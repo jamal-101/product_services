@@ -9,7 +9,10 @@ import 'package:product_service/features/home_flow/presentatin/screen/notificati
 import 'package:product_service/features/onboardin/presentation/screen/onboarding_screen.dart';
 import 'package:product_service/features/product_store_flow/presentation/screen/product_details_screen.dart';
 import 'package:product_service/features/product_store_flow/presentation/screen/store_details_page.dart';
+import 'package:product_service/features/profile_section/presentation/screen/store_creation/presentation/screen/creat_new_store_step1.dart';
+import 'package:product_service/features/profile_section/presentation/screen/store_creation/presentation/screen/my_store.dart';
 import '../../features/account_section/presentation/screen/edite_profile_screen.dart';
+import '../../features/account_section/presentation/screen/notification_setting.dart';
 import '../../features/auth_flow/presentation/controller/auth_controller.dart'; // কন্ট্রোলার ইম্পোর্ট নিশ্চিত করুন
 import '../../features/auth_flow/presentation/screen/create_account_screen.dart';
 import '../../features/auth_flow/presentation/screen/forget_password.dart';
@@ -39,8 +42,12 @@ class AppRoutes {
   static const String accountScreen = "/accountScreen";
   static const String editProfileScreen = "/editProfileScreen";
   static const String identityVerificationScreen = "/identityVerificationScreen";
+  static const String changePasswordScreen = "/changePasswordScreen";
   static const String notificationScreen = "/notificationScreen";
+  static const String notificationSettingScreen = "/notificationSettingScreen";
   static const String helpSupportScreen = "/helpSupportScreen";
+  static const String myStore = "/myStore";
+  static const String createNewStoreStep1 = "/createNewStoreStep1";
 
   // GetPage List
   static List<GetPage> routes = [
@@ -153,8 +160,8 @@ class AppRoutes {
       // })
     ),
     GetPage(
-      name: notificationScreen,
-      page: () =>  ChangePasswordScreen(),
+      name: notificationSettingScreen,
+      page: () =>  NotificationSettingsScreen(),
       // binding: BindingsBuilder((){
       //   Get.lazyPut<S>(() => HomeController());
       // })
@@ -168,7 +175,28 @@ class AppRoutes {
     ),
     GetPage(
       name: helpSupportScreen,
-      page: () => HelpAndSupportScreen(),
+      page: () => HelpSupportScreen(),
+      // binding: BindingsBuilder((){
+      //   Get.lazyPut<S>(() => HomeController());
+      // })
+    ),
+    GetPage(
+      name: changePasswordScreen,
+      page: () => ChangePasswordScreen(),
+      // binding: BindingsBuilder((){
+      //   Get.lazyPut<S>(() => HomeController());
+      // })
+    ),
+    GetPage(
+      name: myStore,
+      page: () => MyStore(),
+      // binding: BindingsBuilder((){
+      //   Get.lazyPut<S>(() => HomeController());
+      // })
+    ),
+    GetPage(
+      name: createNewStoreStep1,
+      page: () => CreateNewStoreStep1(),
       // binding: BindingsBuilder((){
       //   Get.lazyPut<S>(() => HomeController());
       // })

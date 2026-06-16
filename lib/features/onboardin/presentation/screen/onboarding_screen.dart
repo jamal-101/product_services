@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:product_service/config/route/app_route.dart';
 import 'package:product_service/utils/constants/app_images.dart';
 import '../../../../utils/constants/app_color.dart';
 import '../controller/onboarding_controller.dart';
@@ -46,7 +47,10 @@ class OnboardingScreen extends StatelessWidget {
               ? Padding(
             padding: EdgeInsets.only(right: 16.w),
             child: TextButton(
-              onPressed: () => controller.skipToLast(onboardingData.length - 1),
+              // onPressed: () => controller.skipToLast(onboardingData.length - 1),
+              onPressed: (){
+                Get.toNamed(AppRoutes.homeScreen);
+              },
               child: Text(
                 'Skip',
                 style: TextStyle(

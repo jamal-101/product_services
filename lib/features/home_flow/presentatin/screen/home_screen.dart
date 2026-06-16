@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import '../../../../component/bottom_navBar/nav_bar..dart';
+import '../../../profile_section/presentation/widget/app_drawer.dart';
 import '../controller/home_controller.dart';
 import 'notification_screen.dart';
 
@@ -11,8 +12,10 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(HomeController());
-
+    final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
     return Scaffold(
+      key: _scaffoldKey,
+      drawer: const AppDrawer(),
       backgroundColor: const Color(0xFFFBFBFB),
       bottomNavigationBar: BottomNavBar(
         selectedIndex: 0,
@@ -22,7 +25,9 @@ class HomeScreen extends StatelessWidget {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.menu, color: Colors.black),
-          onPressed: () {},
+          onPressed: () {
+            _scaffoldKey.currentState?.openDrawer();
+          },
         ),
         title: Row(
           mainAxisAlignment: MainAxisAlignment.center,

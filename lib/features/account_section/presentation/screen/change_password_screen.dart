@@ -1,22 +1,132 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class ChangePasswordScreen extends StatelessWidget {
+  const ChangePasswordScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Change Password")),
-      body: Padding(
-        padding: EdgeInsets.all(20),
+      backgroundColor: const Color(0xFFFBFBFB), // ব্যাকগ্রাউন্ড কালার
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () => Navigator.pop(context),
+        ),
+        title: Text(
+          "Change Password",
+          style: GoogleFonts.montserrat(
+            color: Colors.black,
+            fontWeight: FontWeight.bold,
+            fontSize: 18.sp,
+          ),
+        ),
+      ),
+      body: SingleChildScrollView(
+        padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
         child: Column(
           children: [
-            TextField(decoration: InputDecoration(labelText: "Current Password")),
-            TextField(decoration: InputDecoration(labelText: "New Password")),
-            TextField(decoration: InputDecoration(labelText: "Confirm New Password")),
-            ElevatedButton(onPressed: () {}, child: Text("Save Changes")),
+            // কন্টেন্ট কার্ড (ফিগমা অনুযায়ী)
+            Container(
+              padding: EdgeInsets.all(20.w),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(20.r),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.05),
+                    blurRadius: 10,
+                    offset: const Offset(0, 5),
+                  ),
+                ],
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _buildPasswordField("Current Password", "Enter current password"),
+                  _buildPasswordField("New Password", "Enter new password"),
+                  Padding(
+                    padding: EdgeInsets.only(bottom: 15.h),
+                    child: Text(
+                      "Minimum 8 characters",
+                      style: GoogleFonts.montserrat(
+                        fontSize: 12.sp,
+                        color: Colors.grey.shade600,
+                      ),
+                    ),
+                  ),
+                  _buildPasswordField("Confirm New Password", "Confirm new password"),
+                ],
+              ),
+            ),
+            SizedBox(height: 30.h),
+
+            // সেভ বাটন
+            SizedBox(
+              width: double.infinity,
+              height: 55.h,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF27AE60), // সবুজ বাটন
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15.r),
+                  ),
+                ),
+                onPressed: () {},
+                child: Text(
+                  "Save Changes",
+                  style: GoogleFonts.montserrat(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16.sp,
+                  ),
+                ),
+              ),
+            ),
           ],
         ),
       ),
+    );
+  }
+
+  // কাস্টম পাসওয়ার্ড ফিল্ড উইজেট
+  Widget _buildPasswordField(String label, String hint) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: GoogleFonts.montserrat(
+            fontWeight: FontWeight.bold,
+            fontSize: 13.sp,
+            color: Colors.black,
+          ),
+        ),
+        SizedBox(height: 8.h),
+        TextField(
+          obscureText: true,
+          decoration: InputDecoration(
+            hintText: hint,
+            hintStyle: GoogleFonts.montserrat(fontSize: 14.sp, color: Colors.grey.shade400),
+            suffixIcon: const Icon(Icons.visibility_off_outlined, color: Colors.grey),
+            contentPadding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 15.h),
+            filled: true,
+            fillColor: Colors.grey.shade50,
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12.r),
+              borderSide: BorderSide(color: Colors.grey.shade200),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12.r),
+              borderSide: const BorderSide(color: Color(0xFF27AE60)),
+            ),
+          ),
+        ),
+        SizedBox(height: 15.h),
+      ],
     );
   }
 }

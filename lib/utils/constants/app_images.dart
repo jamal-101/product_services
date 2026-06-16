@@ -10,6 +10,10 @@ class AppImages {
   static const String leLogo = "$baseurl/leReveLogo.png" ;
   static const String productImage = "$baseurl/product_image.png" ;
   static const String productDetailsImage = "$baseurl/product_details.png" ;
+  static const String serviceDetailsImage = "$baseurl/service_details_image.png" ;
+  static const String serviceImage = "$baseurl/service_image.png" ;
+  static const String store_logo = "$baseurl/store_logo.png" ;
+  static const String servicesImage = "$baseurl/services_image.png" ;
 
 
 

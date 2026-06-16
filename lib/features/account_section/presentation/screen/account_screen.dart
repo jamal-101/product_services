@@ -18,15 +18,11 @@ class AccountScreen extends StatelessWidget {
       bottomNavigationBar: BottomNavBar(selectedIndex: 3),
       body: Stack(
         children: [
-          // ১. সবুজ হেডার ব্যাকগ্রাউন্ড
           Container(height: 180.h, color: const Color(0xFF27AE60)),
-
-          // ২. মেইন কন্টেন্ট (লিষ্টসহ)
           Padding(
             padding: EdgeInsets.only(top: 130.h),
             child: Column(
               children: [
-                // প্রোফাইল কার্ড
                 Container(
                   margin: EdgeInsets.symmetric(horizontal: 20.w),
                   padding: EdgeInsets.fromLTRB(20.w, 60.h, 20.w, 20.h),
@@ -49,30 +45,26 @@ class AccountScreen extends StatelessWidget {
                     ],
                   ),
                 ),
-
-                // ৩. মেনু লিস্ট
                 Expanded(
                   child:
-                  // মেনু লিস্ট সেকশন আপডেট করুন
                   ListView(
                     padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
                     children: [
                       _buildSectionTitle("ACCOUNT"),
-                      // রাউটিং উদাহরণ
                       _buildCardMenuItem(Icons.person_outline, "Edit Profile", "Name, phone, email, address", () {
-                        Get.toNamed(AppRoutes.editProfileScreen); // আপনার রাউট নাম অনুযায়ী
+                        Get.toNamed(AppRoutes.editProfileScreen);
                       }),
                       _buildCardMenuItem(Icons.credit_card, "Identity Verification", "Upload ID document", () {
                         Get.toNamed(AppRoutes.identityVerificationScreen);
                       }),
                       _buildCardMenuItem(Icons.lock_outline, "Change Password", "Update your credentials", () {
-                        Get.toNamed(AppRoutes.resetPassword);
+                        Get.toNamed(AppRoutes.changePasswordScreen);
                       }),
 
                       SizedBox(height: 20.h),
                       _buildSectionTitle("SETTINGS"),
                       _buildCardMenuItem(Icons.notifications_none, "Notifications", "Push, email & SMS", () {
-                        Get.toNamed(AppRoutes.notificationScreen);
+                        Get.toNamed(AppRoutes.notificationSettingScreen);
                       }),
 
                       SizedBox(height: 20.h),
@@ -81,7 +73,6 @@ class AccountScreen extends StatelessWidget {
                         Get.toNamed(AppRoutes.helpSupportScreen);
                       }),
                       _buildCardMenuItem(Icons.logout, "Logout", "Sign out of your account", () {
-                        // লগআউট লজিক
                         Get.offAllNamed(AppRoutes.loginScreen);
                       }, isLogout: true),
                     ],
@@ -91,7 +82,6 @@ class AccountScreen extends StatelessWidget {
             ),
           ),
 
-          // ৪. প্রোফাইল ছবি (সবচেয়ে উপরে ভাসমান)
           Positioned(
             top: 90.h,
             left: 0,

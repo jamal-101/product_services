@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_instance/src/extension_instance.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:product_service/config/route/app_route.dart';
 import 'package:product_service/utils/constants/app_images.dart';
+import '../../../home_flow/presentatin/controller/home_controller.dart';
 import 'contuctForm_widget.dart';
 
 
@@ -37,10 +39,11 @@ class ProductsWidget extends StatelessWidget {
   }
 
   Widget _buildProductCard() {
+    final controller = Get.find<HomeController>();
     return GestureDetector(
       onTap: () {
         // GetX এর মাধ্যমে নেভিগেট করার সঠিক উপায়:
-        Get.toNamed(AppRoutes.productDetailsScreen);
+        Get.toNamed(AppRoutes.productDetailsScreen,arguments: controller.isProductStoreSelected.value,);
       },
       child: Container(
         decoration: BoxDecoration(
@@ -57,7 +60,7 @@ class ProductsWidget extends StatelessWidget {
                   ClipRRect(
                     borderRadius: BorderRadius.vertical(top: Radius.circular(12.r)),
                     child: Image.asset(
-                      AppImages.productImage,
+                      controller.isProductStoreSelected.value ? AppImages.productImage : AppImages.serviceImage,
                       fit: BoxFit.cover,
                       width: double.infinity,
                     ),

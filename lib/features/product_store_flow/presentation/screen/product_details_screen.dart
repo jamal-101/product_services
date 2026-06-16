@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:product_service/utils/constants/app_color.dart';
 import 'package:product_service/utils/constants/app_images.dart';
 
@@ -8,6 +10,7 @@ class ProductDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bool isProductStore = Get.arguments ?? true;
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -35,7 +38,7 @@ class ProductDetailsScreen extends StatelessWidget {
                   child: Stack(
                     children: [
                       Image.asset(
-                        AppImages.productDetailsImage,
+                       isProductStore ?AppImages.productDetailsImage: AppImages.serviceImage,
                         width: double.infinity,
                         height: 350.h,
                         fit: BoxFit.cover,

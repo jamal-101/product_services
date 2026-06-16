@@ -37,6 +37,7 @@ dependencies:
   flutter_screenutil: ^5.9.3
   get: ^4.7.3
   google_fonts: ^8.1.0
+  dotted_border: ^2.1.0
 
 dev_dependencies:
   flutter_test:
