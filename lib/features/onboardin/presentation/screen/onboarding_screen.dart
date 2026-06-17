@@ -49,7 +49,7 @@ class OnboardingScreen extends StatelessWidget {
             child: TextButton(
               // onPressed: () => controller.skipToLast(onboardingData.length - 1),
               onPressed: (){
-                Get.toNamed(AppRoutes.homeScreen);
+                Get.toNamed(AppRoutes.loginScreen);
               },
               child: Text(
                 'Skip',

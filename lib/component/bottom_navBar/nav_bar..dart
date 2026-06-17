@@ -3,7 +3,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:product_service/config/route/app_route.dart';
+import 'package:product_service/features/seller/my_list_flow/presentation/screen/my_list_screen.dart';
 
+import '../../features/auth_flow/presentation/controller/auth_controller.dart';
+import '../../features/seller/seller_home_flow/presentation/screen/seller_home_screen.dart';
 import 'nav_controller.dart';
 
 class BottomNavBar extends StatelessWidget {
@@ -40,9 +43,15 @@ class BottomNavBar extends StatelessWidget {
     ));
   }
 
+  final AuthController authController = Get.put(AuthController());
+
   Widget _buildNavItem(int index, IconData icon, String label) {
     bool isSelected = controller.currentIndex.value == index;
     final Color activeColor = const Color(0xFF27AE60);
+
+    bool isSeller = authController.selectedRole.value == 'seller';
+    String displayLabel = (index == 1 && isSeller) ? "My Listing" : label;
+    IconData displayIcon = (index == 1 && isSeller) ? Icons.inventory_2_outlined : icon;
 
     return GestureDetector(
       onTap: () {
@@ -50,13 +59,13 @@ class BottomNavBar extends StatelessWidget {
         controller.changeIndex(index);
         switch (index) {
           case 0:
-            Get.offAllNamed(AppRoutes.homeScreen);
+            isSeller ? Get.offAll(() => const SellerHomeScreen()) : Get.offAllNamed(AppRoutes.homeScreen);
             break;
           case 1:
-            Get.offAllNamed(AppRoutes.exploreStoriesScreen);
+           isSeller? Get.offAll(()=>const MyListingScreen()) : Get.offAllNamed(AppRoutes.exploreStoriesScreen);
             break;
           case 2:
-            Get.offAllNamed('/messageScreen');
+            Get.offAllNamed(AppRoutes.messageScreen);
             break;
           case 3:
             Get.offAllNamed(AppRoutes.accountScreen);
@@ -64,7 +73,6 @@ class BottomNavBar extends StatelessWidget {
         }
       },
       child: Container(
-        // বাকি ডিজাইন আগের মতোই থাকবে...
         padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
         decoration: BoxDecoration(
           color: isSelected ? activeColor.withOpacity(0.1) : Colors.transparent,
@@ -73,10 +81,10 @@ class BottomNavBar extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(icon, color: isSelected ? activeColor : Colors.grey, size: 24.sp),
+            Icon(displayIcon, color: isSelected ? activeColor : Colors.grey, size: 24.sp),
             SizedBox(height: 4.h),
             Text(
-              label,
+              displayLabel,
               style: GoogleFonts.montserrat(
                 fontSize: 10.sp,
                 color: isSelected ? activeColor : Colors.grey,

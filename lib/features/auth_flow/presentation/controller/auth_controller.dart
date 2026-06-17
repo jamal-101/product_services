@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../../config/route/app_route.dart';
+import '../../../../services/storage/storage_service.dart';
+import '../../../seller/seller_home_flow/presentation/screen/seller_home_screen.dart';
 
 class AuthController extends GetxController {
 
@@ -37,6 +39,14 @@ class AuthController extends GetxController {
   var resendCountdown = 55.obs;
   Timer? _timer;
 
+
+  @override
+  void onInit() {
+    super.onInit();
+    // অ্যাপ চালু হলে আগের সেভ করা রোল লোড হবে
+    selectedRole.value = LocalStorage.myRole;
+  }
+
   void startOtpTimer() {
     resendCountdown.value = 55;
     _timer?.cancel();
@@ -49,10 +59,24 @@ class AuthController extends GetxController {
     });
   }
 
-  void selectRole(String role) {
+  // AuthController.dart
+
+// GetStorage এর জন্য একটি প্যাকেজ যোগ করতে পারেন অথবা Get.find<GetStorage>() ব্যবহার করতে পারেন।
+// আপাতত সিম্পল লজিক নিচে দেওয়া হলো:
+
+  void selectRole(String role) async {
     selectedRole.value = role;
+
+    // LocalStorage এ রোল পার্মানেন্টলি সেভ করে রাখা
+    await LocalStorage.setUserRole(role);
+
     Future.delayed(const Duration(milliseconds: 300), () {
-      Get.offAllNamed(AppRoutes.homeScreen);
+      // এখানে আপনার লজিক অনুযায়ী রাউটিং করুন
+      if (role == 'seller') {
+        Get.offAll(() => const SellerHomeScreen());
+      } else {
+        Get.offAllNamed(AppRoutes.homeScreen);
+      }
     });
   }
 

@@ -11,7 +11,7 @@ class ExploreStoriesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.find<HomeController>();
+    final HomeController controller = Get.put(HomeController());
 
     return Scaffold(
       backgroundColor: const Color(0xFFFBFBFB),
@@ -307,7 +307,7 @@ class ExploreStoriesScreen extends StatelessWidget {
   }
 
   Widget _buildStoreListItem(String title, String subtitle, Color logoBg) {
-    final controller = Get.find<HomeController>();
+    final HomeController controller = Get.put(HomeController());
     return GestureDetector(
       onTap: () {
         Get.toNamed(

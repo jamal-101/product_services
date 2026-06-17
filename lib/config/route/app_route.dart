@@ -6,11 +6,13 @@ import 'package:product_service/features/account_section/presentation/screen/ide
 import 'package:product_service/features/home_flow/presentatin/controller/home_controller.dart';
 import 'package:product_service/features/home_flow/presentatin/screen/explore_stories_screen.dart';
 import 'package:product_service/features/home_flow/presentatin/screen/notification_screen.dart';
+import 'package:product_service/features/message_flow/screen/message_screen.dart';
 import 'package:product_service/features/onboardin/presentation/screen/onboarding_screen.dart';
 import 'package:product_service/features/product_store_flow/presentation/screen/product_details_screen.dart';
 import 'package:product_service/features/product_store_flow/presentation/screen/store_details_page.dart';
 import 'package:product_service/features/profile_section/presentation/screen/store_creation/presentation/screen/creat_new_store_step1.dart';
 import 'package:product_service/features/profile_section/presentation/screen/store_creation/presentation/screen/my_store.dart';
+import '../../component/bottom_navBar/nav_controller.dart';
 import '../../features/account_section/presentation/screen/edite_profile_screen.dart';
 import '../../features/account_section/presentation/screen/notification_setting.dart';
 import '../../features/auth_flow/presentation/controller/auth_controller.dart'; // কন্ট্রোলার ইম্পোর্ট নিশ্চিত করুন
@@ -48,6 +50,7 @@ class AppRoutes {
   static const String helpSupportScreen = "/helpSupportScreen";
   static const String myStore = "/myStore";
   static const String createNewStoreStep1 = "/createNewStoreStep1";
+  static const String messageScreen = "/messageScreen";
 
   // GetPage List
   static List<GetPage> routes = [
@@ -118,11 +121,11 @@ class AppRoutes {
       })
     ),
     GetPage(
-      name: exploreStoriesScreen,
-      page: () =>  ExploreStoriesScreen(),
-      binding: BindingsBuilder((){
-        Get.lazyPut<HomeController>(() => HomeController());
-      })
+      name: AppRoutes.exploreStoriesScreen,
+      page: () => const ExploreStoriesScreen(),
+      binding: BindingsBuilder(() {
+        Get.lazyPut<AuthController>(() =>AuthController());
+      }),
     ),
     GetPage(
       name: storeDetailsPage,
@@ -197,6 +200,13 @@ class AppRoutes {
     GetPage(
       name: createNewStoreStep1,
       page: () => CreateNewStoreStep1(),
+      // binding: BindingsBuilder((){
+      //   Get.lazyPut<S>(() => HomeController());
+      // })
+    ),
+    GetPage(
+      name: messageScreen,
+      page: () => MessageScreen(),
       // binding: BindingsBuilder((){
       //   Get.lazyPut<S>(() => HomeController());
       // })

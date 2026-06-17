@@ -58,8 +58,6 @@ class HomeScreen extends StatelessWidget {
           ),
         ],
       ),
-
-      // --- ⚡ কাস্টমার সাপোর্ট বাটন ---
       floatingActionButton: FloatingActionButton(
         onPressed: () {},
         backgroundColor: const Color(0xFF27AE60),
@@ -67,8 +65,6 @@ class HomeScreen extends StatelessWidget {
         child: const Icon(Icons.support_agent, color: Colors.white, size: 28),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-
-      // --- 📝 মেইন বডি কন্টেন্ট ---
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         padding: EdgeInsets.symmetric(horizontal: 16.w),
@@ -76,8 +72,6 @@ class HomeScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(height: 16.h),
-
-            // 🔍 সার্চ বার বাটন (ক্লিক করলে সার্চ স্ক্রিনে যাবে)
             // GestureDetector(
             //   onTap: () => Get.toNamed(AppRoutes.searchScreen),
             //   child: Container(
