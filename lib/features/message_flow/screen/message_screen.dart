@@ -76,7 +76,6 @@ class MessageScreen extends StatelessWidget {
       ),
       child: Row(
         children: [
-          // লোগো বা প্রোফাইল পিক
           Container(
             width: 50.w,
             height: 50.w,
