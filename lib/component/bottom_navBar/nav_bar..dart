@@ -46,25 +46,20 @@ class BottomNavBar extends StatelessWidget {
 
     return GestureDetector(
       onTap: () {
-        // যদি অলরেডি ওই স্ক্রিনেই থাকে, তবে কিছু করার দরকার নেই
         if (controller.currentIndex.value == index) return;
-
-        // ইনডেক্স আপডেট করুন
         controller.changeIndex(index);
-
-        // নেভিগেশন লজিক (আপনার রাউট অনুযায়ী এখানে পরিবর্তন করুন)
         switch (index) {
           case 0:
-            Get.offAllNamed(AppRoutes.homeScreen); // আপনার হোম রাউট
+            Get.offAllNamed(AppRoutes.homeScreen);
             break;
           case 1:
-            Get.offAllNamed(AppRoutes.exploreStoriesScreen); // আপনার স্টোর রাউট
+            Get.offAllNamed(AppRoutes.exploreStoriesScreen);
             break;
           case 2:
-            Get.offAllNamed('/messageScreen'); // আপনার মেসেজ রাউট
+            Get.offAllNamed('/messageScreen');
             break;
           case 3:
-            Get.offAllNamed(AppRoutes.accountScreen); // আপনার অ্যাকাউন্ট রাউট
+            Get.offAllNamed(AppRoutes.accountScreen);
             break;
         }
       },
