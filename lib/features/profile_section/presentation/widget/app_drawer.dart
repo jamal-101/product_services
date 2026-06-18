@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:product_service/config/route/app_route.dart';
 import 'package:product_service/features/profile_section/presentation/screen/save_flow/presentation/screen/privacy_and_policy.dart';
 import 'package:product_service/features/profile_section/presentation/screen/save_flow/presentation/screen/safety_guidelines.dart';
 import 'package:product_service/features/profile_section/presentation/screen/save_flow/presentation/screen/save_screen.dart';
@@ -96,30 +97,39 @@ class AppDrawer extends StatelessWidget {
                   _buildMenuItem(context, Icons.bookmark_border, "Saved Products"),
                   _buildMenuItem(context, Icons.shopping_bag_outlined, "Saved Services"),
                 ],
-
-                // এই তিনটি মেনু সব সময় দেখাবে (ইমেজ image_a58dbc.png অনুযায়ী)
                 _buildMenuItem(context, Icons.description_outlined, "Safety Guidelines"),
                 _buildMenuItem(context, Icons.privacy_tip_outlined, "Privacy Policy"),
                 _buildMenuItem(context, Icons.article_outlined, "Terms & Conditions"),
               ],
             ),
           ),
+          Divider(
+            color: const Color(0xFFE5E7EB),
+            thickness: 1.0,
+            height: 1.0,
+          ),
           Padding(
             padding: EdgeInsets.all(20.w),
-            child: Row(
-              children: [
-                const Icon(Icons.logout, color: Colors.red),
-                SizedBox(width: 10.w),
-                Text(
-                  "Log Out",
-                  style: GoogleFonts.montserrat(
-                    color: Colors.red,
-                    fontWeight: FontWeight.bold,
+            child: GestureDetector(
+              onTap: (){
+                Get.toNamed(AppRoutes.loginScreen);
+              },
+              child: Row(
+                children: [
+                  const Icon(Icons.logout, color: Colors.red),
+                  SizedBox(width: 10.w),
+                  Text(
+                    "Log Out",
+                    style: GoogleFonts.montserrat(
+                      color: Colors.red,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
+          SizedBox(height: 40.h),
         ],
       ),
     );

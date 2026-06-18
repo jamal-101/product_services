@@ -13,29 +13,18 @@ class AuthController extends GetxController {
   final registerEmailController = TextEditingController();
   final registerPasswordController = TextEditingController();
   final registerConfirmPasswordController = TextEditingController();
-
   var isRegisterPasswordVisible = false.obs;
   var isRegisterConfirmPasswordVisible = false.obs;
-
-// Phone Verification Timer
   var phoneCountdown = 42.obs;
-
-  // Login Controllers
   final loginEmailController = TextEditingController();
   final loginPasswordController = TextEditingController();
   var isLoginPasswordVisible = false.obs;
-
-  // Forgot & Reset Controllers
   final forgotEmailController = TextEditingController();
   final newPasswordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
   var isNewPasswordVisible = false.obs;
   var isConfirmPasswordVisible = false.obs;
-
-  // Role Selection State
-  var selectedRole = "".obs; // 'buyer' or 'seller'
-
-  // OTP Timer State
+  var selectedRole = "".obs;
   var resendCountdown = 55.obs;
   Timer? _timer;
 
@@ -43,7 +32,6 @@ class AuthController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    // অ্যাপ চালু হলে আগের সেভ করা রোল লোড হবে
     selectedRole.value = LocalStorage.myRole;
   }
 
@@ -59,21 +47,12 @@ class AuthController extends GetxController {
     });
   }
 
-  // AuthController.dart
-
-// GetStorage এর জন্য একটি প্যাকেজ যোগ করতে পারেন অথবা Get.find<GetStorage>() ব্যবহার করতে পারেন।
-// আপাতত সিম্পল লজিক নিচে দেওয়া হলো:
-
   void selectRole(String role) async {
     selectedRole.value = role;
-
-    // LocalStorage এ রোল পার্মানেন্টলি সেভ করে রাখা
     await LocalStorage.setUserRole(role);
-
     Future.delayed(const Duration(milliseconds: 300), () {
-      // এখানে আপনার লজিক অনুযায়ী রাউটিং করুন
       if (role == 'seller') {
-        Get.offAll(() => const SellerHomeScreen());
+        Get.offAllNamed(AppRoutes.sellerHomeScreen);
       } else {
         Get.offAllNamed(AppRoutes.homeScreen);
       }
@@ -82,12 +61,25 @@ class AuthController extends GetxController {
 
   @override
   void onClose() {
-    loginEmailController.dispose();
-    loginPasswordController.dispose();
-    forgotEmailController.dispose();
-    newPasswordController.dispose();
-    confirmPasswordController.dispose();
+    // লগইন কন্ট্রোলার সমূহ
+    // loginEmailController.dispose();
+    // loginPasswordController.dispose();
+    //
+    // // ফরগট ও রিসেট কন্ট্রোলার সমূহ
+    // forgotEmailController.dispose();
+    // newPasswordController.dispose();
+    // confirmPasswordController.dispose();
+    //
+    // // রেজিস্ট্রেশন কন্ট্রোলার সমূহ (যা আগে বাদ পড়েছিল)
+    // registerNameController.dispose();
+    // registerPhoneController.dispose();
+    // registerEmailController.dispose();
+    // registerPasswordController.dispose();
+    // registerConfirmPasswordController.dispose();
+
+    // টাইমার ক্যানসেল
     _timer?.cancel();
+
     super.onClose();
   }
 }

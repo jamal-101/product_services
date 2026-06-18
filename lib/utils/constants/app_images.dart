@@ -23,5 +23,8 @@ class AppImages {
   static const String storeIcon = "$baseurlIcon/storefront.png" ;
   static const String messageIcon = "$baseurlIcon/message_icon.png" ;
   static const String accountIcon = "$baseurlIcon/account_icon.png" ;
+  static const String emailIcon = "$baseurlIcon/email_icon.png" ;
+  static const String lockIcon = "$baseurlIcon/Lock.png" ;
+  static const String googleIcon = "$baseurlIcon/google_icon.png" ;
 
 }

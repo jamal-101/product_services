@@ -2,6 +2,8 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:product_service/utils/constants/app_images.dart';
 import '../../../../config/route/app_route.dart';
 import '../../../../utils/constants/app_color.dart';
 import '../controller/auth_controller.dart';
@@ -62,9 +64,22 @@ class LoginScreen extends StatelessWidget {
                   fillColor: Color(0xFFFFFFFF),
                   filled: true,
                   hintText: "you@example.com",
-                  prefixIcon: const Icon(Icons.email_outlined),
+                  prefixIcon: Padding(
+                    padding: const EdgeInsets.only(
+                      left: 14,
+                      right: 8,
+                      top: 14,
+                      bottom: 14,
+                    ),
+                    child: Image.asset(
+                      AppImages.emailIcon,
+                      height: 5.h,
+                      width: 5.w,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
                   enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.r),
+                    borderRadius: BorderRadius.circular(12.r),
                     borderSide: const BorderSide(
                       color: Color(0xFFECECF0),
                       width: 1.5,
@@ -106,39 +121,48 @@ class LoginScreen extends StatelessWidget {
                     fillColor: Color(0xFFFFFFFF),
                     filled: true,
                     hintText: "••••••••",
-                    prefixIcon: const Icon(Icons.lock_outline),
+                    prefixIcon: Padding(
+                      padding: const EdgeInsets.only(
+                        left: 14,
+                        right: 8,
+                        top: 10,
+                        bottom: 14,
+                      ),
+                      child: Image.asset(
+                        AppImages.lockIcon,
+                        height: 5.h,
+                        width: 5.w,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
                     suffixIcon: IconButton(
                       icon: Icon(
                         controller.isLoginPasswordVisible.value
-                            ? Icons.visibility_off_outlined
-                            : Icons.visibility_outlined,
+                            ? Icons.visibility_outlined : Icons.visibility_off_outlined,
                         color: Color(0xFF9D9D9D),
                       ),
                       onPressed: () =>
                           controller.isLoginPasswordVisible.toggle(),
                     ),
                     border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.r),
+                      borderRadius: BorderRadius.circular(12.r),
                     ),
                     enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.r),
+                      borderRadius: BorderRadius.circular(12.r),
                       borderSide: const BorderSide(
                         color: Color(0xFFECECF0),
                         width: 1.5,
                       ),
                     ),
                     focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.r),
-                      // আপনি চাইলে ফোকাসড অবস্থায় কালার সেম রাখতে পারেন অথবা প্রাইমারি কালার দিতে পারেন
+                      borderRadius: BorderRadius.circular(12.r),
                       borderSide: const BorderSide(
                         color: Color(0xFFECECF0),
                         width: 2.0,
                       ),
                     ),
-
-                    // এরর বর্ডার (যদি ভ্যালিডেশন ব্যবহার করেন)
                     errorBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.r),
+                      borderRadius: BorderRadius.circular(12.r),
                       borderSide: const BorderSide(
                         color: Colors.red,
                         width: 1.0,
@@ -161,7 +185,7 @@ class LoginScreen extends StatelessWidget {
                   onPressed: () => Get.toNamed(AppRoutes.forgetPassword),
                   child: Text(
                     "Forgot password?",
-                    style: TextStyle(
+                    style: GoogleFonts.plusJakartaSans(
                       color: AppColor.primary,
                       fontSize: 13.sp,
                       fontWeight: FontWeight.w600,
@@ -219,23 +243,23 @@ class LoginScreen extends StatelessWidget {
                 child: OutlinedButton(
                   style: OutlinedButton.styleFrom(
                     backgroundColor: Color(0xFFFFFFFF),
-                    side: const BorderSide(color: Colors.grey),
+                    side: const BorderSide(color: Color(0xFFECECF0)),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.r),
+                      borderRadius: BorderRadius.circular(12.r),
                     ),
                   ),
                   onPressed: () {},
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(Icons.g_mobiledata, size: 30.w, color: Colors.red),
+                      Image.asset(AppImages.googleIcon,height: 30.h,width: 30.w,),
                       SizedBox(width: 8.w),
                       Text(
                         "Continue With Google",
-                        style: TextStyle(
+                        style: GoogleFonts.plusJakartaSans(
                           fontSize: 14.sp,
-                          color: AppColor.textDark,
-                          fontWeight: FontWeight.w500,
+                          color: Color(0xFF1A1D24),
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
                     ],
@@ -243,21 +267,22 @@ class LoginScreen extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 40.h),
-
               Center(
                 child: RichText(
                   text: TextSpan(
-                    style: TextStyle(
+                    style: GoogleFonts.plusJakartaSans(
                       fontSize: 14.sp,
-                      color: AppColor.textLight,
+                      fontWeight: FontWeight.w600,
+                      color: Color(0xFF7A818F),
                     ),
                     children: [
                       const TextSpan(text: "Don't have an account? "),
                       TextSpan(
                         text: "Register",
-                        style: const TextStyle(
+                        style:  GoogleFonts.plusJakartaSans(
                           color: AppColor.primary,
-                          fontWeight: FontWeight.bold,
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.w600,
                         ),
                         recognizer: TapGestureRecognizer()
                           ..onTap = () {

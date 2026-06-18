@@ -6,12 +6,14 @@ import 'package:product_service/features/account_section/presentation/screen/ide
 import 'package:product_service/features/home_flow/presentatin/controller/home_controller.dart';
 import 'package:product_service/features/home_flow/presentatin/screen/explore_stories_screen.dart';
 import 'package:product_service/features/home_flow/presentatin/screen/notification_screen.dart';
+import 'package:product_service/features/message_flow/screen/conversation_screen.dart';
 import 'package:product_service/features/message_flow/screen/message_screen.dart';
 import 'package:product_service/features/onboardin/presentation/screen/onboarding_screen.dart';
 import 'package:product_service/features/product_store_flow/presentation/screen/product_details_screen.dart';
 import 'package:product_service/features/product_store_flow/presentation/screen/store_details_page.dart';
 import 'package:product_service/features/profile_section/presentation/screen/store_creation/presentation/screen/creat_new_store_step1.dart';
 import 'package:product_service/features/profile_section/presentation/screen/store_creation/presentation/screen/my_store.dart';
+import 'package:product_service/features/seller/seller_home_flow/presentation/screen/seller_home_screen.dart';
 import '../../component/bottom_navBar/nav_controller.dart';
 import '../../features/account_section/presentation/screen/edite_profile_screen.dart';
 import '../../features/account_section/presentation/screen/notification_setting.dart';
@@ -51,6 +53,8 @@ class AppRoutes {
   static const String myStore = "/myStore";
   static const String createNewStoreStep1 = "/createNewStoreStep1";
   static const String messageScreen = "/messageScreen";
+  static const String conversationScreen = "/conversationScreen";
+  static const String sellerHomeScreen = "/sellerHomeScreen";
 
   // GetPage List
   static List<GetPage> routes = [
@@ -207,6 +211,20 @@ class AppRoutes {
     GetPage(
       name: messageScreen,
       page: () => MessageScreen(),
+      // binding: BindingsBuilder((){
+      //   Get.lazyPut<S>(() => HomeController());
+      // })
+    ),
+    GetPage(
+      name: conversationScreen,
+      page: () => ConversationScreen(),
+      // binding: BindingsBuilder((){
+      //   Get.lazyPut<S>(() => HomeController());
+      // })
+    ),
+    GetPage(
+      name: sellerHomeScreen,
+      page: () => SellerHomeScreen(),
       // binding: BindingsBuilder((){
       //   Get.lazyPut<S>(() => HomeController());
       // })
