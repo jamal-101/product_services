@@ -8,6 +8,8 @@ import '../../../../../component/bottom_navBar/nav_bar..dart';
 class MyListingScreen extends StatelessWidget {
   const MyListingScreen({super.key});
 
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -128,8 +130,6 @@ class MyListingScreen extends StatelessWidget {
               ],
             ),
           ),
-
-          // এখানে PopupMenuButton বসানো হয়েছে
           PopupMenuButton<String>(
             icon: const Icon(Icons.more_vert, color: Colors.grey),
             shape: RoundedRectangleBorder(
@@ -137,9 +137,8 @@ class MyListingScreen extends StatelessWidget {
             ),
             onSelected: (value) {
               if (value == 'edit') {
-                // এডিট লজিক
+                Get.to(AddProductScreen(),arguments: {'title': "Vintage Leather Jacket for men- Winter Fashion",});
               } else if (value == 'delete') {
-                // ডিলিট লজিক
               }
             },
             itemBuilder: (BuildContext context) => [

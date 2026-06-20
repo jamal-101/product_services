@@ -16,20 +16,30 @@ class _NotificationSettingsScreenState extends State<NotificationSettingsScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFFBFBFB),
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
+        backgroundColor: Colors.white,
         elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () => Navigator.pop(context),
+        centerTitle: false,
+        leading: Padding(
+          padding: EdgeInsets.only(left: 16.w, top: 8.h, bottom: 8.h),
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.grey.shade50,
+              borderRadius: BorderRadius.circular(12.r),
+              border: Border.all(color: Colors.grey.shade100),
+            ),
+            child: IconButton(
+              icon: const Icon(Icons.arrow_back, color: Colors.black, size: 20),
+              onPressed: () => Navigator.pop(context),
+            ),
+          ),
         ),
         title: Text(
           "Notification Settings",
           style: GoogleFonts.montserrat(
             color: Colors.black,
-            fontWeight: FontWeight.bold,
             fontSize: 18.sp,
+            fontWeight: FontWeight.w600,
           ),
         ),
       ),

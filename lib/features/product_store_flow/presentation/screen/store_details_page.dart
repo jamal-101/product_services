@@ -14,7 +14,6 @@ class StoreDetailsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final bool isProductStore = Get.arguments ?? true;
     return Scaffold(
-      backgroundColor: Colors.white,
       body: DefaultTabController(
         length: 3,
         child: NestedScrollView(

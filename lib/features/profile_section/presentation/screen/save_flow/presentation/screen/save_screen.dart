@@ -49,12 +49,11 @@ class SaveScreen extends StatelessWidget {
               child: const Icon(
                 Icons.storefront_outlined,
                 size: 48,
-                color: Color(0xFFF7931E), // অরেঞ্জ কালার
+                color: Color(0xFFF7931E),
               ),
             ),
             SizedBox(height: 24.h),
 
-            // শিরোনাম
             Text(
               "No Saved Stores",
               style: TextStyle(

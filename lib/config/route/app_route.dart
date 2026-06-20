@@ -13,6 +13,7 @@ import 'package:product_service/features/product_store_flow/presentation/screen/
 import 'package:product_service/features/product_store_flow/presentation/screen/store_details_page.dart';
 import 'package:product_service/features/profile_section/presentation/screen/store_creation/presentation/screen/creat_new_store_step1.dart';
 import 'package:product_service/features/profile_section/presentation/screen/store_creation/presentation/screen/my_store.dart';
+import 'package:product_service/features/seller/my_list_flow/presentation/screen/edite_contact_details_screen.dart';
 import 'package:product_service/features/seller/seller_home_flow/presentation/screen/seller_home_screen.dart';
 import '../../component/bottom_navBar/nav_controller.dart';
 import '../../features/account_section/presentation/screen/edite_profile_screen.dart';
@@ -26,6 +27,9 @@ import '../../features/auth_flow/presentation/screen/select_rol_screen.dart';
 import '../../features/auth_flow/presentation/screen/verify_otp.dart';
 import '../../features/auth_flow/presentation/screen/verify_phone_screen.dart';
 import '../../features/home_flow/presentatin/screen/home_screen.dart';
+import '../../features/seller/my_list_flow/presentation/screen/edite_branding_screen.dart';
+import '../../features/seller/my_list_flow/presentation/screen/edite_legel_document_screen.dart';
+import '../../features/seller/my_list_flow/presentation/screen/subsCription_billing_screen.dart';
 import '../../features/splash/presentation/screen/splash_screen.dart';
 
 class AppRoutes {
@@ -55,6 +59,10 @@ class AppRoutes {
   static const String messageScreen = "/messageScreen";
   static const String conversationScreen = "/conversationScreen";
   static const String sellerHomeScreen = "/sellerHomeScreen";
+  static const String editeBindingScreen = "/editeBindingScreen";
+  static const String editContactDetailsScreen = "/editContactDetailsScreen";
+  static const String editLegalDocumentsScreen = "/editLegalDocumentsScreen";
+  static const String subscriptionBillingScreen = "/subscriptionBillingScreen";
 
   // GetPage List
   static List<GetPage> routes = [
@@ -225,6 +233,34 @@ class AppRoutes {
     GetPage(
       name: sellerHomeScreen,
       page: () => SellerHomeScreen(),
+      // binding: BindingsBuilder((){
+      //   Get.lazyPut<S>(() => HomeController());
+      // })
+    ),
+    GetPage(
+      name: editeBindingScreen,
+      page: () => EditBrandingScreen(),
+      // binding: BindingsBuilder((){
+      //   Get.lazyPut<S>(() => HomeController());
+      // })
+    ),
+    GetPage(
+      name: editContactDetailsScreen,
+      page: () => EditContactDetailsScreen(),
+      // binding: BindingsBuilder((){
+      //   Get.lazyPut<S>(() => HomeController());
+      // })
+    ),
+    GetPage(
+      name: editLegalDocumentsScreen,
+      page: () => EditLegalDocumentsScreen(),
+      // binding: BindingsBuilder((){
+      //   Get.lazyPut<S>(() => HomeController());
+      // })
+    ),
+    GetPage(
+      name: subscriptionBillingScreen,
+      page: () => SubscriptionBillingScreen(),
       // binding: BindingsBuilder((){
       //   Get.lazyPut<S>(() => HomeController());
       // })

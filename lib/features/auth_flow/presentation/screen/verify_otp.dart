@@ -1,112 +1,7 @@
-// import 'package:flutter/material.dart';
-// import 'package:flutter_screenutil/flutter_screenutil.dart';
-// import 'package:get/get.dart';
-// import 'package:product_service/config/route/app_route.dart';
-// import '../../../../utils/constants/app_color.dart';
-// import '../controller/auth_controller.dart';
-//
-// class VerifyOtpScreen extends StatelessWidget {
-//   const VerifyOtpScreen({super.key});
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     final controller = Get.find<AuthController>();
-//
-//     return Scaffold(
-//       appBar: AppBar(
-//         backgroundColor: Colors.transparent,
-//         elevation: 0,
-//         leading: const BackButton(color: Colors.black),
-//       ),
-//       body: SafeArea(
-//         child: Padding(
-//           padding: EdgeInsets.symmetric(horizontal: 24.w),
-//           child: Column(
-//             crossAxisAlignment: CrossAxisAlignment.start,
-//             children: [
-//               SizedBox(height: 20.h),
-//               RichText(
-//                 text: TextSpan(
-//                   style: TextStyle(fontSize: 28.sp, fontWeight: FontWeight.bold),
-//                   children: const [
-//                     TextSpan(text: "Verify ", style: TextStyle(color: AppColor.textDark)),
-//                     TextSpan(text: "OTP", style: TextStyle(color: AppColor.accent)),
-//                   ],
-//                 ),
-//               ),
-//               SizedBox(height: 8.h),
-//               Text(
-//                 "Enter the 6-digit code we've sent to your email\nyourname@example.com",
-//                 style: TextStyle(fontSize: 14.sp, color: AppColor.textLight, height: 1.4),
-//               ),
-//               SizedBox(height: 40.h),
-//
-//               Row(
-//                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                 children: List.generate(6, (index) => _buildOtpField(context, index)),
-//               ),
-//               SizedBox(height: 32.h),
-//
-//               Center(
-//                 child: Obx(() => RichText(
-//                   text: TextSpan(
-//                     style: TextStyle(fontSize: 14.sp, color: AppColor.textLight),
-//                     children: [
-//                       const TextSpan(text: "Resend OTP in "),
-//                       TextSpan(
-//                         text: "${controller.resendCountdown.value}s",
-//                         style: const TextStyle(color: AppColor.accent, fontWeight: FontWeight.bold),
-//                       ),
-//                     ],
-//                   ),
-//                 )),
-//               ),
-//             ],
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-//
-//   Widget _buildOtpField(BuildContext context, int index) {
-//     return SizedBox(
-//       width: 44.w,
-//       height: 50.h,
-//       child: TextFormField(
-//         onChanged: (value) {
-//           if (value.length == 1) {
-//             FocusScope.of(context).nextFocus();
-//             if (index == 5) {
-//               Get.toNamed(AppRoutes.resetPassword);
-//             }
-//           }
-//           if (value.isEmpty) {
-//             FocusScope.of(context).previousFocus();
-//           }
-//         },
-//         textAlign: TextAlign.center,
-//         keyboardType: TextInputType.number,
-//         maxLength: 1,
-//         style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold),
-//         decoration: InputDecoration(
-//           counterText: "",
-//           enabledBorder: OutlineInputBorder(
-//             borderSide: const BorderSide(color: Colors.grey),
-//             borderRadius: BorderRadius.circular(10.r),
-//           ),
-//           focusedBorder: OutlineInputBorder(
-//             borderSide: const BorderSide(color: AppColor.primary, width: 2),
-//             borderRadius: BorderRadius.circular(10.r),
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:product_service/config/route/app_route.dart';
 import '../../../../utils/constants/app_color.dart';
 import '../controller/auth_controller.dart';
@@ -140,9 +35,7 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        leading: const BackButton(color: Colors.black),
+       automaticallyImplyLeading: false,
       ),
       body: SafeArea(
         child: Padding(
@@ -163,26 +56,31 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
               SizedBox(height: 8.h),
               Text(
                 "Enter the 6-digit code we've sent to your email\nyourname@example.com",
-                style: TextStyle(fontSize: 14.sp, color: AppColor.textLight, height: 1.4),
+                style: GoogleFonts.plusJakartaSans(fontSize: 16.sp, color: AppColor.textLight, height: 1.4),
               ),
               SizedBox(height: 40.h),
 
               // ওটিপি ফিল্ডস
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: List.generate(6, (index) => _buildOtpField(context, index)),
+                mainAxisAlignment: MainAxisAlignment.center, // ফিল্ডগুলোকে একদম সেন্টারে এবং কাছে রাখবে
+                children: List.generate(6, (index) {
+                  return Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 7.w), // এখানে horizontal প্যাডিং কমিয়ে বা বাড়িয়ে দূরত্ব নিয়ন্ত্রণ করুন
+                    child: _buildOtpField(context, index),
+                  );
+                }),
               ),
               SizedBox(height: 32.h),
 
               Center(
                 child: Obx(() => RichText(
                   text: TextSpan(
-                    style: TextStyle(fontSize: 14.sp, color: AppColor.textLight),
+                    style: GoogleFonts.plusJakartaSans(fontSize: 16.sp, color: AppColor.textLight),
                     children: [
                       const TextSpan(text: "Resend OTP in "),
                       TextSpan(
                         text: "${controller.resendCountdown.value}s",
-                        style: const TextStyle(color: AppColor.accent, fontWeight: FontWeight.bold),
+                        style: GoogleFonts.plusJakartaSans(color: AppColor.accent, fontWeight: FontWeight.bold),
                       ),
                     ],
                   ),

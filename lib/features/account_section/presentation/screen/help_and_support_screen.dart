@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:google_fonts/google_fonts.dart';
+
+import '../../../../config/route/app_route.dart';
 
 class HelpSupportScreen extends StatelessWidget {
   const HelpSupportScreen({super.key});
@@ -8,20 +12,30 @@ class HelpSupportScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFFBFBFB),
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
+        backgroundColor: Colors.white,
         elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () => Navigator.pop(context),
+        centerTitle: false,
+        leading: Padding(
+          padding: EdgeInsets.only(left: 16.w, top: 8.h, bottom: 8.h),
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.grey.shade50,
+              borderRadius: BorderRadius.circular(12.r),
+              border: Border.all(color: Colors.grey.shade100),
+            ),
+            child: IconButton(
+              icon: const Icon(Icons.arrow_back, color: Colors.black, size: 20),
+              onPressed: () => Navigator.pop(context),
+            ),
+          ),
         ),
         title: Text(
           "Help & Support",
           style: GoogleFonts.montserrat(
             color: Colors.black,
-            fontWeight: FontWeight.bold,
             fontSize: 18.sp,
+            fontWeight: FontWeight.w600,
           ),
         ),
       ),
@@ -99,13 +113,15 @@ class HelpSupportScreen extends StatelessWidget {
                       ),
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.transparent, // গ্রেডিয়েন্ট দেখানোর জন্য ট্রান্সপারেন্ট করা হয়েছে
-                          shadowColor: Colors.transparent, // ডিফল্ট শ্যাডো রিমুভ করা হয়েছে
+                          backgroundColor: Colors.transparent,
+                          shadowColor: Colors.transparent,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12.r),
                           ),
                         ),
-                        onPressed: () {},
+                        onPressed: () {
+                          Get.toNamed(AppRoutes.messageScreen);
+                        },
                         child: Text(
                           "Contact Support",
                           style: GoogleFonts.montserrat(

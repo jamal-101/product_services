@@ -59,25 +59,27 @@ class AuthController extends GetxController {
     });
   }
 
+  void toggleRole() async {
+    // বর্তমানে কি আছে তা চেক করা
+    String currentRole = LocalStorage.myRole;
+
+    // উল্টো রোল সেট করা
+    String newRole = (currentRole == 'buyer') ? 'seller' : 'buyer';
+
+    // লোকাল স্টোরেজে আপডেট করা
+    await LocalStorage.setUserRole(newRole);
+    selectedRole.value = newRole;
+
+    // রাউটিং লজিক
+    if (newRole == 'seller') {
+      Get.offAllNamed(AppRoutes.sellerHomeScreen);
+    } else {
+      Get.offAllNamed(AppRoutes.homeScreen);
+    }
+  }
+
   @override
   void onClose() {
-    // লগইন কন্ট্রোলার সমূহ
-    // loginEmailController.dispose();
-    // loginPasswordController.dispose();
-    //
-    // // ফরগট ও রিসেট কন্ট্রোলার সমূহ
-    // forgotEmailController.dispose();
-    // newPasswordController.dispose();
-    // confirmPasswordController.dispose();
-    //
-    // // রেজিস্ট্রেশন কন্ট্রোলার সমূহ (যা আগে বাদ পড়েছিল)
-    // registerNameController.dispose();
-    // registerPhoneController.dispose();
-    // registerEmailController.dispose();
-    // registerPasswordController.dispose();
-    // registerConfirmPasswordController.dispose();
-
-    // টাইমার ক্যানসেল
     _timer?.cancel();
 
     super.onClose();

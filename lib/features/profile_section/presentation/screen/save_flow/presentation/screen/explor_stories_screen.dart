@@ -17,18 +17,17 @@ class ExploreScreen extends StatelessWidget {
           elevation: 0,
           backgroundColor: Colors.white,
           centerTitle: false,
-          // leading প্যাডিং এবং সাইজ অ্যাডজাস্ট করা হয়েছে
-          leadingWidth: 56.w, // লিডিং এর জন্য নির্দিষ্ট উইডথ
+          leadingWidth: 56.w,
           leading: Center(
             child: Container(
               width: 36.w,
               height: 36.w,
               decoration: BoxDecoration(
-                color: const Color(0xFFF5F5EF), // ফিগমা কালার
+                color: const Color(0xFFF5F5EF),
                 borderRadius: BorderRadius.circular(12.r),
               ),
               child: IconButton(
-                padding: EdgeInsets.zero, // আইকন যেন সেন্টারে থাকে
+                padding: EdgeInsets.zero,
                 icon: Icon(Icons.arrow_back, color: Colors.black, size: 20.sp),
                 onPressed: () => Get.back(),
               ),

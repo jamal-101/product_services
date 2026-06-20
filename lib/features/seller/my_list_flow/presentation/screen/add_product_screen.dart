@@ -1,14 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class AddProductScreen extends StatelessWidget {
-  const AddProductScreen({super.key});
+
+  const AddProductScreen({super.key,});
+
+
 
   @override
   Widget build(BuildContext context) {
+    final Map<String, dynamic>? product = Get.arguments as Map<String, dynamic>?;
     return Scaffold(
-      backgroundColor: const Color(0xFFFAFAFA), // ফিগমার ব্যাকগ্রাউন্ড কালার
+      backgroundColor: const Color(0xFFFAFAFA),
       appBar: AppBar(
         backgroundColor: Colors.white,
         surfaceTintColor: Colors.white,
@@ -29,7 +35,7 @@ class AddProductScreen extends StatelessWidget {
           ),
         ),
         title: Text(
-          "Add Product",
+          product == null ? "Add Product" : "Edit Product",
           style: GoogleFonts.montserrat(
             color: Colors.black,
             fontWeight: FontWeight.bold,
@@ -123,7 +129,7 @@ class AddProductScreen extends StatelessWidget {
                   ),
                 ),
                 child: Text(
-                  "Publish Product",
+                 product == null ? "Publish Product" : "Update Product",
                   style: GoogleFonts.montserrat(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
@@ -147,7 +153,7 @@ class AddProductScreen extends StatelessWidget {
         border: Border.all(color: Color(0xFFF3F4F6)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.03),
+            color: Colors.black.withValues(alpha: 0.03),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),

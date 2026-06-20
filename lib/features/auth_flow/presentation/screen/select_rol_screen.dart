@@ -19,18 +19,10 @@ class SelectRoleScreen extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Image.asset(AppImages.splash1, height: 50.h),
-              SizedBox(height: 24.h),
-              RichText(
-                textAlign: TextAlign.center,
-                text: TextSpan(
-                  style: TextStyle(fontSize: 24.sp, fontWeight: FontWeight.bold),
-                  children: const [
-                    TextSpan(text: "How will you ", style: TextStyle(color: AppColor.textDark)),
-                    TextSpan(text: "use ", style: TextStyle(color: AppColor.accent)),
-                    TextSpan(text: "the app?", style: TextStyle(color: AppColor.textDark)),
-                  ],
-                ),
+              Image.asset(AppImages.rollLOgoImage, height: 110.h),
+              Padding(
+                padding: EdgeInsets.only(left: 16,right: 16),
+                child: Image.asset(AppImages.selectRollText),
               ),
               SizedBox(height: 8.h),
               Text(
@@ -47,11 +39,11 @@ class SelectRoleScreen extends StatelessWidget {
                       return GestureDetector(
                         onTap: () => controller.selectRole('buyer'),
                         child: _buildRoleCard(
-                          icon: Icons.person_pin,
+                          isSelected: isSelected,
                           title: "Buyer",
                           desc: "Explore and purchase products & services easily.",
                           color: AppColor.primary,
-                          isSelected: isSelected,
+                          assetPath: AppImages.buyerImage,
                         ),
                       );
                     }),
@@ -63,7 +55,7 @@ class SelectRoleScreen extends StatelessWidget {
                       return GestureDetector(
                         onTap: () => controller.selectRole('seller'),
                         child: _buildRoleCard(
-                          icon: Icons.store_mall_directory_outlined,
+                          assetPath: AppImages.sellerImage,
                           title: "Seller",
                           desc: "Offer your goods & services and grow your brand.",
                           color: AppColor.accent,
@@ -82,7 +74,7 @@ class SelectRoleScreen extends StatelessWidget {
   }
 
   Widget _buildRoleCard({
-    required IconData icon,
+    required String assetPath,
     required String title,
     required String desc,
     required Color color,
@@ -105,11 +97,13 @@ class SelectRoleScreen extends StatelessWidget {
       ),
       child: Column(
         children: [
-          CircleAvatar(
-            radius: 24.r,
-            backgroundColor: color.withOpacity(0.1),
-            child: Icon(icon, color: color, size: 24.w),
-          ),
+            Padding(
+              padding: EdgeInsets.all(12.r), // ইমেজের চারদিকে কিছুটা স্পেস দেয়ার জন্য
+              child: Image.asset(
+                assetPath,
+              ),
+            ),
+          // ),
           SizedBox(height: 12.h),
           Text(title, style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold, color: color)),
           SizedBox(height: 8.h),

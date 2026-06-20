@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:product_service/config/route/app_route.dart';
 import '../../../../utils/constants/app_color.dart';
 import '../controller/auth_controller.dart';
 
@@ -13,9 +15,22 @@ class VerifyPhoneScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
         elevation: 0,
-        leading: const BackButton(color: Colors.black),
+        centerTitle: false,
+        leading: Padding(
+          padding: EdgeInsets.only(left: 16.w, top: 8.h, bottom: 8.h),
+          child: Container(
+            decoration: BoxDecoration(
+              color: Color(0xFFFFFFFF),
+              borderRadius: BorderRadius.circular(12.r),
+              border: Border.all(color: Color(0xFFECECF0)),
+            ),
+            child: IconButton(
+              icon: const Icon(Icons.arrow_back, color: Colors.black, size: 20),
+              onPressed: () => Navigator.pop(context),
+            ),
+          ),
+        ),
       ),
       body: SafeArea(
         child: Padding(
@@ -26,57 +41,92 @@ class VerifyPhoneScreen extends StatelessWidget {
               SizedBox(height: 20.h),
               RichText(
                 text: TextSpan(
-                  style: TextStyle(fontSize: 28.sp, fontWeight: FontWeight.bold),
+                  style: GoogleFonts.plusJakartaSans(
+                    fontSize: 28.sp,
+                    fontWeight: FontWeight.bold,
+                  ),
                   children: const [
-                    TextSpan(text: "Verify ", style: TextStyle(color: AppColor.textDark)),
-                    TextSpan(text: "phone", style: TextStyle(color: AppColor.accent)),
+                    TextSpan(
+                      text: "Verify ",
+                      style: TextStyle(color: AppColor.textDark),
+                    ),
+                    TextSpan(
+                      text: "phone",
+                      style: TextStyle(color: AppColor.accent),
+                    ),
                   ],
                 ),
               ),
               SizedBox(height: 8.h),
               Text(
                 "We sent a 6-digit code to +1 555 ••• 0000",
-                style: TextStyle(fontSize: 14.sp, color: AppColor.textLight, height: 1.4),
+                style: GoogleFonts.plusJakartaSans(
+                  fontSize: 14.sp,
+                  color: AppColor.textLight,
+                  height: 1.4,
+                ),
               ),
               SizedBox(height: 40.h),
 
               // 6-Digit OTP Boxes
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: List.generate(6, (index) => _buildOtpField(context, index)),
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: List.generate(
+                  6,
+                  (index) => Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 8.w),
+                    child: _buildOtpField(context, index),
+                  ),
+                ),
               ),
               SizedBox(height: 32.h),
 
               // Countdown Timer
               Center(
-                child: Obx(() => RichText(
-                  text: TextSpan(
-                    style: TextStyle(fontSize: 13.sp, color: AppColor.textLight),
-                    children: [
-                      const TextSpan(text: "Didn't receive? "),
-                      TextSpan(
-                        text: "Resend in 0:${controller.phoneCountdown.value.toString().padLeft(2, '0')}",
-                        style: const TextStyle(color: AppColor.primary, fontWeight: FontWeight.bold),
+                child: Obx(
+                  () => RichText(
+                    text: TextSpan(
+                      style: GoogleFonts.plusJakartaSans(
+                        fontSize: 16.sp,
+                        color: AppColor.textLight,
                       ),
-                    ],
+                      children: [
+                        const TextSpan(text: "Didn't receive? "),
+                        TextSpan(
+                          text:
+                              "Resend in 0:${controller.phoneCountdown.value.toString().padLeft(2, '0')}",
+                          style: GoogleFonts.plusJakartaSans(
+                            color: AppColor.primary,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                )),
+                ),
               ),
               SizedBox(height: 40.h),
-
-              // Verify & Continue Button
               SizedBox(
                 width: double.infinity,
                 height: 50.h,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColor.primary,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.r)),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(14.r),
+                    ),
                   ),
                   onPressed: () {
-                    // সফল ভেরিফিকেশন হলে হোমপেজ বা সাকসেস ডায়ালগে নেভিগেট করার লজিক
+                    Get.toNamed(AppRoutes.loginScreen);
                   },
-                  child: Text("Verify & Continue", style: TextStyle(fontSize: 16.sp, color: Colors.white, fontWeight: FontWeight.bold)),
+                  child: Text(
+                    "Verify & Continue",
+                    style: GoogleFonts.plusJakartaSans(
+                      fontSize: 16.sp,
+                      color: Colors.white,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
                 ),
               ),
             ],
@@ -111,15 +161,10 @@ class VerifyPhoneScreen extends StatelessWidget {
             borderRadius: BorderRadius.circular(10.r),
             borderSide: const BorderSide(color: Color(0xFFECECF0), width: 1.5),
           ),
-
-          // ক্লিক করার পর (Focused) বর্ডার কালার
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10.r),
-            // আপনি চাইলে ফোকাসড অবস্থায় কালার সেম রাখতে পারেন অথবা প্রাইমারি কালার দিতে পারেন
             borderSide: const BorderSide(color: Color(0xFFECECF0), width: 2.0),
           ),
-
-          // এরর বর্ডার (যদি ভ্যালিডেশন ব্যবহার করেন)
           errorBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10.r),
             borderSide: const BorderSide(color: Colors.red, width: 1.0),

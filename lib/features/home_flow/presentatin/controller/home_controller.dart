@@ -18,6 +18,13 @@ class HomeController extends GetxController {
     "Coca-Cola Classic 2L",
   ].obs;
 
+  // HomeController-এর ভেতরে
+  var selectedCity = "Madrid".obs;
+
+  void updateCity(String newCity) {
+    selectedCity.value = newCity;
+  }
+
   void changeNavIndex(int index) {
     currentNavIndex.value = index;
   }

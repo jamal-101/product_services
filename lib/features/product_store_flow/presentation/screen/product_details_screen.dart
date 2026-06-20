@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
+import 'package:product_service/features/message_flow/screen/message_screen.dart';
 import 'package:product_service/utils/constants/app_color.dart';
 import 'package:product_service/utils/constants/app_images.dart';
 
@@ -262,16 +263,15 @@ class ProductDetailsScreen extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF27AE60),
-                    // উচ্চতা এবং প্যাডিং অ্যাডজাস্ট করা হয়েছে
                     minimumSize: Size(double.infinity, 56.h),
-                    // ডিজাইন অনুযায়ী পুরোপুরি গোলাকার শেপ
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(30.r),
                     ),
-                    elevation: 0, // শ্যাডো কমিয়ে ফ্ল্যাট লুক দেওয়া হয়েছে
+                    elevation: 0,
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -283,7 +283,7 @@ class ProductDetailsScreen extends StatelessWidget {
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 16.sp,
-                          fontWeight: FontWeight.w600, // ফন্ট ওয়েট বাড়িয়ে দেওয়া হয়েছে
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
                     ],

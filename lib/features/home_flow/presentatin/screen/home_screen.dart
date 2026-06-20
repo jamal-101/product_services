@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:product_service/features/home_flow/presentatin/screen/features_stories_screen.dart';
+import 'package:product_service/features/message_flow/screen/message_screen.dart';
+import 'package:product_service/utils/constants/app_images.dart';
 import '../../../../component/bottom_navBar/nav_bar..dart';
+import '../../../profile_section/presentation/screen/save_flow/presentation/screen/explor_stories_screen.dart';
 import '../../../profile_section/presentation/widget/app_drawer.dart';
 import '../controller/home_controller.dart';
+import 'categories_screen.dart';
 import 'notification_screen.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -16,53 +21,78 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       key: _scaffoldKey,
       drawer: const AppDrawer(),
-      backgroundColor: const Color(0xFFFBFBFB),
-      bottomNavigationBar: BottomNavBar(
-        selectedIndex: 0,
-      ),
+      bottomNavigationBar: BottomNavBar(selectedIndex: 0),
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.menu, color: Colors.black),
+          icon: Image.asset(AppImages.menuIcon, height: 24.h, width: 24.w),
           onPressed: () {
             _scaffoldKey.currentState?.openDrawer();
           },
         ),
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              width: 32.w,
-              height: 32.h,
-              decoration: BoxDecoration(
-                color: const Color(0xFF27AE60),
-                borderRadius: BorderRadius.circular(6.r),
-              ),
-              child: const Icon(Icons.grid_view_rounded, color: Colors.white, size: 18),
-            ),
-            SizedBox(width: 8.w),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text("PRODUCTOS", style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.bold, color: Colors.green)),
-                Text("Y SERVICIOS", style: TextStyle(fontSize: 10.sp, color: Colors.orange, height: 0.8)),
-              ],
-            )
-          ],
+        title: Image.asset(
+          AppImages.home_center_icon,
+          height: 36.h,
+          width: 129.w,
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.notifications_none_outlined, color: Colors.black),
+            icon: Image.asset(
+              AppImages.homeNotificationIcon,
+              height: 28.h,
+              width: 28.w,
+            ),
             onPressed: () => Get.to(() => const NotificationScreen()),
           ),
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        backgroundColor: const Color(0xFF27AE60),
+        onPressed: () {
+          Get.to(MessageScreen());
+        },
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        highlightElevation: 0,
         shape: const CircleBorder(),
-        child: const Icon(Icons.support_agent, color: Colors.white, size: 28),
+        child: Stack(
+          clipBehavior: Clip.none,
+          children: [
+            Container(
+              height: 90.r,
+              width: 90.r,
+              decoration: BoxDecoration(
+                color: const Color(0xFF27AE60),
+                shape: BoxShape.circle,
+                border: Border.all(width: 3.w,color: Color(0xFFFFFFFF)),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.1),
+                    blurRadius: 10,
+                    offset: const Offset(0, 5),
+                  ),
+                ],
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Image.asset(AppImages.floatingIcon,height: 12.h,width: 12.w),
+              ),
+            ),
+            Positioned(
+              right: 0,
+              top: 0,
+              child: Container(
+                height: 18.r,
+                width: 18.r,
+                decoration: BoxDecoration(
+                  color: const Color(0xFFF44336),
+                  shape: BoxShape.circle,
+                  border: Border.all(color: Colors.white, width: 3.w),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       body: SingleChildScrollView(
@@ -72,37 +102,14 @@ class HomeScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(height: 16.h),
-            // GestureDetector(
-            //   onTap: () => Get.toNamed(AppRoutes.searchScreen),
-            //   child: Container(
-            //     padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
-            //     decoration: BoxDecoration(
-            //       color: Colors.white,
-            //       borderRadius: BorderRadius.circular(25.r),
-            //       border: Border.all(color: const Color(0xFFECECF0)),
-            //     ),
-            //     child: Row(
-            //       children: [
-            //         const Icon(Icons.search, color: Colors.grey),
-            //         SizedBox(width: 8.w),
-            //         Text(
-            //           "What would you like to buy?",
-            //           style: TextStyle(color: Colors.grey, fontSize: 14.sp),
-            //         ),
-            //       ],
-            //     ),
-            //   ),
-            // ),
-            // SizedBox(height: 20.h),
-
-            // 🎚️ ব্যানার স্লাইডার (PageView)
             SizedBox(
               height: 140.h,
               child: Stack(
                 children: [
                   PageView.builder(
                     controller: controller.bannerPageController,
-                    onPageChanged: (index) => controller.currentBannerIndex.value = index,
+                    onPageChanged: (index) =>
+                        controller.currentBannerIndex.value = index,
                     itemCount: 3,
                     itemBuilder: (context, index) {
                       return Container(
@@ -121,56 +128,94 @@ class HomeScreen extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Text("Hisense", style: TextStyle(color: Colors.white, fontSize: 18.sp, fontWeight: FontWeight.bold)),
-                                  Text("OFFICIAL SPONSOR", style: TextStyle(color: Colors.white70, fontSize: 10.sp)),
+                                  Text(
+                                    "Hisense",
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 18.sp,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  Text(
+                                    "OFFICIAL SPONSOR",
+                                    style: TextStyle(
+                                      color: Colors.white70,
+                                      fontSize: 10.sp,
+                                    ),
+                                  ),
                                   SizedBox(height: 8.h),
-                                  Text("Innovating for a Brighter Life", style: TextStyle(color: Colors.cyanAccent, fontSize: 12.sp, fontWeight: FontWeight.w500)),
+                                  Text(
+                                    "Innovating for a Brighter Life",
+                                    style: TextStyle(
+                                      color: Colors.cyanAccent,
+                                      fontSize: 12.sp,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
                                 ],
                               ),
                             ),
-                            const Icon(Icons.emoji_events, size: 60, color: Colors.amber),
+                            const Icon(
+                              Icons.emoji_events,
+                              size: 60,
+                              color: Colors.amber,
+                            ),
                           ],
                         ),
                       );
                     },
                   ),
-                  // স্লাইডার ডট ইন্ডিকেটর
                   Positioned(
                     bottom: 10.h,
                     left: 0,
                     right: 0,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: List.generate(3, (index) => Obx(() => Container(
-                        margin: EdgeInsets.symmetric(horizontal: 3.w),
-                        width: controller.currentBannerIndex.value == index ? 12.w : 6.w,
-                        height: 6.h,
-                        decoration: BoxDecoration(
-                          color: controller.currentBannerIndex.value == index ? Colors.white : Colors.white54,
-                          borderRadius: BorderRadius.circular(3.r),
+                      children: List.generate(
+                        3,
+                        (index) => Obx(
+                          () => Container(
+                            margin: EdgeInsets.symmetric(horizontal: 3.w),
+                            width: controller.currentBannerIndex.value == index
+                                ? 12.w
+                                : 6.w,
+                            height: 6.h,
+                            decoration: BoxDecoration(
+                              color:
+                                  controller.currentBannerIndex.value == index
+                                  ? Colors.white
+                                  : Colors.white54,
+                              borderRadius: BorderRadius.circular(3.r),
+                            ),
+                          ),
                         ),
-                      ))),
+                      ),
                     ),
-                  )
+                  ),
                 ],
               ),
             ),
             SizedBox(height: 20.h),
-
-            // 📁 ক্যাটাগরি সেকশন হেডার
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text("Browse Categories", style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold, color: Colors.black54)),
+                Text(
+                  "Browse Categories",
+                  style: TextStyle(
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black54,
+                  ),
+                ),
                 TextButton(
-                  // onPressed: () => Get.to(() => const CategoriesScreen()),
-                  onPressed: (){},
-                  child: const Text("See All", style: TextStyle(color: Color(0xFF27AE60))),
+                  onPressed: () => Get.to(() => CategoriesScreen()),
+                  child: const Text(
+                    "See All",
+                    style: TextStyle(color: Color(0xFF27AE60)),
+                  ),
                 ),
               ],
             ),
-
-            // ক্যাটাগরি হরিজন্টাল লিস্ট
             SizedBox(
               height: 85.h,
               child: ListView(
@@ -179,7 +224,10 @@ class HomeScreen extends StatelessWidget {
                 children: [
                   _buildCategoryItem(Icons.electric_bolt, "Electronics"),
                   _buildCategoryItem(Icons.checkroom, "Fashion"),
-                  _buildCategoryItem(Icons.king_bed_outlined, "Home & \nLiving"),
+                  _buildCategoryItem(
+                    Icons.king_bed_outlined,
+                    "Home & \nLiving",
+                  ),
                   _buildCategoryItem(Icons.brush_outlined, "Beauty"),
                   _buildCategoryItem(Icons.sports_soccer, "Sports"),
                   _buildCategoryItem(Icons.camera, "Toys and \nGames"),
@@ -190,16 +238,43 @@ class HomeScreen extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text("Featured Stores", style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold, color: Colors.black54)),
+                Text(
+                  "Featured Stores",
+                  style: TextStyle(
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black54,
+                  ),
+                ),
                 TextButton(
-                  onPressed: () {},
-                  child: const Text("See All", style: TextStyle(color: Color(0xFF27AE60))),
+                  onPressed: () {
+                    Get.to(FeaturesStoriesScreen());
+                  },
+                  child: const Text(
+                    "See All",
+                    style: TextStyle(color: Color(0xFF27AE60)),
+                  ),
                 ),
               ],
             ),
-            _buildStoreCard("Anytime", "Electronics • Barcelona", const Color(0xFFE67E22), false),
-            _buildStoreCard("Healixir", "Electronics • Barcelona", const Color(0xFF16A085), true),
-            _buildStoreCard("Cocacole", "Food • Barcelona", const Color(0xFFC0392B), false),
+            _buildStoreCard(
+              "Anytime",
+              "Electronics • Barcelona",
+              const Color(0xFFE67E22),
+              false,
+            ),
+            _buildStoreCard(
+              "Healixir",
+              "Electronics • Barcelona",
+              const Color(0xFF16A085),
+              true,
+            ),
+            _buildStoreCard(
+              "Cocacole",
+              "Food • Barcelona",
+              const Color(0xFFC0392B),
+              false,
+            ),
             SizedBox(height: 20.h),
           ],
         ),
@@ -218,14 +293,22 @@ class HomeScreen extends StatelessWidget {
             child: Icon(icon, color: Colors.black54, size: 20),
           ),
           SizedBox(height: 6.h),
-          Text(title, style: TextStyle(fontSize: 11.sp, color: Colors.black54)),
+          Text(
+            title,
+            style: TextStyle(fontSize: 11.sp, color: Colors.black54),
+          ),
         ],
       ),
     );
   }
 
   // --- 🏬 হেল্পার উইজেট: স্টোর কার্ড ---
-  Widget _buildStoreCard(String title, String subtitle, Color logoBg, bool isBookmarked) {
+  Widget _buildStoreCard(
+    String title,
+    String subtitle,
+    Color logoBg,
+    bool isBookmarked,
+  ) {
     return Container(
       margin: EdgeInsets.only(bottom: 12.h),
       padding: EdgeInsets.all(12.w),
@@ -239,7 +322,10 @@ class HomeScreen extends StatelessWidget {
           Container(
             width: 50.w,
             height: 50.h,
-            decoration: BoxDecoration(color: logoBg, borderRadius: BorderRadius.circular(8.r)),
+            decoration: BoxDecoration(
+              color: logoBg,
+              borderRadius: BorderRadius.circular(8.r),
+            ),
             child: const Icon(Icons.store_mall_directory, color: Colors.white),
           ),
           SizedBox(width: 12.w),
@@ -247,9 +333,18 @@ class HomeScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(title, style: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.bold)),
+                Text(
+                  title,
+                  style: TextStyle(
+                    fontSize: 15.sp,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
                 SizedBox(height: 4.h),
-                Text(subtitle, style: TextStyle(fontSize: 12.sp, color: Colors.grey)),
+                Text(
+                  subtitle,
+                  style: TextStyle(fontSize: 12.sp, color: Colors.grey),
+                ),
               ],
             ),
           ),
@@ -258,12 +353,22 @@ class HomeScreen extends StatelessWidget {
             children: [
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
-                decoration: BoxDecoration(color: const Color(0xFFFFF9E6), borderRadius: BorderRadius.circular(12.r)),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFFFF9E6),
+                  borderRadius: BorderRadius.circular(12.r),
+                ),
                 child: Row(
                   children: [
                     const Icon(Icons.star, color: Colors.amber, size: 14),
                     SizedBox(width: 2.w),
-                    Text("4.9", style: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.bold, color: Colors.amber[800])),
+                    Text(
+                      "4.9",
+                      style: TextStyle(
+                        fontSize: 12.sp,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.amber[800],
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -274,7 +379,7 @@ class HomeScreen extends StatelessWidget {
                 size: 20,
               ),
             ],
-          )
+          ),
         ],
       ),
     );

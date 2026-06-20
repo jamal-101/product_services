@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:product_service/config/route/app_route.dart';
 import 'package:product_service/features/home_flow/presentatin/controller/home_controller.dart';
+import 'package:product_service/features/home_flow/presentatin/screen/features_stories_screen.dart';
 import 'package:product_service/utils/constants/app_color.dart';
 import '../../../../component/bottom_navBar/nav_bar..dart';
+import '../widget/city_dialog.dart';
+import '../widget/filtter_bottom_sheet.dart';
 
 class ExploreStoriesScreen extends StatelessWidget {
   const ExploreStoriesScreen({super.key});
@@ -47,20 +51,6 @@ class ExploreStoriesScreen extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            AppBar(
-              backgroundColor: Colors.white,
-              surfaceTintColor: AppColor.appBackgroundColor,
-              elevation: 0,
-              automaticallyImplyLeading: false,
-              title: Text(
-                "Featured Stores",
-                style: TextStyle(
-                  fontSize: 18.sp,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                ),
-              ),
-            ),
             Expanded(
               child: SingleChildScrollView(
                 physics: const BouncingScrollPhysics(),
@@ -127,12 +117,45 @@ class ExploreStoriesScreen extends StatelessWidget {
                             Icons.tune,
                             "All Filters",
                             isSelected: true,
+                            onTap: () {
+                              showModalBottomSheet(
+                                context: context,
+                                isScrollControlled: true,
+                                backgroundColor: Colors.transparent, // ডিজাইনের জন্য স্বচ্ছ ব্যাকগ্রাউন্ড
+                                builder: (context) => const FilterBottomSheet(),
+                              );
+                            },
                           ),
-                          _buildFilterChip(
-                            Icons.location_on_outlined,
-                            "Madrid",
+                          // ExploreStoriesScreen-এর চিপ সেকশনে
+                          Obx(() =>
+                              _buildFilterChip(
+                                Icons.location_on_outlined,
+                                controller.selectedCity.value,
+                                onTap: () {
+                                  showModalBottomSheet(
+                                    context: context,
+                                    isScrollControlled: true, // এটি বড় কন্টেন্টের জন্য প্রয়োজন
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
+                                    ),
+                                    builder: (context) => Padding(
+                                      // কিবোর্ড বা সিস্টেমবার এর জন্য প্যাডিং
+                                      padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                                      child: Container(
+                                        // নিচে থেকে আসার জন্য হাইট কন্ট্রোল
+                                        height: 0.5.sh, // স্ক্রিনের উচ্চতার ৫০%
+                                        child: CityDialog(
+                                          selectedCity: controller.selectedCity.value,
+                                          onCitySelected: (newCity) {
+                                            controller.updateCity(newCity);
+                                          },
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
                           ),
-                          _buildFilterChip(Icons.schedule, "Open now"),
                           _buildFilterChip(Icons.star_border, "4.5+"),
                         ],
                       ),
@@ -252,31 +275,35 @@ class ExploreStoriesScreen extends StatelessWidget {
     IconData icon,
     String label, {
     bool isSelected = false,
+        VoidCallback? onTap,
   }) {
-    return Container(
-      margin: EdgeInsets.only(right: 8.w),
-      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
-      decoration: BoxDecoration(
-        color: isSelected ? const Color(0xFF2C3E50) : Colors.white,
-        borderRadius: BorderRadius.circular(20.r),
-        border: Border.all(color: const Color(0xFFECECF0)),
-      ),
-      child: Row(
-        children: [
-          Icon(
-            icon,
-            size: 14.w,
-            color: isSelected ? Colors.white : Colors.black54,
-          ),
-          SizedBox(width: 4.w),
-          Text(
-            label,
-            style: TextStyle(
-              fontSize: 12.sp,
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        margin: EdgeInsets.only(right: 8.w),
+        padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
+        decoration: BoxDecoration(
+          color: isSelected ? const Color(0xFF2C3E50) : Colors.white,
+          borderRadius: BorderRadius.circular(20.r),
+          border: Border.all(color: const Color(0xFFECECF0)),
+        ),
+        child: Row(
+          children: [
+            Icon(
+              icon,
+              size: 14.w,
               color: isSelected ? Colors.white : Colors.black54,
             ),
-          ),
-        ],
+            SizedBox(width: 4.w),
+            Text(
+              label,
+              style: TextStyle(
+                fontSize: 12.sp,
+                color: isSelected ? Colors.white : Colors.black54,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -387,23 +414,29 @@ class ExploreStoriesScreen extends StatelessWidget {
     return Obx(
       () => Row(
         children: [
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20.r),
-              border: Border.all(color: Colors.grey.withValues(alpha: 0.3)),
-            ),
-            child: Row(
-              children: [
-                Icon(Icons.bookmark_border, size: 16.sp, color: Colors.grey),
-                SizedBox(width: 4.w),
-                Text(
-                  "Saved",
-                  style: TextStyle(fontSize: 12.sp, color: Colors.grey),
+          if (controller.isListViewSelected.value)
+            GestureDetector(
+              onTap: (){
+                Get.to(FeaturesStoriesScreen());
+              },
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20.r),
+                  border: Border.all(color: Colors.grey.withValues(alpha: 0.3)),
                 ),
-              ],
+                child: Row(
+                  children: [
+                    Icon(Icons.bookmark_border, size: 16.sp, color: Colors.grey),
+                    SizedBox(width: 4.w),
+                    Text(
+                      "Saved",
+                      style: TextStyle(fontSize: 12.sp, color: Colors.grey),
+                    ),
+                  ],
+                ),
+              ),
             ),
-          ),
           SizedBox(width: 8.w),
           Container(
             decoration: BoxDecoration(
@@ -452,10 +485,32 @@ class ExploreStoriesScreen extends StatelessWidget {
     );
   }
 
+
+
   Widget _buildMapViewContent() {
     return Container(
       height: 500.h,
-      child: Stack(children: [const Center(child: Text("Google Map View"))]),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(12.r),
+        child: GoogleMap(
+          initialCameraPosition: const CameraPosition(
+            target: LatLng(40.4168, -3.7038),
+            zoom: 12,
+          ),
+          onMapCreated: (GoogleMapController controller) {
+        
+          },
+          markers: {
+            const Marker(
+              markerId: MarkerId('store_1'),
+              position: LatLng(40.4168, -3.7038),
+              infoWindow: InfoWindow(title: 'Store Name'),
+            ),
+          },
+          myLocationEnabled: true, // ইউজারের বর্তমান লোকেশন দেখানোর জন্য
+          zoomControlsEnabled: false, // ডিফল্ট জুম বাটন অফ রাখতে চাইলে
+        ),
+      ),
     );
   }
 }

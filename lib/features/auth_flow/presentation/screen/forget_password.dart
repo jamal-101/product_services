@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:product_service/config/route/app_route.dart';
+import 'package:product_service/utils/constants/app_images.dart';
 import '../../../../utils/constants/app_color.dart';
 import '../controller/auth_controller.dart';
 
@@ -14,9 +15,7 @@ class ForgetPasswordScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        leading: const BackButton(color: Colors.black),
+        automaticallyImplyLeading: false,
       ),
       body: SafeArea(
         child: Padding(
@@ -48,7 +47,10 @@ class ForgetPasswordScreen extends StatelessWidget {
                 keyboardType: TextInputType.emailAddress,
                 decoration: InputDecoration(
                   hintText: "you@example.com",
-                  prefixIcon: const Icon(Icons.email_outlined),
+                  prefixIcon: Padding(
+                    padding: EdgeInsets.only(left: 12,right: 5,top: 12,bottom: 12),
+                    child: Image.asset(AppImages.emailIcon,height: 5.h,width: 2.w,),
+                  ),
                   border: OutlineInputBorder(borderRadius: BorderRadius.circular(10.r)),
                   fillColor: Color(0xFFFFFFFF),
                   filled: true,

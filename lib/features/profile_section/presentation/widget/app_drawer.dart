@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:product_service/config/route/app_route.dart';
+import 'package:product_service/features/auth_flow/presentation/controller/auth_controller.dart';
 import 'package:product_service/features/profile_section/presentation/screen/save_flow/presentation/screen/privacy_and_policy.dart';
 import 'package:product_service/features/profile_section/presentation/screen/save_flow/presentation/screen/safety_guidelines.dart';
+import 'package:product_service/features/profile_section/presentation/screen/save_flow/presentation/screen/save_product_screen.dart';
 import 'package:product_service/features/profile_section/presentation/screen/save_flow/presentation/screen/save_screen.dart';
 import 'package:product_service/features/profile_section/presentation/screen/store_creation/presentation/screen/my_store.dart';
 
 import '../../../../services/storage/storage_service.dart';
+import '../screen/save_flow/presentation/screen/saved_services.dart';
 import '../screen/save_flow/presentation/screen/trems_and_condition.dart';
 
 class AppDrawer extends StatelessWidget {
@@ -17,6 +21,7 @@ class AppDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final AuthController authController = Get.put(AuthController());
     final bool isSeller = (LocalStorage.myRole == 'seller');
     return Drawer(
       width: 280.w,
@@ -56,31 +61,40 @@ class AppDrawer extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: 15.h),
-                Container(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 12.w,
-                    vertical: 8.h,
-                  ),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFF27AE60),
-                    borderRadius: BorderRadius.circular(8.r),
-                  ),
-                  child: Row(
-                    children: [
-                      const Icon(
-                        Icons.swap_horiz,
-                        color: Colors.white,
-                        size: 18,
-                      ),
-                      SizedBox(width: 8.w),
-                      Text(
-                        "Switch to Seller Mode",
-                        style: GoogleFonts.montserrat(
+                GestureDetector(
+                  onTap: (){
+                    Navigator.pop(context);
+                    authController.toggleRole();
+                  },
+                  child: Container(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 12.w,
+                      vertical: 8.h,
+                    ),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF27AE60),
+                      borderRadius: BorderRadius.circular(8.r),
+                    ),
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.swap_horiz,
                           color: Colors.white,
-                          fontSize: 12.sp,
+                          size: 22.sp,
                         ),
-                      ),
-                    ],
+                        SizedBox(width: 8.w),
+                        Text(
+                          (authController.selectedRole.value == 'seller')
+                              ? "Switch to Buyer Mode"
+                              : "Switch to Seller Mode",
+                          style: GoogleFonts.montserrat(
+                            color: Color(0xFFFFFFFF),
+                            fontWeight: FontWeight.w700,
+                            fontSize: 14.sp,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ],
@@ -152,10 +166,10 @@ class AppDrawer extends StatelessWidget {
             Get.to(() => const MyStore()); // আপনার স্ক্রিন নেম অনুযায়ী
             break;
           case "Saved Products":
-            Get.to(() => SaveScreen());
+            Get.to(() => SavedProductScreen());
             break;
           case "Saved Services":
-            // Get.to(() => const SavedServicesScreen());
+            Get.to(() => const SavedServicesScreen());
             break;
           case "Safety Guidelines":
             Get.to(() => SafetyGuidelines());

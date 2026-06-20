@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:product_service/utils/constants/app_images.dart';
 import '../../../../config/route/app_route.dart';
 import '../../../../utils/constants/app_color.dart';
 import '../controller/auth_controller.dart';
@@ -13,10 +15,24 @@ class CreateAccountScreen extends StatelessWidget {
     final controller = Get.find<AuthController>();
 
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
+        backgroundColor: Colors.white,
         elevation: 0,
-        leading: const BackButton(color: Colors.black),
+        leading: Padding(
+          padding: EdgeInsets.only(left: 16.w, top: 8.h, bottom: 8.h),
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12.r),
+              border: Border.all(color: const Color(0xFFECECF0)),
+            ),
+            child: IconButton(
+              icon: const Icon(Icons.arrow_back, color: Colors.black, size: 20),
+              onPressed: () => Get.back(),
+            ),
+          ),
+        ),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -27,234 +43,115 @@ class CreateAccountScreen extends StatelessWidget {
               SizedBox(height: 10.h),
               RichText(
                 text: TextSpan(
-                  style: TextStyle(fontSize: 28.sp, fontWeight: FontWeight.bold),
+                  style: GoogleFonts.montserrat(
+                    fontSize: 28.sp,
+                    fontWeight: FontWeight.bold,
+                  ),
                   children: const [
-                    TextSpan(text: "Create ", style: TextStyle(color: AppColor.textDark)),
-                    TextSpan(text: "account", style: TextStyle(color: AppColor.accent)),
+                    TextSpan(
+                      text: "Create ",
+                      style: TextStyle(color: AppColor.textDark),
+                    ),
+                    TextSpan(
+                      text: "account",
+                      style: TextStyle(color: AppColor.accent),
+                    ),
                   ],
                 ),
               ),
               SizedBox(height: 4.h),
               Text(
                 "Quick signup",
-                style: TextStyle(fontSize: 14.sp, color: AppColor.textLight),
+                style: GoogleFonts.plusJakartaSans(
+                  fontSize: 16.sp,
+                  color: AppColor.textLight,
+                ),
               ),
               SizedBox(height: 24.h),
 
-              // Full Name Field
-              Text("Full Name", style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w500, color: AppColor.textDark)),
-              SizedBox(height: 8.h),
-              TextFormField(
+              // Fields
+              _buildCommonTextField(
+                label: "Full Name",
+                hint: "John Doe",
+                imagePath: AppImages.personIcon,
                 controller: controller.registerNameController,
-                keyboardType: TextInputType.name,
-                decoration: InputDecoration(
-                  hintText: "John Doe",
-                  prefixIcon: const Icon(Icons.person_outline),
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(10.r)),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.r),
-                    borderSide: const BorderSide(color: Color(0xFFECECF0), width: 1.5),
-                  ),
-
-                  // ক্লিক করার পর (Focused) বর্ডার কালার
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.r),
-                    // আপনি চাইলে ফোকাসড অবস্থায় কালার সেম রাখতে পারেন অথবা প্রাইমারি কালার দিতে পারেন
-                    borderSide: const BorderSide(color: Color(0xFFECECF0), width: 2.0),
-                  ),
-
-                  // এরর বর্ডার (যদি ভ্যালিডেশন ব্যবহার করেন)
-                  errorBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.r),
-                    borderSide: const BorderSide(color: Colors.red, width: 1.0),
-                  ),
-                  focusedErrorBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.r),
-                    borderSide: const BorderSide(color: Colors.red, width: 2.0),
-                  ),
-                ),
               ),
               SizedBox(height: 16.h),
-
-              // Phone Number Field
-              Text("Phone Number", style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w500, color: AppColor.textDark)),
-              SizedBox(height: 8.h),
-              TextFormField(
+              _buildCommonTextField(
+                label: "Phone Number",
+                hint: "+1 555 000 0000",
+               imagePath: AppImages.callIcon,
                 controller: controller.registerPhoneController,
                 keyboardType: TextInputType.phone,
-                decoration: InputDecoration(
-                  hintText: "+1 555 000 0000",
-                  prefixIcon: const Icon(Icons.phone_outlined),
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(10.r)),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.r),
-                    borderSide: const BorderSide(color: Color(0xFFECECF0), width: 1.5),
-                  ),
-
-                  // ক্লিক করার পর (Focused) বর্ডার কালার
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.r),
-                    // আপনি চাইলে ফোকাসড অবস্থায় কালার সেম রাখতে পারেন অথবা প্রাইমারি কালার দিতে পারেন
-                    borderSide: const BorderSide(color: Color(0xFFECECF0), width: 2.0),
-                  ),
-
-                  // এরর বর্ডার (যদি ভ্যালিডেশন ব্যবহার করেন)
-                  errorBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.r),
-                    borderSide: const BorderSide(color: Colors.red, width: 1.0),
-                  ),
-                  focusedErrorBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.r),
-                    borderSide: const BorderSide(color: Colors.red, width: 2.0),
-                  ),
-                ),
               ),
               SizedBox(height: 16.h),
-
-              // Email Field
-              Text("Email", style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w500, color: AppColor.textDark)),
-              SizedBox(height: 8.h),
-              TextFormField(
+              _buildCommonTextField(
+                label: "Email",
+                hint: "you@example.com",
+                imagePath: AppImages.emailSymbol,
                 controller: controller.registerEmailController,
                 keyboardType: TextInputType.emailAddress,
-                decoration: InputDecoration(
-                  hintText: "you@example.com",
-                  prefixIcon: const Icon(Icons.email_outlined),
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(10.r)),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.r),
-                    borderSide: const BorderSide(color: Color(0xFFECECF0), width: 1.5),
-                  ),
-
-                  // ক্লিক করার পর (Focused) বর্ডার কালার
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.r),
-                    // আপনি চাইলে ফোকাসড অবস্থায় কালার সেম রাখতে পারেন অথবা প্রাইমারি কালার দিতে পারেন
-                    borderSide: const BorderSide(color: Color(0xFFECECF0), width: 2.0),
-                  ),
-
-                  // এরর বর্ডার (যদি ভ্যালিডেশন ব্যবহার করেন)
-                  errorBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.r),
-                    borderSide: const BorderSide(color: Colors.red, width: 1.0),
-                  ),
-                  focusedErrorBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.r),
-                    borderSide: const BorderSide(color: Colors.red, width: 2.0),
-                  ),
-                ),
               ),
               SizedBox(height: 16.h),
-
-              // Password Field
-              Text("Password", style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w500, color: AppColor.textDark)),
-              SizedBox(height: 8.h),
-              Obx(() => TextFormField(
+              _buildPasswordField(
+                label: "Password",
+                imagePath: AppImages.passwordSymbol,
                 controller: controller.registerPasswordController,
-                obscureText: !controller.isRegisterPasswordVisible.value,
-                decoration: InputDecoration(
-                  hintText: "••••••••",
-                  prefixIcon: const Icon(Icons.lock_outline),
-                  suffixIcon: IconButton(
-                    icon: Icon(controller.isRegisterPasswordVisible.value
-                        ? Icons.visibility_off_outlined
-                        : Icons.visibility_outlined),
-                    onPressed: () => controller.isRegisterPasswordVisible.toggle(),
-                  ),
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(10.r)),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.r),
-                    borderSide: const BorderSide(color: Color(0xFFECECF0), width: 1.5),
-                  ),
-
-                  // ক্লিক করার পর (Focused) বর্ডার কালার
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.r),
-                    // আপনি চাইলে ফোকাসড অবস্থায় কালার সেম রাখতে পারেন অথবা প্রাইমারি কালার দিতে পারেন
-                    borderSide: const BorderSide(color: Color(0xFFECECF0), width: 2.0),
-                  ),
-
-                  // এরর বর্ডার (যদি ভ্যালিডেশন ব্যবহার করেন)
-                  errorBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.r),
-                    borderSide: const BorderSide(color: Colors.red, width: 1.0),
-                  ),
-                  focusedErrorBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.r),
-                    borderSide: const BorderSide(color: Colors.red, width: 2.0),
-                  ),
-                ),
-              )),
+                isVisible: controller.isRegisterPasswordVisible,
+              ),
               SizedBox(height: 16.h),
-
-              // Confirm Password Field
-              Text("Confirm Password", style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w500, color: AppColor.textDark)),
-              SizedBox(height: 8.h),
-              Obx(() => TextFormField(
+              _buildPasswordField(
+                imagePath: AppImages.passwordSymbol,
+                label: "Confirm Password",
                 controller: controller.registerConfirmPasswordController,
-                obscureText: !controller.isRegisterConfirmPasswordVisible.value,
-                decoration: InputDecoration(
-                  hintText: "••••••••",
-                  prefixIcon: const Icon(Icons.lock_outline),
-                  suffixIcon: IconButton(
-                    icon: Icon(controller.isRegisterConfirmPasswordVisible.value
-                        ? Icons.visibility_off_outlined
-                        : Icons.visibility_outlined),
-                    onPressed: () => controller.isRegisterConfirmPasswordVisible.toggle(),
-                  ),
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(10.r)),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.r),
-                    borderSide: const BorderSide(color: Color(0xFFECECF0), width: 1.5),
-                  ),
+                isVisible: controller.isRegisterConfirmPasswordVisible,
+              ),
 
-                  // ক্লিক করার পর (Focused) বর্ডার কালার
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.r),
-                    // আপনি চাইলে ফোকাসড অবস্থায় কালার সেম রাখতে পারেন অথবা প্রাইমারি কালার দিতে পারেন
-                    borderSide: const BorderSide(color: Color(0xFFECECF0), width: 2.0),
-                  ),
-
-                  // এরর বর্ডার (যদি ভ্যালিডেশন ব্যবহার করেন)
-                  errorBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.r),
-                    borderSide: const BorderSide(color: Colors.red, width: 1.0),
-                  ),
-                  focusedErrorBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.r),
-                    borderSide: const BorderSide(color: Colors.red, width: 2.0),
-                  ),
-                ),
-              )),
               SizedBox(height: 32.h),
 
-              // Create Account Button
+              // Button
               SizedBox(
                 width: double.infinity,
                 height: 50.h,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColor.primary,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.r)),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(14.r),
+                    ),
                   ),
                   onPressed: () => Get.toNamed(AppRoutes.verifyPhone),
-                  child: Text("Create Account", style: TextStyle(fontSize: 16.sp, color: Colors.white, fontWeight: FontWeight.bold)),
+                  child: Text(
+                    "Create Account",
+                    style: GoogleFonts.plusJakartaSans(
+                      fontSize: 16.sp,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ),
               ),
               SizedBox(height: 24.h),
 
-              // Already have an account Login Link
+              // Login Link
               Center(
                 child: GestureDetector(
                   onTap: () => Get.back(),
                   child: RichText(
                     text: TextSpan(
-                      style: TextStyle(fontSize: 14.sp, color: AppColor.textLight),
-                      children: const [
+                      style: GoogleFonts.plusJakartaSans(
+                        fontSize: 16.sp,
+                        color: AppColor.textLight,
+                      ),
+                      children: [
                         TextSpan(text: "Already have an account? "),
                         TextSpan(
                           text: "Login",
-                          style: TextStyle(color: AppColor.primary, fontWeight: FontWeight.bold),
+                          style: GoogleFonts.plusJakartaSans(
+                            color: AppColor.primary,
+                            fontSize: 16.sp,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ],
                     ),
@@ -266,6 +163,133 @@ class CreateAccountScreen extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+  Widget _buildCommonTextField({
+    required String label,
+    required String hint,
+    required String imagePath,
+    required TextEditingController controller,
+    TextInputType keyboardType = TextInputType.text,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: GoogleFonts.montserrat(
+            fontSize: 14.sp,
+            fontWeight: FontWeight.w500,
+            color: AppColor.textDark,
+          ),
+        ),
+        SizedBox(height: 8.h),
+        TextFormField(
+          controller: controller,
+          keyboardType: keyboardType,
+          decoration: InputDecoration(
+            hintText: hint,
+            prefixIcon: Padding(
+              padding: EdgeInsets.only(left: 16.sp,right: 5.sp,top: 14.sp,bottom: 16),
+              child: Image.asset(imagePath,height: 5.h,width: 5.w),
+            ),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10.r),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10.r),
+              borderSide: const BorderSide(
+                color: Color(0xFFECECF0),
+                width: 1.5,
+              ),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10.r),
+              borderSide: const BorderSide(
+                color: Color(0xFFECECF0),
+                width: 2.0,
+              ),
+            ),
+            errorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10.r),
+              borderSide: const BorderSide(color: Colors.red, width: 1.0),
+            ),
+            focusedErrorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10.r),
+              borderSide: const BorderSide(color: Colors.red, width: 2.0),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildPasswordField({
+    required String label,
+    required TextEditingController controller,
+    required String imagePath,
+    required RxBool isVisible,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: GoogleFonts.montserrat(
+            fontSize: 14.sp,
+            fontWeight: FontWeight.w500,
+            color: AppColor.textDark,
+          ),
+        ),
+        SizedBox(height: 8.h),
+        Obx(
+          () => TextFormField(
+            controller: controller,
+            obscureText: !isVisible.value,
+            decoration: InputDecoration(
+              hintText: "••••••••",
+              prefixIcon:Padding(
+                padding: EdgeInsets.only(left: 16.sp,right: 5.sp,top: 14.sp,bottom: 16),
+                child: Image.asset(imagePath,height: 5.h,width: 5.w,),
+              ),
+              suffixIcon: IconButton(
+                icon: Icon(
+                  isVisible.value
+                      ? Icons.visibility_outlined :  Icons.visibility_off_outlined
+                      ,
+                  color: AppColor.textLight,
+                ),
+                onPressed: () => isVisible.toggle(),
+              ),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10.r),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10.r),
+                borderSide: const BorderSide(
+                  color: Color(0xFFECECF0),
+                  width: 1.5,
+                ),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10.r),
+                borderSide: const BorderSide(
+                  color: Color(0xFFECECF0),
+                  width: 2.0,
+                ),
+              ),
+              errorBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10.r),
+                borderSide: const BorderSide(color: Colors.red, width: 1.0),
+              ),
+              focusedErrorBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10.r),
+                borderSide: const BorderSide(color: Colors.red, width: 2.0),
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
