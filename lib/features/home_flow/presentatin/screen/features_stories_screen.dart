@@ -113,7 +113,7 @@ class FeaturesStoriesScreen extends StatelessWidget {
                                 context: context,
                                 isScrollControlled: true,
                                 backgroundColor: Colors.transparent, // ডিজাইনের জন্য স্বচ্ছ ব্যাকগ্রাউন্ড
-                                builder: (context) => const FilterBottomSheet(),
+                                builder: (context) =>  FilterBottomSheet(),
                               );
                             },
                           ),

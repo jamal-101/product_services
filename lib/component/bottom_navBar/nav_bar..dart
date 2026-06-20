@@ -26,7 +26,7 @@ class BottomNavBar extends StatelessWidget {
 
     return Obx(
       () => Container(
-        height: 80.h,
+        // height: 80.h,
         decoration: BoxDecoration(
           color: Colors.white,
           boxShadow: [
@@ -37,20 +37,26 @@ class BottomNavBar extends StatelessWidget {
             ),
           ],
         ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            _buildNavItem(0, AppImages.homeIcon, "Home"),
-            _buildNavItem(
-              1,
-              authController.selectedRole.value == 'seller'
-                  ? AppImages.listIcon
-                  : AppImages.storeIcon,
-              "Store",
+        child: SafeArea(
+          top: false,
+          child: Container(
+            height: 80.h,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                _buildNavItem(0, AppImages.homeIcon, "Home"),
+                _buildNavItem(
+                  1,
+                  authController.selectedRole.value == 'seller'
+                      ? AppImages.listIcon
+                      : AppImages.storeIcon,
+                  "Store",
+                ),
+                _buildNavItem(2, AppImages.messageIcon, "Messages"),
+                _buildNavItem(3, AppImages.accountIcon, "Account"),
+              ],
             ),
-            _buildNavItem(2, AppImages.messageIcon, "Messages"),
-            _buildNavItem(3, AppImages.accountIcon, "Account"),
-          ],
+          ),
         ),
       ),
     );
@@ -96,7 +102,7 @@ class BottomNavBar extends StatelessWidget {
                   isSelected ? activeColor : const Color(0xFF6B7280),
                   BlendMode.srcIn,
                 ),
-                child: Image.asset(imagePath, width: 24.sp, height: 24.sp),
+                child: Image.asset(imagePath, width: 26.sp, height: 26.sp),
               ),
               SizedBox(height: 4.h),
               Text(

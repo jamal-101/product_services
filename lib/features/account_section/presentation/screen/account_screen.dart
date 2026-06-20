@@ -221,7 +221,7 @@ class AccountScreen extends StatelessWidget {
     bool isLogout = false,
   }) {
     return Container(
-      margin: EdgeInsets.only(bottom: 12.h),
+      margin: EdgeInsets.only(bottom: 14.h),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(15.r),
@@ -249,15 +249,19 @@ class AccountScreen extends StatelessWidget {
         title: Text(
           title,
           style: GoogleFonts.montserrat(
-            fontWeight: FontWeight.bold,
-            fontSize: 14.sp,
+            fontWeight: FontWeight.w600,
+            fontSize: 16.sp,
           ),
         ),
         subtitle: Text(
           subtitle,
-          style: GoogleFonts.montserrat(fontSize: 11.sp, color: Colors.grey),
+          style: GoogleFonts.montserrat(
+          fontSize: 14.sp,
+          color: Color(0xFF7A818F),
+          fontWeight: FontWeight.w500,
         ),
-        trailing: const Icon(Icons.chevron_right, color: Colors.grey),
+        ),
+        trailing: Icon(Icons.chevron_right,size: 28.sp, color: Colors.grey),
         onTap: onTap,
       ),
     );

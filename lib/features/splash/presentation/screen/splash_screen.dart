@@ -15,12 +15,12 @@ class SplashScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-          Image.asset(AppImages.splashImage,height: 210.h,width: 161.w),
+          Image.asset(AppImages.splashImage,height: 380.h,width: 291.w),
             SizedBox(height: 16.h),
             Text(
               'Product & Service',
               style: TextStyle(
-                fontSize: 24.sp,
+                fontSize: 30.sp,
                 fontWeight: FontWeight.bold,
                 color: Colors.red,
               ),

@@ -12,7 +12,6 @@ import '../../../../profile_section/presentation/widget/app_drawer.dart';
 
 class SellerHomeScreen extends StatelessWidget {
   const SellerHomeScreen({super.key});
-
   @override
   Widget build(BuildContext context) {
     final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -31,15 +30,16 @@ class SellerHomeScreen extends StatelessWidget {
         ),
         title: Image.asset(
           AppImages.home_center_icon,
-          height: 36.h,
-          width: 129.w,
+          height: 180.h,
+          width: 180.w,
+          fit: BoxFit.contain,
         ),
         actions: [
           IconButton(
             icon: Image.asset(
               AppImages.homeNotificationIcon,
-              height: 28.h,
-              width: 28.w,
+              height: 35.h,
+              width: 35.w,
             ),
             onPressed: () => Get.to(() => const NotificationScreen()),
           ),
@@ -62,10 +62,10 @@ class SellerHomeScreen extends StatelessWidget {
               decoration: BoxDecoration(
                 color: const Color(0xFF27AE60),
                 shape: BoxShape.circle,
-                border: Border.all(width: 3.w,color: Color(0xFFFFFFFF)),
+                border: Border.all(width: 3.w, color: Color(0xFFFFFFFF)),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
+                    color: Colors.black.withValues(alpha: 0.1),
                     blurRadius: 10,
                     offset: const Offset(0, 5),
                   ),
@@ -73,7 +73,11 @@ class SellerHomeScreen extends StatelessWidget {
               ),
               child: Padding(
                 padding: const EdgeInsets.all(12.0),
-                child: Image.asset(AppImages.floatingIcon,height: 12.h,width: 12.w),
+                child: Image.asset(
+                  AppImages.floatingIcon,
+                  height: 12.h,
+                  width: 12.w,
+                ),
               ),
             ),
             Positioned(
@@ -125,7 +129,7 @@ class SellerHomeScreen extends StatelessWidget {
           borderRadius: BorderRadius.circular(20),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.03),
+              color: Colors.black.withValues(alpha: 0.03),
               blurRadius: 10,
               offset: const Offset(0, 4),
             ),
@@ -153,14 +157,13 @@ class SellerHomeScreen extends StatelessWidget {
     );
   }
 
-
   Widget _buildProfileCompletion() {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color(0xFFFFA726).withOpacity(0.3)),
+        border: Border.all(color: const Color(0xFFFFA726).withValues(alpha: 0.3)),
       ),
       child: Column(
         children: [
@@ -169,11 +172,18 @@ class SellerHomeScreen extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  const Icon(Icons.check_circle, color: Color(0xFFE67E22), size: 18),
+                  const Icon(
+                    Icons.check_circle,
+                    color: Color(0xFFE67E22),
+                    size: 18,
+                  ),
                   const SizedBox(width: 8),
                   Text(
                     "Profile completion",
-                    style: GoogleFonts.poppins(fontWeight: FontWeight.w600, fontSize: 14),
+                    style: GoogleFonts.poppins(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 14,
+                    ),
                   ),
                 ],
               ),
@@ -192,20 +202,22 @@ class SellerHomeScreen extends StatelessWidget {
             borderRadius: BorderRadius.circular(10),
             child: LinearProgressIndicator(
               value: 0.85,
-              backgroundColor: const Color(0xFFE67E22).withOpacity(0.1),
+              backgroundColor: const Color(0xFFE67E22).withValues(alpha: 0.1),
               color: const Color(0xFFE67E22),
               minHeight: 8,
             ),
           ),
           const SizedBox(height: 16),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              _buildCheckItem("Basic Info"),
-              _buildCheckItem("Logo & cover"),
-              _buildCheckItem("Hours"),
-              _buildCheckItem("Contact"),
-            ],
+          FittedBox(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                _buildCheckItem("Basic Info"),
+                _buildCheckItem("Logo & cover"),
+                _buildCheckItem("Hours"),
+                _buildCheckItem("Contact"),
+              ],
+            ),
           ),
         ],
       ),
@@ -214,10 +226,10 @@ class SellerHomeScreen extends StatelessWidget {
 
   Widget _buildCheckItem(String label) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: Colors.grey.withOpacity(0.2)),
+        border: Border.all(color: Colors.grey.withValues(alpha: 0.2)),
       ),
       child: Row(
         children: [
@@ -225,7 +237,11 @@ class SellerHomeScreen extends StatelessWidget {
           const SizedBox(width: 4),
           Text(
             label,
-            style: GoogleFonts.poppins(fontSize: 10, color: Colors.black87),
+            style: GoogleFonts.poppins(
+              fontSize: 14,
+              color: Colors.black87,
+              fontWeight: FontWeight.w700,
+            ),
           ),
         ],
       ),
@@ -245,22 +261,46 @@ class SellerHomeScreen extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text("Weekly Traffic Analytics",
-                  style: GoogleFonts.poppins(fontWeight: FontWeight.bold, fontSize: 16)),
+              Expanded(
+                child: Text(
+                  "Weekly Traffic Analytics",
+                  style: GoogleFonts.poppins(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+              const SizedBox(width: 8),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                decoration: BoxDecoration(color: Colors.grey.shade50, borderRadius: BorderRadius.circular(8)),
-                child: Text("This Week", style: GoogleFonts.poppins(fontSize: 10, color: Colors.grey.shade700)),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 6,
+                ),
+                decoration: BoxDecoration(
+                  color: Colors.grey.shade50,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Text(
+                  "This Week",
+                  style: GoogleFonts.poppins(
+                    fontSize: 14.sp,
+                    color: Color(0xFF1E293B),
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
               ),
             ],
           ),
-          Text("Simulated daily page requests", style: GoogleFonts.poppins(color: Colors.grey, fontSize: 11)),
+          Text(
+            "Simulated daily page requests",
+            style: GoogleFonts.poppins(color: Colors.grey, fontSize: 11),
+          ),
           const SizedBox(height: 30),
           SizedBox(
             height: 200,
             child: LineChart(
               LineChartData(
-                // Figma অনুযায়ী ডটেড গ্রিড লাইন
                 gridData: FlGridData(
                   show: true,
                   drawVerticalLine: false,
@@ -276,48 +316,63 @@ class SellerHomeScreen extends StatelessWidget {
                     sideTitles: SideTitles(
                       showTitles: true,
                       getTitlesWidget: (value, meta) => Text(
-                        ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'][value.toInt()],
-                        style: GoogleFonts.poppins(fontSize: 11, color: Colors.black),
+                        ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'][value
+                            .toInt()],
+                        style: GoogleFonts.poppins(
+                          fontSize: 11,
+                          color: Colors.black,
+                        ),
                       ),
                     ),
                   ),
-                  // বাম পাশের সংখ্যাগুলো দেখানোর জন্য
                   leftTitles: AxisTitles(
                     sideTitles: SideTitles(
                       showTitles: true,
                       reservedSize: 30,
                       getTitlesWidget: (value, meta) => Text(
                         value.toInt().toString(),
-                        style: GoogleFonts.poppins(fontSize: 11, color: Colors.grey),
+                        style: GoogleFonts.poppins(
+                          fontSize: 11,
+                          color: Colors.grey,
+                        ),
                       ),
                     ),
                   ),
-                  topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                  rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                  topTitles: AxisTitles(
+                    sideTitles: SideTitles(showTitles: false),
+                  ),
+                  rightTitles: AxisTitles(
+                    sideTitles: SideTitles(showTitles: false),
+                  ),
                 ),
                 borderData: FlBorderData(show: false),
                 lineBarsData: [
                   LineChartBarData(
                     spots: [
-                      const FlSpot(0, 30), const FlSpot(1, 80), const FlSpot(2, 50),
-                      const FlSpot(3, 50), const FlSpot(4, 180), const FlSpot(5, 300), const FlSpot(6, 170),
+                      const FlSpot(0, 30),
+                      const FlSpot(1, 80),
+                      const FlSpot(2, 50),
+                      const FlSpot(3, 50),
+                      const FlSpot(4, 180),
+                      const FlSpot(5, 300),
+                      const FlSpot(6, 170),
                     ],
                     isCurved: true,
                     color: const Color(0xFF27AE60),
                     barWidth: 4,
-                    // Figma এর মতো ডটগুলো যুক্ত করা হলো
                     dotData: FlDotData(
                       show: true,
-                      getDotPainter: (spot, percent, barData, index) => FlDotCirclePainter(
-                        radius: 4,
-                        color: Colors.white,
-                        strokeWidth: 3,
-                        strokeColor: const Color(0xFF27AE60),
-                      ),
+                      getDotPainter: (spot, percent, barData, index) =>
+                          FlDotCirclePainter(
+                            radius: 4,
+                            color: Colors.white,
+                            strokeWidth: 3,
+                            strokeColor: const Color(0xFF27AE60),
+                          ),
                     ),
                     belowBarData: BarAreaData(
                       show: true,
-                      color: const Color(0xFF27AE60).withOpacity(0.15),
+                      color: const Color(0xFF27AE60).withValues(alpha: 0.15),
                     ),
                   ),
                 ],

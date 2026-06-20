@@ -41,6 +41,7 @@ dependencies:
   fl_chart: ^0.70.0
   shared_preferences: ^2.5.5
   google_maps_flutter: ^2.5.0
+  flutter_launcher_icons: "^0.13.1"
 
 dev_dependencies:
   flutter_test:
@@ -68,6 +69,13 @@ flutter:
   assets:
     - assets/images/
     - assets/icons/
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/app_logo/app_logo.png"
+  min_sdk_android: 21
+  background_color: "#ffffff"
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

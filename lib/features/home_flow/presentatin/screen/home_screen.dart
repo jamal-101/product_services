@@ -5,7 +5,6 @@ import 'package:product_service/features/home_flow/presentatin/screen/features_s
 import 'package:product_service/features/message_flow/screen/message_screen.dart';
 import 'package:product_service/utils/constants/app_images.dart';
 import '../../../../component/bottom_navBar/nav_bar..dart';
-import '../../../profile_section/presentation/screen/save_flow/presentation/screen/explor_stories_screen.dart';
 import '../../../profile_section/presentation/widget/app_drawer.dart';
 import '../controller/home_controller.dart';
 import 'categories_screen.dart';
@@ -26,22 +25,23 @@ class HomeScreen extends StatelessWidget {
         backgroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
-          icon: Image.asset(AppImages.menuIcon, height: 24.h, width: 24.w),
+          icon: Image.asset(AppImages.menuIcon, height: 30.h, width: 30.w),
           onPressed: () {
             _scaffoldKey.currentState?.openDrawer();
           },
         ),
         title: Image.asset(
           AppImages.home_center_icon,
-          height: 36.h,
-          width: 129.w,
+          height: 180.h,
+          width: 180.w,
+          fit: BoxFit.contain,
         ),
         actions: [
           IconButton(
             icon: Image.asset(
               AppImages.homeNotificationIcon,
-              height: 28.h,
-              width: 28.w,
+              height: 35.h,
+              width: 35.w,
             ),
             onPressed: () => Get.to(() => const NotificationScreen()),
           ),
@@ -102,139 +102,139 @@ class HomeScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(height: 16.h),
-            SizedBox(
-              height: 140.h,
-              child: Stack(
-                children: [
-                  PageView.builder(
-                    controller: controller.bannerPageController,
-                    onPageChanged: (index) =>
-                        controller.currentBannerIndex.value = index,
-                    itemCount: 3,
-                    itemBuilder: (context, index) {
-                      return Container(
-                        margin: EdgeInsets.symmetric(horizontal: 2.w),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12.r),
-                          gradient: const LinearGradient(
-                            colors: [Color(0xFF005C97), Color(0xFF363795)],
-                          ),
-                        ),
-                        padding: EdgeInsets.all(16.w),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    "Hisense",
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 18.sp,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  Text(
-                                    "OFFICIAL SPONSOR",
-                                    style: TextStyle(
-                                      color: Colors.white70,
-                                      fontSize: 10.sp,
-                                    ),
-                                  ),
-                                  SizedBox(height: 8.h),
-                                  Text(
-                                    "Innovating for a Brighter Life",
-                                    style: TextStyle(
-                                      color: Colors.cyanAccent,
-                                      fontSize: 12.sp,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            const Icon(
-                              Icons.emoji_events,
-                              size: 60,
-                              color: Colors.amber,
-                            ),
-                          ],
-                        ),
-                      );
-                    },
-                  ),
-                  Positioned(
-                    bottom: 10.h,
-                    left: 0,
-                    right: 0,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: List.generate(
-                        3,
-                        (index) => Obx(
-                          () => Container(
-                            margin: EdgeInsets.symmetric(horizontal: 3.w),
-                            width: controller.currentBannerIndex.value == index
-                                ? 12.w
-                                : 6.w,
-                            height: 6.h,
-                            decoration: BoxDecoration(
-                              color:
-                                  controller.currentBannerIndex.value == index
-                                  ? Colors.white
-                                  : Colors.white54,
-                              borderRadius: BorderRadius.circular(3.r),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(height: 20.h),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  "Browse Categories",
-                  style: TextStyle(
-                    fontSize: 16.sp,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black54,
-                  ),
-                ),
-                TextButton(
-                  onPressed: () => Get.to(() => CategoriesScreen()),
-                  child: const Text(
-                    "See All",
-                    style: TextStyle(color: Color(0xFF27AE60)),
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 85.h,
-              child: ListView(
-                scrollDirection: Axis.horizontal,
-                physics: const BouncingScrollPhysics(),
-                children: [
-                  _buildCategoryItem(Icons.electric_bolt, "Electronics"),
-                  _buildCategoryItem(Icons.checkroom, "Fashion"),
-                  _buildCategoryItem(
-                    Icons.king_bed_outlined,
-                    "Home & \nLiving",
-                  ),
-                  _buildCategoryItem(Icons.brush_outlined, "Beauty"),
-                  _buildCategoryItem(Icons.sports_soccer, "Sports"),
-                  _buildCategoryItem(Icons.camera, "Toys and \nGames"),
-                ],
-              ),
-            ),
-            SizedBox(height: 10.h),
+            // SizedBox(
+            //   height: 140.h,
+            //   child: Stack(
+            //     children: [
+                  // PageView.builder(
+                  //   controller: controller.bannerPageController,
+                  //   onPageChanged: (index) =>
+                  //       controller.currentBannerIndex.value = index,
+                  //   itemCount: 3,
+                  //   itemBuilder: (context, index) {
+                  //     return Container(
+                  //       margin: EdgeInsets.symmetric(horizontal: 2.w),
+                  //       decoration: BoxDecoration(
+                  //         borderRadius: BorderRadius.circular(12.r),
+                  //         gradient: const LinearGradient(
+                  //           colors: [Color(0xFF005C97), Color(0xFF363795)],
+                  //         ),
+                  //       ),
+                  //       padding: EdgeInsets.all(16.w),
+                  //       child: Row(
+                  //         children: [
+                  //           Expanded(
+                  //             child: Column(
+                  //               crossAxisAlignment: CrossAxisAlignment.start,
+                  //               mainAxisAlignment: MainAxisAlignment.center,
+                  //               children: [
+                  //                 Text(
+                  //                   "Hisense",
+                  //                   style: TextStyle(
+                  //                     color: Colors.white,
+                  //                     fontSize: 18.sp,
+                  //                     fontWeight: FontWeight.bold,
+                  //                   ),
+                  //                 ),
+                  //                 Text(
+                  //                   "OFFICIAL SPONSOR",
+                  //                   style: TextStyle(
+                  //                     color: Colors.white70,
+                  //                     fontSize: 10.sp,
+                  //                   ),
+                  //                 ),
+                  //                 SizedBox(height: 8.h),
+                  //                 Text(
+                  //                   "Innovating for a Brighter Life",
+                  //                   style: TextStyle(
+                  //                     color: Colors.cyanAccent,
+                  //                     fontSize: 12.sp,
+                  //                     fontWeight: FontWeight.w500,
+                  //                   ),
+                  //                 ),
+                  //               ],
+                  //             ),
+                  //           ),
+                  //           const Icon(
+                  //             Icons.emoji_events,
+                  //             size: 60,
+                  //             color: Colors.amber,
+                  //           ),
+                  //         ],
+                  //       ),
+                  //     );
+                  //   },
+                  // ),
+                  // Positioned(
+                  //   bottom: 10.h,
+                  //   left: 0,
+                  //   right: 0,
+                  //   child: Row(
+                  //     mainAxisAlignment: MainAxisAlignment.center,
+                  //     children: List.generate(
+                  //       3,
+                  //       (index) => Obx(
+                  //         () => Container(
+                  //           margin: EdgeInsets.symmetric(horizontal: 3.w),
+                  //           width: controller.currentBannerIndex.value == index
+                  //               ? 12.w
+                  //               : 6.w,
+                  //           height: 6.h,
+                  //           decoration: BoxDecoration(
+                  //             color:
+                  //                 controller.currentBannerIndex.value == index
+                  //                 ? Colors.white
+                  //                 : Colors.white54,
+                  //             borderRadius: BorderRadius.circular(3.r),
+                  //           ),
+                  //         ),
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
+            //     ],
+            //   ),
+            // ),
+            // SizedBox(height: 20.h),
+            // Row(
+            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //   children: [
+            //     Text(
+            //       "Browse Categories",
+            //       style: TextStyle(
+            //         fontSize: 16.sp,
+            //         fontWeight: FontWeight.bold,
+            //         color: Colors.black54,
+            //       ),
+            //     ),
+            //     TextButton(
+            //       onPressed: () => Get.to(() => CategoriesScreen()),
+            //       child: const Text(
+            //         "See All",
+            //         style: TextStyle(color: Color(0xFF27AE60)),
+            //       ),
+            //     ),
+            //   ],
+            // ),
+            // SizedBox(
+            //   height: 85.h,
+            //   child: ListView(
+            //     scrollDirection: Axis.horizontal,
+            //     physics: const BouncingScrollPhysics(),
+            //     children: [
+            //       _buildCategoryItem(Icons.electric_bolt, "Electronics"),
+            //       _buildCategoryItem(Icons.checkroom, "Fashion"),
+            //       _buildCategoryItem(
+            //         Icons.king_bed_outlined,
+            //         "Home & \nLiving",
+            //       ),
+            //       _buildCategoryItem(Icons.brush_outlined, "Beauty"),
+            //       _buildCategoryItem(Icons.sports_soccer, "Sports"),
+            //       _buildCategoryItem(Icons.camera, "Toys and \nGames"),
+            //     ],
+            //   ),
+            // ),
+            // SizedBox(height: 10.h),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [

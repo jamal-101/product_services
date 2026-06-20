@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:product_service/config/route/app_route.dart';
 import 'package:product_service/features/home_flow/presentatin/controller/home_controller.dart';
@@ -20,7 +21,6 @@ class ExploreStoriesScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: const Color(0xFFFBFBFB),
       bottomNavigationBar: BottomNavBar(selectedIndex: 1),
-
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
@@ -121,12 +121,11 @@ class ExploreStoriesScreen extends StatelessWidget {
                               showModalBottomSheet(
                                 context: context,
                                 isScrollControlled: true,
-                                backgroundColor: Colors.transparent, // ডিজাইনের জন্য স্বচ্ছ ব্যাকগ্রাউন্ড
-                                builder: (context) => const FilterBottomSheet(),
+                                backgroundColor: Colors.transparent,
+                                builder: (context) =>  FilterBottomSheet(),
                               );
                             },
                           ),
-                          // ExploreStoriesScreen-এর চিপ সেকশনে
                           Obx(() =>
                               _buildFilterChip(
                                 Icons.location_on_outlined,
@@ -134,16 +133,14 @@ class ExploreStoriesScreen extends StatelessWidget {
                                 onTap: () {
                                   showModalBottomSheet(
                                     context: context,
-                                    isScrollControlled: true, // এটি বড় কন্টেন্টের জন্য প্রয়োজন
+                                    isScrollControlled: true,
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
                                     ),
                                     builder: (context) => Padding(
-                                      // কিবোর্ড বা সিস্টেমবার এর জন্য প্যাডিং
                                       padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
                                       child: Container(
-                                        // নিচে থেকে আসার জন্য হাইট কন্ট্রোল
-                                        height: 0.5.sh, // স্ক্রিনের উচ্চতার ৫০%
+                                        height: 0.5.sh,
                                         child: CityDialog(
                                           selectedCity: controller.selectedCity.value,
                                           onCitySelected: (newCity) {
@@ -248,20 +245,25 @@ class ExploreStoriesScreen extends StatelessWidget {
     required bool isSelected,
     required VoidCallback onTap,
   }) {
+
+    final Color selectedBgColor = title.contains("🛍️")
+        ? const Color(0xFF27AE60)
+        : const Color(0xFFEE7A1F);
+
     return GestureDetector(
       onTap: onTap,
       behavior: HitTestBehavior.opaque,
       child: Container(
         padding: EdgeInsets.symmetric(vertical: 10.h),
         decoration: BoxDecoration(
-          color: isSelected ? const Color(0xFF27AE60) : Colors.transparent,
+          color: isSelected ? selectedBgColor : Colors.transparent,
           borderRadius: BorderRadius.circular(10.r),
         ),
         child: Center(
           child: Text(
             title,
-            style: TextStyle(
-              fontSize: 13.sp,
+            style: GoogleFonts.plusJakartaSans(
+              fontSize: 14.sp,
               fontWeight: FontWeight.bold,
               color: isSelected ? Colors.white : Colors.black54,
             ),
