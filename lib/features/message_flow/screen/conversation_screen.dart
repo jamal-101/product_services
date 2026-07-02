@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:product_service/utils/constants/app_string.dart';
 
 class ConversationScreen extends StatelessWidget {
   const ConversationScreen({super.key});
@@ -64,9 +65,8 @@ class ConversationScreen extends StatelessWidget {
         actions: [
           PopupMenuButton<String>(
             icon: const Icon(Icons.more_vert, color: Colors.black),
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)), // কর্নার রাউন্ড করার জন্য
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
             onSelected: (value) {
-              // এখানে ক্লিক করলে কী হবে তা কন্ট্রোল করুন
               if (value == 'mute') { /* Mute logic */ }
               if (value == 'delete') { /* Delete logic */ }
               if (value == 'block') { /* Block logic */ }
@@ -82,7 +82,7 @@ class ConversationScreen extends StatelessWidget {
                   ],
                 ),
               ),
-              const PopupMenuDivider(), // মেনুর মাঝখানের লাইন
+              const PopupMenuDivider(),
               PopupMenuItem<String>(
                 value: 'delete',
                 child: Row(
@@ -189,7 +189,7 @@ class ConversationScreen extends StatelessWidget {
           Expanded(
             child: TextField(
               decoration: InputDecoration(
-                hintText: "Type a message...",
+                hintText: AppString.typeMessage,
                 border: InputBorder.none,
                 hintStyle: GoogleFonts.montserrat(
                   color: Colors.grey,

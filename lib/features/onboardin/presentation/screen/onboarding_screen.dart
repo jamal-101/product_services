@@ -1,32 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:product_service/config/route/app_route.dart';
 import 'package:product_service/utils/constants/app_images.dart';
+import 'package:product_service/utils/constants/app_string.dart';
 import '../../../../utils/constants/app_color.dart';
 import '../controller/onboarding_controller.dart';
 import '../model/onboarding_model.dart';
 
 final List<OnboardingModel> onboardingData = [
   OnboardingModel(
-    titleFirst: "Find ",
-    titleHighlight: "trusted\n",
-    titleLast: "local stores",
-    description: "Find and find local stores near you seller and shop to fulfill your regular needs",
+    titleFirst: AppString.find,
+    titleHighlight: AppString.trusted,
+    titleLast: AppString.localStores,
+    description: AppString.description1,
     image: AppImages.splash1,
   ),
   OnboardingModel(
-    titleFirst: "Chat ",
-    titleHighlight: "directly\n",
-    titleLast: "with sellers",
-    description: "Chat directly with local store owners to verify and purchase items easily",
+    titleFirst: AppString.chat ,
+    titleHighlight: AppString.directly,
+    titleLast: AppString.withSellers,
+    description: AppString.description2,
     image: AppImages.splash2,
   ),
   OnboardingModel(
-    titleFirst: "Promote your\n",
-    titleHighlight: "business",
+    titleFirst: AppString.promoteYour,
+    titleHighlight: AppString.business,
     titleLast: "",
-    description: "We promote your local business to local customers to grow your store easily",
+    description: AppString.description3,
     image: AppImages.splash3,
   ),
 ];
@@ -52,8 +54,8 @@ class OnboardingScreen extends StatelessWidget {
                 Get.toNamed(AppRoutes.loginScreen);
               },
               child: Text(
-                'Skip',
-                style: TextStyle(
+                AppString.skip,
+                style: GoogleFonts.plusJakartaSans(
                   color: Colors.black54,
                   fontWeight: FontWeight.w600,
                   fontSize: 18.sp,
@@ -92,21 +94,21 @@ class OnboardingScreen extends StatelessWidget {
                         ),
                         RichText(
                           text: TextSpan(
-                            style: TextStyle(
+                            style: GoogleFonts.plusJakartaSans(
                               fontSize: 28.sp,
                               fontWeight: FontWeight.bold,
                               height: 1.2,
                             ),
                             children: [
-                              TextSpan(text: item.titleFirst, style: const TextStyle(color: AppColor.textDark)),
-                              TextSpan(text: item.titleHighlight, style: const TextStyle(color: AppColor.accent)),
-                              TextSpan(text: item.titleLast, style: const TextStyle(color: AppColor.textDark)),
+                              TextSpan(text: item.titleFirst, style:  GoogleFonts.plusJakartaSans(color: AppColor.textDark)),
+                              TextSpan(text: item.titleHighlight, style:  GoogleFonts.plusJakartaSans(color: AppColor.accent)),
+                              TextSpan(text: item.titleLast, style: GoogleFonts.plusJakartaSans(color: AppColor.textDark)),
                             ],
                           ),
                         ),
                         Text(
                           item.description,
-                          style: TextStyle(
+                          style: GoogleFonts.plusJakartaSans(
                             fontSize: 15.sp,
                             color: AppColor.textLight,
                             height: 1.5,
@@ -155,9 +157,9 @@ class OnboardingScreen extends StatelessWidget {
                         children: [
                           Text(
                             controller.currentIndex.value == onboardingData.length - 1
-                                ? 'Get Started'
-                                : 'Next',
-                            style: TextStyle(
+                                ? AppString.getStarted
+                                : AppString.next,
+                            style: GoogleFonts.plusJakartaSans(
                               fontSize: 16.sp,
                               color: Colors.white,
                               fontWeight: FontWeight.bold,

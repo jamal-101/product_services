@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:product_service/features/home_flow/presentatin/screen/features_stories_screen.dart';
 import 'package:product_service/features/message_flow/screen/message_screen.dart';
 import 'package:product_service/utils/constants/app_images.dart';
+import 'package:product_service/utils/constants/app_string.dart';
 import '../../../../component/bottom_navBar/nav_bar..dart';
 import '../../../profile_section/presentation/widget/app_drawer.dart';
-import '../controller/home_controller.dart';
-import 'categories_screen.dart';
 import 'notification_screen.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -15,10 +15,9 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(HomeController());
-    final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+    final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
     return Scaffold(
-      key: _scaffoldKey,
+      key: scaffoldKey,
       drawer: const AppDrawer(),
       bottomNavigationBar: BottomNavBar(selectedIndex: 0),
       appBar: AppBar(
@@ -27,7 +26,7 @@ class HomeScreen extends StatelessWidget {
         leading: IconButton(
           icon: Image.asset(AppImages.menuIcon, height: 30.h, width: 30.w),
           onPressed: () {
-            _scaffoldKey.currentState?.openDrawer();
+            scaffoldKey.currentState?.openDrawer();
           },
         ),
         title: Image.asset(
@@ -67,7 +66,7 @@ class HomeScreen extends StatelessWidget {
                 border: Border.all(width: 3.w,color: Color(0xFFFFFFFF)),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
+                    color: Colors.black.withValues(alpha: 0.1),
                     blurRadius: 10,
                     offset: const Offset(0, 5),
                   ),
@@ -239,8 +238,8 @@ class HomeScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "Featured Stores",
-                  style: TextStyle(
+                  AppString.featuredStores,
+                  style: GoogleFonts.plusJakartaSans(
                     fontSize: 16.sp,
                     fontWeight: FontWeight.bold,
                     color: Colors.black54,
@@ -250,17 +249,17 @@ class HomeScreen extends StatelessWidget {
                   onPressed: () {
                     Get.to(FeaturesStoriesScreen());
                   },
-                  child: const Text(
-                    "See All",
-                    style: TextStyle(color: Color(0xFF27AE60)),
+                  child: Text(
+                    AppString.seeAll,
+                    style: GoogleFonts.plusJakartaSans(color: Color(0xFF27AE60)),
                   ),
                 ),
               ],
             ),
             _buildStoreCard(
-              "Anytime",
-              "Electronics • Barcelona",
-              const Color(0xFFE67E22),
+              AppString.anyTime,
+              AppString.electronics,
+              Color(0xFFE67E22),
               false,
             ),
             _buildStoreCard(
@@ -282,27 +281,27 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildCategoryItem(IconData icon, String title) {
-    return Padding(
-      padding: EdgeInsets.only(right: 16.w),
-      child: Column(
-        children: [
-          CircleAvatar(
-            radius: 24.r,
-            backgroundColor: Colors.white,
-            child: Icon(icon, color: Colors.black54, size: 20),
-          ),
-          SizedBox(height: 6.h),
-          Text(
-            title,
-            style: TextStyle(fontSize: 11.sp, color: Colors.black54),
-          ),
-        ],
-      ),
-    );
-  }
+  // Widget _buildCategoryItem(IconData icon, String title) {
+  //   return Padding(
+  //     padding: EdgeInsets.only(right: 16.w),
+  //     child: Column(
+  //       children: [
+  //         CircleAvatar(
+  //           radius: 24.r,
+  //           backgroundColor: Colors.white,
+  //           child: Icon(icon, color: Colors.black54, size: 20),
+  //         ),
+  //         SizedBox(height: 6.h),
+  //         Text(
+  //           title,
+  //           style: TextStyle(fontSize: 11.sp, color: Colors.black54),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 
-  // --- 🏬 হেল্পার উইজেট: স্টোর কার্ড ---
+
   Widget _buildStoreCard(
     String title,
     String subtitle,
@@ -335,7 +334,7 @@ class HomeScreen extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: TextStyle(
+                  style: GoogleFonts.plusJakartaSans(
                     fontSize: 15.sp,
                     fontWeight: FontWeight.bold,
                   ),
@@ -343,7 +342,7 @@ class HomeScreen extends StatelessWidget {
                 SizedBox(height: 4.h),
                 Text(
                   subtitle,
-                  style: TextStyle(fontSize: 12.sp, color: Colors.grey),
+                  style: GoogleFonts.plusJakartaSans(fontSize: 12.sp, color: Colors.grey),
                 ),
               ],
             ),
@@ -354,7 +353,7 @@ class HomeScreen extends StatelessWidget {
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
                 decoration: BoxDecoration(
-                  color: const Color(0xFFFFF9E6),
+                  color: Color(0xFFFFF9E6),
                   borderRadius: BorderRadius.circular(12.r),
                 ),
                 child: Row(
@@ -363,7 +362,7 @@ class HomeScreen extends StatelessWidget {
                     SizedBox(width: 2.w),
                     Text(
                       "4.9",
-                      style: TextStyle(
+                      style: GoogleFonts.plusJakartaSans(
                         fontSize: 12.sp,
                         fontWeight: FontWeight.bold,
                         color: Colors.amber[800],

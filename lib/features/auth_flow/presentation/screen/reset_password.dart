@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:product_service/config/route/app_route.dart';
 import 'package:product_service/utils/constants/app_images.dart';
+import 'package:product_service/utils/constants/app_string.dart';
 import '../../../../utils/constants/app_color.dart';
 import '../controller/auth_controller.dart';
 
@@ -24,32 +26,32 @@ class ResetPasswordScreen extends StatelessWidget {
               SizedBox(height: 20.h),
               RichText(
                 text: TextSpan(
-                  style: TextStyle(
+                  style: GoogleFonts.plusJakartaSans(
                     fontSize: 28.sp,
                     fontWeight: FontWeight.bold,
                   ),
-                  children: const [
+                  children: [
                     TextSpan(
-                      text: "Reset ",
-                      style: TextStyle(color: AppColor.textDark),
+                      text: AppString.reset,
+                      style: GoogleFonts.plusJakartaSans(color: AppColor.textDark),
                     ),
                     TextSpan(
-                      text: "Password",
-                      style: TextStyle(color: AppColor.accent),
+                      text: AppString.password,
+                      style: GoogleFonts.plusJakartaSans(color: AppColor.accent),
                     ),
                   ],
                 ),
               ),
               SizedBox(height: 8.h),
               Text(
-                "Create a new strong password to keep your account safe.",
-                style: TextStyle(fontSize: 14.sp, color: AppColor.textLight),
+                AppString.createNew,
+                style: GoogleFonts.plusJakartaSans(fontSize: 14.sp, color: AppColor.textLight),
               ),
               SizedBox(height: 32.h),
 
               Text(
-                "New Password",
-                style: TextStyle(
+                AppString.newPassword,
+                style: GoogleFonts.plusJakartaSans(
                   fontSize: 14.sp,
                   fontWeight: FontWeight.w500,
                   color: AppColor.textDark,
@@ -61,7 +63,7 @@ class ResetPasswordScreen extends StatelessWidget {
                   controller: controller.newPasswordController,
                   obscureText: !controller.isNewPasswordVisible.value,
                   decoration: InputDecoration(
-                    hintText: "Create a strong password",
+                    hintText: AppString.createStrong,
                     prefixIcon: Padding(
                       padding: EdgeInsets.only(left: 12.sp,right: 5.sp,top: 12.sp,bottom: 12.sp),
                       child: Image.asset(AppImages.lockIcon,height: 5.h,width: 5,),
@@ -85,18 +87,13 @@ class ResetPasswordScreen extends StatelessWidget {
                         width: 1.5,
                       ),
                     ),
-
-                    // ক্লিক করার পর (Focused) বর্ডার কালার
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10.r),
-                      // আপনি চাইলে ফোকাসড অবস্থায় কালার সেম রাখতে পারেন অথবা প্রাইমারি কালার দিতে পারেন
                       borderSide: const BorderSide(
                         color: Color(0xFFECECF0),
                         width: 2.0,
                       ),
                     ),
-
-                    // এরর বর্ডার (যদি ভ্যালিডেশন ব্যবহার করেন)
                     errorBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10.r),
                       borderSide: const BorderSide(
@@ -117,8 +114,8 @@ class ResetPasswordScreen extends StatelessWidget {
               SizedBox(height: 20.h),
 
               Text(
-                "Confirm New Password",
-                style: TextStyle(
+                AppString.confirmNew,
+                style: GoogleFonts.plusJakartaSans(
                   fontSize: 14.sp,
                   fontWeight: FontWeight.w500,
                   color: AppColor.textDark,
@@ -130,7 +127,7 @@ class ResetPasswordScreen extends StatelessWidget {
                   controller: controller.confirmPasswordController,
                   obscureText: !controller.isConfirmPasswordVisible.value,
                   decoration: InputDecoration(
-                    hintText: "Re-enter your password",
+                    hintText: AppString.reEnter,
                     prefixIcon: Padding(
                       padding: EdgeInsets.only(left: 12.sp,right: 5.sp,top: 12.sp,bottom: 12.sp),
                       child: Image.asset(AppImages.lockIcon,height: 5.h,width: 5,),
@@ -155,18 +152,13 @@ class ResetPasswordScreen extends StatelessWidget {
                         width: 1.5,
                       ),
                     ),
-
-                    // ক্লিক করার পর (Focused) বর্ডার কালার
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10.r),
-                      // আপনি চাইলে ফোকাসড অবস্থায় কালার সেম রাখতে পারেন অথবা প্রাইমারি কালার দিতে পারেন
                       borderSide: const BorderSide(
                         color: Color(0xFFECECF0),
                         width: 2.0,
                       ),
                     ),
-
-                    // এরর বর্ডার (যদি ভ্যালিডেশন ব্যবহার করেন)
                     errorBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10.r),
                       borderSide: const BorderSide(
@@ -197,12 +189,11 @@ class ResetPasswordScreen extends StatelessWidget {
                     ),
                   ),
                   onPressed: () {
-                    // পাসওয়ার্ড রিসেট সফল হলে লগইন বা ড্যাশবোর্ডে রিডাইরেক্ট লজিক
                     Get.offAllNamed(AppRoutes.loginScreen);
                   },
                   child: Text(
-                    "Reset Password",
-                    style: TextStyle(
+                    AppString.resterPassword,
+                    style: GoogleFonts.plusJakartaSans(
                       fontSize: 16.sp,
                       color: Colors.white,
                       fontWeight: FontWeight.bold,

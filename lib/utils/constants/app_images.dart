@@ -2,7 +2,8 @@ class AppImages {
   static const String baseurl = "assets/images" ;
   static const String baseurlIcon = "assets/icons" ;
 
-  static const String splashImage = "$baseurl/splash_image.png" ;
+  static const String splashImage = "$baseurl/splash_animitation.mp4" ;
+  static const String splashVideoPlayer = "$baseurl/audio_player.mp3" ;
   static const String splash1 = "$baseurl/splash_1.png" ;
   static const String splash2 = "$baseurl/splash_2.png" ;
   static const String splash3 = "$baseurl/splash_3.png" ;

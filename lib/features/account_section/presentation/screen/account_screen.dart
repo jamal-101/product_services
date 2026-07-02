@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:product_service/features/auth_flow/presentation/controller/auth_controller.dart';
+import 'package:product_service/utils/constants/app_string.dart';
 import '../../../../component/bottom_navBar/nav_bar..dart';
 import '../../../../config/route/app_route.dart';
 
@@ -75,37 +76,37 @@ class AccountScreen extends StatelessWidget {
                       if (authController.selectedRole.value == 'seller') ...[
                         _buildGrowthPlanBanner(),
                       ],
-                      _buildSectionTitle("ACCOUNT"),
+                      _buildSectionTitle(AppString.accounT),
                       _buildCardMenuItem(
                         Icons.person_outline,
-                        "Edit Profile",
-                        "Name, phone, email, address",
+                        AppString.editeProfile,
+                        AppString.nameEx,
                         () {
                           Get.toNamed(AppRoutes.editProfileScreen);
                         },
                       ),
                       _buildCardMenuItem(
                         Icons.credit_card,
-                        "Identity Verification",
-                        "Upload ID document",
+                        AppString.identity,
+                        AppString.uploadId,
                         () {
                           Get.toNamed(AppRoutes.identityVerificationScreen);
                         },
                       ),
                       _buildCardMenuItem(
                         Icons.lock_outline,
-                        "Change Password",
-                        "Update your credentials",
+                        AppString.changePassword,
+                        AppString.updateYour,
                         () {
                           Get.toNamed(AppRoutes.changePasswordScreen);
                         },
                       ),
                       if (authController.selectedRole.value == 'seller') ...[
-                        _buildSectionTitle("STORE SETTINGS"),
+                        _buildSectionTitle(AppString.storeSetting),
                         _buildCardMenuItem(
                           Icons.storefront_outlined,
-                          "Branding",
-                          "Name, Description, Category, Logo, Cover",
+                          AppString.branding,
+                         AppString.nameDescription,
                           () {
                             Get.toNamed(
                               AppRoutes.editeBindingScreen,
@@ -114,16 +115,16 @@ class AccountScreen extends StatelessWidget {
                         ),
                         _buildCardMenuItem(
                           Icons.phone_outlined,
-                          "Contact Details",
-                          "Phone, WhatsApp, Email, Map Pin Location",
+                          AppString.contactDetails,
+                          AppString.phoneWhatUp,
                           () {
                             Get.toNamed(AppRoutes.editContactDetailsScreen);
                           },
                         ),
                         _buildCardMenuItem(
                           Icons.description_outlined,
-                          "Legal Documents",
-                          "Trade License, Business License, TIN Info",
+                          AppString.legalDocuments,
+                          AppString.tradeLicense,
                           () {
                             Get.toNamed(AppRoutes.editLegalDocumentsScreen);
                           },
@@ -132,30 +133,30 @@ class AccountScreen extends StatelessWidget {
                       ],
 
                       SizedBox(height: 20.h),
-                      _buildSectionTitle("SETTINGS"),
+                      _buildSectionTitle(AppString.settinG),
                       _buildCardMenuItem(
                         Icons.notifications_none,
-                        "Notifications",
-                        "Push, email & SMS",
+                        AppString.notifications,
+                        AppString.pushEmail,
                         () {
                           Get.toNamed(AppRoutes.notificationSettingScreen);
                         },
                       ),
 
                       SizedBox(height: 20.h),
-                      _buildSectionTitle("SUPPORT"),
+                      _buildSectionTitle(AppString.support),
                       _buildCardMenuItem(
                         Icons.help_outline,
-                        "Help & Support",
-                        "FAQ and contact us",
+                        AppString.helpAndSupport,
+                        AppString.FAQand,
                         () {
                           Get.toNamed(AppRoutes.helpSupportScreen);
                         },
                       ),
                       _buildCardMenuItem(
                         Icons.logout,
-                        "Logout",
-                        "Sign out of your account",
+                        AppString.logOut,
+                       AppString.singOut,
                         () {
                           Get.offAllNamed(AppRoutes.loginScreen);
                         },
@@ -272,7 +273,7 @@ class AccountScreen extends StatelessWidget {
       margin: EdgeInsets.only(bottom: 20.h),
       padding: EdgeInsets.all(16.w),
       decoration: BoxDecoration(
-        color: const Color(0xFF2A9B4A), // গ্রিন কালার
+        color: const Color(0xFF2A9B4A),
         borderRadius: BorderRadius.circular(15.r),
       ),
       child: Row(
@@ -291,7 +292,7 @@ class AccountScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Growth Plan Active",
+                  AppString.growthPlan,
                   style: GoogleFonts.montserrat(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
@@ -319,7 +320,7 @@ class AccountScreen extends StatelessWidget {
                 borderRadius: BorderRadius.circular(8.r),
               ),
               child: Text(
-                "MANAGE",
+                AppString.manage,
                 style: GoogleFonts.montserrat(
                   color: const Color(0xFF2A9B4A),
                   fontWeight: FontWeight.bold,

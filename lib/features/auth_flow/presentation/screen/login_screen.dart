@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:product_service/utils/constants/app_images.dart';
+import 'package:product_service/utils/constants/app_string.dart';
 import '../../../../config/route/app_route.dart';
 import '../../../../utils/constants/app_color.dart';
 import '../controller/auth_controller.dart';
@@ -29,28 +30,28 @@ class LoginScreen extends StatelessWidget {
                     fontSize: 28.sp,
                     fontWeight: FontWeight.bold,
                   ),
-                  children: const [
+                  children: [
                     TextSpan(
-                      text: "Welcome ",
-                      style: TextStyle(color: AppColor.textDark),
+                      text: AppString.welcome,
+                      style: GoogleFonts.plusJakartaSans(color: AppColor.textDark),
                     ),
                     TextSpan(
-                      text: "back",
-                      style: TextStyle(color: AppColor.accent),
+                      text: AppString.back,
+                      style: GoogleFonts.plusJakartaSans(color: AppColor.accent),
                     ),
                   ],
                 ),
               ),
               SizedBox(height: 8.h),
               Text(
-                "Login to your consumer account to continue.",
-                style: TextStyle(fontSize: 14.sp, color: AppColor.textLight),
+                AppString.loginTo,
+                style: GoogleFonts.plusJakartaSans(fontSize: 14.sp, color: AppColor.textLight),
               ),
               SizedBox(height: 32.h),
 
               Text(
-                "Email",
-                style: TextStyle(
+                AppString.email,
+                style: GoogleFonts.plusJakartaSans(
                   fontSize: 14.sp,
                   fontWeight: FontWeight.w500,
                   color: AppColor.textDark,
@@ -105,8 +106,8 @@ class LoginScreen extends StatelessWidget {
               SizedBox(height: 20.h),
 
               Text(
-                "Password",
-                style: TextStyle(
+                AppString.password,
+                style: GoogleFonts.plusJakartaSans(
                   fontSize: 14.sp,
                   fontWeight: FontWeight.w500,
                   color: AppColor.textDark,
@@ -184,7 +185,7 @@ class LoginScreen extends StatelessWidget {
                 child: TextButton(
                   onPressed: () => Get.toNamed(AppRoutes.forgetPassword),
                   child: Text(
-                    "Forgot password?",
+                    AppString.forgotPassword,
                     style: GoogleFonts.plusJakartaSans(
                       color: AppColor.primary,
                       fontSize: 13.sp,
@@ -207,8 +208,8 @@ class LoginScreen extends StatelessWidget {
                   ),
                   onPressed: () => Get.toNamed(AppRoutes.selectRoleScreen),
                   child: Text(
-                    "Login",
-                    style: TextStyle(
+                    AppString.login,
+                    style: GoogleFonts.plusJakartaSans(
                       fontSize: 16.sp,
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
@@ -224,8 +225,8 @@ class LoginScreen extends StatelessWidget {
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 10.w),
                     child: Text(
-                      "OR",
-                      style: TextStyle(
+                      AppString.or,
+                      style: GoogleFonts.plusJakartaSans(
                         color: AppColor.textLight,
                         fontSize: 12.sp,
                         fontWeight: FontWeight.w500,
@@ -255,7 +256,7 @@ class LoginScreen extends StatelessWidget {
                       Image.asset(AppImages.googleIcon,height: 30.h,width: 30.w,),
                       SizedBox(width: 8.w),
                       Text(
-                        "Continue With Google",
+                        AppString.continueWithGoogle,
                         style: GoogleFonts.plusJakartaSans(
                           fontSize: 14.sp,
                           color: Color(0xFF1A1D24),
@@ -276,9 +277,9 @@ class LoginScreen extends StatelessWidget {
                       color: Color(0xFF7A818F),
                     ),
                     children: [
-                      const TextSpan(text: "Don't have an account? "),
+                       TextSpan(text: AppString.donH),
                       TextSpan(
-                        text: "Register",
+                        text: AppString.register,
                         style:  GoogleFonts.plusJakartaSans(
                           color: AppColor.primary,
                           fontSize: 14.sp,

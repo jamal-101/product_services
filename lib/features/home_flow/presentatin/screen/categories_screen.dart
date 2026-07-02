@@ -1,9 +1,11 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
 
 class CategoriesScreen extends StatelessWidget {
+
   final List<Map<String, dynamic>> categories = [
     {"title": "Electronics", "icon": Icons.electrical_services},
     {"title": "Fashion", "icon": Icons.checkroom},
@@ -17,7 +19,6 @@ class CategoriesScreen extends StatelessWidget {
     {"title": "Books and Stationery", "icon": Icons.menu_book},
     {"title": "Health & Wellness", "icon": Icons.medical_services},
   ];
-
    CategoriesScreen({super.key});
 
   @override
@@ -68,11 +69,11 @@ class CategoriesScreen extends StatelessWidget {
                     ),
                     child: Icon(item["icon"], color: Colors.black87, size: 28),
                   ),
-                  const SizedBox(height: 8),
+                   SizedBox(height: 8),
                   Text(
                     item["title"],
                     textAlign: TextAlign.center,
-                    style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w500),
+                    style:  TextStyle(fontSize: 11, fontWeight: FontWeight.w500),
                   ),
                 ],
               ),
@@ -83,3 +84,12 @@ class CategoriesScreen extends StatelessWidget {
     );
   }
 }
+
+
+
+
+
+
+
+
+

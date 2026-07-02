@@ -329,6 +329,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:product_service/config/route/app_route.dart';
+import 'package:product_service/utils/constants/app_string.dart';
 
 class EditProfileScreen extends StatelessWidget {
   EditProfileScreen({super.key});
@@ -365,7 +366,7 @@ class EditProfileScreen extends StatelessWidget {
           ),
         ),
         title: Text(
-          "Edit Profile",
+          AppString.editeProfile,
           style: GoogleFonts.montserrat(
             color: Colors.black,
             fontSize: 18.sp,
@@ -412,15 +413,13 @@ class EditProfileScreen extends StatelessWidget {
               ),
               SizedBox(height: 12.h),
               Text(
-                "Tap to change profile photo",
+                AppString.tapToChange,
                 style: GoogleFonts.montserrat(
                   color: Colors.grey.shade600,
                   fontSize: 12.sp,
                 ),
               ),
               SizedBox(height: 25.h),
-
-              // কার্ড কন্টেইনার
               Container(
                 padding: EdgeInsets.all(15.w),
                 decoration: BoxDecoration(
@@ -428,7 +427,7 @@ class EditProfileScreen extends StatelessWidget {
                   borderRadius: BorderRadius.circular(20.r),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.05),
+                      color: Colors.black.withValues(alpha: 0.05),
                       blurRadius: 10,
                       offset: const Offset(0, 5),
                     ),
@@ -597,7 +596,7 @@ class EditProfileScreen extends StatelessWidget {
             ),
             SizedBox(width: 8.w),
             Text(
-              "Address",
+             AppString.address,
               style: GoogleFonts.montserrat(
                 fontWeight: FontWeight.bold,
                 fontSize: 13.sp,
@@ -608,7 +607,7 @@ class EditProfileScreen extends StatelessWidget {
         SizedBox(height: 8.h),
         RichText(
           text: TextSpan(
-            text: "City",
+            text: AppString.city,
             style: GoogleFonts.montserrat(fontSize: 11.sp, color: Colors.grey),
             children: const [
               TextSpan(text: ' *', style: TextStyle(color: Colors.red)),
@@ -621,7 +620,7 @@ class EditProfileScreen extends StatelessWidget {
             value: _selectedCity.value,
             validator: (value) {
               if (value == null || value.isEmpty) {
-                return "Please select a city";
+                return ;
               }
               return null;
             },
@@ -651,7 +650,7 @@ class EditProfileScreen extends StatelessWidget {
               ),
             ),
             hint: Text(
-              "Select your City",
+              AppString.selectYourCity,
               style: GoogleFonts.montserrat(fontSize: 14.sp),
             ),
             items: ["Dhaka", "Chittagong"]
@@ -665,7 +664,7 @@ class EditProfileScreen extends StatelessWidget {
         SizedBox(height: 10.h),
         RichText(
           text: TextSpan(
-            text: "Postal Code",
+            text: AppString.postalCode,
             style: GoogleFonts.montserrat(fontSize: 11.sp, color: Colors.grey),
             children: const [
               TextSpan(text: ' *', style: TextStyle(color: Colors.red)),
@@ -682,7 +681,7 @@ class EditProfileScreen extends StatelessWidget {
             return null;
           },
           decoration: InputDecoration(
-            hintText: "Enter your postal code",
+            hintText: AppString.enterYourPostal,
             contentPadding: EdgeInsets.symmetric(
               horizontal: 15.w,
               vertical: 15.h,
@@ -714,7 +713,7 @@ class EditProfileScreen extends StatelessWidget {
         SizedBox(height: 10.h),
         RichText(
           text: TextSpan(
-            text: "Street Address",
+            text: AppString.streetAddress,
             style: GoogleFonts.montserrat(fontSize: 11.sp, color: Colors.grey),
             children: const [
               TextSpan(text: ' *', style: TextStyle(color: Colors.red)),

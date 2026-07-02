@@ -3,6 +3,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:product_service/config/route/app_route.dart';
+import 'package:product_service/utils/constants/app_string.dart';
 
 class AddProductScreen extends StatelessWidget {
 
@@ -35,7 +37,7 @@ class AddProductScreen extends StatelessWidget {
           ),
         ),
         title: Text(
-          product == null ? "Add Product" : "Edit Product",
+          product == null ? AppString.addProducts : AppString.editeProduct,
           style: GoogleFonts.montserrat(
             color: Colors.black,
             fontWeight: FontWeight.bold,
@@ -61,7 +63,7 @@ class AddProductScreen extends StatelessWidget {
                   const Icon(Icons.perm_media_outlined, color: Colors.grey),
                   SizedBox(height: 8.h),
                   Text(
-                    "Tap to upload image",
+                    AppString.tapToChange,
                     style: GoogleFonts.montserrat(
                       color: Colors.orange,
                       fontSize: 12.sp,
@@ -79,49 +81,41 @@ class AddProductScreen extends StatelessWidget {
               ),
             ),
             SizedBox(height: 20.h),
-
-            // ২. প্রোডাক্ট টাইটেল
             _buildCardContainer(
-              child: _buildTextField("Product Title", "e.g., Premium Olive Jersey Polo"),
+              child: _buildTextField(AppString.productTitle, "e.g., Premium Olive Jersey Polo"),
             ),
             SizedBox(height: 15.h),
-
-            // ৩. প্রাইস সেকশন
             Row(
               children: [
                 Expanded(
                   child: _buildCardContainer(
-                    child: _buildTextField("Active Price (\$)", "149.99"),
+                    child: _buildTextField(AppString.activePrice, "149.99"),
                   ),
                 ),
                 SizedBox(width: 15.w),
                 Expanded(
                   child: _buildCardContainer(
-                    child: _buildTextField("Original Price (\$)", "159.99"),
+                    child: _buildTextField(AppString.originalPrice, "159.99"),
                   ),
                 ),
               ],
             ),
             SizedBox(height: 15.h),
-
-            // ৪. ডেসক্রিপশন
             _buildCardContainer(
-              child: _buildTextArea("Description", "Tell your customers about the product..."),
+              child: _buildTextArea(AppString.description, "Tell your customers about the product..."),
             ),
             SizedBox(height: 15.h),
-
-            // ৫. অ্যাডিশনাল ইনফরমেশন
             _buildCardContainer(
-              child: _buildTextArea("Additional Information", "Weight, size guides, or technical details."),
+              child: _buildTextArea(AppString.additionalInform, "Weight, size guides, or technical details."),
             ),
             SizedBox(height: 30.h),
-
-            // ৬. পাবলিশ বাটন
             SizedBox(
               width: double.infinity,
               height: 50.h,
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  Get.toNamed(AppRoutes.homeScreen);
+                },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF16A34A),
                   shape: RoundedRectangleBorder(
@@ -129,7 +123,7 @@ class AddProductScreen extends StatelessWidget {
                   ),
                 ),
                 child: Text(
-                 product == null ? "Publish Product" : "Update Product",
+                 product == null ? AppString.publishProduct : AppString.updateProduct,
                   style: GoogleFonts.montserrat(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
@@ -143,7 +137,6 @@ class AddProductScreen extends StatelessWidget {
     );
   }
 
-  // আলাদা কন্টেইনার স্টাইল
   Widget _buildCardContainer({required Widget child}) {
     return Container(
       padding: EdgeInsets.all(16.w),

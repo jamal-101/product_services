@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:product_service/config/route/app_route.dart';
+import 'package:product_service/utils/constants/app_string.dart';
 import '../../../../utils/constants/app_color.dart';
 import '../controller/auth_controller.dart';
 
@@ -47,11 +48,11 @@ class VerifyPhoneScreen extends StatelessWidget {
                   ),
                   children: const [
                     TextSpan(
-                      text: "Verify ",
+                      text: AppString.verify,
                       style: TextStyle(color: AppColor.textDark),
                     ),
                     TextSpan(
-                      text: "phone",
+                      text: AppString.phone,
                       style: TextStyle(color: AppColor.accent),
                     ),
                   ],
@@ -59,7 +60,7 @@ class VerifyPhoneScreen extends StatelessWidget {
               ),
               SizedBox(height: 8.h),
               Text(
-                "We sent a 6-digit code to +1 555 ••• 0000",
+                AppString.weSent,
                 style: GoogleFonts.plusJakartaSans(
                   fontSize: 14.sp,
                   color: AppColor.textLight,
@@ -91,10 +92,10 @@ class VerifyPhoneScreen extends StatelessWidget {
                         color: AppColor.textLight,
                       ),
                       children: [
-                        const TextSpan(text: "Didn't receive? "),
+                        TextSpan(text: AppString.donH),
                         TextSpan(
                           text:
-                              "Resend in 0:${controller.phoneCountdown.value.toString().padLeft(2, '0')}",
+                              "${AppString.resendIn} 0:${controller.phoneCountdown.value.toString().padLeft(2, '0')}",
                           style: GoogleFonts.plusJakartaSans(
                             color: AppColor.primary,
                             fontWeight: FontWeight.w700,
@@ -120,7 +121,7 @@ class VerifyPhoneScreen extends StatelessWidget {
                     Get.toNamed(AppRoutes.loginScreen);
                   },
                   child: Text(
-                    "Verify & Continue",
+                    AppString.verifyAndContinue,
                     style: GoogleFonts.plusJakartaSans(
                       fontSize: 16.sp,
                       color: Colors.white,

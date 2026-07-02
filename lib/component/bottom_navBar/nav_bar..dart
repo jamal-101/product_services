@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:product_service/config/route/app_route.dart';
 import 'package:product_service/features/seller/my_list_flow/presentation/screen/my_list_screen.dart';
 import 'package:product_service/utils/constants/app_images.dart';
+import 'package:product_service/utils/constants/app_string.dart';
 import '../../features/auth_flow/presentation/controller/auth_controller.dart';
 import '../../features/seller/seller_home_flow/presentation/screen/seller_home_screen.dart';
 import 'nav_controller.dart';
@@ -44,7 +45,7 @@ class BottomNavBar extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                _buildNavItem(0, AppImages.homeIcon, "Home"),
+                _buildNavItem(0, AppImages.homeIcon, AppString.home),
                 _buildNavItem(
                   1,
                   authController.selectedRole.value == 'seller'
@@ -52,8 +53,8 @@ class BottomNavBar extends StatelessWidget {
                       : AppImages.storeIcon,
                   "Store",
                 ),
-                _buildNavItem(2, AppImages.messageIcon, "Messages"),
-                _buildNavItem(3, AppImages.accountIcon, "Account"),
+                _buildNavItem(2, AppImages.messageIcon, AppString.message),
+                _buildNavItem(3, AppImages.accountIcon, AppString.account),
               ],
             ),
           ),
@@ -67,7 +68,7 @@ class BottomNavBar extends StatelessWidget {
     bool isSeller = authController.selectedRole.value == 'seller';
     final Color activeColor = const Color(0xFF2A9B4A);
 
-    String displayLabel = (index == 1 && isSeller) ? "My Listing" : label;
+    String displayLabel = (index == 1 && isSeller) ? AppString.myList : label;
 
     return Expanded(
       child: GestureDetector(

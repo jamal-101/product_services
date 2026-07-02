@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:product_service/utils/constants/app_string.dart';
 
 import '../../../../config/route/app_route.dart';
 
@@ -31,7 +32,7 @@ class IdentityVerificationScreen extends StatelessWidget {
           ),
         ),
         title: Text(
-          "Identity Verification",
+          AppString.identityVerification,
           style: GoogleFonts.montserrat(
             color: Colors.black,
             fontSize: 18.sp,
@@ -45,8 +46,11 @@ class IdentityVerificationScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "Verification builds trust with buyers and helps you unlock exclusive selling features. Your data is encrypted and kept private.",
-              style: GoogleFonts.montserrat(color: Colors.grey.shade700, fontSize: 13.sp),
+              AppString.identityVerification,
+              style: GoogleFonts.montserrat(
+                color: Colors.grey.shade700,
+                fontSize: 13.sp,
+              ),
             ),
             SizedBox(height: 20.h),
 
@@ -56,20 +60,32 @@ class IdentityVerificationScreen extends StatelessWidget {
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(20.r),
-                boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 10, offset: const Offset(0, 5))],
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.05),
+                    blurRadius: 10,
+                    offset: const Offset(0, 5),
+                  ),
+                ],
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("Select Document type", style: GoogleFonts.montserrat(fontWeight: FontWeight.bold, fontSize: 14.sp)),
+                  Text(
+                    AppString.selectType,
+                    style: GoogleFonts.montserrat(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 14.sp,
+                    ),
+                  ),
                   SizedBox(height: 10.h),
                   _buildDropdown(),
                   SizedBox(height: 20.h),
                   Row(
                     children: [
-                      Expanded(child: _buildUploadBox("Front Side")),
+                      Expanded(child: _buildUploadBox(AppString.fontSide)),
                       SizedBox(width: 15.w),
-                      Expanded(child: _buildUploadBox("Back Side")),
+                      Expanded(child: _buildUploadBox(AppString.backSide)),
                     ],
                   ),
                 ],
@@ -77,17 +93,27 @@ class IdentityVerificationScreen extends StatelessWidget {
             ),
 
             const Spacer(),
-
-            // সাবমিট বাটন
             SizedBox(
               width: double.infinity,
               height: 55.h,
               child: ElevatedButton(
-                style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF27AE60), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.r))),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF27AE60),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15.r),
+                  ),
+                ),
                 onPressed: () {
                   Get.toNamed(AppRoutes.accountScreen);
                 },
-                child: Text("Submit Verifications", style: GoogleFonts.montserrat(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16.sp)),
+                child: Text(
+                  AppString.submitVerification,
+                  style: GoogleFonts.montserrat(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16.sp,
+                  ),
+                ),
               ),
             ),
             SizedBox(height: 20.h),
@@ -100,12 +126,20 @@ class IdentityVerificationScreen extends StatelessWidget {
   Widget _buildDropdown() {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 15.w),
-      decoration: BoxDecoration(color: Colors.grey.shade50, borderRadius: BorderRadius.circular(12.r), border: Border.all(color: Colors.grey.shade200)),
+      decoration: BoxDecoration(
+        color: Colors.grey.shade50,
+        borderRadius: BorderRadius.circular(12.r),
+        border: Border.all(color: Colors.grey.shade200),
+      ),
       child: DropdownButtonHideUnderline(
         child: DropdownButton<String>(
           isExpanded: true,
           hint: Text("National ID", style: GoogleFonts.montserrat()),
-          items: ["National ID", "Passport", "Driving License"].map((e) => DropdownMenuItem(value: e, child: Text(e))).toList(),
+          items: [
+            "National ID",
+            "Passport",
+            "Driving License",
+          ].map((e) => DropdownMenuItem(value: e, child: Text(e))).toList(),
           onChanged: (v) {},
         ),
       ),
@@ -116,16 +150,31 @@ class IdentityVerificationScreen extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label, style: GoogleFonts.montserrat(fontWeight: FontWeight.bold, fontSize: 13.sp)),
+        Text(
+          label,
+          style: GoogleFonts.montserrat(
+            fontWeight: FontWeight.bold,
+            fontSize: 13.sp,
+          ),
+        ),
         SizedBox(height: 8.h),
         Container(
           height: 100.h,
           decoration: BoxDecoration(
             color: Colors.grey.shade50,
             borderRadius: BorderRadius.circular(12.r),
-            border: Border.all(color: Colors.grey.shade300, style: BorderStyle.solid), // এখানে ডটেড বর্ডার লাইব্রেরি ব্যবহার করা যেতে পারে
+            border: Border.all(
+              color: Colors.grey.shade300,
+              style: BorderStyle.solid,
+            ),
           ),
-          child: Center(child: Icon(Icons.add_photo_alternate_outlined, color: Colors.grey.shade400, size: 30.sp)),
+          child: Center(
+            child: Icon(
+              Icons.add_photo_alternate_outlined,
+              color: Colors.grey.shade400,
+              size: 30.sp,
+            ),
+          ),
         ),
       ],
     );

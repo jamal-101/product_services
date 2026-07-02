@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:product_service/utils/constants/app_string.dart';
 
 class NotificationSettingsScreen extends StatefulWidget {
   const NotificationSettingsScreen({super.key});
@@ -35,7 +36,7 @@ class _NotificationSettingsScreenState extends State<NotificationSettingsScreen>
           ),
         ),
         title: Text(
-          "Notification Settings",
+          AppString.notificationSettings,
           style: GoogleFonts.montserrat(
             color: Colors.black,
             fontSize: 18.sp,
@@ -62,16 +63,16 @@ class _NotificationSettingsScreenState extends State<NotificationSettingsScreen>
             children: [
               _buildNotificationTile(
                 icon: Icons.email_outlined,
-                title: "Email Alerts",
-                subtitle: "Receive alerts via email",
+                title: AppString.emailAlerts,
+                subtitle: AppString.receiveAlerts,
                 value: isEmailAlertsEnabled,
                 onChanged: (val) => setState(() => isEmailAlertsEnabled = val),
               ),
               Divider(height: 1, indent: 20.w, endIndent: 20.w),
               _buildNotificationTile(
                 icon: Icons.notifications_none_outlined,
-                title: "Push Notifications",
-                subtitle: "Get instant updates on your device",
+                title: AppString.pushNotification,
+                subtitle: AppString.getInstant,
                 value: isPushNotificationsEnabled,
                 onChanged: (val) => setState(() => isPushNotificationsEnabled = val),
               ),

@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:product_service/config/route/app_route.dart';
 import 'package:product_service/features/home_flow/presentatin/controller/home_controller.dart';
-
+import 'package:product_service/utils/constants/app_string.dart';
 import '../widget/city_dialog.dart';
 import '../widget/filtter_bottom_sheet.dart';
 
@@ -35,8 +36,8 @@ class FeaturesStoriesScreen extends StatelessWidget {
           ),
         ),
         title: Text(
-          "Featured Stores",
-          style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold, color: Colors.black),
+          AppString.featuredStores,
+          style: GoogleFonts.plusJakartaSans(fontSize: 18.sp, fontWeight: FontWeight.bold, color: Colors.black),
         ),
       ),
       body: SafeArea(
@@ -63,7 +64,7 @@ class FeaturesStoriesScreen extends StatelessWidget {
                           children: [
                             Expanded(
                               child: _buildToggleButton(
-                                title: "🛍️ Products Stores",
+                                title: AppString.productsStores,
                                 isSelected:
                                 controller.isProductStoreSelected.value,
                                 onTap: () => controller.toggleStoreType(true),
@@ -71,7 +72,7 @@ class FeaturesStoriesScreen extends StatelessWidget {
                             ),
                             Expanded(
                               child: _buildToggleButton(
-                                title: "🛠️ Services Providers",
+                                title: AppString.servicesProvider,
                                 isSelected:
                                 !controller.isProductStoreSelected.value,
                                 onTap: () => controller.toggleStoreType(false),
@@ -84,12 +85,12 @@ class FeaturesStoriesScreen extends StatelessWidget {
                     SizedBox(height: 16.h),
                     TextFormField(
                       decoration: InputDecoration(
-                        hintText: "Search stores & Service Providers",
+                        hintText: AppString.searchStores,
                         prefixIcon: const Icon(
                           Icons.search,
                           color: Colors.grey,
                         ),
-                        fillColor: const Color(0xFFF5F5F7),
+                        fillColor:  Color(0xFFF5F5F7),
                         filled: true,
                         contentPadding: EdgeInsets.symmetric(vertical: 12.h),
                         border: OutlineInputBorder(
@@ -106,13 +107,13 @@ class FeaturesStoriesScreen extends StatelessWidget {
                         children: [
                           _buildFilterChip(
                             Icons.tune,
-                            "All Filters",
+                            AppString.allFilters,
                             isSelected: true,
                             onTab: () {
                               showModalBottomSheet(
                                 context: context,
                                 isScrollControlled: true,
-                                backgroundColor: Colors.transparent, // ডিজাইনের জন্য স্বচ্ছ ব্যাকগ্রাউন্ড
+                                backgroundColor: Colors.transparent,
                                 builder: (context) =>  FilterBottomSheet(),
                               );
                             },
@@ -125,11 +126,11 @@ class FeaturesStoriesScreen extends StatelessWidget {
                                 showModalBottomSheet(
                                   context: context,
                                   isScrollControlled: true,
-                                  backgroundColor: Colors.white, // ব্যাকগ্রাউন্ড সাদা নিশ্চিত করুন
+                                  backgroundColor: Colors.white,
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.vertical(top: Radius.circular(24.r)),
                                   ),
-                                  builder: (context) => Wrap( // কন্টেন্ট যতটুকু ততটুকুই হাইট নেবে
+                                  builder: (context) => Wrap(
                                     children: [
                                       CityDialog(
                                         selectedCity: controller.selectedCity.value,
@@ -167,14 +168,12 @@ class FeaturesStoriesScreen extends StatelessWidget {
                               "Food • Barcelona",
                               const Color(0xFFC0392B),
                             ),
-
                             _buildSectionHeader("D"),
                             _buildStoreListItem(
                               "Dave",
                               "Electronics • Barcelona",
                               const Color(0xFF3498DB),
                             ),
-
                             _buildSectionHeader("H"),
                             _buildStoreListItem(
                               "Healixir",
@@ -193,21 +192,18 @@ class FeaturesStoriesScreen extends StatelessWidget {
                               "Grooming • Barcelona",
                               const Color(0xFF9B59B6),
                             ),
-
                             _buildSectionHeader("C"),
                             _buildStoreListItem(
                               "Cleaners Pro",
                               "Home Services • Barcelona",
                               const Color(0xFF1ABC9C),
                             ),
-
                             _buildSectionHeader("L"),
                             _buildStoreListItem(
                               "Laundry Hub",
                               "Services • Madrid",
                               const Color(0xFF34495E),
                             ),
-
                             _buildSectionHeader("P"),
                             _buildStoreListItem(
                               "Plumbing Experts",
@@ -232,20 +228,23 @@ class FeaturesStoriesScreen extends StatelessWidget {
     required String title,
     required bool isSelected,
     required VoidCallback onTap,
-  }) {
+     }) {
+    final Color selectedBgColor = title.contains("🛍️")
+        ? const Color(0xFF27AE60)
+        : const Color(0xFFEE7A1F);
     return GestureDetector(
       onTap: onTap,
       behavior: HitTestBehavior.opaque,
       child: Container(
         padding: EdgeInsets.symmetric(vertical: 8.h),
         decoration: BoxDecoration(
-          color: isSelected ? const Color(0xFF2A9B4A) : Colors.transparent,
+          color: isSelected ? selectedBgColor : Colors.transparent,
           borderRadius: BorderRadius.circular(12.r),
         ),
         child: Center(
           child: Text(
             title,
-            style: TextStyle(
+            style: GoogleFonts.plusJakartaSans(
               fontSize: 13.sp,
               fontWeight: FontWeight.bold,
               color: isSelected ? Colors.white : Color(0xFF7A818F),
@@ -282,7 +281,7 @@ class FeaturesStoriesScreen extends StatelessWidget {
             SizedBox(width: 4.w),
             Text(
               label,
-              style: TextStyle(
+              style: GoogleFonts.plusJakartaSans(
                 fontSize: 12.sp,
                 color: isSelected ? Colors.white : Colors.black54,
               ),
@@ -300,7 +299,7 @@ class FeaturesStoriesScreen extends StatelessWidget {
         children: [
           Text(
             letter,
-            style: TextStyle(
+            style: GoogleFonts.plusJakartaSans(
               fontSize: 16.sp,
               fontWeight: FontWeight.bold,
               color: Colors.orange[800],
@@ -356,7 +355,7 @@ class FeaturesStoriesScreen extends StatelessWidget {
                 children: [
                   Text(
                     title,
-                    style: TextStyle(
+                    style: GoogleFonts.plusJakartaSans(
                       fontSize: 14.sp,
                       fontWeight: FontWeight.bold,
                     ),
@@ -364,7 +363,7 @@ class FeaturesStoriesScreen extends StatelessWidget {
                   SizedBox(height: 4.h),
                   Text(
                     subtitle,
-                    style: TextStyle(fontSize: 12.sp, color: Colors.grey),
+                    style: GoogleFonts.plusJakartaSans(fontSize: 12.sp, color: Colors.grey),
                   ),
                 ],
               ),
@@ -378,7 +377,7 @@ class FeaturesStoriesScreen extends StatelessWidget {
                     SizedBox(width: 2.w),
                     Text(
                       "4.9",
-                      style: TextStyle(
+                      style: GoogleFonts.plusJakartaSans(
                         fontSize: 12.sp,
                         fontWeight: FontWeight.bold,
                       ),
@@ -395,74 +394,74 @@ class FeaturesStoriesScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildTopBarActions(HomeController controller) {
-    return Obx(
-          () => Row(
-        children: [
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20.r),
-              border: Border.all(color: Colors.grey.withValues(alpha: 0.3)),
-            ),
-            child: Row(
-              children: [
-                Icon(Icons.bookmark_border, size: 16.sp, color: Colors.grey),
-                SizedBox(width: 4.w),
-                Text(
-                  "Saved",
-                  style: TextStyle(fontSize: 12.sp, color: Colors.grey),
-                ),
-              ],
-            ),
-          ),
-          SizedBox(width: 8.w),
-          Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8.r),
-              border: Border.all(color: Colors.grey.withValues(alpha: 0.3)),
-            ),
-            child: Row(
-              children: [
-                _buildToggleIconButton(
-                  icon: Icons.list,
-                  isSelected: controller.isListViewSelected.value,
-                  onTap: () => controller.toggleView(true),
-                ),
-                _buildToggleIconButton(
-                  icon: Icons.grid_view,
-                  isSelected: !controller.isListViewSelected.value,
-                  onTap: () => controller.toggleView(false),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+  // Widget _buildTopBarActions(HomeController controller) {
+  //   return Obx(
+  //         () => Row(
+  //       children: [
+  //         Container(
+  //           padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
+  //           decoration: BoxDecoration(
+  //             borderRadius: BorderRadius.circular(20.r),
+  //             border: Border.all(color: Colors.grey.withValues(alpha: 0.3)),
+  //           ),
+  //           child: Row(
+  //             children: [
+  //               Icon(Icons.bookmark_border, size: 16.sp, color: Colors.grey),
+  //               SizedBox(width: 4.w),
+  //               Text(
+  //                 AppString.saved,
+  //                 style: GoogleFonts.plusJakartaSans(fontSize: 12.sp, color: Colors.grey),
+  //               ),
+  //             ],
+  //           ),
+  //         ),
+  //         SizedBox(width: 8.w),
+  //         Container(
+  //           decoration: BoxDecoration(
+  //             borderRadius: BorderRadius.circular(8.r),
+  //             border: Border.all(color: Colors.grey.withValues(alpha: 0.3)),
+  //           ),
+  //           child: Row(
+  //             children: [
+  //               _buildToggleIconButton(
+  //                 icon: Icons.list,
+  //                 isSelected: controller.isListViewSelected.value,
+  //                 onTap: () => controller.toggleView(true),
+  //               ),
+  //               _buildToggleIconButton(
+  //                 icon: Icons.grid_view,
+  //                 isSelected: !controller.isListViewSelected.value,
+  //                 onTap: () => controller.toggleView(false),
+  //               ),
+  //             ],
+  //           ),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 
-  Widget _buildToggleIconButton({
-    required IconData icon,
-    required bool isSelected,
-    required VoidCallback onTap,
-  }) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: EdgeInsets.all(8.w),
-        decoration: BoxDecoration(
-          color: isSelected ? const Color(0xFF2C3E50) : Colors.transparent,
-          borderRadius: BorderRadius.circular(8.r),
-        ),
-        child: Icon(
-          icon,
-          size: 20.sp,
-          color: isSelected ? Colors.white : Colors.grey,
-        ),
-      ),
-    );
-  }
+  // Widget _buildToggleIconButton({
+  //   required IconData icon,
+  //   required bool isSelected,
+  //   required VoidCallback onTap,
+  // }) {
+  //   return GestureDetector(
+  //     onTap: onTap,
+  //     child: Container(
+  //       padding: EdgeInsets.all(8.w),
+  //       decoration: BoxDecoration(
+  //         color: isSelected ? const Color(0xFF2C3E50) : Colors.transparent,
+  //         borderRadius: BorderRadius.circular(8.r),
+  //       ),
+  //       child: Icon(
+  //         icon,
+  //         size: 20.sp,
+  //         color: isSelected ? Colors.white : Colors.grey,
+  //       ),
+  //     ),
+  //   );
+  // }
 
 
 
@@ -480,7 +479,7 @@ class FeaturesStoriesScreen extends StatelessWidget {
 
           },
           markers: {
-            const Marker(
+             Marker(
               markerId: MarkerId('store_1'),
               position: LatLng(40.4168, -3.7038),
               infoWindow: InfoWindow(title: 'Store Name'),

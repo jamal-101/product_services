@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:product_service/config/route/app_route.dart';
 import 'package:product_service/utils/constants/app_images.dart';
+import 'package:product_service/utils/constants/app_string.dart';
 import '../../../../utils/constants/app_color.dart';
 import '../controller/auth_controller.dart';
 
@@ -27,20 +29,20 @@ class ForgetPasswordScreen extends StatelessWidget {
               RichText(
                 text: TextSpan(
                   style: TextStyle(fontSize: 28.sp, fontWeight: FontWeight.bold),
-                  children: const [
-                    TextSpan(text: "Forgot ", style: TextStyle(color: AppColor.textDark)),
-                    TextSpan(text: "Password?", style: TextStyle(color: AppColor.accent)),
+                  children: [
+                    TextSpan(text: AppString.forgot, style: TextStyle(color: AppColor.textDark)),
+                    TextSpan(text: "${AppString.password}?", style: TextStyle(color: AppColor.accent)),
                   ],
                 ),
               ),
               SizedBox(height: 8.h),
               Text(
-                "No worries! Enter your email and we'll send you an OTP code to reset your password.",
+                AppString.noWorries,
                 style: TextStyle(fontSize: 14.sp, color: AppColor.textLight, height: 1.4),
               ),
               SizedBox(height: 32.h),
 
-              Text("Email", style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w500, color: AppColor.textDark)),
+              Text(AppString.email, style: GoogleFonts.plusJakartaSans(fontSize: 16.sp, fontWeight: FontWeight.w500, color: AppColor.textDark)),
               SizedBox(height: 8.h),
               TextFormField(
                 controller: controller.forgotEmailController,
@@ -59,14 +61,10 @@ class ForgetPasswordScreen extends StatelessWidget {
                     borderSide: const BorderSide(color: Color(0xFFECECF0), width: 1.5),
                   ),
 
-                  // ক্লিক করার পর (Focused) বর্ডার কালার
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.r),
-                    // আপনি চাইলে ফোকাসড অবস্থায় কালার সেম রাখতে পারেন অথবা প্রাইমারি কালার দিতে পারেন
                     borderSide: const BorderSide(color: Color(0xFFECECF0), width: 2.0),
                   ),
-
-                  // এরর বর্ডার (যদি ভ্যালিডেশন ব্যবহার করেন)
                   errorBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.r),
                     borderSide: const BorderSide(color: Colors.red, width: 1.0),
@@ -91,7 +89,7 @@ class ForgetPasswordScreen extends StatelessWidget {
                     controller.startOtpTimer();
                     Get.toNamed(AppRoutes.verifyOtp);
                   },
-                  child: Text("Send OTP", style: TextStyle(fontSize: 16.sp, color: Colors.white, fontWeight: FontWeight.bold)),
+                  child: Text(AppString.sendOtp, style: GoogleFonts.plusJakartaSans(fontSize: 16.sp, color: Colors.white, fontWeight: FontWeight.bold)),
                 ),
               ),
             ],

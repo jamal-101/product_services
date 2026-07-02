@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:product_service/utils/constants/app_images.dart';
+import 'package:product_service/utils/constants/app_string.dart';
 import '../../../../config/route/app_route.dart';
 import '../../../../utils/constants/app_color.dart';
 import '../controller/auth_controller.dart';
@@ -47,21 +48,21 @@ class CreateAccountScreen extends StatelessWidget {
                     fontSize: 28.sp,
                     fontWeight: FontWeight.bold,
                   ),
-                  children: const [
+                  children:  [
                     TextSpan(
-                      text: "Create ",
-                      style: TextStyle(color: AppColor.textDark),
+                      text: AppString.create,
+                      style: GoogleFonts.plusJakartaSans(color: AppColor.textDark),
                     ),
                     TextSpan(
-                      text: "account",
-                      style: TextStyle(color: AppColor.accent),
+                      text: AppString.account,
+                      style: GoogleFonts.plusJakartaSans(color: AppColor.accent),
                     ),
                   ],
                 ),
               ),
               SizedBox(height: 4.h),
               Text(
-                "Quick signup",
+                AppString.quickSingUp,
                 style: GoogleFonts.plusJakartaSans(
                   fontSize: 16.sp,
                   color: AppColor.textLight,
@@ -71,14 +72,14 @@ class CreateAccountScreen extends StatelessWidget {
 
               // Fields
               _buildCommonTextField(
-                label: "Full Name",
+                label: AppString.fullName,
                 hint: "John Doe",
                 imagePath: AppImages.personIcon,
                 controller: controller.registerNameController,
               ),
               SizedBox(height: 16.h),
               _buildCommonTextField(
-                label: "Phone Number",
+                label: AppString.phoneNumber,
                 hint: "+1 555 000 0000",
                imagePath: AppImages.callIcon,
                 controller: controller.registerPhoneController,
@@ -86,7 +87,7 @@ class CreateAccountScreen extends StatelessWidget {
               ),
               SizedBox(height: 16.h),
               _buildCommonTextField(
-                label: "Email",
+                label: AppString.email,
                 hint: "you@example.com",
                 imagePath: AppImages.emailSymbol,
                 controller: controller.registerEmailController,
@@ -94,7 +95,7 @@ class CreateAccountScreen extends StatelessWidget {
               ),
               SizedBox(height: 16.h),
               _buildPasswordField(
-                label: "Password",
+                label: AppString.password,
                 imagePath: AppImages.passwordSymbol,
                 controller: controller.registerPasswordController,
                 isVisible: controller.isRegisterPasswordVisible,
@@ -102,7 +103,7 @@ class CreateAccountScreen extends StatelessWidget {
               SizedBox(height: 16.h),
               _buildPasswordField(
                 imagePath: AppImages.passwordSymbol,
-                label: "Confirm Password",
+                label: AppString.confirmPassword,
                 controller: controller.registerConfirmPasswordController,
                 isVisible: controller.isRegisterConfirmPasswordVisible,
               ),
@@ -122,7 +123,7 @@ class CreateAccountScreen extends StatelessWidget {
                   ),
                   onPressed: () => Get.toNamed(AppRoutes.verifyPhone),
                   child: Text(
-                    "Create Account",
+                    AppString.createAccount,
                     style: GoogleFonts.plusJakartaSans(
                       fontSize: 16.sp,
                       color: Colors.white,
@@ -144,9 +145,9 @@ class CreateAccountScreen extends StatelessWidget {
                         color: AppColor.textLight,
                       ),
                       children: [
-                        TextSpan(text: "Already have an account? "),
+                        TextSpan(text: AppString.alreadyHave),
                         TextSpan(
-                          text: "Login",
+                          text: AppString.login,
                           style: GoogleFonts.plusJakartaSans(
                             color: AppColor.primary,
                             fontSize: 16.sp,

@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:google_fonts/google_fonts.dart';
-
+import 'package:product_service/utils/constants/app_string.dart';
 import '../../../../config/route/app_route.dart';
 
 class ChangePasswordScreen extends StatelessWidget {
@@ -31,7 +31,7 @@ class ChangePasswordScreen extends StatelessWidget {
           ),
         ),
         title: Text(
-          "Change Password",
+          AppString.changePassword,
           style: GoogleFonts.montserrat(
             color: Colors.black,
             fontSize: 18.sp,
@@ -43,7 +43,6 @@ class ChangePasswordScreen extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
         child: Column(
           children: [
-            // কন্টেন্ট কার্ড (ফিগমা অনুযায়ী)
             Container(
               padding: EdgeInsets.all(20.w),
               decoration: BoxDecoration(
@@ -51,7 +50,7 @@ class ChangePasswordScreen extends StatelessWidget {
                 borderRadius: BorderRadius.circular(20.r),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
+                    color: Colors.black.withValues(alpha: 0.05),
                     blurRadius: 10,
                     offset: const Offset(0, 5),
                   ),
@@ -60,8 +59,8 @@ class ChangePasswordScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _buildPasswordField("Current Password", "Enter current password"),
-                  _buildPasswordField("New Password", "Enter new password"),
+                  _buildPasswordField(AppString.currentPassword, AppString.enterCurrentPassword),
+                  _buildPasswordField(AppString.newPassword, "Enter new password"),
                   Padding(
                     padding: EdgeInsets.only(bottom: 15.h),
                     child: Text(
@@ -72,19 +71,17 @@ class ChangePasswordScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                  _buildPasswordField("Confirm New Password", "Confirm new password"),
+                  _buildPasswordField(AppString.confirmNewPassword, "Confirm new password"),
                 ],
               ),
             ),
             SizedBox(height: 30.h),
-
-            // সেভ বাটন
             SizedBox(
               width: double.infinity,
               height: 55.h,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF27AE60), // সবুজ বাটন
+                  backgroundColor: const Color(0xFF27AE60),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15.r),
                   ),

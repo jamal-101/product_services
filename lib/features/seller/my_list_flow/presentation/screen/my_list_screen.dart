@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:product_service/features/seller/my_list_flow/presentation/screen/add_product_screen.dart';
+import 'package:product_service/utils/constants/app_string.dart';
 import '../../../../../component/bottom_navBar/nav_bar..dart';
 
 class MyListingScreen extends StatelessWidget {
@@ -19,8 +21,8 @@ class MyListingScreen extends StatelessWidget {
         elevation: 0,
         centerTitle: false,
         title: Text(
-          "My listing",
-          style: TextStyle(
+          AppString.myList,
+          style: GoogleFonts.plusJakartaSans(
             color: Color(0xFF1A1D24),
             fontSize: 18.sp,
             fontWeight: FontWeight.bold,
@@ -46,7 +48,7 @@ class MyListingScreen extends StatelessWidget {
                      Icon(Icons.add, size: 20, color: Colors.white),
                     SizedBox(width: 6.w),
                     Text(
-                      "Add Product",
+                      AppString.addProducts,
                       style: TextStyle(
                         fontSize: 14.sp,
                         color: Colors.white,
@@ -62,7 +64,7 @@ class MyListingScreen extends StatelessWidget {
       ),
       body: ListView.builder(
         padding: EdgeInsets.all(16.w),
-        itemCount: 7, // আপনার ইমেজে ৭টি আইটেম আছে
+        itemCount: 7,
         itemBuilder: (context, index) {
           return _buildProductCard();
         },

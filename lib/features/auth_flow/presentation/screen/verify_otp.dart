@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:product_service/config/route/app_route.dart';
+import 'package:product_service/utils/constants/app_string.dart';
 import '../../../../utils/constants/app_color.dart';
 import '../controller/auth_controller.dart';
 
@@ -14,9 +15,11 @@ class VerifyOtpScreen extends StatefulWidget {
 }
 
 class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
-
   final List<FocusNode> _focusNodes = List.generate(6, (index) => FocusNode());
-  final List<TextEditingController> _textControllers = List.generate(6, (index) => TextEditingController());
+  final List<TextEditingController> _textControllers = List.generate(
+    6,
+    (index) => TextEditingController(),
+  );
 
   @override
   void dispose() {
@@ -34,9 +37,7 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
     final controller = Get.find<AuthController>();
 
     return Scaffold(
-      appBar: AppBar(
-       automaticallyImplyLeading: false,
-      ),
+      appBar: AppBar(automaticallyImplyLeading: false),
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 24.w),
@@ -46,26 +47,41 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
               SizedBox(height: 20.h),
               RichText(
                 text: TextSpan(
-                  style: TextStyle(fontSize: 28.sp, fontWeight: FontWeight.bold),
-                  children: const [
-                    TextSpan(text: "Verify ", style: TextStyle(color: AppColor.textDark)),
-                    TextSpan(text: "OTP", style: TextStyle(color: AppColor.accent)),
+                  style: GoogleFonts.plusJakartaSans(
+                    fontSize: 28.sp,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  children: [
+                    TextSpan(
+                      text: AppString.verify,
+                      style: GoogleFonts.plusJakartaSans(
+                        color: AppColor.textDark,
+                      ),
+                    ),
+                    TextSpan(
+                      text: AppString.otp,
+                      style: GoogleFonts.plusJakartaSans(
+                        color: AppColor.accent,
+                      ),
+                    ),
                   ],
                 ),
               ),
               SizedBox(height: 8.h),
               Text(
-                "Enter the 6-digit code we've sent to your email\nyourname@example.com",
-                style: GoogleFonts.plusJakartaSans(fontSize: 16.sp, color: AppColor.textLight, height: 1.4),
+                AppString.enterThe,
+                style: GoogleFonts.plusJakartaSans(
+                  fontSize: 16.sp,
+                  color: AppColor.textLight,
+                  height: 1.4,
+                ),
               ),
               SizedBox(height: 40.h),
-
-              // ওটিপি ফিল্ডস
               Row(
-                mainAxisAlignment: MainAxisAlignment.center, // ফিল্ডগুলোকে একদম সেন্টারে এবং কাছে রাখবে
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: List.generate(6, (index) {
                   return Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 7.w), // এখানে horizontal প্যাডিং কমিয়ে বা বাড়িয়ে দূরত্ব নিয়ন্ত্রণ করুন
+                    padding: EdgeInsets.symmetric(horizontal: 7.w),
                     child: _buildOtpField(context, index),
                   );
                 }),
@@ -73,18 +89,26 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
               SizedBox(height: 32.h),
 
               Center(
-                child: Obx(() => RichText(
-                  text: TextSpan(
-                    style: GoogleFonts.plusJakartaSans(fontSize: 16.sp, color: AppColor.textLight),
-                    children: [
-                      const TextSpan(text: "Resend OTP in "),
-                      TextSpan(
-                        text: "${controller.resendCountdown.value}s",
-                        style: GoogleFonts.plusJakartaSans(color: AppColor.accent, fontWeight: FontWeight.bold),
+                child: Obx(
+                  () => RichText(
+                    text: TextSpan(
+                      style: GoogleFonts.plusJakartaSans(
+                        fontSize: 16.sp,
+                        color: AppColor.textLight,
                       ),
-                    ],
+                      children: [
+                        const TextSpan(text: AppString.resendOtp),
+                        TextSpan(
+                          text: "${controller.resendCountdown.value}s",
+                          style: GoogleFonts.plusJakartaSans(
+                            color: AppColor.accent,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                )),
+                ),
               ),
             ],
           ),
@@ -103,7 +127,10 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
         textAlign: TextAlign.center,
         keyboardType: TextInputType.number,
         maxLength: 1,
-        style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold),
+        style: GoogleFonts.plusJakartaSans(
+          fontSize: 18.sp,
+          fontWeight: FontWeight.bold,
+        ),
         decoration: InputDecoration(
           counterText: "",
           fillColor: Color(0xFFFFFFFF),
@@ -112,15 +139,10 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
             borderRadius: BorderRadius.circular(10.r),
             borderSide: const BorderSide(color: Color(0xFFECECF0), width: 1.5),
           ),
-
-          // ক্লিক করার পর (Focused) বর্ডার কালার
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10.r),
-            // আপনি চাইলে ফোকাসড অবস্থায় কালার সেম রাখতে পারেন অথবা প্রাইমারি কালার দিতে পারেন
             borderSide: const BorderSide(color: Color(0xFFECECF0), width: 2.0),
           ),
-
-          // এরর বর্ডার (যদি ভ্যালিডেশন ব্যবহার করেন)
           errorBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10.r),
             borderSide: const BorderSide(color: Colors.red, width: 1.0),

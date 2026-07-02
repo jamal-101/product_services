@@ -14,9 +14,9 @@ class SellerHomeScreen extends StatelessWidget {
   const SellerHomeScreen({super.key});
   @override
   Widget build(BuildContext context) {
-    final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+    final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
     return Scaffold(
-      key: _scaffoldKey,
+      key: scaffoldKey,
       drawer: const AppDrawer(),
       bottomNavigationBar: BottomNavBar(selectedIndex: 0),
       appBar: AppBar(
@@ -25,7 +25,7 @@ class SellerHomeScreen extends StatelessWidget {
         leading: IconButton(
           icon: Image.asset(AppImages.menuIcon, height: 24.h, width: 24.w),
           onPressed: () {
-            _scaffoldKey.currentState?.openDrawer();
+            scaffoldKey.currentState?.openDrawer();
           },
         ),
         title: Image.asset(

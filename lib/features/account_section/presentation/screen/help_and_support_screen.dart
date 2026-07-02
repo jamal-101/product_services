@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:google_fonts/google_fonts.dart';
-
+import 'package:product_service/utils/constants/app_string.dart';
 import '../../../../config/route/app_route.dart';
 
 class HelpSupportScreen extends StatelessWidget {
@@ -31,7 +31,7 @@ class HelpSupportScreen extends StatelessWidget {
           ),
         ),
         title: Text(
-          "Help & Support",
+          AppString.helpAndSupport,
           style: GoogleFonts.montserrat(
             color: Colors.black,
             fontSize: 18.sp,
@@ -43,14 +43,13 @@ class HelpSupportScreen extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
         child: Column(
           children: [
-            // FAQ লিস্টের কার্ড
             Container(
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(20.r),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
+                    color: Colors.black.withValues(alpha: 0.05),
                     blurRadius: 10,
                     offset: const Offset(0, 5),
                   ),
@@ -59,7 +58,7 @@ class HelpSupportScreen extends StatelessWidget {
               child: Column(
                 children: [
                   _buildExpansionTile(
-                    "Can I buy products directly through the app?",
+                    AppString.canIBuy,
                     "No, [App Name] does not process payments or handle transactions. Buyers and sellers arrange payments and delivery directly between themselves.",
                   ),
                   _buildDivider(),
@@ -76,12 +75,10 @@ class HelpSupportScreen extends StatelessWidget {
               ),
             ),
             SizedBox(height: 25.h),
-
-            // কন্টাক্ট সাপোর্ট বক্স
             Container(
               padding: EdgeInsets.all(20.w),
               decoration: BoxDecoration(
-                color: const Color(0xFFB9E2C5).withValues(alpha: 0.3), // হালকা সবুজ ব্যাকগ্রাউন্ড
+                color: const Color(0xFFB9E2C5).withValues(alpha: 0.3),
                 borderRadius: BorderRadius.circular(20.r),
               ),
               child: Column(
@@ -89,12 +86,12 @@ class HelpSupportScreen extends StatelessWidget {
                   Icon(Icons.support_agent, size: 40.sp, color: const Color(0xFF27AE60)),
                   SizedBox(height: 10.h),
                   Text(
-                    "Still need help ?",
+                   AppString.stillNed,
                     style: GoogleFonts.montserrat(fontWeight: FontWeight.bold, fontSize: 16.sp),
                   ),
                   SizedBox(height: 5.h),
                   Text(
-                    "Our support team is ready to assist you anytime.",
+                    AppString.ourSupport,
                     textAlign: TextAlign.center,
                     style: GoogleFonts.montserrat(fontSize: 12.sp, color: Colors.grey.shade700),
                   ),
@@ -123,7 +120,7 @@ class HelpSupportScreen extends StatelessWidget {
                           Get.toNamed(AppRoutes.messageScreen);
                         },
                         child: Text(
-                          "Contact Support",
+                          AppString.contactSupport,
                           style: GoogleFonts.montserrat(
                             fontWeight: FontWeight.bold,
                             color: Colors.white,

@@ -3,8 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:product_service/config/route/app_route.dart';
-
+import 'package:product_service/utils/constants/app_string.dart';
 import '../../../component/bottom_navBar/nav_bar..dart';
 import 'conversation_screen.dart';
 
@@ -14,15 +13,13 @@ class MessageScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: BottomNavBar(
-        selectedIndex: 2,
-      ),
+      bottomNavigationBar: BottomNavBar(selectedIndex: 2),
       appBar: AppBar(
         backgroundColor: Colors.white,
         centerTitle: false,
         elevation: 0,
         title: Text(
-          "Messages",
+          AppString.message,
           style: GoogleFonts.montserrat(
             color: Colors.black,
             fontSize: 20.sp,
@@ -46,7 +43,7 @@ class MessageScreen extends StatelessWidget {
               child: TextField(
                 decoration: InputDecoration(
                   icon: const Icon(Icons.search, color: Colors.grey),
-                  hintText: "Search conversations...",
+                  hintText: AppString.searchConversation,
                   hintStyle: GoogleFonts.montserrat(color: Colors.grey),
                   border: InputBorder.none,
                 ),
@@ -58,8 +55,13 @@ class MessageScreen extends StatelessWidget {
               child: ListView.builder(
                 itemCount: 5,
                 itemBuilder: (context, index) {
-                  // এখানে উদাহরণস্বরূপ কিছু নাম পাঠাচ্ছি, আপনি আপনার ডাটা লিস্ট থেকে এটি পাঠাবেন
-                  List<String> shops = ["El Mercado Verde", "Tech Torres", "Casa Aurora", "La Plomeria Pro", "Boutique Gloria"];
+                  List<String> shops = [
+                    "El Mercado Verde",
+                    "Tech Torres",
+                    "Casa Aurora",
+                    "La Plomeria Pro",
+                    "Boutique Gloria",
+                  ];
                   return _buildMessageItem(shops[index]);
                 },
               ),
@@ -72,7 +74,7 @@ class MessageScreen extends StatelessWidget {
 
   Widget _buildMessageItem(String shopName) {
     return GestureDetector(
-      onTap: (){
+      onTap: () {
         Get.to(() => const ConversationScreen(), arguments: shopName);
       },
       child: Container(
@@ -110,13 +112,29 @@ class MessageScreen extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      // এখানে হার্ডকোড করা নামের পরিবর্তে shopName ব্যবহার করা হয়েছে
-                      Text(shopName, style: GoogleFonts.montserrat(fontWeight: FontWeight.bold)),
-                      Text("2m", style: GoogleFonts.montserrat(fontSize: 12.sp, color: Colors.grey)),
+                      Text(
+                        shopName,
+                        style: GoogleFonts.montserrat(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Text(
+                        "2m",
+                        style: GoogleFonts.montserrat(
+                          fontSize: 12.sp,
+                          color: Colors.grey,
+                        ),
+                      ),
                     ],
                   ),
                   SizedBox(height: 4.h),
-                  Text("Yes, we have fresh basil!", style: GoogleFonts.montserrat(fontSize: 12.sp, color: Colors.grey)),
+                  Text(
+                    "Yes, we have fresh basil!",
+                    style: GoogleFonts.montserrat(
+                      fontSize: 12.sp,
+                      color: Colors.grey,
+                    ),
+                  ),
                 ],
               ),
             ),

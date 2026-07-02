@@ -7,6 +7,7 @@ import 'package:product_service/config/route/app_route.dart';
 import 'package:product_service/features/home_flow/presentatin/controller/home_controller.dart';
 import 'package:product_service/features/home_flow/presentatin/screen/features_stories_screen.dart';
 import 'package:product_service/utils/constants/app_color.dart';
+import 'package:product_service/utils/constants/app_string.dart';
 import '../../../../component/bottom_navBar/nav_bar..dart';
 import '../widget/city_dialog.dart';
 import '../widget/filtter_bottom_sheet.dart';
@@ -30,15 +31,15 @@ class ExploreStoriesScreen extends StatelessWidget {
           children: [
             RichText(
               text: TextSpan(
-                style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold),
-                children: const [
+                style: GoogleFonts.plusJakartaSans(fontSize: 18.sp, fontWeight: FontWeight.bold),
+                children:  [
                   TextSpan(
-                    text: "Explore ",
-                    style: TextStyle(color: Colors.black),
+                    text: AppString.explore,
+                    style: GoogleFonts.plusJakartaSans(color: Colors.black),
                   ),
                   TextSpan(
-                    text: "Stores",
-                    style: TextStyle(color: Color(0xFFE67E22)),
+                    text: AppString.stores,
+                    style: GoogleFonts.plusJakartaSans(color: Color(0xFFE67E22)),
                   ),
                 ],
               ),
@@ -72,7 +73,7 @@ class ExploreStoriesScreen extends StatelessWidget {
                           children: [
                             Expanded(
                               child: _buildToggleButton(
-                                title: "🛍️ Products Stores",
+                                title: AppString.productsStores,
                                 isSelected:
                                     controller.isProductStoreSelected.value,
                                 onTap: () => controller.toggleStoreType(true),
@@ -80,7 +81,7 @@ class ExploreStoriesScreen extends StatelessWidget {
                             ),
                             Expanded(
                               child: _buildToggleButton(
-                                title: "🛠️ Services Providers",
+                                title: AppString.servicesProvider,
                                 isSelected:
                                     !controller.isProductStoreSelected.value,
                                 onTap: () => controller.toggleStoreType(false),
@@ -93,7 +94,7 @@ class ExploreStoriesScreen extends StatelessWidget {
                     SizedBox(height: 16.h),
                     TextFormField(
                       decoration: InputDecoration(
-                        hintText: "Search stores & Service Providers",
+                        hintText: AppString.searchStores,
                         prefixIcon: const Icon(
                           Icons.search,
                           color: Colors.grey,
@@ -115,7 +116,7 @@ class ExploreStoriesScreen extends StatelessWidget {
                         children: [
                           _buildFilterChip(
                             Icons.tune,
-                            "All Filters",
+                            AppString.allFilters,
                             isSelected: true,
                             onTap: () {
                               showModalBottomSheet(
@@ -299,7 +300,7 @@ class ExploreStoriesScreen extends StatelessWidget {
             SizedBox(width: 4.w),
             Text(
               label,
-              style: TextStyle(
+              style: GoogleFonts.plusJakartaSans(
                 fontSize: 12.sp,
                 color: isSelected ? Colors.white : Colors.black54,
               ),
@@ -317,7 +318,7 @@ class ExploreStoriesScreen extends StatelessWidget {
         children: [
           Text(
             letter,
-            style: TextStyle(
+            style: GoogleFonts.plusJakartaSans(
               fontSize: 16.sp,
               fontWeight: FontWeight.bold,
               color: Colors.orange[800],
@@ -373,7 +374,7 @@ class ExploreStoriesScreen extends StatelessWidget {
                 children: [
                   Text(
                     title,
-                    style: TextStyle(
+                    style: GoogleFonts.plusJakartaSans(
                       fontSize: 14.sp,
                       fontWeight: FontWeight.bold,
                     ),
@@ -381,7 +382,7 @@ class ExploreStoriesScreen extends StatelessWidget {
                   SizedBox(height: 4.h),
                   Text(
                     subtitle,
-                    style: TextStyle(fontSize: 12.sp, color: Colors.grey),
+                    style: GoogleFonts.plusJakartaSans(fontSize: 12.sp, color: Colors.grey),
                   ),
                 ],
               ),
@@ -395,7 +396,7 @@ class ExploreStoriesScreen extends StatelessWidget {
                     SizedBox(width: 2.w),
                     Text(
                       "4.9",
-                      style: TextStyle(
+                      style: GoogleFonts.plusJakartaSans(
                         fontSize: 12.sp,
                         fontWeight: FontWeight.bold,
                       ),
@@ -432,8 +433,8 @@ class ExploreStoriesScreen extends StatelessWidget {
                     Icon(Icons.bookmark_border, size: 16.sp, color: Colors.grey),
                     SizedBox(width: 4.w),
                     Text(
-                      "Saved",
-                      style: TextStyle(fontSize: 12.sp, color: Colors.grey),
+                      AppString.saved,
+                      style: GoogleFonts.plusJakartaSans(fontSize: 12.sp, color: Colors.grey),
                     ),
                   ],
                 ),
@@ -448,12 +449,19 @@ class ExploreStoriesScreen extends StatelessWidget {
             child: Row(
               children: [
                 _buildToggleIconButton(
-                  icon: Icons.list,
+                  child: Icon(Icons.list, size: 20.sp, color: controller.isListViewSelected.value ? Colors.white : Colors.grey),
                   isSelected: controller.isListViewSelected.value,
                   onTap: () => controller.toggleView(true),
                 ),
                 _buildToggleIconButton(
-                  icon: Icons.grid_view,
+                  child: Text(
+                    "Map",
+                    style: GoogleFonts.plusJakartaSans(
+                      fontSize: 12.sp,
+                      fontWeight: FontWeight.bold,
+                      color: !controller.isListViewSelected.value ? Colors.white : Colors.grey,
+                    ),
+                  ),
                   isSelected: !controller.isListViewSelected.value,
                   onTap: () => controller.toggleView(false),
                 ),
@@ -466,23 +474,19 @@ class ExploreStoriesScreen extends StatelessWidget {
   }
 
   Widget _buildToggleIconButton({
-    required IconData icon,
+    required Widget child,
     required bool isSelected,
     required VoidCallback onTap,
   }) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: EdgeInsets.all(8.w),
+        padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
         decoration: BoxDecoration(
           color: isSelected ? const Color(0xFF2C3E50) : Colors.transparent,
           borderRadius: BorderRadius.circular(8.r),
         ),
-        child: Icon(
-          icon,
-          size: 20.sp,
-          color: isSelected ? Colors.white : Colors.grey,
-        ),
+        child: child,
       ),
     );
   }
@@ -509,8 +513,8 @@ class ExploreStoriesScreen extends StatelessWidget {
               infoWindow: InfoWindow(title: 'Store Name'),
             ),
           },
-          myLocationEnabled: true, // ইউজারের বর্তমান লোকেশন দেখানোর জন্য
-          zoomControlsEnabled: false, // ডিফল্ট জুম বাটন অফ রাখতে চাইলে
+          myLocationEnabled: true,
+          zoomControlsEnabled: false,
         ),
       ),
     );
