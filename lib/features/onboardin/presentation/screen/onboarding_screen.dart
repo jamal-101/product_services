@@ -42,7 +42,6 @@ class OnboardingScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
         elevation: 0,
         actions: [
           Obx(() => controller.currentIndex.value < onboardingData.length - 1

@@ -17,6 +17,9 @@ class LoginScreen extends StatelessWidget {
     final controller = Get.put(AuthController());
 
     return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+      ),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: EdgeInsets.symmetric(horizontal: 24.w),

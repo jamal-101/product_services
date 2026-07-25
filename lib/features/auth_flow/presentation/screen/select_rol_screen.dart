@@ -13,6 +13,7 @@ class SelectRoleScreen extends StatelessWidget {
     final AuthController controller = Get.put(AuthController());
 
     return Scaffold(
+      appBar: AppBar(automaticallyImplyLeading: false),
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 24.w),

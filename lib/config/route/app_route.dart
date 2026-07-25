@@ -9,6 +9,7 @@ import 'package:product_service/features/home_flow/presentatin/screen/notificati
 import 'package:product_service/features/message_flow/screen/conversation_screen.dart';
 import 'package:product_service/features/message_flow/screen/message_screen.dart';
 import 'package:product_service/features/onboardin/presentation/screen/onboarding_screen.dart';
+import 'package:product_service/features/post_add/presentation/screen/adverties_with_us.dart';
 import 'package:product_service/features/product_store_flow/presentation/screen/product_details_screen.dart';
 import 'package:product_service/features/product_store_flow/presentation/screen/store_details_page.dart';
 import 'package:product_service/features/profile_section/presentation/screen/store_creation/presentation/screen/creat_new_store_step1.dart';
@@ -63,6 +64,7 @@ class AppRoutes {
   static const String editContactDetailsScreen = "/editContactDetailsScreen";
   static const String editLegalDocumentsScreen = "/editLegalDocumentsScreen";
   static const String subscriptionBillingScreen = "/subscriptionBillingScreen";
+  static const String advertiseWithUs = "/AdvertiseWithUs";
 
   // GetPage List
   static List<GetPage> routes = [
@@ -261,6 +263,13 @@ class AppRoutes {
     GetPage(
       name: subscriptionBillingScreen,
       page: () => SubscriptionBillingScreen(),
+      // binding: BindingsBuilder((){
+      //   Get.lazyPut<S>(() => HomeController());
+      // })
+    ),
+    GetPage(
+      name: advertiseWithUs,
+      page: () => AdvertiseWithUs(),
       // binding: BindingsBuilder((){
       //   Get.lazyPut<S>(() => HomeController());
       // })
