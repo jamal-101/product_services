@@ -101,7 +101,7 @@ class PostAddController extends GetxController {
         uploadedBannerPath.value = image.path;
       }
     } catch (e) {
-      print("Image pick error: $e");
+      debugPrint("Image pick error: $e");
     }
   }
 

@@ -2,11 +2,8 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_instance/src/extension_instance.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
-import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
-import 'package:product_service/config/route/app_route.dart';
-import 'package:product_service/features/profile_section/presentation/screen/store_creation/presentation/controller/store_creation_controller.dart';
+
 import '../../../../../../../utils/constants/app_color.dart';
 import '../widget/common_widget.dart';
 import 'creat_new_store_step4.dart';
@@ -16,9 +13,7 @@ class CreateNewStoreStep3 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final StoreCreationController controller = Get.put(
-      StoreCreationController(),
-    );
+
 
     return Scaffold(
       appBar: AppBar(
@@ -90,39 +85,34 @@ class CreateNewStoreStep3 extends StatelessWidget {
 
             _buildLabel("Phone Number *"),
             _buildTextField("+880 1XXX XXX XXX"),
+            _buildLabel("WhatsApp"),
+                // Row(
+                //   children: [
+                //     Text(
+                //       "Same as phone number",
+                //       style: TextStyle(
+                //         fontSize: 14.sp,
+                //         color: Color(0xFF7A818F),
+                //       ),
+                //     ),
+                //     Obx(
+                //           () => Transform.scale(
+                //         scale: 0.70,
+                //         child: Switch(
+                //           value: controller.isWhatsAppSameAsPhone.value,
+                //           activeColor: Colors.white,
+                //           activeTrackColor: const Color(0xFF2A9B4A),
+                //           inactiveTrackColor: const Color(0xFFE5E5E5),
+                //           inactiveThumbColor: Colors.white,
+                //           onChanged: (val) {
+                //             controller.toggleWhatsApp(val);
+                //           },
+                //         ),
+                //       ),
+                //     ),
+                //   ],
+                // ),
 
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                _buildLabel("WhatsApp"),
-                Row(
-                  children: [
-                    Text(
-                      "Same as phone number",
-                      style: TextStyle(
-                        fontSize: 14.sp,
-                        color: Color(0xFF7A818F),
-                      ),
-                    ),
-                    Obx(
-                          () => Transform.scale(
-                        scale: 0.70,
-                        child: Switch(
-                          value: controller.isWhatsAppSameAsPhone.value,
-                          activeColor: Colors.white,
-                          activeTrackColor: const Color(0xFF2A9B4A),
-                          inactiveTrackColor: const Color(0xFFE5E5E5),
-                          inactiveThumbColor: Colors.white,
-                          onChanged: (val) {
-                            controller.toggleWhatsApp(val);
-                          },
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
             _buildTextField("+880 1XXX XXX XXX"),
 
             _buildLabel("Email Address *"),
@@ -134,31 +124,21 @@ class CreateNewStoreStep3 extends StatelessWidget {
             SizedBox(height: 20.h),
             _buildLabel("Location *"),
             Container(
-              padding: EdgeInsets.all(16.w),
+              padding: EdgeInsets.all(12.w),
               decoration: BoxDecoration(
                 border: Border.all(color: const Color(0xFFECECF0)),
                 borderRadius: BorderRadius.circular(12.r),
               ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _buildLabel("Streat Address *"),
-                  _buildTextField("Calle Mayor 142"),
-                  Row(
-                    children: [
-                      Expanded(child: _buildLabel("City *")),
-                      Expanded(child: _buildLabel("Postal Code")),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Expanded(child: _buildTextField("Madrid")),
-                      SizedBox(width: 10.w),
-                      Expanded(child: _buildTextField("28013")),
-                    ],
-                  ),
-                  _buildMapBox(),
-                ],
+              child: Center(
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Text("Select Location"),
+                    SizedBox(width: 110.w),
+                    Icon(Icons.keyboard_arrow_down_outlined)
+                  ],
+                ),
               ),
             ),
 

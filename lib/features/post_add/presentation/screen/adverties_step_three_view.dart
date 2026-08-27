@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -18,59 +19,6 @@ class AdvertiseStepThreeView extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            "Step 3 of 4 • Creative",
-            style: GoogleFonts.plusJakartaSans(
-              fontSize: 12.sp,
-              color: Colors.grey,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-          SizedBox(height: 8.h),
-          Row(
-            children: [
-              Expanded(
-                child: Container(
-                  height: 4.h,
-                  decoration: BoxDecoration(
-                    color: const Color(0xFF2E7D32),
-                    borderRadius: BorderRadius.circular(2.r),
-                  ),
-                ),
-              ),
-              SizedBox(width: 8.w),
-              Expanded(
-                child: Container(
-                  height: 4.h,
-                  decoration: BoxDecoration(
-                    color: const Color(0xFF2E7D32),
-                    borderRadius: BorderRadius.circular(2.r),
-                  ),
-                ),
-              ),
-              SizedBox(width: 8.w),
-              Expanded(
-                child: Container(
-                  height: 4.h,
-                  decoration: BoxDecoration(
-                    color: const Color(0xFF2E7D32),
-                    borderRadius: BorderRadius.circular(2.r),
-                  ),
-                ),
-              ),
-              SizedBox(width: 8.w),
-              Expanded(
-                child: Container(
-                  height: 4.h,
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFECECF0),
-                    borderRadius: BorderRadius.circular(2.r),
-                  ),
-                ),
-              ),
-            ],
-          ),
-          SizedBox(height: 20.h),
           Container(
             padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
             decoration: BoxDecoration(
@@ -270,31 +218,6 @@ class AdvertiseStepThreeView extends StatelessWidget {
               }),
             ),
           ),
-          // Container(
-          //   height: 120.h,
-          //   width: double.infinity,
-          //   decoration: BoxDecoration(
-          //     color: Colors.black,
-          //     borderRadius: BorderRadius.circular(12.r),
-          //   ),
-          //   child: ClipRRect(
-          //     borderRadius: BorderRadius.circular(12.r),
-          //     child: controller.uploadedBannerPath.value.isNotEmpty
-          //         ? Image.file(
-          //       File(controller.uploadedBannerPath.value),
-          //       fit: BoxFit.cover,
-          //     )
-          //         : Center(
-          //       child: Text(
-          //         "Banner Image Preview",
-          //         style: GoogleFonts.plusJakartaSans(
-          //           color: Colors.white,
-          //           fontSize: 12.sp,
-          //         ),
-          //       ),
-          //     ),
-          //   ),
-          // ),
           SizedBox(height: 24.h),
           Obx(() {
             if (controller.uploadedBannerPath.value.isEmpty) {
@@ -312,15 +235,14 @@ class AdvertiseStepThreeView extends StatelessWidget {
                 ),
                 SizedBox(height: 12.h),
                 Container(
-                  padding: EdgeInsets.all(12.w),
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(16.r),
-                    border: Border.all(color : Color(0xFFECECF0)),
+                    border: Border.all(color: Color(0xFFECECF0), width: 1.w),
                     boxShadow: [
                       BoxShadow(
                         color: Colors.black.withValues(alpha: 0.04),
-                        offset : Offset(0, 1),
+                        offset: const Offset(0, 1),
                         blurRadius: 2,
                         spreadRadius: 0,
                       ),
@@ -329,42 +251,67 @@ class AdvertiseStepThreeView extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            "IN-APP",
-                            style: GoogleFonts.plusJakartaSans(
-                              fontSize: 10.sp,
-                              color: Colors.grey,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          Text(
-                            "Featured Top Slider 1",
-                            style: GoogleFonts.plusJakartaSans(
-                              fontSize: 11.sp,
-                              color: const Color(0xFF2E7D32),
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 8.h),
-                      Container(
-                        height: 120.h,
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          color: Colors.black,
-                          borderRadius: BorderRadius.circular(12.r),
+                      Padding(
+                        padding: EdgeInsets.only(
+                          top: 14.sp,
+                          left: 12.sp,
+                          right: 12.sp,
+                          bottom: 3.sp,
                         ),
-                        child: Center(
-                          child: Text(
-                            "Banner Image Preview",
-                            style: GoogleFonts.plusJakartaSans(
-                              color: Colors.white,
-                              fontSize: 12.sp,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "IN-APP",
+                              style: GoogleFonts.plusJakartaSans(
+                                fontSize: 11.sp,
+                                color: Colors.grey.shade600,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
+                            Text(
+                              "Featured Top Slider 1",
+                              style: GoogleFonts.plusJakartaSans(
+                                fontSize: 12.sp,
+                                color: const Color(0xFF2E7D32),
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 12.h),
+                      Container(
+                        height: 152.h,
+                        width: 380.w,
+                        decoration: BoxDecoration(
+                          color: Color(0xFFF3F4F6),
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.zero,
+                            topRight: Radius.zero,
+                          ),
+                        ),
+                        child: Padding(
+                          padding: EdgeInsets.all(12.r),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(12.r),
+                            child:
+                                controller.uploadedBannerPath.value.isNotEmpty
+                                ? Image.file(
+                                    File(controller.uploadedBannerPath.value),
+                                    fit: BoxFit.cover,
+                                    width: double.infinity,
+                                    height: double.infinity,
+                                  )
+                                : Center(
+                                    child: Text(
+                                      "Banner Image Preview",
+                                      style: GoogleFonts.plusJakartaSans(
+                                        color: Colors.white,
+                                        fontSize: 12.sp,
+                                      ),
+                                    ),
+                                  ),
                           ),
                         ),
                       ),

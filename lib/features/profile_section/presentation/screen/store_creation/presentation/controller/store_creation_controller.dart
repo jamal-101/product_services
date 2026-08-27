@@ -12,8 +12,8 @@ class StoreCreationController extends GetxController {
   void nextStep() {
     if (currentStep < 5) currentStep++;
   }
-  var selectedPlan = "Growth".obs; // Starter or Growth
-  var selectedPayment = "Card".obs; // Card, Debit, Bank
+  var selectedPlan = "Growth".obs;
+  var selectedPayment = "Card".obs;
 
   void selectPlan(String plan) => selectedPlan.value = plan;
   void selectPayment(String payment) => selectedPayment.value = payment;

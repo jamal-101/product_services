@@ -1,4 +1,8 @@
 class AppString {
+  static const String startServer = "Please, start the Server";
+  static const String someThingWrong = "Something Went Wrong";
+  static const String requestTimeOut = "Request Time Out";
+  static const String noInternetConnection = "No internet connection";
   static const String product = "Product & Service";
   static const String find = "Find";
   static const String trusted = "trusted ";
@@ -35,7 +39,7 @@ class AppString {
   static const String alreadyHave = "Already have an account? ";
   static const String verify  = "Verify ";
   static const String phone  = "phone";
-  static const String weSent  = "We sent a 6-digit code to +1 555 ••• 0000";
+  static const String weSent  = "We sent a 6-digit code to";
   static const String donHave = "Didn't receive? ";
   static const String  resendIn = "Resend in ";
   static const String verifyAndContinue = "Verify & Continue";

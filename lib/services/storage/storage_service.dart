@@ -1,5 +1,6 @@
 import 'package:product_service/services/storage/storage_key.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../log/app_log.dart';
 
 
 class LocalStorage {
@@ -12,8 +13,9 @@ class LocalStorage {
   static String myEmail = "";
   static String myRole = "";
   static String profileImage = "";
+  static bool hasSellerAccount = false;
 
-  // Create Local Storage Instance
+
   static SharedPreferences? preferences;
 
   /// Get SharedPreferences Instance
@@ -22,30 +24,29 @@ class LocalStorage {
     return preferences!;
   }
 
-  /// Get All Data From SharedPreferences
   static Future<void> getAllPrefData() async {
     final localStorage = await _getStorage();
 
-    // token = localStorage.getString(LocalStorageKeys.token) ?? "";
-    // refreshToken = localStorage.getString(LocalStorageKeys.refreshToken) ?? "";
-    // isLogIn = localStorage.getBool(LocalStorageKeys.isLogIn) ?? false;
-    // userId = localStorage.getString(LocalStorageKeys.userId) ?? "";
-    // myImage = localStorage.getString(LocalStorageKeys.myImage) ?? "";
-    // myName = localStorage.getString(LocalStorageKeys.myName) ?? "";
-    // myEmail = localStorage.getString(LocalStorageKeys.myEmail) ?? "";
+    token = localStorage.getString(LocalStorageKeys.token) ?? "";
+    refreshToken = localStorage.getString(LocalStorageKeys.refreshToken) ?? "";
+    isLogIn = localStorage.getBool(LocalStorageKeys.isLogIn) ?? false;
+    userId = localStorage.getString(LocalStorageKeys.userId) ?? "";
+    myImage = localStorage.getString(LocalStorageKeys.myImage) ?? "";
+    myName = localStorage.getString(LocalStorageKeys.myName) ?? "";
+    myEmail = localStorage.getString(LocalStorageKeys.myEmail) ?? "";
     myRole = localStorage.getString(LocalStorageKeys.myRole) ?? "";
-    // profileImage = localStorage.getString(LocalStorageKeys.profileImage) ?? "";
+    profileImage = localStorage.getString(LocalStorageKeys.profileImage) ?? "";
+    hasSellerAccount = localStorage.getBool(LocalStorageKeys.hasSellerAccount) ?? false;
 
-    // appLog(userId, source: "Local Storage");
+
+    appLog(userId, source: "Local Storage");
   }
 
-  /// Remove All Data From SharedPreferences
+
   static Future<void> removeAllPrefData() async {
     final localStorage = await _getStorage();
     await localStorage.clear();
     _resetLocalStorageData();
-
-    // Clear Hive Box
     try {
       // final cartBox = Hive.box<CartItem>(CartItemAdapter.boxName);
       // await cartBox.clear();
@@ -57,26 +58,26 @@ class LocalStorage {
     await getAllPrefData();
   }
 
-  // Reset LocalStorage Data
   static void _resetLocalStorageData() {
     final localStorage = preferences!;
-    // localStorage.setString(LocalStorageKeys.token, "");
-    // localStorage.setString(LocalStorageKeys.refreshToken, "");
-    // localStorage.setString(LocalStorageKeys.userId, "");
-    // localStorage.setString(LocalStorageKeys.myImage, "");
-    // localStorage.setString(LocalStorageKeys.myName, "");
-    // localStorage.setString(LocalStorageKeys.myEmail, "");
-    // localStorage.setBool(LocalStorageKeys.isLogIn, false);
+    localStorage.setString(LocalStorageKeys.token, "");
+    localStorage.setString(LocalStorageKeys.refreshToken, "");
+    localStorage.setString(LocalStorageKeys.userId, "");
+    localStorage.setString(LocalStorageKeys.myImage, "");
+    localStorage.setString(LocalStorageKeys.myName, "");
+    localStorage.setString(LocalStorageKeys.myEmail, "");
+    localStorage.setBool(LocalStorageKeys.isLogIn, false);
     localStorage.setString(LocalStorageKeys.myRole, "");
-    // localStorage.setString(LocalStorageKeys.profileImage, "");
+    localStorage.setString(LocalStorageKeys.profileImage, "");
+    localStorage.setBool(LocalStorageKeys.hasSellerAccount, false);
+    hasSellerAccount = false;
   }
 
   static Future<void> setUserRole(String role) async {
-    myRole = role; // লোকাল ভেরিয়েবল আপডেট
-    await setString(LocalStorageKeys.myRole, role); // SharedPreferences এ সেভ
+    myRole = role;
+    await setString(LocalStorageKeys.myRole, role);
   }
 
-  // Save Data To SharedPreferences
   static Future<void> setString(String key, String value) async {
     final localStorage = await _getStorage();
     await localStorage.setString(key, value);

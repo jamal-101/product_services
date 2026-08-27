@@ -4,10 +4,9 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:product_service/config/route/app_route.dart';
 import 'package:product_service/features/home_flow/presentatin/controller/home_controller.dart';
-import 'package:product_service/features/home_flow/presentatin/screen/features_stories_screen.dart';
 import 'package:product_service/features/message_flow/screen/message_screen.dart';
+import 'package:product_service/utils/constants/api_enpoint.dart';
 import 'package:product_service/utils/constants/app_images.dart';
-import 'package:product_service/utils/constants/app_string.dart';
 import '../../../../component/bottom_navBar/nav_bar..dart';
 import '../../../profile_section/presentation/widget/app_drawer.dart';
 import 'notification_screen.dart';
@@ -21,7 +20,7 @@ class HomeScreen extends StatelessWidget {
     final HomeController controller = Get.put(HomeController());
     return Scaffold(
       key: scaffoldKey,
-      drawer: const AppDrawer(),
+      drawer:  AppDrawer(),
       bottomNavigationBar: BottomNavBar(selectedIndex: 0),
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -103,215 +102,195 @@ class HomeScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(height: 16.h),
+
             SizedBox(
               height: 140.h,
-              child: Stack(
-                children: [
-                  PageView.builder(
-                    controller: controller.bannerPageController,
-                    onPageChanged: (index) =>
-                        controller.currentBannerIndex.value = index,
-                    itemCount: 3,
-                    itemBuilder: (context, index) {
-                      return Container(
-                        margin: EdgeInsets.symmetric(horizontal: 2.w),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12.r),
-                          gradient: const LinearGradient(
-                            colors: [Color(0xFF005C97), Color(0xFF363795)],
-                          ),
-                        ),
-                        padding: EdgeInsets.all(16.w),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    "Hisense",
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 18.sp,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  Text(
-                                    "OFFICIAL SPONSOR",
-                                    style: TextStyle(
-                                      color: Colors.white70,
-                                      fontSize: 10.sp,
-                                    ),
-                                  ),
-                                  SizedBox(height: 8.h),
-                                  Text(
-                                    "Innovating for a Brighter Life",
-                                    style: TextStyle(
-                                      color: Colors.cyanAccent,
-                                      fontSize: 12.sp,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                                ],
+              child: Obx(() {
+
+                if (controller.bannerList.isEmpty) {
+                  return const Center(child: Text("No banners found"));
+                }
+
+                return Stack(
+                  children: [
+                    PageView.builder(
+                      controller: controller.bannerPageController,
+                      onPageChanged: (index) =>
+                      controller.currentBannerIndex.value = index,
+                      itemCount: controller.bannerList.length,
+                      itemBuilder: (context, index) {
+                        final banner = controller.bannerList[index];
+                        return Container(
+                          margin: EdgeInsets.symmetric(horizontal: 2.w),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12.r),
+                            color: Colors.grey[900],
+
+                            image: banner.image != null && banner.image!.isNotEmpty
+                                ? DecorationImage(
+                              image: NetworkImage("${ApiEndPoint.imageUrl}${banner.image}"),
+                              fit: BoxFit.cover,
+                              colorFilter: ColorFilter.mode(
+                                Colors.black.withValues(alpha: 0.3),
+                                BlendMode.darken,
                               ),
-                            ),
-                            const Icon(
-                              Icons.emoji_events,
-                              size: 60,
-                              color: Colors.amber,
-                            ),
-                          ],
-                        ),
-                      );
-                    },
-                  ),
-                  Positioned(
-                    bottom: 10.h,
-                    left: 0,
-                    right: 0,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: List.generate(
-                        3,
-                        (index) => Obx(
-                          () => Container(
-                            margin: EdgeInsets.symmetric(horizontal: 3.w),
-                            width: controller.currentBannerIndex.value == index
-                                ? 12.w
-                                : 6.w,
-                            height: 6.h,
-                            decoration: BoxDecoration(
-                              color:
-                                  controller.currentBannerIndex.value == index
-                                  ? Colors.white
-                                  : Colors.white54,
-                              borderRadius: BorderRadius.circular(3.r),
+                            )
+                                : null,
+                          ),
+                          padding: EdgeInsets.all(16.w),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      banner.name ?? "",
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 18.sp,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    SizedBox(height: 6.h),
+                                    Text(
+                                      banner.description ?? "",
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                        color: Colors.white70,
+                                        fontSize: 11.sp,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    ),
+                    Positioned(
+                      bottom: 10.h,
+                      left: 0,
+                      right: 0,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: List.generate(
+                          controller.bannerList.length,
+                              (index) => Obx(
+                                () => Container(
+                              margin: EdgeInsets.symmetric(horizontal: 3.w),
+                              width: controller.currentBannerIndex.value == index
+                                  ? 12.w
+                                  : 6.w,
+                              height: 6.h,
+                              decoration: BoxDecoration(
+                                color: controller.currentBannerIndex.value == index
+                                    ? Colors.white
+                                    : Colors.white54,
+                                borderRadius: BorderRadius.circular(3.r),
+                              ),
                             ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                ],
-              ),
+                  ],
+                );
+              }),
             ),
-            SizedBox(height: 20.h),
+
+            SizedBox(height: 16.h),
+            _buildCitySelectionBox(controller),
             _buildAdvertiseCard(),
-            // Row(
-            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //   children: [
-            //     Text(
-            //       "Browse Categories",
-            //       style: TextStyle(
-            //         fontSize: 16.sp,
-            //         fontWeight: FontWeight.bold,
-            //         color: Colors.black54,
-            //       ),
-            //     ),
-            //     TextButton(
-            //       onPressed: () => Get.to(() => CategoriesScreen()),
-            //       child: const Text(
-            //         "See All",
-            //         style: TextStyle(color: Color(0xFF27AE60)),
-            //       ),
-            //     ),
-            //   ],
-            // ),
-            // SizedBox(
-            //   height: 85.h,
-            //   child: ListView(
-            //     scrollDirection: Axis.horizontal,
-            //     physics: const BouncingScrollPhysics(),
-            //     children: [
-            //       _buildCategoryItem(Icons.electric_bolt, "Electronics"),
-            //       _buildCategoryItem(Icons.checkroom, "Fashion"),
-            //       _buildCategoryItem(
-            //         Icons.king_bed_outlined,
-            //         "Home & \nLiving",
-            //       ),
-            //       _buildCategoryItem(Icons.brush_outlined, "Beauty"),
-            //       _buildCategoryItem(Icons.sports_soccer, "Sports"),
-            //       _buildCategoryItem(Icons.camera, "Toys and \nGames"),
-            //     ],
-            //   ),
-            // ),
-            // SizedBox(height: 10.h),
-            // Row(
-            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //   children: [
-            //     Text(
-            //       AppString.featuredStores,
-            //       style: GoogleFonts.plusJakartaSans(
-            //         fontSize: 16.sp,
-            //         fontWeight: FontWeight.bold,
-            //         color: Colors.black54,
-            //       ),
-            //     ),
-            //     TextButton(
-            //       onPressed: () {
-            //         Get.to(FeaturesStoriesScreen());
-            //       },
-            //       child: Text(
-            //         AppString.seeAll,
-            //         style: GoogleFonts.plusJakartaSans(color: Color(0xFF27AE60)),
-            //       ),
-            //     ),
-            //   ],
-            // ),
-            // _buildStoreCard(
-            //   AppString.anyTime,
-            //   AppString.electronics,
-            //   Color(0xFFE67E22),
-            //   false,
-            // ),
-            // _buildStoreCard(
-            //   "Healixir",
-            //   "Electronics • Barcelona",
-            //   const Color(0xFF16A085),
-            //   true,
-            // ),
-            // _buildStoreCard(
-            //   "Cocacole",
-            //   "Food • Barcelona",
-            //   const Color(0xFFC0392B),
-            //   false,
-            // ),
-            // SizedBox(height: 20.h),
+            SizedBox(height: 10.h),
+            Image.asset(AppImages.addImage_1),
+            SizedBox(height: 5.h),
+            Image.asset(AppImages.addImage_2)
           ],
         ),
       ),
     );
   }
 
-  // Widget _buildCategoryItem(IconData icon, String title) {
-  //   return Padding(
-  //     padding: EdgeInsets.only(right: 16.w),
-  //     child: Column(
-  //       children: [
-  //         CircleAvatar(
-  //           radius: 24.r,
-  //           backgroundColor: Colors.white,
-  //           child: Icon(icon, color: Colors.black54, size: 20),
-  //         ),
-  //         SizedBox(height: 6.h),
-  //         Text(
-  //           title,
-  //           style: TextStyle(fontSize: 11.sp, color: Colors.black54),
-  //         ),
-  //       ],
-  //     ),
-  //   );
-  // }
-
+  Widget _buildCitySelectionBox(HomeController controller) {
+    final RxString selectedCity = "Choose city".obs;
+    return Align(
+      alignment: Alignment.centerRight,
+      child: PopupMenuButton<String>(
+        onSelected: (String city) {
+          selectedCity.value = city;
+        },
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12.r),
+        ),
+        itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+          const PopupMenuItem<String>(
+            value: 'Choose city',
+            child: Text('Choose city'),
+          ),
+          const PopupMenuItem<String>(
+            value: 'Geneva',
+            child: Text('Geneva'),
+          ),
+          const PopupMenuItem<String>(
+            value: 'Zurich',
+            child: Text('Zurich'),
+          ),
+          const PopupMenuItem<String>(
+            value: 'Madrid',
+            child: Text('Madrid'),
+          ),
+          const PopupMenuItem<String>(
+            value: 'Barcelona',
+            child: Text('Barcelona'),
+          ),
+        ],
+        child: Container(
+          padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(10.r),
+            border: Border.all(color: Colors.grey.shade300, width: 1),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.03),
+                blurRadius: 4,
+                offset: const Offset(0, 2),
+              ),
+            ],
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(Icons.location_on_outlined, size: 18.sp, color: const Color(0xFF2E7D32)),
+              SizedBox(width: 6.w),
+              Obx(() => Text(
+                  selectedCity.value,
+                  style: GoogleFonts.plusJakartaSans(
+                    fontSize: 13.sp,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.grey[800],
+                  ),
+                ),
+              ),
+              SizedBox(width: 8.w),
+              Icon(Icons.keyboard_arrow_down, size: 18.sp, color: Colors.grey),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 
   Widget _buildAdvertiseCard({VoidCallback? onTap}) {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 1.w, vertical: 8.h),
       padding: EdgeInsets.all(10.w),
       decoration: BoxDecoration(
-        gradient: const LinearGradient(
+        gradient:  LinearGradient(
           begin: Alignment.centerLeft,
           end: Alignment.centerRight,
           colors: [
@@ -323,28 +302,15 @@ class HomeScreen extends StatelessWidget {
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.05),
-            offset: const Offset(0, 1),
+            offset:  Offset(0, 1),
             blurRadius: 2,
             spreadRadius: 0,
           ),
         ],
-        border: Border.all(color: const Color(0xFFF3F4F6), width: 1.11),
+        border: Border.all(color:  Color(0xFFF3F4F6), width: 1.11),
       ),
       child: Row(
         children: [
-          // Container(
-          //   width: 50.w,
-          //   height: 50.h,
-          //   decoration: BoxDecoration(
-          //     shape: BoxShape.circle,
-          //     border: Border.all(color: const Color(0xFF2E7D32), width: 1.5),
-          //   ),
-          //   child: Icon(
-          //     Icons.campaign_outlined,
-          //     color: const Color(0xFF2E7D32),
-          //     size: 26.sp,
-          //   ),
-          // ),
           Image.asset(AppImages.add_icon,height: 60.h,width: 60.w,),
           SizedBox(width: 14.w),
           Expanded(
@@ -398,88 +364,6 @@ class HomeScreen extends StatelessWidget {
                 ),
               ],
             ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildStoreCard(
-    String title,
-    String subtitle,
-    Color logoBg,
-    bool isBookmarked,
-   ) {
-    return Container(
-      margin: EdgeInsets.only(bottom: 12.h),
-      padding: EdgeInsets.all(12.w),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12.r),
-        border: Border.all(color: const Color(0xFFECECF0)),
-      ),
-      child: Row(
-        children: [
-          Container(
-            width: 50.w,
-            height: 50.h,
-            decoration: BoxDecoration(
-              color: logoBg,
-              borderRadius: BorderRadius.circular(8.r),
-            ),
-            child: const Icon(Icons.store_mall_directory, color: Colors.white),
-          ),
-          SizedBox(width: 12.w),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: GoogleFonts.plusJakartaSans(
-                    fontSize: 15.sp,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                SizedBox(height: 4.h),
-                Text(
-                  subtitle,
-                  style: GoogleFonts.plusJakartaSans(fontSize: 12.sp, color: Colors.grey),
-                ),
-              ],
-            ),
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
-                decoration: BoxDecoration(
-                  color: Color(0xFFFFF9E6),
-                  borderRadius: BorderRadius.circular(12.r),
-                ),
-                child: Row(
-                  children: [
-                    const Icon(Icons.star, color: Colors.amber, size: 14),
-                    SizedBox(width: 2.w),
-                    Text(
-                      "4.9",
-                      style: GoogleFonts.plusJakartaSans(
-                        fontSize: 12.sp,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.amber[800],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(height: 8.h),
-              Icon(
-                isBookmarked ? Icons.bookmark : Icons.bookmark_border_outlined,
-                color: isBookmarked ? Colors.orange : Colors.grey,
-                size: 20,
-              ),
-            ],
           ),
         ],
       ),

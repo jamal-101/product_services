@@ -77,10 +77,9 @@ class AppRoutes {
       page: () => const OnboardingScreen(),
     ),
 
-    // Auth Flow স্ক্রিনগুলোতে binding যুক্ত করা হলো যেন কন্ট্রোলার অটো-ইনিশিয়ালাইজ হয়
     GetPage(
       name: loginScreen,
-      page: () => const LoginScreen(),
+      page: () =>  LoginScreen(),
       binding: BindingsBuilder(() {
         Get.lazyPut<AuthController>(() => AuthController());
       }),
@@ -94,21 +93,21 @@ class AppRoutes {
     ),
     GetPage(
       name: forgetPassword,
-      page: () => const ForgetPasswordScreen(),
+      page: () => ForgetPasswordScreen(),
       binding: BindingsBuilder(() {
         Get.lazyPut<AuthController>(() => AuthController());
       }),
     ),
     GetPage(
       name: verifyOtp,
-      page: () => const VerifyOtpScreen(),
+      page: () => VerifyOtpScreen(),
       binding: BindingsBuilder(() {
         Get.lazyPut<AuthController>(() => AuthController());
       }),
     ),
     GetPage(
       name: resetPassword,
-      page: () => const ResetPasswordScreen(),
+      page: () => ResetPasswordScreen(),
       binding: BindingsBuilder(() {
         Get.lazyPut<AuthController>(() => AuthController());
       }),
@@ -122,7 +121,7 @@ class AppRoutes {
     ),
     GetPage(
       name: verifyPhone,
-      page: () => const VerifyPhoneScreen(),
+      page: () => VerifyPhoneScreen(),
       binding: BindingsBuilder(() {
         Get.lazyPut<AuthController>(() => AuthController());
       }),

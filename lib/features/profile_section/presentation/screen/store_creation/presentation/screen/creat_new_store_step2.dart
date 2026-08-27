@@ -14,7 +14,7 @@ class CreateNewStoreStep2 extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar:AppBar(
-        backgroundColor: Colors.white, // ব্যাকগ্রাউন্ড কালার সাদা
+        surfaceTintColor: AppColor.appBackgroundColor,
         elevation: 0,
         leading: Padding(
           padding: EdgeInsets.only(left: 16.w, top: 8.h, bottom: 8.h),
@@ -24,7 +24,7 @@ class CreateNewStoreStep2 extends StatelessWidget {
             },
             child: Container(
               decoration: BoxDecoration(
-                color: const Color(0xFFF7F7F2), // ফিগমার ব্যাক বাটনের হালকা কালার
+                color: const Color(0xFFF7F7F2),
                 borderRadius: BorderRadius.circular(12.r),
               ),
               child: const Icon(Icons.arrow_back, color: Colors.black),
@@ -39,7 +39,7 @@ class CreateNewStoreStep2 extends StatelessWidget {
               style: TextStyle(color: Colors.black, fontWeight: FontWeight.w600),
             ),
             Text(
-              "Step 2 of 5", // ডান পাশের টেক্সট
+              "Step 2 of 5",
               style: TextStyle(color: Colors.grey, fontSize: 14.sp),
             ),
           ],
@@ -47,9 +47,9 @@ class CreateNewStoreStep2 extends StatelessWidget {
         bottom: PreferredSize(
           preferredSize: Size.fromHeight(4.h),
           child: LinearProgressIndicator(
-            value: 0.4, // প্রগ্রেস ভ্যালু
+            value: 0.4,
             backgroundColor: Colors.grey.shade200,
-            color: const Color(0xFF2A9B4A), // প্রগ্রেস বারের সবুজ কালার
+            color: const Color(0xFF2A9B4A),
           ),
         ),
       ),
@@ -81,6 +81,7 @@ class CreateNewStoreStep2 extends StatelessWidget {
               limit: "0/300",
             ),
             _buildCategoryField("Category", onTap: () {  }),
+            _buildCategoryField("Time zone", onTap: () {  }),
 
             SizedBox(height: 15.h),
             Column(
@@ -91,14 +92,12 @@ class CreateNewStoreStep2 extends StatelessWidget {
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14.sp),
                 ),
                 SizedBox(height: 12.h),
-
-                // মেইন কন্টেইনার যা দুটি বক্সকে ঘিরে রেখেছে
                 Container(
-                  padding: EdgeInsets.all(16.w), // ডিজাইনের চারপাশের গ্যাপের জন্য
+                  padding: EdgeInsets.all(16.w),
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(16.r),
-                    border: Border.all(color: Color(0xFFECECF0)), // বাইরের বর্ডার
+                    border: Border.all(color: Color(0xFFECECF0)),
                   ),
                   child: Row(
                     children: [

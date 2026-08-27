@@ -173,12 +173,12 @@ class AdvertiseStepTwoView extends StatelessWidget {
                       }),
                     ),
                     Positioned(
-                      top: -18.h,
-                      left: 16.w,
+                      top: -14.h,
+                      left: 18.w,
                       child: Container(
                         padding: EdgeInsets.symmetric(
                           horizontal: 10.w,
-                          vertical: 6.h,
+                          vertical: 4.h,
                         ),
                         decoration: BoxDecoration(
                           color: Color(0xFFF26522),
@@ -187,8 +187,8 @@ class AdvertiseStepTwoView extends StatelessWidget {
                         child: Text(
                           "Best Value",
                           style: GoogleFonts.plusJakartaSans(
-                            fontSize: 14.sp,
-                            fontWeight: FontWeight.bold,
+                            fontSize: 12.sp,
+                            fontWeight: FontWeight.w500,
                             color: Colors.white,
                           ),
                         ),

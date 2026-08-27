@@ -19,6 +19,8 @@ class AppImages {
   static const String sellerImage = "$baseurl/seller_image.png" ;
   static const String rollLOgoImage = "$baseurl/roll_logo.png" ;
   static const String selectRollText = "$baseurl/select_rool_text.png" ;
+  static const String addImage_1 = "$baseurl/add_image_1.png" ;
+  static const String addImage_2 = "$baseurl/add_image_2.png" ;
 
 
 
