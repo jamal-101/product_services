@@ -266,12 +266,12 @@ class AppRoutes {
       //   Get.lazyPut<S>(() => HomeController());
       // })
     ),
-    GetPage(
-      name: advertiseWithUs,
-      page: () => AdvertiseWithUs(),
+    // GetPage(
+    //   name: advertiseWithUs,
+      // page: () => AdvertiseWithUs(),
       // binding: BindingsBuilder((){
       //   Get.lazyPut<S>(() => HomeController());
       // })
-    ),
+    // ),
   ];
 }

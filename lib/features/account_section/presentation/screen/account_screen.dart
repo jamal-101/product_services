@@ -8,7 +8,9 @@ import 'package:product_service/utils/constants/api_enpoint.dart';
 import 'package:product_service/utils/constants/app_string.dart';
 import '../../../../component/bottom_navBar/nav_bar..dart';
 import '../../../../config/route/app_route.dart';
+import '../../../../services/storage/storage_service.dart';
 import '../../../profile_section/presentation/controller/profile_controller.dart';
+import '../../../profile_section/presentation/screen/store_creation/presentation/screen/transection_history_screen.dart';
 
 class AccountScreen extends StatelessWidget {
   const AccountScreen({super.key});
@@ -110,14 +112,16 @@ class AccountScreen extends StatelessWidget {
                             Get.toNamed(AppRoutes.changePasswordScreen);
                           },
                         ),
-                        _buildCardMenuItem(
-                          Icons.store,
-                          "Create Store",
-                          "Create your store",
-                              () {
-                            Get.toNamed(AppRoutes.myStore);
-                          },
-                        ),
+                        if (authController.selectedRole.value != 'seller') ...[
+                          _buildCardMenuItem(
+                            Icons.store,
+                            "Create Store",
+                            "Create your store",
+                                () {
+                              Get.toNamed(AppRoutes.myStore);
+                            },
+                          ),
+                        ],
                         if (authController.selectedRole.value == 'seller') ...[
                           _buildSectionTitle(AppString.storeSetting),
                           _buildCardMenuItem(
@@ -174,7 +178,7 @@ class AccountScreen extends StatelessWidget {
                           "Transaction History",
                           "Payments, receipts & Stripe invoices",
                               () {
-                            // Get.toNamed(AppRoutes.notificationSettingScreen);
+                            Get.to(TransactionHistoryScreen());
                           },
                         ),
 
@@ -188,12 +192,73 @@ class AccountScreen extends StatelessWidget {
                             Get.toNamed(AppRoutes.helpSupportScreen);
                           },
                         ),
+                        // _buildCardMenuItem(
+                        //   Icons.logout,
+                        //   AppString.logOut,
+                        //   AppString.singOut,
+                        //       () {
+                        //     Get.offAllNamed(AppRoutes.loginScreen);
+                        //   },
+                        //   isLogout: true,
+                        // ),
                         _buildCardMenuItem(
                           Icons.logout,
                           AppString.logOut,
                           AppString.singOut,
                               () {
-                            Get.offAllNamed(AppRoutes.loginScreen);
+                            // লগআউট কনফার্মেশন ডায়ালগ
+                            Get.dialog(
+                              AlertDialog(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(15.r),
+                                ),
+                                title: Text(
+                                  "Log Out",
+                                  style: GoogleFonts.montserrat(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18.sp,
+                                  ),
+                                ),
+                                content: Text(
+                                  "Are you sure you want to log out?",
+                                  style: GoogleFonts.montserrat(
+                                    fontSize: 14.sp,
+                                    color: Colors.grey.shade700,
+                                  ),
+                                ),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () => Get.back(),
+                                    child: Text(
+                                      "Cancel",
+                                      style: GoogleFonts.montserrat(
+                                        color: Colors.grey,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ),
+                                  ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.red,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(8.r),
+                                      ),
+                                    ),
+                                    onPressed: () async {
+                                      await LocalStorage.removeAllPrefData();
+                                      Get.offAllNamed(AppRoutes.loginScreen);
+                                    },
+                                    child: Text(
+                                      "Yes, Logout",
+                                      style: GoogleFonts.montserrat(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
                           },
                           isLogout: true,
                         ),

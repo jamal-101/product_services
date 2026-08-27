@@ -17,7 +17,7 @@ class MessageScreen extends StatelessWidget {
 
     return Obx(() {
       bool isSeller = authController.selectedRole.value == 'seller';
-      int messageNavIndex = isSeller ? 2 : 3;
+      int messageNavIndex = isSeller ? 3 : 3;
 
       return Scaffold(
         bottomNavigationBar: BottomNavBar(selectedIndex: messageNavIndex),

@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:dio/dio.dart';
 import '../../services/storage/storage_service.dart';
@@ -116,6 +117,57 @@ class ApiService {
 
     final headers = Map<String, String>.from(header);
     headers['Content-Type'] = "multipart/form-data";
+
+    return _request(url, method, body: formData, header: headers);
+  }
+
+
+  /// ========== [ MULTIPART FOR JSON + MULTIPLE FILES ] ========== ///
+  static Future<ApiResponseModel> multipartRequest(
+      String url, {
+        Map<String, String> header = const {},
+        required Map<String, dynamic> bodyData, // যেমন: {"data": storePayload}
+        Map<String, File?> files = const {},   // যেমন: {"logo": file1, "coverImage": file2}
+        String method = "POST",
+      }) async {
+    FormData formData = FormData();
+
+    // ১. ফাইলগুলো ফরমডেটাতে যুক্ত করা
+    for (var entry in files.entries) {
+      String fieldName = entry.key;
+      File? file = entry.value;
+
+      if (file != null && await file.exists()) {
+        String extension = file.path.split('.').last.toLowerCase();
+        String? mimeType = lookupMimeType(file.path);
+
+        formData.files.add(
+          MapEntry(
+            fieldName,
+            await MultipartFile.fromFile(
+              file.path,
+              filename: "$fieldName.$extension",
+              contentType: mimeType != null
+                  ? DioMediaType.parse(mimeType)
+                  : DioMediaType.parse("image/jpeg"),
+            ),
+          ),
+        );
+      }
+    }
+
+    // ২. মেইন বডি বা JSON ডাটা ফিল্ডগুলো ফরমডেটাতে যুক্ত করা
+    bodyData.forEach((key, value) {
+      if (value is Map || value is List) {
+        // যদি অবজেক্ট বা লিস্ট হয়, তবে তা JSON স্ট্রিং হিসেবে রূপান্তর করে পাঠানো
+        formData.fields.add(MapEntry(key, jsonEncode(value)));
+      } else {
+        formData.fields.add(MapEntry(key, value.toString()));
+      }
+    });
+
+    final headers = Map<String, String>.from(header);
+    headers['Content-Type'] = 'multipart/form-data';
 
     return _request(url, method, body: formData, header: headers);
   }

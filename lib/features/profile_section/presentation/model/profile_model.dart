@@ -8,13 +8,13 @@ class ProfileModel {
   ProfileModel.fromJson(Map<String, dynamic> json) {
     success = json['success'];
     message = json['message'];
-    data = json['data'] != null ? new Data.fromJson(json['data']) : null;
+    data = json['data'] != null ? Data.fromJson(json['data']) : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['success'] = this.success;
-    data['message'] = this.message;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['success'] = success;
+    data['message'] = message;
     if (this.data != null) {
       data['data'] = this.data!.toJson();
     }
@@ -47,37 +47,50 @@ class Data {
   String? subscriptionExpiresAt;
   String? subscriptionPackageId;
   String? timezone;
+  String? address;
+  String? postalCode;
+  String? state;
+  bool? isSubscribed;
+  StoreSubscription? storeSubscription;
+  PostSubscription? postSubscription;
+  bool? isStoreCreated;
 
-  Data(
-      {this.location,
-        this.sId,
-        this.name,
-        this.role,
-        this.activeRole,
-        this.email,
-        this.profileImage,
-        this.gender,
-        this.status,
-        this.phone,
-        this.countryCode,
-        this.verified,
-        this.averageRating,
-        this.totalRatings,
-        this.totalReviews,
-        this.isDeleted,
-        this.createdAt,
-        this.updatedAt,
-        this.stripeCustomerId,
-        this.subscriptionStatus,
-        this.stripeSubscriptionId,
-        this.subscriptionExpiresAt,
-        this.subscriptionPackageId,
-        this.timezone});
+  Data({
+    this.location,
+    this.sId,
+    this.name,
+    this.role,
+    this.activeRole,
+    this.email,
+    this.profileImage,
+    this.gender,
+    this.status,
+    this.phone,
+    this.countryCode,
+    this.verified,
+    this.averageRating,
+    this.totalRatings,
+    this.totalReviews,
+    this.isDeleted,
+    this.createdAt,
+    this.updatedAt,
+    this.stripeCustomerId,
+    this.subscriptionStatus,
+    this.stripeSubscriptionId,
+    this.subscriptionExpiresAt,
+    this.subscriptionPackageId,
+    this.timezone,
+    this.address,
+    this.postalCode,
+    this.state,
+    this.isSubscribed,
+    this.storeSubscription,
+    this.postSubscription,
+    this.isStoreCreated,
+  });
 
   Data.fromJson(Map<String, dynamic> json) {
-    location = json['location'] != null
-        ? new Location.fromJson(json['location'])
-        : null;
+    location = json['location'] != null ? Location.fromJson(json['location']) : null;
     sId = json['_id'];
     name = json['name'];
     role = json['role'];
@@ -101,58 +114,120 @@ class Data {
     subscriptionExpiresAt = json['subscriptionExpiresAt'];
     subscriptionPackageId = json['subscriptionPackageId'];
     timezone = json['timezone'];
+    address = json['address'];
+    postalCode = json['postalCode'];
+    state = json['state'];
+    isStoreCreated = json['isStoreCreated'];
+    isSubscribed = json['isSubscribed'];
+    storeSubscription = json['storeSubscription'] != null
+        ? StoreSubscription.fromJson(json['storeSubscription'])
+        : null;
+    postSubscription = json['postSubscription'] != null
+        ? PostSubscription.fromJson(json['postSubscription'])
+        : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.location != null) {
-      data['location'] = this.location!.toJson();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    if (location != null) {
+      data['location'] = location!.toJson();
     }
-    data['_id'] = this.sId;
-    data['name'] = this.name;
-    data['role'] = this.role;
-    data['activeRole'] = this.activeRole;
-    data['email'] = this.email;
-    data['profileImage'] = this.profileImage;
-    data['gender'] = this.gender;
-    data['status'] = this.status;
-    data['phone'] = this.phone;
-    data['countryCode'] = this.countryCode;
-    data['verified'] = this.verified;
-    data['averageRating'] = this.averageRating;
-    data['totalRatings'] = this.totalRatings;
-    data['totalReviews'] = this.totalReviews;
-    data['isDeleted'] = this.isDeleted;
-    data['createdAt'] = this.createdAt;
-    data['updatedAt'] = this.updatedAt;
-    data['stripeCustomerId'] = this.stripeCustomerId;
-    data['subscriptionStatus'] = this.subscriptionStatus;
-    data['stripeSubscriptionId'] = this.stripeSubscriptionId;
-    data['subscriptionExpiresAt'] = this.subscriptionExpiresAt;
-    data['subscriptionPackageId'] = this.subscriptionPackageId;
-    data['timezone'] = this.timezone;
+    data['_id'] = sId;
+    data['name'] = name;
+    data['role'] = role;
+    data['activeRole'] = activeRole;
+    data['email'] = email;
+    data['profileImage'] = profileImage;
+    data['gender'] = gender;
+    data['status'] = status;
+    data['phone'] = phone;
+    data['countryCode'] = countryCode;
+    data['verified'] = verified;
+    data['averageRating'] = averageRating;
+    data['totalRatings'] = totalRatings;
+    data['totalReviews'] = totalReviews;
+    data['isDeleted'] = isDeleted;
+    data['createdAt'] = createdAt;
+    data['updatedAt'] = updatedAt;
+    data['stripeCustomerId'] = stripeCustomerId;
+    data['subscriptionStatus'] = subscriptionStatus;
+    data['stripeSubscriptionId'] = stripeSubscriptionId;
+    data['subscriptionExpiresAt'] = subscriptionExpiresAt;
+    data['subscriptionPackageId'] = subscriptionPackageId;
+    data['timezone'] = timezone;
+    data['address'] = address;
+    data['postalCode'] = postalCode;
+    data['state'] = state;
+    data['isSubscribed'] = isSubscribed;
+    data['isStoreCreated'] = isStoreCreated;
+    if (storeSubscription != null) {
+      data['storeSubscription'] = storeSubscription!.toJson();
+    }
+    if (postSubscription != null) {
+      data['postSubscription'] = postSubscription!.toJson();
+    }
     return data;
   }
 }
 
 class Location {
   String? type;
-  List<int>? coordinates;
+  List<double>? coordinates; // সার্ভার থেকে double (যেমন 90.4125) আসতে পারে তাই double করা হয়েছে
   String? address;
 
   Location({this.type, this.coordinates, this.address});
 
   Location.fromJson(Map<String, dynamic> json) {
     type = json['type'];
-    coordinates = json['coordinates'].cast<int>();
+    if (json['coordinates'] != null) {
+      coordinates = (json['coordinates'] as List).map((e) => (e as num).toDouble()).toList();
+    }
     address = json['address'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['type'] = this.type;
-    data['coordinates'] = this.coordinates;
-    data['address'] = this.address;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['type'] = type;
+    data['coordinates'] = coordinates;
+    data['address'] = address;
+    return data;
+  }
+}
+
+class StoreSubscription {
+  bool? isPurchased;
+  String? expiresAt;
+
+  StoreSubscription({this.isPurchased, this.expiresAt});
+
+  StoreSubscription.fromJson(Map<String, dynamic> json) {
+    isPurchased = json['isPurchased'];
+    expiresAt = json['expiresAt'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['isPurchased'] = isPurchased;
+    data['expiresAt'] = expiresAt;
+    return data;
+  }
+}
+
+class PostSubscription {
+  bool? isPurchased;
+  String? expiresAt;
+
+  PostSubscription({this.isPurchased, this.expiresAt});
+
+  PostSubscription.fromJson(Map<String, dynamic> json) {
+    isPurchased = json['isPurchased'];
+    expiresAt = json['expiresAt'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['isPurchased'] = isPurchased;
+    data['expiresAt'] = expiresAt;
     return data;
   }
 }
