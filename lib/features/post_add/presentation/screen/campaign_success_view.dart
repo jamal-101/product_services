@@ -3,7 +3,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:product_service/config/route/app_route.dart';
 import 'package:product_service/features/my_add/presentation/screen/my_add_screen.dart';
 
 class CampaignSuccessView extends StatelessWidget {

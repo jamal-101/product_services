@@ -233,11 +233,10 @@ class StoreUpdateController extends GetxController {
     fetchCategories(); // কন্ট্রোলার ইনিশিয়াল হলে ক্যাটাগরি ফেচ করবে
   }
 
-  // ক্যাটাগরি API কল করার মেথড
   Future<void> fetchCategories() async {
     try {
       isCategoryLoading.value = true;
-      final response = await ApiService.get(ApiEndPoint.categories); // আপনার এন্ডপয়েন্ট অনুযায়ী ঠিক করুন (যেমন: ApiEndPoint.categories)
+      final response = await ApiService.get(ApiEndPoint.categories);
 
       if (response.isSuccess) {
         CategoryModel categoryModel = CategoryModel.fromJson(response.data as Map<String, dynamic>);

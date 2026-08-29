@@ -6,6 +6,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:product_service/config/route/app_route.dart';
 import 'package:product_service/utils/constants/app_string.dart';
 
+import '../../../../../component/bottom_navBar/nav_bar..dart';
+
 class AddProductScreen extends StatelessWidget {
 
   const AddProductScreen({super.key,});
@@ -16,7 +18,7 @@ class AddProductScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final Map<String, dynamic>? product = Get.arguments as Map<String, dynamic>?;
     return Scaffold(
-      backgroundColor: const Color(0xFFFAFAFA),
+      bottomNavigationBar: BottomNavBar(selectedIndex: 2),
       appBar: AppBar(
         backgroundColor: Colors.white,
         surfaceTintColor: Colors.white,
