@@ -1,16 +1,41 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_navigation/src/extension_navigation.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:product_service/features/message_flow/presentation/controller/conversation_controller.dart';
+import 'package:product_service/services/storage/storage_service.dart';
+import 'package:product_service/utils/constants/api_enpoint.dart';
 import 'package:product_service/utils/constants/app_string.dart';
 
-class ConversationScreen extends StatelessWidget {
+class ConversationScreen extends StatefulWidget {
   const ConversationScreen({super.key});
 
   @override
+  State<ConversationScreen> createState() => _ConversationScreenState();
+}
+
+class _ConversationScreenState extends State<ConversationScreen> {
+  late final ConversationController conversationController;
+
+  @override
+  void initState() {
+    super.initState();
+    Get.delete<ConversationController>();
+    conversationController = Get.put(ConversationController());
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final String shopName = Get.arguments ?? " ";
+    String shopName = " ";
+    if (Get.arguments != null) {
+      if (Get.arguments is Map) {
+        shopName = Get.arguments['shopName'] ?? " ";
+      } else if (Get.arguments is String) {
+        shopName = Get.arguments;
+      }
+    }
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -62,81 +87,99 @@ class ConversationScreen extends StatelessWidget {
             ),
           ],
         ),
-        actions: [
-          PopupMenuButton<String>(
-            icon: const Icon(Icons.more_vert, color: Colors.black),
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
-            onSelected: (value) {
-              if (value == 'mute') { /* Mute logic */ }
-              if (value == 'delete') { /* Delete logic */ }
-              if (value == 'block') { /* Block logic */ }
-            },
-            itemBuilder: (BuildContext context) => [
-              PopupMenuItem<String>(
-                value: 'mute',
-                child: Row(
-                  children: [
-                    const Icon(Icons.notifications_off, color: Colors.black),
-                    SizedBox(width: 10.w),
-                    Text("Mute Notifications", style: GoogleFonts.montserrat()),
-                  ],
-                ),
-              ),
-              const PopupMenuDivider(),
-              PopupMenuItem<String>(
-                value: 'delete',
-                child: Row(
-                  children: [
-                    const Icon(Icons.delete, color: Colors.red),
-                    SizedBox(width: 10.w),
-                    Text("Delete Conversation", style: GoogleFonts.montserrat(color: Colors.red)),
-                  ],
-                ),
-              ),
-              PopupMenuItem<String>(
-                value: 'block',
-                child: Row(
-                  children: [
-                    const Icon(Icons.block, color: Colors.red),
-                    SizedBox(width: 10.w),
-                    Text("Block Shop", style: GoogleFonts.montserrat(color: Colors.red)),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ],
       ),
       body: Column(
         children: [
           Expanded(
-            child: ListView(
-              padding: EdgeInsets.all(16.w),
-              children: [
-                _buildMessageBubble(
-                  "Hi! Do you have fresh basil in stock?",
-                  false,
-                ),
-                _buildMessageBubble(
-                  "Yes, we just received a fresh batch this morning 🌱",
-                  true,
-                ),
-                _buildMessageBubble(
-                  "Is it like this one I had last week?",
-                  false,
-                ),
-                _buildMessageBubble("Yes exactly! Even fresher today.", true),
-              ],
+            child: RefreshIndicator(
+              onRefresh: () async {
+                final chatId = conversationController.chatId;
+                if (chatId != null && chatId.isNotEmpty) {
+                  await conversationController.getConversation(
+                    chatId,
+                    isRefresh: true,
+                  );
+                }
+              },
+              child: Obx(() {
+                if (conversationController.isLoading.value &&
+                    conversationController.messages.isEmpty) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+
+                if (conversationController.messages.isEmpty) {
+                  return ListView(
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    children: [
+                      SizedBox(height: 100.h),
+                      Center(
+                        child: Text(
+                          "No messages yet",
+                          style: GoogleFonts.montserrat(color: Colors.grey),
+                        ),
+                      ),
+                    ],
+                  );
+                }
+
+                return ListView.builder(
+                  reverse: true,
+                  controller: conversationController.scrollController,
+                  padding: EdgeInsets.all(16.w),
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  itemCount: conversationController.messages.length + 1,
+                  itemBuilder: (context, index) {
+                    if (index < conversationController.messages.length) {
+                      final message = conversationController.messages[index];
+                      final isSentByMe =
+                          message.sender.id == LocalStorage.userId;
+                      return _buildMessageBubble(
+                        message.text,
+                        message.image,
+                        isSentByMe,
+                      );
+                    }
+
+                    if (conversationController.isLoadMoreLoading.value) {
+                      return Padding(
+                        padding: EdgeInsets.symmetric(vertical: 16.h),
+                        child: const Center(child: CircularProgressIndicator()),
+                      );
+                    }
+
+                    if (!conversationController.hasMore.value &&
+                        conversationController.messages.isNotEmpty) {
+                      return Padding(
+                        padding: EdgeInsets.symmetric(vertical: 16.h),
+                        child: Center(
+                          child: Text(
+                            "No more messages",
+                            style: GoogleFonts.montserrat(
+                              color: Colors.grey,
+                              fontSize: 12.sp,
+                            ),
+                          ),
+                        ),
+                      );
+                    }
+
+                    return const SizedBox.shrink();
+                  },
+                );
+              }),
             ),
           ),
-          Padding(padding: EdgeInsets.all(12.0), child: _buildMessageInput()),
+          Padding(
+            padding: EdgeInsets.all(12.0),
+            child: _buildMessageInput(context),
+          ),
           SizedBox(height: 30.h),
         ],
       ),
     );
   }
 
-  Widget _buildMessageBubble(String text, bool isSentByMe) {
+  Widget _buildMessageBubble(String text, String? imageUrl, bool isSentByMe) {
     return Align(
       alignment: isSentByMe ? Alignment.centerRight : Alignment.centerLeft,
       child: Container(
@@ -162,54 +205,164 @@ class ConversationScreen extends StatelessWidget {
             ),
           ],
         ),
-        child: Text(
-          text,
-          style: GoogleFonts.montserrat(
-            color: isSentByMe ? Colors.white : Colors.black,
-            fontSize: 13.sp,
-            fontWeight: FontWeight.w400,
-          ),
+        child: Column(
+          crossAxisAlignment: isSentByMe
+              ? CrossAxisAlignment.end
+              : CrossAxisAlignment.start,
+          children: [
+            if (imageUrl != null && imageUrl.isNotEmpty) ...[
+              ClipRRect(
+                borderRadius: BorderRadius.circular(12.r),
+                child: _buildBubbleImage(imageUrl),
+              ),
+              if (text.isNotEmpty) SizedBox(height: 8.h),
+            ],
+            if (text.isNotEmpty)
+              Text(
+                text,
+                style: GoogleFonts.montserrat(
+                  color: isSentByMe ? Colors.white : Colors.black,
+                  fontSize: 13.sp,
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+          ],
         ),
       ),
     );
   }
 
-  Widget _buildMessageInput() {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 2.h),
-      decoration: BoxDecoration(
-        color: const Color(0xFFFAFAFA),
-        borderRadius: BorderRadius.circular(30.r),
-        border: Border.all(color: const Color(0xFFECECF0)),
-      ),
-      child: Row(
-        children: [
-          const Icon(Icons.attach_file, color: Colors.grey),
-          SizedBox(width: 10.w),
-          Expanded(
-            child: TextField(
-              decoration: InputDecoration(
-                hintText: AppString.typeMessage,
-                border: InputBorder.none,
-                hintStyle: GoogleFonts.montserrat(
-                  color: Colors.grey,
-                  fontSize: 13.sp,
+  Widget _buildBubbleImage(String url) {
+    if (url.startsWith("http")) {
+      return Image.network(
+        url,
+        height: 150.h,
+        width: 200.w,
+        fit: BoxFit.cover,
+        errorBuilder: (context, error, stackTrace) =>
+            const Icon(Icons.broken_image, color: Colors.grey),
+      );
+    } else if (url.isNotEmpty && File(url).existsSync()) {
+      return Image.file(
+        File(url),
+        height: 150.h,
+        width: 200.w,
+        fit: BoxFit.cover,
+      );
+    } else {
+      return Image.network(
+        "${ApiEndPoint.imageUrl}/$url",
+        height: 150.h,
+        width: 200.w,
+        fit: BoxFit.cover,
+        errorBuilder: (context, error, stackTrace) =>
+            const Icon(Icons.broken_image, color: Colors.grey),
+      );
+    }
+  }
+
+  Widget _buildMessageInput(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Obx(() {
+          final file = conversationController.selectedImage.value;
+          if (file == null) return const SizedBox.shrink();
+          return Container(
+            margin: EdgeInsets.only(bottom: 8.h),
+            padding: EdgeInsets.all(8.w),
+            decoration: BoxDecoration(
+              color: Colors.grey.shade100,
+              borderRadius: BorderRadius.circular(12.r),
+              border: Border.all(color: Colors.grey.shade300),
+            ),
+            child: Row(
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(8.r),
+                  child: Image.file(
+                    file,
+                    width: 50.w,
+                    height: 50.w,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                SizedBox(width: 10.w),
+                Expanded(
+                  child: Text(
+                    file.path.split('/').last,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: GoogleFonts.montserrat(fontSize: 12.sp),
+                  ),
+                ),
+                IconButton(
+                  icon: const Icon(Icons.close, color: Colors.red),
+                  onPressed: () => conversationController.removeSelectedImage(),
+                ),
+              ],
+            ),
+          );
+        }),
+        Container(
+          padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 2.h),
+          decoration: BoxDecoration(
+            color: const Color(0xFFFAFAFA),
+            borderRadius: BorderRadius.circular(30.r),
+            border: Border.all(color: const Color(0xFFECECF0)),
+          ),
+          child: Row(
+            children: [
+              GestureDetector(
+                onTap: () => conversationController.pickImage(context),
+                child: const Icon(Icons.camera_alt, color: Colors.grey),
+              ),
+              SizedBox(width: 10.w),
+              Expanded(
+                child: TextField(
+                  controller: conversationController.textController,
+                  decoration: InputDecoration(
+                    hintText: AppString.typeMessage,
+                    border: InputBorder.none,
+                    hintStyle: GoogleFonts.montserrat(
+                      color: Colors.grey,
+                      fontSize: 13.sp,
+                    ),
+                  ),
                 ),
               ),
-            ),
+              SizedBox(width: 8.w),
+              GestureDetector(
+                onTap: () => conversationController.sendMessage(),
+                child: Container(
+                  padding: EdgeInsets.all(8.w),
+                  decoration: const BoxDecoration(
+                    color: Color(0xFF27AE60),
+                    shape: BoxShape.circle,
+                  ),
+                  child: Obx(() {
+                    if (conversationController.isSending.value) {
+                      return SizedBox(
+                        width: 18.w,
+                        height: 18.w,
+                        child: const CircularProgressIndicator(
+                          color: Colors.white,
+                          strokeWidth: 2,
+                        ),
+                      );
+                    }
+                    return const Icon(
+                      Icons.send,
+                      color: Colors.white,
+                      size: 18,
+                    );
+                  }),
+                ),
+              ),
+            ],
           ),
-          const Icon(Icons.camera_alt, color: Colors.grey),
-          SizedBox(width: 8.w),
-          Container(
-            padding: EdgeInsets.all(8.w),
-            decoration: const BoxDecoration(
-              color: Color(0xFF27AE60),
-              shape: BoxShape.circle,
-            ),
-            child: const Icon(Icons.send, color: Colors.white, size: 18),
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

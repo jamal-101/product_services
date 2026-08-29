@@ -15,10 +15,14 @@ class ApiEndPoint {
   static const changePass = "$baseUrl/auth/change-password";
   static const stores = "$baseUrl/stores";
   static const categories = "$baseUrl/categories";
-  static const cityAdConfigurationsAdmin = "$baseUrl/city-ad-configurations/admin";
+  static const cityAdConfigurationsAdmin =
+      "$baseUrl/city-ad-configurations/admin";
   static const faqs = "$baseUrl/faqs";
   static const activeCities = "$baseUrl/city-ad-configurations/seller/active";
   static const slotAvailability = "$baseUrl/advertisements/availability";
   static const createAdvertisement = "$baseUrl/advertisements";
 
+  static const chats = "$baseUrl/chats";
+  static const message = "$baseUrl/messages";
+  static const sendMessage = "$baseUrl/messages/send-message";
 }

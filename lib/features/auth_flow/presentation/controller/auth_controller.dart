@@ -7,10 +7,7 @@ import '../../../../services/storage/storage_key.dart';
 import '../../../../services/storage/storage_service.dart';
 import '../../../../utils/constants/api_enpoint.dart';
 
-
-
 class AuthController extends GetxController {
-
   final registerNameController = TextEditingController();
   final registerPhoneController = TextEditingController();
   final registerEmailController = TextEditingController();
@@ -31,7 +28,10 @@ class AuthController extends GetxController {
   var resendCountdown = 55.obs;
   Timer? _timer;
   var isLoading = false.obs;
-  final List<TextEditingController> otpControllers = List.generate(6, (index) => TextEditingController());
+  final List<TextEditingController> otpControllers = List.generate(
+    6,
+    (index) => TextEditingController(),
+  );
 
   @override
   void onInit() {
@@ -39,9 +39,7 @@ class AuthController extends GetxController {
     selectedRole.value = LocalStorage.myRole;
   }
 
-
   Future<void> signUp() async {
-
     isLoading.value = true;
 
     final Map<String, dynamic> body = {
@@ -90,7 +88,6 @@ class AuthController extends GetxController {
     }
   }
 
-
   void toggleRegisterPasswordVisibility() {
     isRegisterPasswordVisible.toggle();
     update();
@@ -112,8 +109,6 @@ class AuthController extends GetxController {
       }
     });
   }
-
-
 
   Future<void> verifyOtp() async {
     String otpCode = otpControllers.map((c) => c.text.trim()).join();
@@ -158,8 +153,6 @@ class AuthController extends GetxController {
 
   var isLoginLoading = false.obs;
 
-
-
   Future<void> loginUser() async {
     isLoginLoading.value = true;
 
@@ -174,14 +167,22 @@ class AuthController extends GetxController {
       if (response.isSuccess) {
         var responseData = response.data;
         String? token = responseData['data']?['token'];
+        String? userId = responseData['data']?['user']?['_id'];
 
-        if (token != null) {
+        if (token != null && userId != null) {
           LocalStorage.token = token;
+          LocalStorage.userId = userId;
           await LocalStorage.setString(LocalStorageKeys.token, token);
+          await LocalStorage.setString(LocalStorageKeys.userId, userId);
+
         }
-        bool hasSellerAccount = responseData['data']?['hasSellerAccount'] ?? false;
+        bool hasSellerAccount =
+            responseData['data']?['hasSellerAccount'] ?? false;
         LocalStorage.hasSellerAccount = hasSellerAccount;
-        await LocalStorage.setBool(LocalStorageKeys.hasSellerAccount, hasSellerAccount);
+        await LocalStorage.setBool(
+          LocalStorageKeys.hasSellerAccount,
+          hasSellerAccount,
+        );
 
         Get.snackbar(
           "Success",
@@ -194,7 +195,6 @@ class AuthController extends GetxController {
         } else {
           Get.offAllNamed(AppRoutes.homeScreen);
         }
-
       } else {
         Get.snackbar(
           "Failed",
@@ -239,19 +239,19 @@ class AuthController extends GetxController {
   //   }
   // }
 
-
   // Role select ba switch korar API integration
   Future<void> selectRole(String role) async {
     String apiRole = (role == 'buyer') ? 'user' : role;
 
     selectedRole.value = role;
 
-    final Map<String, dynamic> body = {
-      "role": apiRole,
-    };
+    final Map<String, dynamic> body = {"role": apiRole};
 
     try {
-      final response = await ApiService.post(ApiEndPoint.switchRole, body: body);
+      final response = await ApiService.post(
+        ApiEndPoint.switchRole,
+        body: body,
+      );
 
       if (response.isSuccess) {
         var responseData = response.data;
@@ -299,6 +299,7 @@ class AuthController extends GetxController {
     String newRole = (currentRole == 'buyer') ? 'seller' : 'buyer';
     await selectRole(newRole);
   }
+
   var isForgotLoading = false.obs;
 
   Future<void> forgotPassword() async {
@@ -308,7 +309,10 @@ class AuthController extends GetxController {
       "email": forgotEmailController.text.trim(),
     };
     try {
-      final response = await ApiService.post(ApiEndPoint.forgotPassword, body: body);
+      final response = await ApiService.post(
+        ApiEndPoint.forgotPassword,
+        body: body,
+      );
       if (response.isSuccess) {
         // Get.snackbar(
         //   "Success",
@@ -338,10 +342,15 @@ class AuthController extends GetxController {
     }
   }
 
-
   var isVerifyLoading = false.obs;
-  final List<TextEditingController> otpEmailControllers = List.generate(6, (index) => TextEditingController());
-  final List<FocusNode> otpFocusNodes = List.generate(6, (index) => FocusNode());
+  final List<TextEditingController> otpEmailControllers = List.generate(
+    6,
+    (index) => TextEditingController(),
+  );
+  final List<FocusNode> otpFocusNodes = List.generate(
+    6,
+    (index) => FocusNode(),
+  );
 
   Future<void> verifyForgetEmailOtp(String otpCode) async {
     isVerifyLoading.value = true;
@@ -351,7 +360,10 @@ class AuthController extends GetxController {
       "oneTimeCode": int.parse(otpCode),
     };
     try {
-      final response = await ApiService.post(ApiEndPoint.verifyEmail, body: body);
+      final response = await ApiService.post(
+        ApiEndPoint.verifyEmail,
+        body: body,
+      );
 
       if (response.isSuccess) {
         var responseData = response.data;
@@ -388,7 +400,6 @@ class AuthController extends GetxController {
     }
   }
 
-
   var isResetLoading = false.obs;
 
   Future<void> resetPassword() async {
@@ -400,13 +411,10 @@ class AuthController extends GetxController {
     };
 
     try {
-
       final response = await ApiService.post(
         ApiEndPoint.resetPassword,
         body: body,
-        header: {
-          "resettoken": LocalStorage.token,
-        },
+        header: {"resettoken": LocalStorage.token},
       );
 
       if (response.isSuccess) {
