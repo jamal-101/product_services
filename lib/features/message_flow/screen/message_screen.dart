@@ -3,7 +3,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:product_service/features/auth_flow/presentation/controller/auth_controller.dart';
+import 'package:product_service/features/message_flow/presentation/controller/message_controller.dart';
+import 'package:product_service/services/storage/storage_service.dart';
 import 'package:product_service/utils/constants/app_string.dart';
+import 'package:product_service/utils/constants/relative_time_extention.dart';
 import '../../../component/bottom_navBar/nav_bar..dart';
 import 'conversation_screen.dart';
 
@@ -11,10 +14,11 @@ class MessageScreen extends StatelessWidget {
   MessageScreen({super.key});
 
   final AuthController authController = Get.put(AuthController());
+  final MessageController messageController = Get.put(MessageController());
 
   @override
   Widget build(BuildContext context) {
-
+    final userId = LocalStorage.userId;
     return Obx(() {
       bool isSeller = authController.selectedRole.value == 'seller';
       int messageNavIndex = isSeller ? 3 : 3;
@@ -47,6 +51,7 @@ class MessageScreen extends StatelessWidget {
                   border: Border.all(color: const Color(0xFFE5E7EB)),
                 ),
                 child: TextField(
+                  onChanged: messageController.onSearchChanged,
                   decoration: InputDecoration(
                     icon: const Icon(Icons.search, color: Colors.grey),
                     hintText: AppString.searchConversation,
@@ -58,32 +63,105 @@ class MessageScreen extends StatelessWidget {
               SizedBox(height: 16.h),
               // মেসেজ লিস্ট
               Expanded(
-                child: ListView.builder(
-                  itemCount: 5,
-                  itemBuilder: (context, index) {
-                    List<String> shops = [
-                      "El Mercado Verde",
-                      "Tech Torres",
-                      "Casa Aurora",
-                      "La Plomeria Pro",
-                      "Boutique Gloria",
-                    ];
-                    return _buildMessageItem(shops[index]);
+                child: RefreshIndicator(
+                  onRefresh: () async {
+                    await messageController.getChatList(isRefresh: true);
                   },
+                  child: Obx(() {
+                    if (messageController.messageListLoading.value &&
+                        messageController.chats.isEmpty) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+
+                    if (messageController.chats.isEmpty) {
+                      return ListView(
+                        physics: const AlwaysScrollableScrollPhysics(),
+                        children: [
+                          SizedBox(height: 100.h),
+                          Center(
+                            child: Text(
+                              "No messages found",
+                              style: GoogleFonts.montserrat(color: Colors.grey),
+                            ),
+                          ),
+                        ],
+                      );
+                    }
+
+                    return ListView.builder(
+                      
+                      controller: messageController.scrollController,
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      itemCount: messageController.chats.length + 1,
+                      itemBuilder: (context, index) {
+                        if (index < messageController.chats.length) {
+                          final chat = messageController.chats[index];
+                          return _buildMessageItem(
+                            chatId: chat.id,
+                            shopName: chat.participants.isNotEmpty
+                                ? chat.participants[0].name
+                                : "",
+                            lastMessage: chat.lastMessage.type != "text"
+                                ? "image"
+                                : chat.lastMessage.text,
+                            time: chat.createdAt.toRelativeTime(fallback: ""),
+                          );
+                        }
+
+                        // Bottom Pagination Loading / No More Data Message
+                        if (messageController.isLoadMoreLoading.value) {
+                          return Padding(
+                            padding: EdgeInsets.symmetric(vertical: 16.h),
+                            child: const Center(
+                              child: CircularProgressIndicator(),
+                            ),
+                          );
+                        }
+
+                        if (!messageController.hasMore.value &&
+                            messageController.chats.isNotEmpty) {
+                          return Padding(
+                            padding: EdgeInsets.symmetric(vertical: 16.h),
+                            child: Center(
+                              child: Text(
+                                "No more messages",
+                                style: GoogleFonts.montserrat(
+                                  color: Colors.grey,
+                                  fontSize: 12.sp,
+                                ),
+                              ),
+                            ),
+                          );
+                        }
+
+                        return const SizedBox.shrink();
+                      },
+                    );
+                  }),
                 ),
               ),
             ],
           ),
         ),
       );
-    }
-    );
+    });
   }
 
-  Widget _buildMessageItem(String shopName) {
+  Widget _buildMessageItem({
+    String? chatId,
+    String? shopName,
+    String? lastMessage,
+    String? time,
+  }) {
     return GestureDetector(
       onTap: () {
-        Get.to(() => const ConversationScreen(), arguments: shopName);
+        Get.to(
+          () => ConversationScreen(),
+          arguments: {
+            'chatId': chatId,
+            'shopName': shopName,
+          },
+        );
       },
       child: Container(
         margin: EdgeInsets.only(bottom: 12.h),
@@ -121,13 +199,13 @@ class MessageScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        shopName,
+                        shopName ?? "",
                         style: GoogleFonts.montserrat(
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                       Text(
-                        "2m",
+                        time ?? "",
                         style: GoogleFonts.montserrat(
                           fontSize: 12.sp,
                           color: Colors.grey,
@@ -137,7 +215,7 @@ class MessageScreen extends StatelessWidget {
                   ),
                   SizedBox(height: 4.h),
                   Text(
-                    "Yes, we have fresh basil!",
+                    lastMessage ?? "",
                     style: GoogleFonts.montserrat(
                       fontSize: 12.sp,
                       color: Colors.grey,
