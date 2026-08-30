@@ -14,6 +14,7 @@ class LocalStorage {
   static String myRole = "";
   static String profileImage = "";
   static bool hasSellerAccount = false;
+  static String sellerAccessToken = "";
 
 
   static SharedPreferences? preferences;
@@ -22,6 +23,9 @@ class LocalStorage {
   static Future<SharedPreferences> _getStorage() async {
     preferences ??= await SharedPreferences.getInstance();
     return preferences!;
+  }
+  static String getStoreType() {
+    return preferences?.getString(LocalStorageKeys.storeType) ?? "product_store";
   }
 
   static Future<void> getAllPrefData() async {
@@ -37,6 +41,8 @@ class LocalStorage {
     myRole = localStorage.getString(LocalStorageKeys.myRole) ?? "";
     profileImage = localStorage.getString(LocalStorageKeys.profileImage) ?? "";
     hasSellerAccount = localStorage.getBool(LocalStorageKeys.hasSellerAccount) ?? false;
+    sellerAccessToken = localStorage.getString(LocalStorageKeys.sellerToken) ?? "";
+
 
 
     appLog(userId, source: "Local Storage");
@@ -71,11 +77,21 @@ class LocalStorage {
     localStorage.setString(LocalStorageKeys.profileImage, "");
     localStorage.setBool(LocalStorageKeys.hasSellerAccount, false);
     hasSellerAccount = false;
+    localStorage.remove(LocalStorageKeys.storeType);
   }
 
   static Future<void> setUserRole(String role) async {
     myRole = role;
     await setString(LocalStorageKeys.myRole, role);
+  }
+
+  static Future<void> setStoreType(String type) async {
+    await setString(LocalStorageKeys.storeType, type);
+  }
+
+  static Future<void> setSellerToken(String token) async {
+    sellerAccessToken = token;
+    await setString(LocalStorageKeys.sellerToken, token);
   }
 
   static Future<void> setString(String key, String value) async {

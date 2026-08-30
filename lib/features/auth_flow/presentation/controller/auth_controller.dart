@@ -215,36 +215,55 @@ class AuthController extends GetxController {
     }
   }
 
-  // void selectRole(String role) async {
-  //   selectedRole.value = role;
-  //   await LocalStorage.setUserRole(role);
-  //   Future.delayed(const Duration(milliseconds: 300), () {
-  //     if (role == 'seller') {
-  //       Get.offAllNamed(AppRoutes.sellerHomeScreen);
-  //     } else {
-  //       Get.offAllNamed(AppRoutes.homeScreen);
-  //     }
-  //   });
-  // }
+  // Future<void> selectRole(String role) async {
+  //   String apiRole = (role == 'buyer') ? 'user' : role;
   //
-  // void toggleRole() async {
-  //   String currentRole = LocalStorage.myRole;
-  //   String newRole = (currentRole == 'buyer') ? 'seller' : 'buyer';
-  //   await LocalStorage.setUserRole(newRole);
-  //   selectedRole.value = newRole;
-  //   if (newRole == 'seller') {
-  //     Get.offAllNamed(AppRoutes.sellerHomeScreen);
-  //   } else {
-  //     Get.offAllNamed(AppRoutes.homeScreen);
+  //   selectedRole.value = role;
+  //
+  //   final Map<String, dynamic> body = {
+  //     "role": apiRole,
+  //   };
+  //
+  //   try {
+  //     final response = await ApiService.post(ApiEndPoint.switchRole, body: body);
+  //
+  //     if (response.isSuccess) {
+  //       var responseData = response.data;
+  //
+  //       String? token = responseData['data']?['token'];
+  //       if (token != null) {
+  //         LocalStorage.token = token;
+  //         await LocalStorage.setString(LocalStorageKeys.token, token);
+  //       }
+  //
+  //       await LocalStorage.setUserRole(role);
+  //
+  //       if (role == 'seller') {
+  //         Get.offAllNamed(AppRoutes.sellerHomeScreen);
+  //       } else {
+  //         Get.offAllNamed(AppRoutes.homeScreen);
+  //       }
+  //     } else {
+  //       Get.snackbar(
+  //         "Failed",
+  //         response.message,
+  //         backgroundColor: Colors.red,
+  //         colorText: Colors.white,
+  //       );
+  //     }
+  //   } catch (e) {
+  //     Get.snackbar(
+  //       "Error",
+  //       e.toString(),
+  //       backgroundColor: Colors.red,
+  //       colorText: Colors.white,
+  //     );
   //   }
   // }
 
 
-  // Role select ba switch korar API integration
   Future<void> selectRole(String role) async {
     String apiRole = (role == 'buyer') ? 'user' : role;
-
-    selectedRole.value = role;
 
     final Map<String, dynamic> body = {
       "role": apiRole,
@@ -262,14 +281,8 @@ class AuthController extends GetxController {
           await LocalStorage.setString(LocalStorageKeys.token, token);
         }
 
+        selectedRole.value = role;
         await LocalStorage.setUserRole(role);
-
-        // Get.snackbar(
-        //   "Success",
-        //   response.message,
-        //   backgroundColor: Colors.green,
-        //   colorText: Colors.white,
-        // );
 
         if (role == 'seller') {
           Get.offAllNamed(AppRoutes.sellerHomeScreen);

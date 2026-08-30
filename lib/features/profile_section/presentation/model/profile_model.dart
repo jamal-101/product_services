@@ -54,6 +54,7 @@ class Data {
   StoreSubscription? storeSubscription;
   PostSubscription? postSubscription;
   bool? isStoreCreated;
+  String? storeType;
 
   Data({
     this.location,
@@ -87,6 +88,7 @@ class Data {
     this.storeSubscription,
     this.postSubscription,
     this.isStoreCreated,
+    this.storeType,
   });
 
   Data.fromJson(Map<String, dynamic> json) {
@@ -119,6 +121,7 @@ class Data {
     state = json['state'];
     isStoreCreated = json['isStoreCreated'];
     isSubscribed = json['isSubscribed'];
+    storeType = json['storeType'];
     storeSubscription = json['storeSubscription'] != null
         ? StoreSubscription.fromJson(json['storeSubscription'])
         : null;
@@ -160,6 +163,7 @@ class Data {
     data['state'] = state;
     data['isSubscribed'] = isSubscribed;
     data['isStoreCreated'] = isStoreCreated;
+    data['storeType'] = storeType;
     if (storeSubscription != null) {
       data['storeSubscription'] = storeSubscription!.toJson();
     }
@@ -172,7 +176,7 @@ class Data {
 
 class Location {
   String? type;
-  List<double>? coordinates; // সার্ভার থেকে double (যেমন 90.4125) আসতে পারে তাই double করা হয়েছে
+  List<double>? coordinates;
   String? address;
 
   Location({this.type, this.coordinates, this.address});

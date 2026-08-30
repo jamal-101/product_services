@@ -2,13 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:product_service/config/route/app_route.dart';
 import 'package:product_service/features/home_flow/presentatin/controller/home_controller.dart';
 import 'package:product_service/features/message_flow/screen/message_screen.dart';
+import 'package:product_service/features/product_store_flow/presentation/screen/product_details_screen.dart';
 import 'package:product_service/utils/constants/api_enpoint.dart';
+import 'package:product_service/utils/constants/app_color.dart';
 import 'package:product_service/utils/constants/app_images.dart';
 import '../../../../component/bottom_navBar/nav_bar..dart';
+import '../../../post_add/controller/post_add_controller.dart';
+import '../../../product_store_flow/presentation/screen/store_details_page.dart';
 import '../../../profile_section/presentation/widget/app_drawer.dart';
+import '../model/city_model.dart';
 import 'notification_screen.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -23,7 +27,8 @@ class HomeScreen extends StatelessWidget {
       drawer:  AppDrawer(),
       bottomNavigationBar: BottomNavBar(selectedIndex: 0),
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: AppColor.appBackgroundColor,
+        surfaceTintColor: AppColor.appBackgroundColor,
         elevation: 0,
         leading: IconButton(
           icon: Image.asset(AppImages.menuIcon, height: 30.h, width: 30.w),
@@ -203,85 +208,219 @@ class HomeScreen extends StatelessWidget {
             ),
 
             SizedBox(height: 16.h),
-            _buildCitySelectionBox(controller),
             _buildAdvertiseCard(),
             SizedBox(height: 10.h),
-            Image.asset(AppImages.addImage_1),
-            SizedBox(height: 5.h),
-            Image.asset(AppImages.addImage_2)
+            Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text("Featured Stores",style: GoogleFonts.plusJakartaSans(
+                  fontWeight: FontWeight.w700,
+                  color: Color(0xFF1A1D24),
+                  fontSize: 18.sp,
+                ),),
+                _buildCitySelectionBox(controller),
+              ],
+            ),
+            SizedBox(height: 10.h),
+            Obx(() {
+              if (controller.isFeaturedLoading.value) {
+                return Center(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(vertical: 20.h),
+                    child: const CircularProgressIndicator(color: Color(0xFF27AE60)),
+                  ),
+                );
+              }
+
+              if (controller.featuredList.isEmpty) {
+                return Center(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(vertical: 20.h),
+                    child: Text(
+                      "No Featured Stores Found",
+                      style: GoogleFonts.plusJakartaSans(
+                        fontSize: 13.sp,
+                        color: Colors.grey,
+                      ),
+                    ),
+                  ),
+                );
+              }
+
+
+
+             return ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: controller.featuredList.length,
+                itemBuilder: (context, index) {
+                  final item = controller.featuredList[index];
+                  String imageUrl = "";
+                  if (item.featuredImage != null && item.featuredImage!.isNotEmpty) {
+                    if (item.featuredImage!.startsWith('http')) {
+                      imageUrl = item.featuredImage!;
+                    } else {
+                      imageUrl = "${ApiEndPoint.imageUrl}${item.featuredImage}";
+                    }
+                  }
+                  String? storeId = item.storeId?.sId;
+
+                  return GestureDetector(
+                    onTap: () {
+                      if (storeId != null && storeId.isNotEmpty) {
+                        Get.to(
+                              () => const ProductDetailsScreen(),
+                          arguments: storeId,
+                        );
+                      }
+                    },
+                    child: Container(
+                      margin: EdgeInsets.only(bottom: 12.h),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(16.r),
+                        border: Border.all(color: Colors.grey.shade200),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withValues(alpha: 0.03),
+                            blurRadius: 6,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          if (imageUrl.isNotEmpty)
+                            ClipRRect(
+                              borderRadius: BorderRadius.vertical(top: Radius.circular(16.r)),
+                              child: Image.network(
+                                imageUrl,
+                                height: 150.h,
+                                width: double.infinity,
+                                fit: BoxFit.cover,
+                                errorBuilder: (context, error, stackTrace) => Container(
+                                  height: 150.h,
+                                  color: Colors.grey.shade200,
+                                  child: const Icon(Icons.image_not_supported, color: Colors.grey),
+                                ),
+                              ),
+                            ),
+                          Padding(
+                            padding: EdgeInsets.all(12.w),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  item.campaignName ?? "No Campaign Name",
+                                  style: GoogleFonts.plusJakartaSans(
+                                    fontSize: 14.sp,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black87,
+                                  ),
+                                ),
+                                SizedBox(height: 4.h),
+                                Text(
+                                  "Store: ${item.storeId?.displayName?.isNotEmpty == true ? item.storeId!.displayName : "N/A"} (${item.city ?? ""})",
+                                  style: GoogleFonts.plusJakartaSans(
+                                    fontSize: 12.sp,
+                                    color: Colors.grey[600],
+                                  ),
+                                ),
+                                SizedBox(height: 6.h),
+                                Text(
+                                  "Price: \$${item.price ?? 0}",
+                                  style: GoogleFonts.plusJakartaSans(
+                                    fontSize: 13.sp,
+                                    fontWeight: FontWeight.w700,
+                                    color: const Color(0xFF27AE60),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              );
+
+            }),
           ],
         ),
       ),
     );
   }
 
+
+
+
   Widget _buildCitySelectionBox(HomeController controller) {
-    final RxString selectedCity = "Choose city".obs;
     return Align(
       alignment: Alignment.centerRight,
-      child: PopupMenuButton<String>(
-        onSelected: (String city) {
-          selectedCity.value = city;
-        },
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12.r),
-        ),
-        itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
-          const PopupMenuItem<String>(
-            value: 'Choose city',
-            child: Text('Choose city'),
+      child: Obx(() {
+        if (controller.isCityLoading.value) {
+          return SizedBox(
+            height: 20.h,
+            width: 20.w,
+            child: const CircularProgressIndicator(strokeWidth: 2, color: Color(0xFF2E7D32)),
+          );
+        }
+
+        return PopupMenuButton<CityData>(
+          onSelected: (CityData cityData) {
+            controller.onCitySelected(cityData);
+          },
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12.r),
           ),
-          const PopupMenuItem<String>(
-            value: 'Geneva',
-            child: Text('Geneva'),
-          ),
-          const PopupMenuItem<String>(
-            value: 'Zurich',
-            child: Text('Zurich'),
-          ),
-          const PopupMenuItem<String>(
-            value: 'Madrid',
-            child: Text('Madrid'),
-          ),
-          const PopupMenuItem<String>(
-            value: 'Barcelona',
-            child: Text('Barcelona'),
-          ),
-        ],
-        child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(10.r),
-            border: Border.all(color: Colors.grey.shade300, width: 1),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withValues(alpha: 0.03),
-                blurRadius: 4,
-                offset: const Offset(0, 2),
-              ),
-            ],
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(Icons.location_on_outlined, size: 18.sp, color: const Color(0xFF2E7D32)),
-              SizedBox(width: 6.w),
-              Obx(() => Text(
-                  selectedCity.value,
+          itemBuilder: (BuildContext context) => <PopupMenuEntry<CityData>>[
+            PopupMenuItem<CityData>(
+              value: CityData(city: "Choose city", latitude: null, longitude: null),
+              child: const Text('Choose city'),
+            ),
+            ...controller.cityList.map((city) {
+              return PopupMenuItem<CityData>(
+                value: city,
+                child: Text(city.city ?? ""),
+              );
+            }).toList(),
+          ],
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(10.r),
+              border: Border.all(color: Colors.grey.shade300, width: 1),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.03),
+                  blurRadius: 4,
+                  offset: const Offset(0, 2),
+                ),
+              ],
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(Icons.location_on_outlined, size: 18.sp, color: const Color(0xFF2E7D32)),
+                SizedBox(width: 6.w),
+                Text(
+                  controller.selectedCityName.value,
                   style: GoogleFonts.plusJakartaSans(
                     fontSize: 13.sp,
                     fontWeight: FontWeight.w600,
                     color: Colors.grey[800],
                   ),
                 ),
-              ),
-              SizedBox(width: 8.w),
-              Icon(Icons.keyboard_arrow_down, size: 18.sp, color: Colors.grey),
-            ],
+                SizedBox(width: 8.w),
+                Icon(Icons.keyboard_arrow_down, size: 18.sp, color: Colors.grey),
+              ],
+            ),
           ),
-        ),
-      ),
+        );
+      }),
     );
   }
 
@@ -338,7 +477,8 @@ class HomeScreen extends StatelessWidget {
           ),
           ElevatedButton(
             onPressed: onTap ?? () {
-              Get.toNamed(AppRoutes.advertiseWithUs);
+              final PostAddController postController = Get.put(PostAddController());
+              postController.checkAndNavigateToPostAd();
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: Color(0xFF228B22),

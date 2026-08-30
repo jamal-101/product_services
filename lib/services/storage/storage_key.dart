@@ -9,4 +9,6 @@ class LocalStorageKeys {
   static const String myRole = "myRole";
   static const String profileImage = "profileImage";
   static const String hasSellerAccount = "hasSellerAccount";
+  static const String sellerToken = "seller_token";
+  static const String storeType = "storeType";
 }

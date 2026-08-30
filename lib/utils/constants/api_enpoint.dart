@@ -20,5 +20,7 @@ class ApiEndPoint {
   static const activeCities = "$baseUrl/city-ad-configurations/seller/active";
   static const slotAvailability = "$baseUrl/advertisements/availability";
   static const createAdvertisement = "$baseUrl/advertisements";
+  static const verifySellerForPosting = "$baseUrl/advertisements/verify-seller";
+  static const String myAdvertisements = "/advertisements/my-advertisements";
 
 }

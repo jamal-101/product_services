@@ -9,6 +9,7 @@ import 'package:product_service/utils/constants/app_string.dart';
 import '../../../../component/bottom_navBar/nav_bar..dart';
 import '../../../../config/route/app_route.dart';
 import '../../../../services/storage/storage_service.dart';
+import '../../../my_add/presentation/screen/my_add_screen.dart';
 import '../../../profile_section/presentation/controller/profile_controller.dart';
 import '../../../profile_section/presentation/screen/store_creation/presentation/screen/transection_history_screen.dart';
 
@@ -158,6 +159,14 @@ class AccountScreen extends StatelessWidget {
                               Get.toNamed(AppRoutes.editLegalDocumentsScreen);
                             },
                           ),
+                          _buildCardMenuItem(
+                            Icons.add_shopping_cart,
+                            "My Adds",
+                            "See your add",
+                                () {
+                              Get.to(MyAddScreen());
+                            },
+                          ),
                           SizedBox(height: 20.h),
                         ],
 
@@ -206,7 +215,6 @@ class AccountScreen extends StatelessWidget {
                           AppString.logOut,
                           AppString.singOut,
                               () {
-                            // লগআউট কনফার্মেশন ডায়ালগ
                             Get.dialog(
                               AlertDialog(
                                 shape: RoundedRectangleBorder(

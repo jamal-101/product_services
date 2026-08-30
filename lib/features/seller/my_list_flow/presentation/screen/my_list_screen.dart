@@ -1,29 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_navigation/src/extension_navigation.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:product_service/features/seller/my_list_flow/presentation/screen/add_product_screen.dart';
-import 'package:product_service/utils/constants/app_string.dart';
+import 'package:get/get.dart';
+import 'package:product_service/utils/constants/app_color.dart';
 import '../../../../../component/bottom_navBar/nav_bar..dart';
+import '../../../../../utils/constants/api_enpoint.dart';
+import '../controller/listing_controller.dart';
+import '../model/service_model.dart' as s_model;
+import '../model/product_model.dart' as p_model;
+import 'add_product_screen.dart';
 
 class MyListingScreen extends StatelessWidget {
-  const MyListingScreen({super.key});
+  MyListingScreen({super.key});
 
-
+  final MyListingController controller = Get.put(MyListingController());
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: BottomNavBar(selectedIndex: 1),
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
+        surfaceTintColor: AppColor.appBackgroundColor,
+        automaticallyImplyLeading: false,
         centerTitle: false,
+        elevation: 0,
         title: Text(
-          AppString.myList,
-          style: GoogleFonts.plusJakartaSans(
-            color: Color(0xFF1A1D24),
+          "My Listing",
+          style: TextStyle(
+            color: Colors.black,
             fontSize: 18.sp,
             fontWeight: FontWeight.bold,
           ),
@@ -32,29 +34,33 @@ class MyListingScreen extends StatelessWidget {
           Padding(
             padding: EdgeInsets.only(right: 16.w),
             child: InkWell(
-              onTap: () {
-                Get.to(AddProductScreen());
+              onTap: () async {
+                bool? isChanged = await Get.to(
+                      () => const AddProductScreen(),
+                );
+                if (isChanged == true) {
+                  controller.fetchMyListings();
+                }
               },
-              borderRadius: BorderRadius.circular(8.r),
               child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 8.h),
+                padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
                 decoration: BoxDecoration(
-                  color:  Color(0xFF27AE60),
+                  color: const Color(0xFF2A9B4A),
                   borderRadius: BorderRadius.circular(8.r),
                 ),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                     Icon(Icons.add, size: 20, color: Colors.white),
-                    SizedBox(width: 6.w),
-                    Text(
-                      AppString.addProducts,
+                    const Icon(Icons.add, color: Colors.white, size: 18),
+                    SizedBox(width: 4.w),
+                    Obx(() => Text(
+                      controller.storeType == "service_store" ? "Add Service" : "Add Product",
                       style: TextStyle(
-                        fontSize: 14.sp,
                         color: Colors.white,
+                        fontSize: 12.sp,
                         fontWeight: FontWeight.w700,
                       ),
-                    ),
+                    ))
                   ],
                 ),
               ),
@@ -62,117 +68,174 @@ class MyListingScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: ListView.builder(
-        padding: EdgeInsets.all(16.w),
-        itemCount: 7,
-        itemBuilder: (context, index) {
-          return _buildProductCard();
-        },
-      ),
-    );
-  }
+      bottomNavigationBar: BottomNavBar(selectedIndex: 1),
+      body: Obx(() {
+        if (controller.isLoading.value) {
+          return const Center(
+            child: CircularProgressIndicator(color: Color(0xFF27AE60)),
+          );
+        }
 
-  Widget _buildProductCard() {
-    return Container(
-      margin: EdgeInsets.only(bottom: 12.h),
-      padding: EdgeInsets.all(12.w),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16.r),
-        border: Border.all(color: Colors.grey.shade100),
-      ),
-      child: Row(
-        children: [
-          Container(
-            width: 60.w,
-            height: 60.w,
-            decoration: BoxDecoration(
-              color: Colors.grey[200],
-              borderRadius: BorderRadius.circular(12.r),
-              image: const DecorationImage(
-                image: NetworkImage("https://via.placeholder.com/150"),
-                fit: BoxFit.cover,
-              ),
+        bool isService = controller.storeType == "service_store";
+        int itemCount = isService ? controller.serviceList.length : controller.productList.length;
+
+        if (itemCount == 0) {
+          return Center(
+            child: Text(
+              isService ? "No Services Found" : "No Products Found",
+              style: TextStyle(fontSize: 14.sp, color: Colors.grey),
             ),
-          ),
-          SizedBox(width: 12.w),
-          // টেক্সট ইনফরমেশন
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "Vintage Leather Jacket for men- Winter Fashion",
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontSize: 13.sp,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                SizedBox(height: 4.h),
-                Row(
-                  children: [
-                    Text(
-                      "\$89.99 ",
-                      style: TextStyle(
-                        fontSize: 14.sp,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    Text(
-                      "\$95.45",
-                      style: TextStyle(
-                        fontSize: 12.sp,
-                        color: Colors.grey,
-                        decoration: TextDecoration.lineThrough,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-          PopupMenuButton<String>(
-            icon: const Icon(Icons.more_vert, color: Colors.grey),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16.r),
-            ),
-            onSelected: (value) {
-              if (value == 'edit') {
-                Get.to(AddProductScreen(),arguments: {'title': "Vintage Leather Jacket for men- Winter Fashion",});
-              } else if (value == 'delete') {
+          );
+        }
+
+        return ListView.builder(
+          padding: EdgeInsets.all(16.w),
+          itemCount: itemCount,
+          itemBuilder: (context, index) {
+            String title = "No Title";
+            int activePrice = 0;
+            int originalPrice = 0;
+            List<String>? images;
+            String? itemId;
+
+            if (isService) {
+              s_model.Data item = controller.serviceList[index];
+              title = item.title ?? "No Title";
+              activePrice = item.activePrice ?? 0;
+              originalPrice = item.originalPrice ?? 0;
+              images = item.images;
+              itemId = item.sId;
+            } else {
+              p_model.Data item = controller.productList[index];
+              title = item.title ?? "No Title";
+              activePrice = item.activePrice ?? 0;
+              originalPrice = item.originalPrice ?? 0;
+              images = item.images;
+              itemId = item.sId;
+            }
+
+            String imageUrl = "https://via.placeholder.com/150";
+            if (images != null && images.isNotEmpty) {
+              String rawPath = images.first;
+              if (rawPath.startsWith('http')) {
+                imageUrl = rawPath;
+              } else {
+                imageUrl = "${ApiEndPoint.imageUrl}$rawPath";
               }
-            },
-            itemBuilder: (BuildContext context) => [
-              PopupMenuItem(
-                value: 'edit',
-                child: Row(
-                  children: [
-                    const Icon(Icons.edit, color: Colors.black, size: 20),
-                    SizedBox(width: 10.w),
-                    const Text("Edit"),
-                  ],
-                ),
+            }
+
+            return Container(
+              margin: EdgeInsets.only(bottom: 12.h),
+              padding: EdgeInsets.all(10.w),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(16.r),
+                border: Border.all(color: Colors.grey.shade200),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.02),
+                    blurRadius: 6,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
               ),
-              const PopupMenuDivider(),
-              PopupMenuItem(
-                value: 'delete',
-                child: Row(
-                  children: [
-                    const Icon(
-                      Icons.delete_outline,
-                      color: Colors.red,
-                      size: 20,
+              child: Row(
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(12.r),
+                    child: Image.network(
+                      imageUrl,
+                      width: 60.w,
+                      height: 60.w,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) => Container(
+                        width: 60.w,
+                        height: 60.w,
+                        color: Colors.grey.shade200,
+                        child: const Icon(Icons.image_not_supported, color: Colors.grey),
+                      ),
                     ),
-                    SizedBox(width: 10.w),
-                    const Text("Delete", style: TextStyle(color: Colors.red)),
-                  ],
-                ),
+                  ),
+                  SizedBox(width: 12.w),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          title,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontSize: 13.sp,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.black87,
+                          ),
+                        ),
+                        SizedBox(height: 6.h),
+                        Row(
+                          children: [
+                            Text(
+                              "\$$activePrice",
+                              style: TextStyle(
+                                fontSize: 14.sp,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                              ),
+                            ),
+                            SizedBox(width: 8.w),
+                            if (originalPrice > 0)
+                              Text(
+                                "\$$originalPrice",
+                                style: TextStyle(
+                                  fontSize: 12.sp,
+                                  color: Colors.grey,
+                                  decoration: TextDecoration.lineThrough,
+                                ),
+                              ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  PopupMenuButton<String>(
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.r)),
+                    onSelected: (value) async {
+                      if (value == 'edit') {
+                        var rawItem = isService
+                            ? controller.serviceList[index]
+                            : controller.productList[index];
+
+                        bool? isChanged = await Get.to(
+                              () => const AddProductScreen(),
+                          arguments: rawItem,
+                        );
+                        if (isChanged == true) {
+                          controller.fetchMyListings();
+                        }
+                      } else if (value == 'delete') {
+                        if (itemId != null) {
+                          controller.deleteItem(itemId);
+                        }
+                      }
+                    },
+                    itemBuilder: (context) => [
+                      const PopupMenuItem(
+                        value: 'edit',
+                        child: Text("Edit"),
+                      ),
+                      const PopupMenuItem(
+                        value: 'delete',
+                        child: Text("Delete", style: TextStyle(color: Colors.red)),
+                      ),
+                    ],
+                    icon: const Icon(Icons.more_vert, color: Colors.grey),
+                  )
+                ],
               ),
-            ],
-          ),
-        ],
-      ),
+            );
+          },
+        );
+      }),
     );
   }
 }

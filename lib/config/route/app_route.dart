@@ -26,6 +26,7 @@ import '../../features/auth_flow/presentation/screen/select_rol_screen.dart';
 import '../../features/auth_flow/presentation/screen/verify_otp.dart';
 import '../../features/auth_flow/presentation/screen/verify_phone_screen.dart';
 import '../../features/home_flow/presentatin/screen/home_screen.dart';
+import '../../features/seller/my_list_flow/presentation/screen/add_product_screen.dart';
 import '../../features/seller/my_list_flow/presentation/screen/edite_branding_screen.dart';
 import '../../features/seller/my_list_flow/presentation/screen/edite_legel_document_screen.dart';
 import '../../features/seller/my_list_flow/presentation/screen/subsCription_billing_screen.dart';
@@ -63,6 +64,7 @@ class AppRoutes {
   static const String editLegalDocumentsScreen = "/editLegalDocumentsScreen";
   static const String subscriptionBillingScreen = "/subscriptionBillingScreen";
   static const String advertiseWithUs = "/AdvertiseWithUs";
+  static const String adProductScreen = "/addProductScreen";
 
   // GetPage List
   static List<GetPage> routes = [
@@ -138,20 +140,20 @@ class AppRoutes {
         Get.lazyPut<AuthController>(() =>AuthController());
       }),
     ),
-    GetPage(
-      name: storeDetailsPage,
-      page: () =>  StoreDetailsPage(),
+    // GetPage(
+    //   name: storeDetailsPage,
+    //   page: () =>  StoreDetailsPage(),
+    //   // binding: BindingsBuilder((){
+    //   //   Get.lazyPut<S>(() => HomeController());
+    //   // })
+    // ),
+    // GetPage(
+    //   name: productDetailsScreen,
+      // page: () =>  ProductDetailsScreen(),
       // binding: BindingsBuilder((){
       //   Get.lazyPut<S>(() => HomeController());
       // })
-    ),
-    GetPage(
-      name: productDetailsScreen,
-      page: () =>  ProductDetailsScreen(),
-      // binding: BindingsBuilder((){
-      //   Get.lazyPut<S>(() => HomeController());
-      // })
-    ),
+    // ),
     GetPage(
       name: accountScreen,
       page: () =>  AccountScreen(),

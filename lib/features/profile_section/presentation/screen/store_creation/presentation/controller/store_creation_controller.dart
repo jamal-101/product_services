@@ -22,6 +22,7 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:product_service/config/route/app_route.dart';
 import '../../../../../../../services/api/api_service.dart';
+import '../../../../../../../services/storage/storage_service.dart';
 import '../../../../../../../utils/constants/api_enpoint.dart';
 
 
@@ -146,8 +147,9 @@ class StoreCreationController extends GetxController {
       );
 
       if (response.isSuccess) {
-        Get.snackbar("Success", "Store created successfully!", backgroundColor: Colors.green, colorText: Colors.white);
+        await LocalStorage.setStoreType(selectedStoreType.value);
         Get.to(AppRoutes.accountScreen);
+        Get.snackbar("Success", "Store created successfully!", backgroundColor: Colors.green, colorText: Colors.white);
       } else {
         Get.snackbar("Error", response.message, backgroundColor: Colors.red, colorText: Colors.white);
       }

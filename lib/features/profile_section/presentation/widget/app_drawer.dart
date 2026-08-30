@@ -118,7 +118,7 @@ class AppDrawer extends StatelessWidget {
               padding: EdgeInsets.symmetric(horizontal: 10.w),
               children: [
                 if (!isSeller) ...[
-                  _buildMenuItem(context, Icons.storefront_outlined, "My Ads"),
+                  // _buildMenuItem(context, Icons.storefront_outlined, "My Ads"),
                   _buildMenuItem(context, Icons.storefront_outlined, "Save Store"),
                   // _buildMenuItem(context, Icons.analytics, "Store Analytics"),
                   _buildMenuItem(context, Icons.bookmark_border, "Saved Products"),

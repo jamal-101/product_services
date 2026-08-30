@@ -2,9 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:product_service/utils/constants/api_enpoint.dart';
+import 'package:product_service/utils/constants/app_color.dart';
 import 'package:product_service/utils/constants/app_images.dart';
-import '../../controller/my_add_controller.dart';
+import '../../../auth_flow/presentation/controller/auth_controller.dart';
+import '../controller/my_add_controller.dart';
 import 'add_details_screen.dart';
+
 
 class MyAddScreen extends StatelessWidget {
   const MyAddScreen({super.key});
@@ -14,8 +18,10 @@ class MyAddScreen extends StatelessWidget {
     final MyAddController controller = Get.put(MyAddController());
 
     return Scaffold(
+
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: AppColor.appBackgroundColor,
+        surfaceTintColor: AppColor.appBackgroundColor,
         centerTitle: false,
         elevation: 0,
         leading: Padding(
@@ -27,7 +33,15 @@ class MyAddScreen extends StatelessWidget {
             ),
             child: IconButton(
               icon: const Icon(Icons.arrow_back, color: Colors.black),
-              onPressed: () => Get.back(),
+              onPressed: () async {
+                if (Get.isRegistered<AuthController>()) {
+                  final AuthController authController = Get.find<AuthController>();
+                  await authController.selectRole('seller');
+                } else {
+                  final AuthController authController = Get.put(AuthController());
+                  await authController.selectRole('seller');
+                }
+              },
             ),
           ),
         ),
@@ -39,110 +53,68 @@ class MyAddScreen extends StatelessWidget {
             fontSize: 18.sp,
           ),
         ),
-        bottom: PreferredSize(
-          preferredSize: Size.fromHeight(50.h),
-          child: Container(
-            color: Colors.white,
-            padding: EdgeInsets.symmetric(horizontal: 16.w),
-            child: Row(
-              children: [
-                _buildTabButton(controller, "All", 0),
-                SizedBox(width: 24.w),
-                _buildTabButton(controller, "Pending", 1),
-                SizedBox(width: 24.w),
-                _buildTabButton(controller, "Live", 2),
-              ],
-            ),
-          ),
-        ),
       ),
       body: SafeArea(
-        child: ListView(
-          physics: const BouncingScrollPhysics(),
-          padding: EdgeInsets.all(16.w),
-          children: [
-
-            _buildAdCard(
-              status: "LIVE",
-              statusColor: const Color(0xFF2E7D32),
-              bgColor: const Color(0xFFE8F5E9),
-              title: "Gree",
-              date: "Jul 1 - Jul 31",
-              price: "\$420",
-              imagePath: AppImages.storeCoverImage,
-              onTap: () => Get.to(() => AddDetailsScreen()),
-            ),
-            SizedBox(height: 16.h),
-            _buildAdCard(
-              status: "Pending",
-              statusColor: Colors.orange.shade800,
-              bgColor: Colors.orange.shade50,
-              title: "Gree",
-              date: "Jul 20 - Jul 27",
-              price: "\$37",
-              isBannerCustom: true,
-              imagePath: AppImages.servicesImage,
-              onTap: () => Get.to(() => AddDetailsScreen()),
-            ),
-            SizedBox(height: 16.h),
-            _buildAdCard(
-              status: "Pending",
-              statusColor: Colors.orange.shade800,
-              bgColor: Colors.orange.shade50,
-              title: "Gree",
-              date: "Aug 1 - Aug 8",
-              price: "\$147",
-              imagePath: AppImages.servicesImage,
-              isKettle: true,
-              onTap: () => Get.to(() => const AddDetailsScreen()),
-            ),
-          ],
-        ),
+        child: Obx(() {
+          if (controller.isLoading.value) {
+            return const Center(
+              child: CircularProgressIndicator(color: Color(0xFF2E7D32)),
+            );
+          }
+          if (controller.myAds.isEmpty) {
+            return Center(
+              child: Text(
+                "No advertisements found",
+                style: GoogleFonts.plusJakartaSans(
+                  fontSize: 16.sp,
+                  color: Colors.grey.shade600,
+                ),
+              ),
+            );
+          }
+          return ListView.builder(
+            physics: const BouncingScrollPhysics(),
+            padding: EdgeInsets.all(16.w),
+            itemCount: controller.myAds.length,
+            itemBuilder: (context, index) {
+              final ad = controller.myAds[index];
+              bool isLive = ad.status?.toLowerCase() == 'live' || ad.status?.toLowerCase() == 'active';
+              Color statusColor = isLive ? const Color(0xFF2E7D32) : Colors.orange.shade800;
+              Color bgColor = isLive ? const Color(0xFFE8F5E9) : Colors.orange.shade50;
+              String start = ad.startDate?.split('T').first ?? "N/A";
+              String end = ad.endDate?.split('T').first ?? "N/A";
+              String formattedDate = "$start - $end";
+              String imgUrl = ad.featuredImage != null
+                  ? "${ApiEndPoint.imageUrl}${ad.featuredImage}"
+                  : "";
+              return Padding(
+                padding: EdgeInsets.only(bottom: 16.h),
+                child: _buildAdCard(
+                  status: ad.status ?? "Pending",
+                  statusColor: statusColor,
+                  bgColor: bgColor,
+                  title: ad.campaignName ?? "Unknown Campaign",
+                  date: formattedDate,
+                  price: "N/A",
+                  imageUrl: imgUrl,
+                  onTap: () => Get.to(() => const AddDetailsScreen()),
+                ),
+              );
+            },
+          );
+        }),
       ),
     );
   }
 
-  Widget _buildTabButton(MyAddController controller, String title, int index) {
-    return Obx(() {
-      bool isSelected = controller.selectedTab.value == index;
-      return GestureDetector(
-        onTap: () => controller.changeTab(index),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              title,
-              style: GoogleFonts.plusJakartaSans(
-                fontSize: 14.sp,
-                fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
-                color: isSelected ? const Color(0xFF2E7D32) : Colors.grey.shade600,
-              ),
-            ),
-            SizedBox(height: 8.h),
-            Container(
-              height: 3.h,
-              width: 35.w,
-              decoration: BoxDecoration(
-                color: isSelected ? const Color(0xFF2E7D32) : Colors.transparent,
-                borderRadius: BorderRadius.circular(2.r),
-              ),
-            ),
-          ],
-        ),
-      );
-    });
-  }
-
   Widget _buildAdCard({
-    bool isBannerCustom = false,
-    bool isKettle = false,
     required String status,
     required Color statusColor,
     required Color bgColor,
     required String title,
     required String date,
     required String price,
-    required String imagePath,
+    required String imageUrl,
     required VoidCallback onTap,
   }) {
     return GestureDetector(
@@ -160,42 +132,37 @@ class MyAddScreen extends StatelessWidget {
               children: [
                 ClipRRect(
                   borderRadius: BorderRadius.vertical(top: Radius.circular(16.r)),
-                  child: Image.asset(
-                    imagePath,
+                  child: imageUrl.isNotEmpty
+                      ? Image.network(
+                    imageUrl,
                     height: 130.h,
                     width: double.infinity,
                     fit: BoxFit.cover,
                     errorBuilder: (context, error, stackTrace) {
-                      return Container(
-                        height: 130.h,
-                        width: double.infinity,
-                        color: Colors.grey.shade200,
-                        child: const Center(
-                          child: Icon(Icons.image_not_supported, color: Colors.grey),
-                        ),
-                      );
+                      return _fallbackImage();
                     },
-                  ),
+                  )
+                      : _fallbackImage(),
                 ),
-                Positioned(
-                  top: 12.h,
-                  left: 12.w,
-                  child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
-                    decoration: BoxDecoration(
-                      color: bgColor,
-                      borderRadius: BorderRadius.circular(6.r),
-                    ),
-                    child: Text(
-                      status,
-                      style: GoogleFonts.plusJakartaSans(
-                        fontSize: 11.sp,
-                        fontWeight: FontWeight.bold,
-                        color: statusColor,
-                      ),
-                    ),
-                  ),
-                ),
+                // Positioned(
+                //   top: 12.h,
+                //   left: 12.w,
+                //   child: Container(
+                //     padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
+                //     decoration: BoxDecoration(
+                //       color: bgColor,
+                //       borderRadius: BorderRadius.circular(6.r),
+                //     ),
+                //     child: Text(
+                //       status.toUpperCase(), // "LIVE" বা "PENDING"
+                //       style: GoogleFonts.plusJakartaSans(
+                //         fontSize: 11.sp,
+                //         fontWeight: FontWeight.bold,
+                //         color: statusColor,
+                //       ),
+                //     ),
+                //   ),
+                // ),
               ],
             ),
             Padding(
@@ -213,6 +180,8 @@ class MyAddScreen extends StatelessWidget {
                           fontWeight: FontWeight.bold,
                           color: const Color(0xFF111827),
                         ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                       ),
                       SizedBox(height: 2.h),
                       Text(
@@ -224,20 +193,29 @@ class MyAddScreen extends StatelessWidget {
                       ),
                     ],
                   ),
-                  Text(
-                    price,
-                    style: GoogleFonts.plusJakartaSans(
-                      fontSize: 18.sp,
-                      fontWeight: FontWeight.bold,
-                      color: const Color(0xFF2E7D32),
-                    ),
-                  ),
+                  // Text(
+                  //   price,
+                  //   style: GoogleFonts.plusJakartaSans(
+                  //     fontSize: 18.sp,
+                  //     fontWeight: FontWeight.bold,
+                  //     color: const Color(0xFF2E7D32),
+                  //   ),
+                  // ),
                 ],
               ),
             ),
           ],
         ),
       ),
+    );
+  }
+
+  Widget _fallbackImage() {
+    return Image.asset(
+      AppImages.servicesImage,
+      height: 130.h,
+      width: double.infinity,
+      fit: BoxFit.cover,
     );
   }
 }
