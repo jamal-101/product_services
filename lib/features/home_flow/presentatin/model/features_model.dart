@@ -136,7 +136,7 @@ class StoreId {
   String? status;
   bool? isVerified;
   int? visitorCount;
-  int? averageRating;
+  double? averageRating;
   int? ratingCount;
   List<String>? workingDays;
   String? openingTime;
@@ -170,7 +170,7 @@ class StoreId {
     this.status,
     this.isVerified,
     this.visitorCount,
-    this.averageRating,
+    // this.averageRating,
     this.ratingCount,
     this.workingDays,
     this.openingTime,
@@ -184,6 +184,7 @@ class StoreId {
     this.longitude,
     this.postalCode,
     this.streetAddress,
+    double? averageRating,
   });
 
   StoreId.fromJson(Map<String, dynamic> json) {
@@ -204,8 +205,10 @@ class StoreId {
     tinNumber = json['tinNumber'];
     status = json['status'];
     isVerified = json['isVerified'];
+    averageRating = json['averageRating'] != null
+        ? (json['averageRating'] as num).toDouble()
+        : null;
     visitorCount = json['visitorCount'];
-    averageRating = json['averageRating'];
     ratingCount = json['ratingCount'];
     workingDays = json['workingDays'] != null ? List<String>.from(json['workingDays']) : null;
     openingTime = json['openingTime'];
@@ -219,6 +222,7 @@ class StoreId {
     longitude = json['longitude'];
     postalCode = json['postalCode'];
     streetAddress = json['streetAddress'];
+
   }
 
   Map<String, dynamic> toJson() {
@@ -242,7 +246,7 @@ class StoreId {
     data['isVerified'] = this.isVerified;
     data['visitorCount'] = this.visitorCount;
     data['averageRating'] = this.averageRating;
-    data['ratingCount'] = this.ratingCount;
+    data['averageRating'] = this.averageRating;
     data['workingDays'] = this.workingDays;
     data['openingTime'] = this.openingTime;
     data['closingTime'] = this.closingTime;

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:product_service/utils/constants/app_color.dart';
+import 'package:shimmer/shimmer.dart';
 import '../../../../../component/bottom_navBar/nav_bar..dart';
 import '../../../../../utils/constants/api_enpoint.dart';
 import '../controller/listing_controller.dart';
@@ -70,10 +71,14 @@ class MyListingScreen extends StatelessWidget {
       ),
       bottomNavigationBar: BottomNavBar(selectedIndex: 1),
       body: Obx(() {
+        // if (controller.isLoading.value) {
+        //   return const Center(
+        //     child: CircularProgressIndicator(color: Color(0xFF27AE60)),
+        //   );
+        // }
+
         if (controller.isLoading.value) {
-          return const Center(
-            child: CircularProgressIndicator(color: Color(0xFF27AE60)),
-          );
+          return _buildListingShimmerLoader();
         }
 
         bool isService = controller.storeType == "service_store";
@@ -238,4 +243,69 @@ class MyListingScreen extends StatelessWidget {
       }),
     );
   }
+
+  Widget _buildListingShimmerLoader() {
+    return Shimmer.fromColors(
+      baseColor: Colors.grey[300]!,
+      highlightColor: Colors.grey[100]!,
+      child: ListView.builder(
+        padding: EdgeInsets.all(16.w),
+        itemCount: 6,
+        itemBuilder: (context, index) {
+          return Container(
+            margin: EdgeInsets.only(bottom: 12.h),
+            padding: EdgeInsets.all(10.w),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(16.r),
+            ),
+            child: Row(
+              children: [
+                Container(
+                  width: 60.w,
+                  height: 60.w,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(12.r),
+                  ),
+                ),
+                SizedBox(width: 12.w),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // টাইটেল শিমার
+                      Container(
+                        width: double.infinity,
+                        height: 14.h,
+                        color: Colors.white,
+                      ),
+                      SizedBox(height: 8.h),
+                      // প্রাইস শিমার
+                      Container(
+                        width: 80.w,
+                        height: 12.h,
+                        color: Colors.white,
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(width: 12.w),
+                // থ্রি ডট আইকন শিমার
+                Container(
+                  width: 24.w,
+                  height: 24.h,
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                    shape: BoxShape.circle,
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
+      ),
+    );
+  }
+
 }

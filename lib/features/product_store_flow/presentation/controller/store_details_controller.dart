@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../../services/api/api_service.dart';
-import '../../../home_flow/presentatin/model/store_details_model.dart';
+import '../model/store_details_model.dart';
 
 class StoreDetailsController extends GetxController {
   var isLoading = false.obs;
@@ -11,13 +11,12 @@ class StoreDetailsController extends GetxController {
     try {
       isLoading.value = true;
 
-      // সঠিক এন্ডপয়েন্ট: /stores/ ব্যবহার করতে হবে (store-details বাদ দিয়ে)
       final response = await ApiService.get('/stores/$storeId');
 
       if (response.isSuccess) {
         debugPrint("API Response Body: ${response.data}");
 
-        if (response.data != null && response.data is Map<String, dynamic>) {
+        if (response.data is Map<String, dynamic>) {
           storeDetailsModel.value = StoreDetailsModel.fromJson(response.data as Map<String, dynamic>);
         } else {
           debugPrint("Error: Response data is null or not in expected format.");
@@ -27,7 +26,7 @@ class StoreDetailsController extends GetxController {
         debugPrint("API Failed with status message: ${response.message}");
         Get.snackbar(
           "Failed",
-          response.message ?? "Failed to load store details",
+          response.message,
           backgroundColor: Colors.red,
           colorText: Colors.white,
         );

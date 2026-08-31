@@ -1,4 +1,5 @@
-import 'city_model.dart';
+import '../../../home_flow/presentatin/model/city_model.dart';
+import '../../../profile_section/presentation/screen/store_creation/presentation/model/category_model.dart';
 
 class StoreDetailsModel {
   bool? success;
@@ -57,6 +58,8 @@ class Store {
   String? plan;
   int? listings;
   CityData? cityId;
+  CategoryData? categoryId;
+  bool? isVerified;
 
   Store({
     this.sId,
@@ -76,6 +79,8 @@ class Store {
     this.closingTime,
     this.plan,
     this.listings,
+    this.isVerified,
+    this.categoryId,
   });
 
   Store.fromJson(Map<String, dynamic> json) {
@@ -89,6 +94,7 @@ class Store {
     whatsapp = json['whatsapp'];
     email = json['email'];
     cityId = json['cityId'] != null ? CityData.fromJson(json['cityId']) : null;
+    categoryId = json['categoryId'] != null ? CategoryData.fromJson(json['categoryId']) : null;
     visitorCount = json['visitorCount'];
     averageRating = json['averageRating'];
     ratingCount = json['ratingCount'];
@@ -97,6 +103,7 @@ class Store {
     closingTime = json['closingTime'];
     plan = json['plan'];
     listings = json['listings'];
+    isVerified = json['isVerified'];
   }
 }
 

@@ -9,8 +9,6 @@ import 'package:product_service/features/home_flow/presentatin/screen/notificati
 import 'package:product_service/features/message_flow/screen/conversation_screen.dart';
 import 'package:product_service/features/message_flow/screen/message_screen.dart';
 import 'package:product_service/features/onboardin/presentation/screen/onboarding_screen.dart';
-import 'package:product_service/features/product_store_flow/presentation/screen/product_details_screen.dart';
-import 'package:product_service/features/product_store_flow/presentation/screen/store_details_page.dart';
 import 'package:product_service/features/profile_section/presentation/screen/store_creation/presentation/screen/creat_new_store_step1.dart';
 import 'package:product_service/features/profile_section/presentation/screen/store_creation/presentation/screen/my_store.dart';
 import 'package:product_service/features/seller/my_list_flow/presentation/screen/edite_contact_details_screen.dart';
@@ -26,7 +24,6 @@ import '../../features/auth_flow/presentation/screen/select_rol_screen.dart';
 import '../../features/auth_flow/presentation/screen/verify_otp.dart';
 import '../../features/auth_flow/presentation/screen/verify_phone_screen.dart';
 import '../../features/home_flow/presentatin/screen/home_screen.dart';
-import '../../features/seller/my_list_flow/presentation/screen/add_product_screen.dart';
 import '../../features/seller/my_list_flow/presentation/screen/edite_branding_screen.dart';
 import '../../features/seller/my_list_flow/presentation/screen/edite_legel_document_screen.dart';
 import '../../features/seller/my_list_flow/presentation/screen/subsCription_billing_screen.dart';

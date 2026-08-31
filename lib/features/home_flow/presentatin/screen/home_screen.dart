@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:product_service/features/home_flow/presentatin/controller/home_controller.dart';
 import 'package:product_service/features/message_flow/screen/message_screen.dart';
-import 'package:product_service/features/product_store_flow/presentation/screen/product_details_screen.dart';
 import 'package:product_service/utils/constants/api_enpoint.dart';
 import 'package:product_service/utils/constants/app_color.dart';
 import 'package:product_service/utils/constants/app_images.dart';
@@ -246,9 +245,6 @@ class HomeScreen extends StatelessWidget {
                   ),
                 );
               }
-
-
-
              return ListView.builder(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
@@ -264,13 +260,17 @@ class HomeScreen extends StatelessWidget {
                     }
                   }
                   String? storeId = item.storeId?.sId;
+                  String storeType = item.storeId?.storeType ?? "";
 
                   return GestureDetector(
                     onTap: () {
                       if (storeId != null && storeId.isNotEmpty) {
                         Get.to(
                               () => const ProductDetailsScreen(),
-                          arguments: storeId,
+                          arguments: {
+                            'storeId': storeId,
+                            'storeType': storeType,
+                          },
                         );
                       }
                     },
