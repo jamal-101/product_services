@@ -18,32 +18,7 @@ class HomeController extends GetxController {
   var currentNavIndex = 0.obs;
   var currentBannerIndex = 0.obs;
   final PageController bannerPageController = PageController();
-  var selectedStoreTab = 0.obs;
-  var recentSearches = <String>[
-    "Samsung Galaxy S24 Ultra",
-    "Coca-Cola Classic 2L",
-  ].obs;
-  var selectedCity = "Madrid".obs;
-  void updateCity(String newCity) {
-    selectedCity.value = newCity;
-  }
-  void changeNavIndex(int index) {
-    currentNavIndex.value = index;
-  }
-  void removeSearchItem(int index) {
-    recentSearches.removeAt(index);
-  }
-  void clearAllSearch() {
-    recentSearches.clear();
-  }
-  var isProductStoreSelected = true.obs;
-  void toggleStoreType(bool isProduct) {
-    isProductStoreSelected.value = isProduct;
-  }
-  var isListViewSelected = true.obs;
-  void toggleView(bool isList) {
-    isListViewSelected.value = isList;
-  }
+
 
 
   var isBannerLoading = false.obs;
@@ -111,21 +86,40 @@ class HomeController extends GetxController {
     fetchFeaturedStores();
   }
 
+
   Future<void> fetchFeaturedStores() async {
     try {
       isFeaturedLoading.value = true;
 
-      String endpoint = "/advertisements/user-ads";
+      String endpoint = ApiEndPoint.userAds;
+      List<String> queryParams = [];
 
-      if (selectedLatitude != null && selectedLongitude != null) {
-        endpoint += "?longitude=$selectedLongitude&latitude=$selectedLatitude";
+      if (selectedCityName.value.isNotEmpty && selectedCityName.value != "Choose city") {
+        queryParams.add("city=${Uri.encodeComponent(selectedCityName.value)}");
       }
 
-      final response = await ApiService.get(endpoint);
+      if (selectedLatitude != null && selectedLongitude != null) {
+        queryParams.add("longitude=$selectedLongitude");
+        queryParams.add("latitude=$selectedLatitude");
+      }
+
+      if (queryParams.isNotEmpty) {
+        endpoint += "?${queryParams.join('&')}";
+      }
+
+      final response = await ApiService.get(
+        endpoint,
+        header: {
+          'Authorization': 'Bearer ${LocalStorage.token}',
+          'Content-Type': 'application/json',
+        },
+      );
 
       if (response.isSuccess) {
         featuresModel model = featuresModel.fromJson(response.data as Map<String, dynamic>);
         featuredList.value = model.data ?? [];
+      } else {
+        featuredList.clear();
       }
     } catch (e) {
       debugPrint("Error fetching featured stores: $e");

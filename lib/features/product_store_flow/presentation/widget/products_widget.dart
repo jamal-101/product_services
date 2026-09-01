@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:product_service/utils/constants/app_images.dart';
 import '../../../../utils/constants/api_enpoint.dart';
 import '../controller/store_details_controller.dart';
+import '../screen/productServiceDetailsScreen.dart';
 import 'contuctForm_widget.dart';
 
 
@@ -58,12 +59,20 @@ class ProductsWidget extends StatelessWidget {
                 final String imageUrl = rawImage.isNotEmpty
                     ? (rawImage.startsWith('http') ? rawImage : "${ApiEndPoint.imageUrl}$rawImage")
                     : "";
-                return _buildItemCard(
-                  title: product.title ?? "",
-                  activePrice: product.activePrice ?? 0,
-                  originalPrice: product.originalPrice ?? 0,
-                  imageUrl: imageUrl,
-                  isProduct: true,
+                return GestureDetector(
+                  onTap: (){
+                    Get.to(() => ProductServiceDetailsScreen(
+                      itemId: product.sId ?? "",
+                      isProduct: true,
+                    ));
+                  },
+                  child: _buildItemCard(
+                    title: product.title ?? "",
+                    activePrice: product.activePrice ?? 0,
+                    originalPrice: product.originalPrice ?? 0,
+                    imageUrl: imageUrl,
+                    isProduct: true,
+                  ),
                 );
               } else {
                 final service = storeData!.services![index];
@@ -72,12 +81,20 @@ class ProductsWidget extends StatelessWidget {
                 final String imageUrl = rawImage.isNotEmpty
                     ? (rawImage.startsWith('http') ? rawImage : "${ApiEndPoint.imageUrl}$rawImage")
                     : "";
-                return _buildItemCard(
-                  title: service.title ?? "",
-                  activePrice: service.activePrice ?? 0,
-                  originalPrice: service.originalPrice ?? 0,
-                  imageUrl: imageUrl,
-                  isProduct: false,
+                return GestureDetector(
+                  onTap: (){
+                    Get.to(() => ProductServiceDetailsScreen(
+                      itemId: service.sId ?? "",
+                      isProduct: false,
+                    ));
+                  },
+                  child: _buildItemCard(
+                    title: service.title ?? "",
+                    activePrice: service.activePrice ?? 0,
+                    originalPrice: service.originalPrice ?? 0,
+                    imageUrl: imageUrl,
+                    isProduct: false,
+                  ),
                 );
               }
             },

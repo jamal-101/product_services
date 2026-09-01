@@ -102,7 +102,6 @@ class ProductDetailsScreen extends StatelessWidget {
               children: [
                 ProductsWidget(),
                 AboutWidget(),
-                // ReviewsWidget(),
                 ReviewsWidget(storeId: storeId),
               ],
             ),

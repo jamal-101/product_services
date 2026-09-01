@@ -4,20 +4,21 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:product_service/config/route/app_route.dart';
-import 'package:product_service/features/home_flow/presentatin/controller/home_controller.dart';
 import 'package:product_service/features/home_flow/presentatin/screen/features_stories_screen.dart';
 import 'package:product_service/utils/constants/app_color.dart';
 import 'package:product_service/utils/constants/app_string.dart';
 import '../../../../component/bottom_navBar/nav_bar..dart';
+import '../controller/explore_store_controller.dart';
 import '../widget/city_dialog.dart';
-import '../widget/filtter_bottom_sheet.dart';
 
 class ExploreStoriesScreen extends StatelessWidget {
   const ExploreStoriesScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final HomeController controller = Get.put(HomeController());
+    final ExploreStoreController controllers = Get.put(
+      ExploreStoreController(),
+    );
 
     return Scaffold(
       backgroundColor: const Color(0xFFFBFBFB),
@@ -31,21 +32,26 @@ class ExploreStoriesScreen extends StatelessWidget {
           children: [
             RichText(
               text: TextSpan(
-                style: GoogleFonts.plusJakartaSans(fontSize: 18.sp, fontWeight: FontWeight.bold),
-                children:  [
+                style: GoogleFonts.plusJakartaSans(
+                  fontSize: 18.sp,
+                  fontWeight: FontWeight.bold,
+                ),
+                children: [
                   TextSpan(
                     text: AppString.explore,
                     style: GoogleFonts.plusJakartaSans(color: Colors.black),
                   ),
                   TextSpan(
                     text: AppString.stores,
-                    style: GoogleFonts.plusJakartaSans(color: Color(0xFFE67E22)),
+                    style: GoogleFonts.plusJakartaSans(
+                      color: const Color(0xFFE67E22),
+                    ),
                   ),
                 ],
               ),
             ),
             const Spacer(),
-            _buildTopBarActions(controller),
+            _buildTopBarActions(controllers),
           ],
         ),
       ),
@@ -60,7 +66,7 @@ class ExploreStoriesScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Obx(() {
-                      if (!controller.isListViewSelected.value) {
+                      if (!controllers.isListViewSelected.value) {
                         return const SizedBox.shrink();
                       }
                       return Container(
@@ -75,16 +81,16 @@ class ExploreStoriesScreen extends StatelessWidget {
                               child: _buildToggleButton(
                                 title: AppString.productsStores,
                                 isSelected:
-                                    controller.isProductStoreSelected.value,
-                                onTap: () => controller.toggleStoreType(true),
+                                controllers.isProductStoreSelected.value,
+                                onTap: () => controllers.toggleStoreType(true),
                               ),
                             ),
                             Expanded(
                               child: _buildToggleButton(
                                 title: AppString.servicesProvider,
                                 isSelected:
-                                    !controller.isProductStoreSelected.value,
-                                onTap: () => controller.toggleStoreType(false),
+                                !controllers.isProductStoreSelected.value,
+                                onTap: () => controllers.toggleStoreType(false),
                               ),
                             ),
                           ],
@@ -93,6 +99,9 @@ class ExploreStoriesScreen extends StatelessWidget {
                     }),
                     SizedBox(height: 16.h),
                     TextFormField(
+                      onChanged: (value) {
+                        controllers.updateSearchQuery(value);
+                      },
                       decoration: InputDecoration(
                         hintText: AppString.searchStores,
                         prefixIcon: const Icon(
@@ -114,120 +123,221 @@ class ExploreStoriesScreen extends StatelessWidget {
                       physics: const BouncingScrollPhysics(),
                       child: Row(
                         children: [
-                          _buildFilterChip(
-                            Icons.tune,
-                            AppString.allFilters,
-                            isSelected: true,
-                            onTap: () {
-                              showModalBottomSheet(
-                                context: context,
-                                isScrollControlled: true,
-                                backgroundColor: Colors.transparent,
-                                builder: (context) =>  FilterBottomSheet(),
-                              );
-                            },
-                          ),
-                          Obx(() =>
-                              _buildFilterChip(
-                                Icons.location_on_outlined,
-                                controller.selectedCity.value,
-                                onTap: () {
-                                  showModalBottomSheet(
-                                    context: context,
-                                    isScrollControlled: true,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
+                          Obx(() => _buildFilterChip(
+                              Icons.location_on_outlined,
+                              controllers.selectedCity.value.isEmpty
+                                  ? "City"
+                                  : controllers.selectedCity.value,
+                              onTap: () {
+                                showModalBottomSheet(
+                                  context: context,
+                                  isScrollControlled: true,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.vertical(
+                                      top: Radius.circular(20.r),
                                     ),
-                                    builder: (context) => Padding(
-                                      padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-                                      child: Container(
-                                        height: 0.5.sh,
-                                        child: CityDialog(
-                                          selectedCity: controller.selectedCity.value,
-                                          onCitySelected: (newCity) {
-                                            controller.updateCity(newCity);
-                                          },
-                                        ),
+                                  ),
+                                  builder: (context) => Padding(
+                                    padding: EdgeInsets.only(
+                                      bottom: MediaQuery.of(
+                                        context,
+                                      ).viewInsets.bottom,
+                                    ),
+                                    child: SizedBox(
+                                      height: 0.5.sh,
+                                      child: CityDialog(
+                                        selectedCity:
+                                        controllers.selectedCity.value,
+                                        onCitySelected: (newCity) {
+                                          controllers.updateCity(newCity);
+                                        },
                                       ),
                                     ),
-                                  );
-                                },
-                              ),
+                                  ),
+                                );
+                              },
+                            ),
                           ),
-                          _buildFilterChip(Icons.star_border, "4.5+"),
+
+                          // Open Now ফিল্টার চিপ
+                          Obx(
+                                () => _buildFilterChip(
+                              Icons.access_time_rounded,
+                              "Open now",
+                              isSelected: controllers.isOpenNow.value,
+                              onTap: () {
+                                controllers.toggleOpenNow();
+                              },
+                            ),
+                          ),
+
+                          // রেটিং ড্রপডাউন মেনু
+                          Obx(
+                                () => PopupMenuButton<String>(
+                              onSelected: (String ratingValue) {
+                                controllers.updateRating(ratingValue);
+                              },
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12.r),
+                              ),
+                              itemBuilder: (BuildContext context) =>
+                              <PopupMenuEntry<String>>[
+                                const PopupMenuItem<String>(
+                                  value: '1',
+                                  child: Row(
+                                    children: [
+                                      Icon(Icons.star, color: Colors.amber, size: 16),
+                                      SizedBox(width: 8),
+                                      Text('1 Star'),
+                                    ],
+                                  ),
+                                ),
+                                const PopupMenuItem<String>(
+                                  value: '2',
+                                  child: Row(
+                                    children: [
+                                      Icon(Icons.star, color: Colors.amber, size: 16),
+                                      SizedBox(width: 8),
+                                      Text('2 Stars'),
+                                    ],
+                                  ),
+                                ),
+                                const PopupMenuItem<String>(
+                                  value: '3',
+                                  child: Row(
+                                    children: [
+                                      Icon(Icons.star, color: Colors.amber, size: 16),
+                                      SizedBox(width: 8),
+                                      Text('3 Stars'),
+                                    ],
+                                  ),
+                                ),
+                                const PopupMenuItem<String>(
+                                  value: '4',
+                                  child: Row(
+                                    children: [
+                                      Icon(Icons.star, color: Colors.amber, size: 16),
+                                      SizedBox(width: 8),
+                                      Text('4 Stars'),
+                                    ],
+                                  ),
+                                ),
+                                const PopupMenuItem<String>(
+                                  value: '5',
+                                  child: Row(
+                                    children: [
+                                      Icon(Icons.star, color: Colors.amber, size: 16),
+                                      SizedBox(width: 8),
+                                      Text('5 Stars'),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                              child: Container(
+                                margin: EdgeInsets.only(right: 8.w),
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 12.w,
+                                  vertical: 6.h,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: controllers.selectedRatingEnum.value != null
+                                      ? const Color(0xFF2C3E50)
+                                      : Colors.white,
+                                  borderRadius: BorderRadius.circular(20.r),
+                                  border: Border.all(
+                                    color: const Color(0xFFECECF0),
+                                  ),
+                                ),
+                                child: Row(
+                                  children: [
+                                    Icon(
+                                      Icons.star_border,
+                                      size: 14.w,
+                                      color: controllers.selectedRatingEnum.value != null
+                                          ? Colors.white
+                                          : Colors.black54,
+                                    ),
+                                    SizedBox(width: 4.w),
+                                    Text(
+                                      controllers.selectedRatingEnum.value == null
+                                          ? "Rating"
+                                          : "${controllers.selectedRatingEnum.value.toString().split('.').last} Star",
+                                      style: GoogleFonts.plusJakartaSans(
+                                        fontSize: 12.sp,
+                                        color: controllers.selectedRatingEnum.value != null
+                                            ? Colors.white
+                                            : Colors.black54,
+                                      ),
+                                    ),
+                                    SizedBox(width: 4.w),
+                                    Icon(
+                                      Icons.arrow_drop_down,
+                                      size: 16.w,
+                                      color: controllers.selectedRatingEnum.value != null
+                                          ? Colors.white
+                                          : Colors.black54,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                     ),
                     SizedBox(height: 20.h),
+
                     Obx(() {
-                      if (!controller.isListViewSelected.value) {
+                      if (controllers.isLoading.value) {
+                        return Center(
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(vertical: 40.h),
+                            child: const CircularProgressIndicator(
+                              color: Color(0xFFE67E22),
+                            ),
+                          ),
+                        );
+                      }
+
+                      if (!controllers.isListViewSelected.value) {
                         return _buildMapViewContent();
                       }
-                      if (controller.isProductStoreSelected.value) {
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            _buildSectionHeader("A"),
-                            _buildStoreListItem(
-                              "Anytime",
-                              "Electronics • Barcelona",
-                              const Color(0xFFE67E22),
-                            ),
 
-                            _buildSectionHeader("C"),
-                            _buildStoreListItem(
-                              "Cocacole",
-                              "Food • Barcelona",
-                              const Color(0xFFC0392B),
-                            ),
-
-                            _buildSectionHeader("D"),
-                            _buildStoreListItem(
-                              "Dave",
-                              "Electronics • Barcelona",
-                              const Color(0xFF3498DB),
-                            ),
-
-                            _buildSectionHeader("H"),
-                            _buildStoreListItem(
-                              "Healixir",
-                              "Electronics • Barcelona",
-                              const Color(0xFF16A085),
-                            ),
-                          ],
+                      if (controllers.isProductStoreSelected.value) {
+                        if (controllers.productStoreList.isEmpty) {
+                          return _buildEmptyState();
+                        }
+                        return ListView.builder(
+                          itemCount: controllers.productStoreList.length,
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemBuilder: (context, index) {
+                            var store = controllers.productStoreList[index];
+                            return _buildStoreListItem(
+                              title: store.displayName ?? "No Name",
+                              subtitle: "${store.categoryId?.name ?? 'Store'} • ${store.phone ?? ''}",
+                              rating: store.averageRating?.toString() ?? "0.0",
+                              logoBg: const Color(0xFFE67E22),
+                            );
+                          },
                         );
                       } else {
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            _buildSectionHeader("B"),
-                            _buildStoreListItem(
-                              "Barber Shop",
-                              "Grooming • Barcelona",
-                              const Color(0xFF9B59B6),
-                            ),
-
-                            _buildSectionHeader("C"),
-                            _buildStoreListItem(
-                              "Cleaners Pro",
-                              "Home Services • Barcelona",
-                              const Color(0xFF1ABC9C),
-                            ),
-
-                            _buildSectionHeader("L"),
-                            _buildStoreListItem(
-                              "Laundry Hub",
-                              "Services • Madrid",
-                              const Color(0xFF34495E),
-                            ),
-
-                            _buildSectionHeader("P"),
-                            _buildStoreListItem(
-                              "Plumbing Experts",
-                              "Repairs • Valencia",
-                              const Color(0xFFE74C3C),
-                            ),
-                          ],
+                        if (controllers.serviceStoreList.isEmpty) {
+                          return _buildEmptyState();
+                        }
+                        return ListView.builder(
+                          itemCount: controllers.serviceStoreList.length,
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemBuilder: (context, index) {
+                            var store = controllers.serviceStoreList[index];
+                            return _buildStoreListItem(
+                              title: store.displayName ?? "No Name",
+                              subtitle: "${store.categoryId?.name ?? 'Service'} • ${store.phone ?? ''}",
+                              rating: store.averageRating?.toString() ?? "0.0",
+                              logoBg: const Color(0xFF9B59B6),
+                            );
+                          },
                         );
                       }
                     }),
@@ -246,18 +356,13 @@ class ExploreStoriesScreen extends StatelessWidget {
     required bool isSelected,
     required VoidCallback onTap,
   }) {
-
-    final Color selectedBgColor = title.contains("🛍️")
-        ? const Color(0xFF27AE60)
-        : const Color(0xFFEE7A1F);
-
     return GestureDetector(
       onTap: onTap,
       behavior: HitTestBehavior.opaque,
       child: Container(
         padding: EdgeInsets.symmetric(vertical: 10.h),
         decoration: BoxDecoration(
-          color: isSelected ? selectedBgColor : Colors.transparent,
+          color: isSelected ? const Color(0xFFE67E22) : Colors.transparent,
           borderRadius: BorderRadius.circular(10.r),
         ),
         child: Center(
@@ -275,11 +380,11 @@ class ExploreStoriesScreen extends StatelessWidget {
   }
 
   Widget _buildFilterChip(
-    IconData icon,
-    String label, {
-    bool isSelected = false,
+      IconData icon,
+      String label, {
+        bool isSelected = false,
         VoidCallback? onTap,
-  }) {
+      }) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -311,38 +416,18 @@ class ExploreStoriesScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildSectionHeader(String letter) {
-    return Padding(
-      padding: EdgeInsets.only(bottom: 8.h, top: 12.h),
-      child: Row(
-        children: [
-          Text(
-            letter,
-            style: GoogleFonts.plusJakartaSans(
-              fontSize: 16.sp,
-              fontWeight: FontWeight.bold,
-              color: Colors.orange[800],
-            ),
-          ),
-          SizedBox(width: 12.w),
-          Expanded(
-            child: Divider(
-              color: Colors.grey.withValues(alpha: 0.3),
-              thickness: 1.h,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildStoreListItem(String title, String subtitle, Color logoBg) {
-    final HomeController controller = Get.put(HomeController());
+  Widget _buildStoreListItem({
+    required String title,
+    required String subtitle,
+    required String rating,
+    required Color logoBg,
+  }) {
+    final ExploreStoreController controllers = Get.find<ExploreStoreController>();
     return GestureDetector(
       onTap: () {
         Get.toNamed(
           AppRoutes.storeDetailsPage,
-          arguments: controller.isProductStoreSelected.value,
+          arguments: controllers.isProductStoreSelected.value,
         );
       },
       child: Container(
@@ -382,7 +467,10 @@ class ExploreStoriesScreen extends StatelessWidget {
                   SizedBox(height: 4.h),
                   Text(
                     subtitle,
-                    style: GoogleFonts.plusJakartaSans(fontSize: 12.sp, color: Colors.grey),
+                    style: GoogleFonts.plusJakartaSans(
+                      fontSize: 12.sp,
+                      color: Colors.grey,
+                    ),
                   ),
                 ],
               ),
@@ -395,7 +483,7 @@ class ExploreStoriesScreen extends StatelessWidget {
                     const Icon(Icons.star, color: Colors.amber, size: 14),
                     SizedBox(width: 2.w),
                     Text(
-                      "4.9",
+                      rating,
                       style: GoogleFonts.plusJakartaSans(
                         fontSize: 12.sp,
                         fontWeight: FontWeight.bold,
@@ -413,14 +501,26 @@ class ExploreStoriesScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildTopBarActions(HomeController controller) {
+  Widget _buildEmptyState() {
+    return Center(
+      child: Padding(
+        padding: EdgeInsets.symmetric(vertical: 40.h),
+        child: Text(
+          "No stores found",
+          style: GoogleFonts.plusJakartaSans(fontSize: 14.sp, color: Colors.grey),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTopBarActions(ExploreStoreController controllers) {
     return Obx(
-      () => Row(
+          () => Row(
         children: [
-          if (controller.isListViewSelected.value)
+          if (controllers.isListViewSelected.value)
             GestureDetector(
-              onTap: (){
-                Get.to(FeaturesStoriesScreen());
+              onTap: () {
+                Get.to(() => const FeaturesStoriesScreen());
               },
               child: Container(
                 padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
@@ -430,11 +530,18 @@ class ExploreStoriesScreen extends StatelessWidget {
                 ),
                 child: Row(
                   children: [
-                    Icon(Icons.bookmark_border, size: 16.sp, color: Colors.grey),
+                    Icon(
+                      Icons.bookmark_border,
+                      size: 16.sp,
+                      color: Colors.grey,
+                    ),
                     SizedBox(width: 4.w),
                     Text(
                       AppString.saved,
-                      style: GoogleFonts.plusJakartaSans(fontSize: 12.sp, color: Colors.grey),
+                      style: GoogleFonts.plusJakartaSans(
+                        fontSize: 12.sp,
+                        color: Colors.grey,
+                      ),
                     ),
                   ],
                 ),
@@ -449,9 +556,16 @@ class ExploreStoriesScreen extends StatelessWidget {
             child: Row(
               children: [
                 _buildToggleIconButton(
-                  child: Icon(Icons.list, size: 20.sp, color: controller.isListViewSelected.value ? Colors.white : Colors.grey),
-                  isSelected: controller.isListViewSelected.value,
-                  onTap: () => controller.toggleView(true),
+                  child: Icon(
+                    Icons.list,
+                    size: 20.sp,
+
+                    color: controllers.isListViewSelected.value
+                        ? Colors.white
+                        : Colors.grey,
+                  ),
+                  isSelected: controllers.isListViewSelected.value,
+                  onTap: () => controllers.toggleView(true),
                 ),
                 _buildToggleIconButton(
                   child: Text(
@@ -459,11 +573,13 @@ class ExploreStoriesScreen extends StatelessWidget {
                     style: GoogleFonts.plusJakartaSans(
                       fontSize: 12.sp,
                       fontWeight: FontWeight.bold,
-                      color: !controller.isListViewSelected.value ? Colors.white : Colors.grey,
+                      color: !controllers.isListViewSelected.value
+                          ? Colors.white
+                          : Colors.grey,
                     ),
                   ),
-                  isSelected: !controller.isListViewSelected.value,
-                  onTap: () => controller.toggleView(false),
+                  isSelected: !controllers.isListViewSelected.value,
+                  onTap: () => controllers.toggleView(false),
                 ),
               ],
             ),
@@ -478,6 +594,7 @@ class ExploreStoriesScreen extends StatelessWidget {
     required bool isSelected,
     required VoidCallback onTap,
   }) {
+
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -491,10 +608,8 @@ class ExploreStoriesScreen extends StatelessWidget {
     );
   }
 
-
-
   Widget _buildMapViewContent() {
-    return Container(
+    return SizedBox(
       height: 500.h,
       child: ClipRRect(
         borderRadius: BorderRadius.circular(12.r),
@@ -503,9 +618,7 @@ class ExploreStoriesScreen extends StatelessWidget {
             target: LatLng(40.4168, -3.7038),
             zoom: 12,
           ),
-          onMapCreated: (GoogleMapController controller) {
-        
-          },
+          onMapCreated: (GoogleMapController controller) {},
           markers: {
             const Marker(
               markerId: MarkerId('store_1'),

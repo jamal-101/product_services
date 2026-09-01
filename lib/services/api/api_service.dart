@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
 import '../../services/storage/storage_service.dart';
 import '../../utils/constants/api_enpoint.dart';
 import '../../utils/constants/api_log.dart';
@@ -233,13 +234,20 @@ class ApiService {
 
 /// ========== [ DIO INSTANCE WITH INTERCEPTORS ] ========== ///
 Dio _getMyDio() {
-  Dio dio = Dio();
+  Dio dio = Dio(
+    BaseOptions(
+      baseUrl: ApiEndPoint.baseUrl,
+      connectTimeout: const Duration(seconds: 30),
+      receiveTimeout: const Duration(seconds: 30),
+    ),
+  );
 
   dio.interceptors.add(apiLog());
 
   dio.interceptors.add(
     InterceptorsWrapper(
       onRequest: (options, handler) {
+        final token = LocalStorage.token;
         options
           ..headers["Authorization"] ??= "Bearer ${LocalStorage.token}"
           ..headers["Content-Type"] ??= "application/json"
@@ -251,6 +259,14 @@ Dio _getMyDio() {
           ..baseUrl = options.baseUrl.startsWith("http")
               ? ""
               : ApiEndPoint.baseUrl;
+
+
+        debugPrint("--------------------------------------------------");
+        debugPrint("🚀 API REQUEST [${options.method}] => URL: ${options.uri}");
+        debugPrint("🔑 Token Sent: Bearer $token");
+        debugPrint("📦 Request Headers: ${options.headers}");
+        debugPrint("--------------------------------------------------");
+
         handler.next(options);
       },
       onResponse: (response, handler) {

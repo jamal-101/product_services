@@ -4,17 +4,17 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:product_service/config/route/app_route.dart';
-import 'package:product_service/features/home_flow/presentatin/controller/home_controller.dart';
+import 'package:product_service/features/home_flow/presentatin/controller/explore_store_controller.dart';
 import 'package:product_service/utils/constants/app_string.dart';
-import '../widget/city_dialog.dart';
-import '../widget/filtter_bottom_sheet.dart';
+
 
 class FeaturesStoriesScreen extends StatelessWidget {
   const FeaturesStoriesScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final HomeController controller = Get.put(HomeController());
+
+    final ExploreStoreController controller = Get.put(ExploreStoreController());
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -82,71 +82,6 @@ class FeaturesStoriesScreen extends StatelessWidget {
                         ),
                       );
                     }),
-                    SizedBox(height: 16.h),
-                    TextFormField(
-                      decoration: InputDecoration(
-                        hintText: AppString.searchStores,
-                        prefixIcon: const Icon(
-                          Icons.search,
-                          color: Colors.grey,
-                        ),
-                        fillColor:  Color(0xFFF5F5F7),
-                        filled: true,
-                        contentPadding: EdgeInsets.symmetric(vertical: 12.h),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12.r),
-                          borderSide: BorderSide.none,
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 16.h),
-                    SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      physics: const BouncingScrollPhysics(),
-                      child: Row(
-                        children: [
-                          _buildFilterChip(
-                            Icons.tune,
-                            AppString.allFilters,
-                            isSelected: true,
-                            onTab: () {
-                              showModalBottomSheet(
-                                context: context,
-                                isScrollControlled: true,
-                                backgroundColor: Colors.transparent,
-                                builder: (context) =>  FilterBottomSheet(),
-                              );
-                            },
-                          ),
-                          Obx(()=>
-                            _buildFilterChip(
-                              Icons.location_on_outlined,
-                              controller.selectedCity.value,
-                              onTab: () {
-                                showModalBottomSheet(
-                                  context: context,
-                                  isScrollControlled: true,
-                                  backgroundColor: Colors.white,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.vertical(top: Radius.circular(24.r)),
-                                  ),
-                                  builder: (context) => Wrap(
-                                    children: [
-                                      CityDialog(
-                                        selectedCity: controller.selectedCity.value,
-                                        onCitySelected: (newCity) => controller.updateCity(newCity),
-                                      ),
-                                    ],
-                                  ),
-                                );
-                              },
-                            ),
-                          ),
-                          _buildFilterChip(Icons.star_border, "4.5+"),
-                        ],
-                      ),
-                    ),
-                    SizedBox(height: 20.h),
                     Obx(() {
                       if (!controller.isListViewSelected.value) {
                         return _buildMapViewContent();
@@ -229,16 +164,13 @@ class FeaturesStoriesScreen extends StatelessWidget {
     required bool isSelected,
     required VoidCallback onTap,
      }) {
-    final Color selectedBgColor = title.contains("🛍️")
-        ? const Color(0xFF27AE60)
-        : const Color(0xFFEE7A1F);
     return GestureDetector(
       onTap: onTap,
       behavior: HitTestBehavior.opaque,
       child: Container(
         padding: EdgeInsets.symmetric(vertical: 8.h),
         decoration: BoxDecoration(
-          color: isSelected ? selectedBgColor : Colors.transparent,
+          color: isSelected ? Color(0xFFFFFFFF) : Colors.transparent,
           borderRadius: BorderRadius.circular(12.r),
         ),
         child: Center(
@@ -247,7 +179,7 @@ class FeaturesStoriesScreen extends StatelessWidget {
             style: GoogleFonts.plusJakartaSans(
               fontSize: 13.sp,
               fontWeight: FontWeight.bold,
-              color: isSelected ? Colors.white : Color(0xFF7A818F),
+              color: isSelected ?  Color(0xFF1A1D24) : Color(0xFF7A818F)  ,
             ),
           ),
         ),
@@ -255,42 +187,6 @@ class FeaturesStoriesScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildFilterChip(
-      IconData icon,
-      String label, {
-        bool isSelected = false,
-        VoidCallback? onTab,
-      }) {
-    return GestureDetector(
-      onTap: onTab,
-      child: Container(
-        margin: EdgeInsets.only(right: 8.w),
-        padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
-        decoration: BoxDecoration(
-          color: isSelected ? const Color(0xFF2C3E50) : Colors.white,
-          borderRadius: BorderRadius.circular(20.r),
-          border: Border.all(color: const Color(0xFFECECF0)),
-        ),
-        child: Row(
-          children: [
-            Icon(
-              icon,
-              size: 14.w,
-              color: isSelected ? Colors.white : Colors.black54,
-            ),
-            SizedBox(width: 4.w),
-            Text(
-              label,
-              style: GoogleFonts.plusJakartaSans(
-                fontSize: 12.sp,
-                color: isSelected ? Colors.white : Colors.black54,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
 
   Widget _buildSectionHeader(String letter) {
     return Padding(
@@ -318,7 +214,7 @@ class FeaturesStoriesScreen extends StatelessWidget {
   }
 
   Widget _buildStoreListItem(String title, String subtitle, Color logoBg) {
-    final HomeController controller = Get.put(HomeController());
+    final ExploreStoreController controller = Get.put(ExploreStoreController());
     return GestureDetector(
       onTap: () {
         Get.toNamed(
@@ -394,74 +290,6 @@ class FeaturesStoriesScreen extends StatelessWidget {
     );
   }
 
-  // Widget _buildTopBarActions(HomeController controller) {
-  //   return Obx(
-  //         () => Row(
-  //       children: [
-  //         Container(
-  //           padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
-  //           decoration: BoxDecoration(
-  //             borderRadius: BorderRadius.circular(20.r),
-  //             border: Border.all(color: Colors.grey.withValues(alpha: 0.3)),
-  //           ),
-  //           child: Row(
-  //             children: [
-  //               Icon(Icons.bookmark_border, size: 16.sp, color: Colors.grey),
-  //               SizedBox(width: 4.w),
-  //               Text(
-  //                 AppString.saved,
-  //                 style: GoogleFonts.plusJakartaSans(fontSize: 12.sp, color: Colors.grey),
-  //               ),
-  //             ],
-  //           ),
-  //         ),
-  //         SizedBox(width: 8.w),
-  //         Container(
-  //           decoration: BoxDecoration(
-  //             borderRadius: BorderRadius.circular(8.r),
-  //             border: Border.all(color: Colors.grey.withValues(alpha: 0.3)),
-  //           ),
-  //           child: Row(
-  //             children: [
-  //               _buildToggleIconButton(
-  //                 icon: Icons.list,
-  //                 isSelected: controller.isListViewSelected.value,
-  //                 onTap: () => controller.toggleView(true),
-  //               ),
-  //               _buildToggleIconButton(
-  //                 icon: Icons.grid_view,
-  //                 isSelected: !controller.isListViewSelected.value,
-  //                 onTap: () => controller.toggleView(false),
-  //               ),
-  //             ],
-  //           ),
-  //         ),
-  //       ],
-  //     ),
-  //   );
-  // }
-
-  // Widget _buildToggleIconButton({
-  //   required IconData icon,
-  //   required bool isSelected,
-  //   required VoidCallback onTap,
-  // }) {
-  //   return GestureDetector(
-  //     onTap: onTap,
-  //     child: Container(
-  //       padding: EdgeInsets.all(8.w),
-  //       decoration: BoxDecoration(
-  //         color: isSelected ? const Color(0xFF2C3E50) : Colors.transparent,
-  //         borderRadius: BorderRadius.circular(8.r),
-  //       ),
-  //       child: Icon(
-  //         icon,
-  //         size: 20.sp,
-  //         color: isSelected ? Colors.white : Colors.grey,
-  //       ),
-  //     ),
-  //   );
-  // }
 
 
 

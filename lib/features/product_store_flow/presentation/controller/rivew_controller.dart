@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../../services/api/api_service.dart';
+import '../../../../services/storage/storage_service.dart';
 import '../model/rivew_model.dart';
 
 class ReviewController extends GetxController {
@@ -30,9 +31,64 @@ class ReviewController extends GetxController {
     }
   }
 
+  // Future<void> sendOwnerReply(String reviewId, String commentText, String storeId) async {
+  //   try {
+  //     isLoading.value = true;
+  //
+  //     final Map<String, dynamic> bodyData = {
+  //       "comment": commentText,
+  //     };
+  //
+  //     final response = await ApiService.patch(
+  //       '/reviews/$reviewId/owner-reply',
+  //       body: bodyData,
+  //     );
+  //
+  //     if (response.isSuccess) {
+  //       Get.snackbar(
+  //         "Success",
+  //         "Reply sent successfully",
+  //         backgroundColor: Colors.green,
+  //         colorText: Colors.white,
+  //       );
+  //
+  //       await fetchReviews(storeId);
+  //
+  //     } else {
+  //       String errorMsg = "Failed to send reply";
+  //       if (response.data['message'] != null) {
+  //         errorMsg = response.data['message'];
+  //       }
+  //
+  //       Get.snackbar(
+  //         "Error",
+  //         errorMsg,
+  //         backgroundColor: Colors.red,
+  //         colorText: Colors.white,
+  //       );
+  //     }
+  //   } catch (e) {
+  //     debugPrint("Error in sendOwnerReply: $e");
+  //     Get.snackbar(
+  //       "Error",
+  //       "Something went wrong!",
+  //       backgroundColor: Colors.red,
+  //       colorText: Colors.white,
+  //     );
+  //   } finally {
+  //     isLoading.value = false;
+  //   }
+  // }
+
+
+
   Future<void> sendOwnerReply(String reviewId, String commentText, String storeId) async {
     try {
       isLoading.value = true;
+
+      debugPrint("--------------------------------------------------");
+      debugPrint("🔑 Current Token: ${LocalStorage.token}");
+      debugPrint("--------------------------------------------------");
 
       final Map<String, dynamic> bodyData = {
         "comment": commentText,
@@ -41,27 +97,25 @@ class ReviewController extends GetxController {
       final response = await ApiService.patch(
         '/reviews/$reviewId/owner-reply',
         body: bodyData,
+        header: {
+          "Authorization": "Bearer ${LocalStorage.token}",
+        },
       );
 
       if (response.isSuccess) {
         Get.snackbar(
           "Success",
-          "Reply sent successfully",
+          response.message.isNotEmpty ? response.message : "Reply sent successfully",
           backgroundColor: Colors.green,
           colorText: Colors.white,
         );
 
-        // await fetchReviews(storeId);
+        await fetchReviews(storeId);
 
       } else {
-        String errorMsg = "Failed to send reply";
-        if (response.data['message'] != null) {
-          errorMsg = response.data['message'];
-        }
-
         Get.snackbar(
-          "Error",
-          errorMsg,
+          "Failed",
+          response.message.isNotEmpty ? response.message : "Failed to send reply",
           backgroundColor: Colors.red,
           colorText: Colors.white,
         );
@@ -70,7 +124,7 @@ class ReviewController extends GetxController {
       debugPrint("Error in sendOwnerReply: $e");
       Get.snackbar(
         "Error",
-        "Something went wrong!",
+        e.toString(),
         backgroundColor: Colors.red,
         colorText: Colors.white,
       );
@@ -78,7 +132,6 @@ class ReviewController extends GetxController {
       isLoading.value = false;
     }
   }
-
 
   Future<void> createReview(String storeId, int rating, String comment, BuildContext context) async {
     try {
@@ -96,7 +149,7 @@ class ReviewController extends GetxController {
       );
 
       if (response.isSuccess) {
-        Navigator.pop(context); // ডায়ালগ বন্ধ করার জন্য
+        Navigator.pop(context);
         Get.snackbar(
           "Success",
           "Review submitted successfully",

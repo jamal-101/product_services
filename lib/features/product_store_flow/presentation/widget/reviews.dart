@@ -1,433 +1,3 @@
-//
-// import 'package:flutter/material.dart';
-// import 'package:flutter_screenutil/flutter_screenutil.dart';
-// import 'package:get/get.dart';
-// import 'package:intl/intl.dart';
-// import '../../../../utils/constants/api_enpoint.dart';
-// import '../controller/rivew_controller.dart';
-//
-//
-//
-// class ReviewsWidget extends StatelessWidget {
-//   final String storeId;
-//   ReviewsWidget({super.key, required this.storeId});
-//
-//   final ReviewController controller = Get.put(ReviewController());
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     WidgetsBinding.instance.addPostFrameCallback((_) {
-//       controller.fetchReviews(storeId);
-//     });
-//
-//     return Obx(() {
-//       if (controller.isLoading.value) {
-//         return const Center(
-//           child: CircularProgressIndicator(color: Colors.orange),
-//         );
-//       }
-//
-//       final data = controller.reviewModel.value.data;
-//       final reviewsList = data?.reviews ?? [];
-//       final ratingStats = data?.ratingStats;
-//
-//       final bool isUserSeller = data?.isSeller ?? false;
-//
-//       return Column(
-//         children: [
-//           Expanded(
-//             child: ListView(
-//               padding: EdgeInsets.all(16.w),
-//               children: [
-//                 _buildRatingHeader(
-//                   averageRating: data?.averageRating?.toDouble() ?? 0.0,
-//                   totalReviews: data?.totalReviews ?? 0,
-//                   ratingStats: ratingStats,
-//                 ),
-//                 SizedBox(height: 16.h),
-//                 reviewsList.isEmpty
-//                     ? Center(
-//                   child: Padding(
-//                     padding: EdgeInsets.all(20.h),
-//                     child: Text("No reviews found",
-//                         style: TextStyle(
-//                             color: Colors.grey, fontSize: 14.sp)),
-//                   ),
-//                 )
-//                     : ListView.builder(
-//                   shrinkWrap: true,
-//                   physics: const NeverScrollableScrollPhysics(),
-//                   itemCount: reviewsList.length,
-//                   itemBuilder: (context, index) {
-//                     var review = reviewsList[index];
-//                     String name = review.userId?.name ?? "Anonymous";
-//                     String comment = review.comment ?? "";
-//                     String date = review.createdAt ?? "";
-//                     int rating = review.rating ?? 5;
-//                     String profileImage =
-//                         review.userId?.profileImage ?? "";
-//                     bool hasResponse = review.isReplied ?? false;
-//
-//                     return _buildReviewItem(
-//                       reviewId: review.id ?? "",
-//                       name: name,
-//                       comment: comment,
-//                       date: date,
-//                       rating: rating,
-//                       profileImage: profileImage,
-//                       isReplied: hasResponse,
-//                       replyText: review.reply ?? "",
-//                       isSeller: isUserSeller,
-//                     );
-//                   },
-//                 ),
-//               ],
-//             ),
-//           ),
-//           _buildFooterButton(),
-//         ],
-//       );
-//     });
-//   }
-//
-//   Widget _buildRatingHeader({
-//     required double averageRating,
-//     required int totalReviews,
-//     var ratingStats,
-//   }) {
-//     int totalCount = totalReviews > 0 ? totalReviews : 1;
-//
-//     int count5 = ratingStats?.i5 ?? 0;
-//     int count4 = ratingStats?.i4 ?? 0;
-//     int count3 = ratingStats?.i3 ?? 0;
-//     int count2 = ratingStats?.i2 ?? 0;
-//     int count1 = ratingStats?.i1 ?? 0;
-//
-//     List<double> values = [
-//       count5 / totalCount,
-//       count4 / totalCount,
-//       count3 / totalCount,
-//       count2 / totalCount,
-//       count1 / totalCount,
-//     ];
-//
-//     return Container(
-//       padding: EdgeInsets.all(16.w),
-//       decoration: BoxDecoration(
-//         color: Colors.white,
-//         borderRadius: BorderRadius.circular(12.r),
-//         border: Border.all(color: Colors.grey.shade200),
-//       ),
-//       child: Row(
-//         children: [
-//           Column(
-//             children: [
-//               Text("$averageRating",
-//                   style: TextStyle(
-//                       fontSize: 32.sp, fontWeight: FontWeight.bold)),
-//               Text("★★★★★",
-//                   style: TextStyle(
-//                     color: const Color(0xFFEE7A1F),
-//                     fontWeight: FontWeight.w600,
-//                     fontSize: 16.sp,
-//                   )),
-//               Text("$totalReviews reviews",
-//                   style: TextStyle(fontSize: 12.sp, color: Colors.grey)),
-//             ],
-//           ),
-//           SizedBox(width: 20.w),
-//           Expanded(
-//             child: Column(
-//               children: List.generate(5, (i) {
-//                 int starCount = 5 - i;
-//                 double progressVal = values[i].clamp(0.0, 1.0);
-//                 return Padding(
-//                   padding: EdgeInsets.symmetric(vertical: 2.h),
-//                   child: Row(
-//                     children: [
-//                       Text("$starCount", style: TextStyle(fontSize: 12.sp)),
-//                       SizedBox(width: 4.w),
-//                       Icon(Icons.star, color: Colors.orange, size: 12.sp),
-//                       SizedBox(width: 8.w),
-//                       Expanded(
-//                         child: LinearProgressIndicator(
-//                           value: progressVal,
-//                           color: Colors.orange,
-//                           backgroundColor: Colors.grey.shade200,
-//                           minHeight: 6.h,
-//                           borderRadius: BorderRadius.circular(4.r),
-//                         ),
-//                       ),
-//                     ],
-//                   ),
-//                 );
-//               }),
-//             ),
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-//
-//   Widget _buildReviewItem({
-//     required String reviewId,
-//     required String name,
-//     required String comment,
-//     required String date,
-//     required int rating,
-//     required String profileImage,
-//     required bool isReplied,
-//     required String? replyText,
-//     required bool isSeller,
-//   }) {
-//     final String? finalProfileImg = profileImage.isNotEmpty
-//         ? (profileImage.startsWith('http')
-//         ? profileImage
-//         : "${ApiEndPoint.imageUrl}$profileImage")
-//         : null;
-//
-//     return Container(
-//       margin: EdgeInsets.only(bottom: 12.h),
-//       padding: EdgeInsets.all(16.w),
-//       decoration: BoxDecoration(
-//         color: Colors.white,
-//         borderRadius: BorderRadius.circular(16.r),
-//         border: Border.all(color: Colors.grey.shade200),
-//         boxShadow: [
-//           BoxShadow(
-//             color: Colors.black.withValues(alpha: 0.02),
-//             blurRadius: 8,
-//             offset: const Offset(0, 2),
-//           ),
-//         ],
-//       ),
-//       child: Column(
-//         crossAxisAlignment: CrossAxisAlignment.start,
-//         children: [
-//           Row(
-//             crossAxisAlignment: CrossAxisAlignment.start,
-//             children: [
-//               CircleAvatar(
-//                 radius: 22.r,
-//                 backgroundColor: Colors.teal.shade50,
-//                 backgroundImage: finalProfileImg != null
-//                     ? NetworkImage(finalProfileImg)
-//                     : null,
-//                 child: finalProfileImg == null
-//                     ? Text(
-//                   name.isNotEmpty ? name[0] : "U",
-//                   style: TextStyle(
-//                     color: Colors.teal.shade700,
-//                     fontWeight: FontWeight.bold,
-//                     fontSize: 16.sp,
-//                   ),
-//                 )
-//                     : null,
-//               ),
-//               SizedBox(width: 12.w),
-//               Expanded(
-//                 child: Column(
-//                   crossAxisAlignment: CrossAxisAlignment.start,
-//                   children: [
-//                     Row(
-//                       children: [
-//                         Flexible(
-//                           child: Text(
-//                             name,
-//                             style: TextStyle(
-//                                 fontSize: 16.sp,
-//                                 fontWeight: FontWeight.bold,
-//                                 color: Colors.black87),
-//                             overflow: TextOverflow.ellipsis,
-//                           ),
-//                         ),
-//                         SizedBox(width: 4.w),
-//                         Icon(Icons.check_circle,
-//                             color: Colors.green, size: 16.sp),
-//                       ],
-//                     ),
-//                     SizedBox(height: 4.h),
-//                     Row(
-//                       children: List.generate(
-//                         5,
-//                             (index) => Icon(
-//                           index < rating ? Icons.star : Icons.star_border,
-//                           color: const Color(0xFFEE7A1F),
-//                           size: 14.sp,
-//                         ),
-//                       ),
-//                     ),
-//                   ],
-//                 ),
-//               ),
-//               Text(
-//                 DateConverter.formatTimeAgo(date),
-//                 style: TextStyle(fontSize: 12.sp, color: Colors.grey.shade500),
-//               ),
-//             ],
-//           ),
-//           SizedBox(height: 12.h),
-//           Text(
-//             comment,
-//             style: TextStyle(
-//                 fontSize: 14.sp, color: Colors.grey.shade800, height: 1.4),
-//           ),
-//           if (isReplied && replyText != null && replyText.isNotEmpty)
-//             Container(
-//               margin: EdgeInsets.only(top: 12.h),
-//               padding: EdgeInsets.all(12.w),
-//               decoration: BoxDecoration(
-//                 color: const Color(0xFFE8F5E9),
-//                 borderRadius: BorderRadius.circular(12.r),
-//                 border: Border(
-//                   left: BorderSide(color: Colors.green.shade600, width: 4.w),
-//                 ),
-//               ),
-//               child: Column(
-//                 crossAxisAlignment: CrossAxisAlignment.start,
-//                 children: [
-//                   Row(
-//                     children: [
-//                       Icon(Icons.reply,
-//                           color: Colors.green.shade700, size: 16.sp),
-//                       SizedBox(width: 6.w),
-//                       Text(
-//                         "Response from owner",
-//                         style: TextStyle(
-//                           fontSize: 13.sp,
-//                           fontWeight: FontWeight.bold,
-//                           color: Colors.green.shade800,
-//                         ),
-//                       ),
-//                     ],
-//                   ),
-//                   SizedBox(height: 6.h),
-//                   Text(
-//                     replyText,
-//                     style: TextStyle(
-//                         fontSize: 13.sp,
-//                         color: Colors.grey.shade800,
-//                         height: 1.3),
-//                   ),
-//                 ],
-//               ),
-//             ),
-//           if (isSeller && !isReplied)
-//             Padding(
-//               padding: EdgeInsets.only(top: 12.h),
-//               child: Align(
-//                 alignment: Alignment.centerRight,
-//                 child: ElevatedButton(
-//                   onPressed: () {
-//                     _showReplyDialog(Get.context!, reviewId);
-//                   },
-//                   style: ElevatedButton.styleFrom(
-//                     backgroundColor: const Color(0xFFEE7A1F),
-//                     shape: RoundedRectangleBorder(
-//                         borderRadius: BorderRadius.circular(8.r)),
-//                     padding: EdgeInsets.symmetric(
-//                         horizontal: 16.w, vertical: 8.h),
-//                   ),
-//                   child: Text("Reply",
-//                       style:
-//                       TextStyle(color: Colors.white, fontSize: 12.sp)),
-//                 ),
-//               ),
-//             ),
-//         ],
-//       ),
-//     );
-//   }
-//
-//   void _showReplyDialog(BuildContext context, String reviewId) {
-//     final TextEditingController textController = TextEditingController();
-//     final ReviewController controller = Get.find<ReviewController>();
-//
-//     showDialog(
-//       context: context,
-//       builder: (context) => AlertDialog(
-//         title: const Text("Write Owner Reply"),
-//         content: TextField(
-//           controller: textController,
-//           decoration:
-//           const InputDecoration(hintText: "Type your reply here..."),
-//           maxLines: 3,
-//         ),
-//         actions: [
-//           TextButton(
-//               onPressed: () => Navigator.pop(context),
-//               child: const Text("Cancel")),
-//           ElevatedButton(
-//             onPressed: () {
-//               if (textController.text.isNotEmpty) {
-//                 controller.sendOwnerReply(
-//                     reviewId, textController.text.trim());
-//               }
-//             },
-//             child: const Text("Send"),
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-//
-//   Widget _buildFooterButton() {
-//     return Padding(
-//       padding: EdgeInsets.all(16.w),
-//       child: ElevatedButton(
-//         onPressed: () {},
-//         style: ElevatedButton.styleFrom(
-//             backgroundColor: Colors.orange.shade800,
-//             minimumSize: Size(double.infinity, 50.h)),
-//         child: Text("Write a Review",
-//             style: TextStyle(color: Colors.white, fontSize: 16.sp)),
-//       ),
-//     );
-//   }
-// }
-//
-//
-//
-//
-//
-//
-//
-//
-// class DateConverter {
-//   static String formatTimeAgo(String dateStr) {
-//     try {
-//       DateTime dateTime = DateTime.parse(dateStr).toLocal();
-//       Duration diff = DateTime.now().difference(dateTime);
-//
-//       if (diff.inDays > 365) {
-//         return "${(diff.inDays / 365).floor()} years ago";
-//       } else if (diff.inDays > 30) {
-//         return "${(diff.inDays / 30).floor()} months ago";
-//       } else if (diff.inDays >= 7) {
-//         return "${(diff.inDays / 7).floor()} week ago";
-//       } else if (diff.inDays > 0) {
-//         return "${diff.inDays} days ago";
-//       } else if (diff.inHours > 0) {
-//         return "${diff.inHours} hours ago";
-//       } else if (diff.inMinutes > 0) {
-//         return "${diff.inMinutes} minutes ago";
-//       } else {
-//         return "Just now";
-//       }
-//     } catch (e) {
-//       return dateStr;
-//     }
-//   }
-//   static String formatDate(String dateStr) {
-//     try {
-//       DateTime dateTime = DateTime.parse(dateStr).toLocal();
-//       return DateFormat('d MMM yyyy').format(dateTime);
-//     } catch (e) {
-//       return dateStr;
-//     }
-//   }
-// }
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -446,7 +16,6 @@ class ReviewsWidget extends StatefulWidget {
 class _ReviewsWidgetState extends State<ReviewsWidget> {
   final ReviewController controller = Get.put(ReviewController());
 
-  // কোন রিভিউটিতে রিপ্লাই বাটন ক্লিক করা হয়েছে তার ID ট্র্যাক রাখার জন্য
   final RxString activeReplyReviewId = "".obs;
   final TextEditingController _replyTextController = TextEditingController();
 
@@ -472,6 +41,7 @@ class _ReviewsWidgetState extends State<ReviewsWidget> {
       final data = controller.reviewModel.value.data;
       final reviewsList = data?.reviews ?? [];
       final ratingStats = data?.ratingStats;
+      final bool isSeller = data?.isSeller ?? false;
 
       return Column(
         children: [
@@ -512,6 +82,7 @@ class _ReviewsWidgetState extends State<ReviewsWidget> {
                           String profileImage =
                               review.userId?.profileImage ?? "";
                           bool hasResponse = review.isReplied ?? false;
+                          String ownerReplyText = review.ownerReply?.comment ?? "";
 
                           return Obx(
                             () => _buildReviewItem(
@@ -522,8 +93,10 @@ class _ReviewsWidgetState extends State<ReviewsWidget> {
                               rating: rating,
                               profileImage: profileImage,
                               isReplied: hasResponse,
-                              replyText: review.reply ?? "",
+                              // replyText: review.reply ?? "",
+                              replyText: ownerReplyText,
                               isReplying: activeReplyReviewId.value == reviewId,
+                                isSeller: isSeller
                             ),
                           );
                         },
@@ -631,6 +204,7 @@ class _ReviewsWidgetState extends State<ReviewsWidget> {
     required bool isReplied,
     required String? replyText,
     required bool isReplying,
+    required bool isSeller,
   }) {
     final String? finalProfileImg = profileImage.isNotEmpty
         ? (profileImage.startsWith('http')
@@ -731,8 +305,7 @@ class _ReviewsWidgetState extends State<ReviewsWidget> {
               height: 1.4,
             ),
           ),
-
-          // ১. যদি আগে থেকেই রিপ্লাই দেওয়া থাকে (isReplied: true), তবে সেটি শো করবে
+          // if (isReplied && replyText != null && replyText.isNotEmpty)
           if (isReplied && replyText != null && replyText.isNotEmpty)
             Container(
               margin: EdgeInsets.only(top: 12.h),
@@ -778,8 +351,9 @@ class _ReviewsWidgetState extends State<ReviewsWidget> {
               ),
             ),
 
-          // ২. যদি isReplied: false হয়, তবে রিপ্লাই দেওয়ার অপশন/বাটন দেখাবে
-          if (!isReplied) ...[
+
+          // if (!isReplied) ...[
+          if (!isReplied && isSeller) ...[
             SizedBox(height: 10.h),
             Align(
               alignment: Alignment.centerRight,
@@ -803,7 +377,7 @@ class _ReviewsWidgetState extends State<ReviewsWidget> {
               ),
             ),
 
-            // Reply এ ক্লিক করলে ইনলাইন টেক্সট ফিল্ড ওপেন হবে
+
             if (isReplying)
               Container(
                 margin: EdgeInsets.only(top: 10.h),
