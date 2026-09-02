@@ -97,11 +97,33 @@ class LocalStorage {
   static Future<void> setString(String key, String value) async {
     final localStorage = await _getStorage();
     await localStorage.setString(key, value);
+    if (key == LocalStorageKeys.token) {
+      token = value;
+    } else if (key == LocalStorageKeys.userId) {
+      userId = value;
+    } else if (key == LocalStorageKeys.refreshToken) {
+      refreshToken = value;
+    } else if (key == LocalStorageKeys.myName) {
+      myName = value;
+    } else if (key == LocalStorageKeys.myEmail) {
+      myEmail = value;
+    } else if (key == LocalStorageKeys.myImage) {
+      myImage = value;
+    } else if (key == LocalStorageKeys.profileImage) {
+      profileImage = value;
+    } else if (key == LocalStorageKeys.myRole) {
+      myRole = value;
+    }
   }
 
   static Future<void> setBool(String key, bool value) async {
     final localStorage = await _getStorage();
     await localStorage.setBool(key, value);
+    if (key == LocalStorageKeys.isLogIn) {
+      isLogIn = value;
+    } else if (key == LocalStorageKeys.hasSellerAccount) {
+      hasSellerAccount = value;
+    }
   }
 
   static Future<void> setInt(String key, int value) async {
