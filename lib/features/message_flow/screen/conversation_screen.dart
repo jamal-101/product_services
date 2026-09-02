@@ -21,8 +21,12 @@ class _ConversationScreenState extends State<ConversationScreen> {
   @override
   void initState() {
     super.initState();
-    Get.delete<ConversationController>();
-    conversationController = Get.put(ConversationController());
+    // Use Get.find or Get.put but don't delete if already exists to avoid issues
+    if (Get.isRegistered<ConversationController>()) {
+      conversationController = Get.find<ConversationController>();
+    } else {
+      conversationController = Get.put(ConversationController());
+    }
   }
 
   @override
@@ -250,8 +254,18 @@ class _ConversationScreenState extends State<ConversationScreen> {
         fit: BoxFit.cover,
       );
     } else {
+      // Fix: Handle relative paths and ensure correct base URL concatenation
+      String fullUrl = url;
+      if (url.isNotEmpty) {
+        if (url.startsWith('/')) {
+          fullUrl = "${ApiEndPoint.imageUrl}$url";
+        } else {
+          fullUrl = "${ApiEndPoint.imageUrl}/$url";
+        }
+      }
+
       return Image.network(
-        "${ApiEndPoint.imageUrl}/$url",
+        fullUrl,
         height: 150.h,
         width: 200.w,
         fit: BoxFit.cover,
@@ -340,23 +354,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
                     color: Color(0xFF27AE60),
                     shape: BoxShape.circle,
                   ),
-                  child: Obx(() {
-                    if (conversationController.isSending.value) {
-                      return SizedBox(
-                        width: 18.w,
-                        height: 18.w,
-                        child: const CircularProgressIndicator(
-                          color: Colors.white,
-                          strokeWidth: 2,
-                        ),
-                      );
-                    }
-                    return const Icon(
-                      Icons.send,
-                      color: Colors.white,
-                      size: 18,
-                    );
-                  }),
+                  child: const Icon(Icons.send, color: Colors.white, size: 20),
                 ),
               ),
             ],

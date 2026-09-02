@@ -201,15 +201,14 @@ class AccountScreen extends StatelessWidget {
                             Get.toNamed(AppRoutes.helpSupportScreen);
                           },
                         ),
-                        // _buildCardMenuItem(
-                        //   Icons.logout,
-                        //   AppString.logOut,
-                        //   AppString.singOut,
-                        //       () {
-                        //     Get.offAllNamed(AppRoutes.loginScreen);
-                        //   },
-                        //   isLogout: true,
-                        // ),
+                        _buildCardMenuItem(
+                          Icons.language,
+                          "Language",
+                          "Select Your Language",
+                              () {
+
+                          },
+                        ),
                         _buildCardMenuItem(
                           Icons.logout,
                           AppString.logOut,

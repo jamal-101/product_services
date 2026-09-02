@@ -65,15 +65,17 @@ class ConversationController extends GetxController {
           if (msgJson is Map<String, dynamic>) {
             final incomingMessage = Message.fromJson(msgJson);
 
+            // Improved deduplication logic: check ID or (sender, text, and time)
+            // Removed text.isNotEmpty to handle image-only messages correctly
             final isAlreadyAdded = messages.any((m) =>
                 (m.id.isNotEmpty && m.id == incomingMessage.id) ||
-                (m.text.isNotEmpty &&
+                (m.sender.id == incomingMessage.sender.id &&
                     m.text == incomingMessage.text &&
                     m.createdAt
                             .difference(incomingMessage.createdAt)
                             .abs()
                             .inSeconds <
-                        5));
+                        10));
 
             if (!isAlreadyAdded) {
               messages.insert(0, incomingMessage);
@@ -156,49 +158,55 @@ class ConversationController extends GetxController {
       );
 
       if (response.isSuccess) {
-        textController.clear();
-        selectedImage.value = null;
+        Message? createdMessage;
 
         try {
-          final resData = response.data as Map<String, dynamic>;
-          Message? createdMessage;
-
-          if (resData["data"] != null && resData["data"] is Map<String, dynamic>) {
-            final dataMap = resData["data"] as Map<String, dynamic>;
-            final msgObj = dataMap["message"] ?? dataMap;
-            if (msgObj is Map<String, dynamic> && msgObj["_id"] != null) {
-              createdMessage = Message.fromJson(msgObj);
+          if (response.data != null && response.data is Map<String, dynamic>) {
+            final resData = response.data as Map<String, dynamic>;
+            final dataMap = resData["data"];
+            if (dataMap != null && dataMap is Map<String, dynamic>) {
+              final msgObj = dataMap["message"] ?? dataMap;
+              if (msgObj is Map<String, dynamic> && msgObj["_id"] != null) {
+                createdMessage = Message.fromJson(msgObj);
+              }
             }
           }
-
-          createdMessage ??= Message(
-            id: DateTime.now().millisecondsSinceEpoch.toString(),
-            chatId: chatId!,
-            sender: Sender(
-              id: LocalStorage.userId,
-              name: "",
-              role: "",
-              activeRole: "",
-              email: "",
-              profileImage: "",
-            ),
-            text: messageText,
-            image: imageFile != null ? imageFile.path : "",
-            read: true,
-            type: imageFile != null ? "image" : "text",
-            isDeleted: false,
-            isPinned: false,
-            createdAt: DateTime.now(),
-            updatedAt: DateTime.now(),
-          );
-
-          messages.insert(0, createdMessage);
         } catch (e) {
-          appLog(e.toString());
+          appLog("Error parsing response: $e");
         }
+
+        // Fallback: create message locally if parsing fails or response doesn't contain message
+        createdMessage ??= Message(
+          id: DateTime.now().millisecondsSinceEpoch.toString(),
+          chatId: chatId!,
+          sender: Sender(
+            id: LocalStorage.userId,
+            name: "",
+            role: "",
+            activeRole: "",
+            email: "",
+            profileImage: "",
+          ),
+          text: messageText,
+          image: imageFile != null ? imageFile.path : "",
+          read: true,
+          type: imageFile != null ? "image" : "text",
+          isDeleted: false,
+          isPinned: false,
+          createdAt: DateTime.now(),
+          updatedAt: DateTime.now(),
+        );
+
+        // Add to list and refresh UI
+        messages.insert(0, createdMessage);
+        messages.refresh();
+
+        // Clear input fields
+        textController.clear();
+        selectedImage.value = null;
       }
     } catch (e) {
-      appLog(e.toString());
+      appLog("Send message error: $e");
     } finally {
       isSending.value = false;
     }
@@ -273,4 +281,3 @@ class ConversationController extends GetxController {
     }
   }
 }
-
