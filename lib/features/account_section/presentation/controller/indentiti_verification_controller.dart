@@ -8,8 +8,6 @@ import '../../../../utils/constants/api_enpoint.dart';
 
 class IdentityVerificationController extends GetxController {
   RxString selectedIdType = 'National ID'.obs;
-
-  // Image path gulo string hishebe rakhar jonno
   RxString frontImagePath = ''.obs;
   RxString backImagePath = ''.obs;
 
@@ -23,7 +21,6 @@ class IdentityVerificationController extends GetxController {
     }
   }
 
-  // Image Pick korar method
   Future<void> pickImage(bool isFront) async {
     final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
     if (image != null) {

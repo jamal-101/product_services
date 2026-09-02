@@ -2,13 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class OperatingHoursController extends GetxController {
-  // 24/7 Toggle state
+
   var isOpen24_7 = false.obs;
 
-  // Selected preset index (-1 mane konotai select nai)
   var selectedPresetIndex = (-1).obs;
 
-  // Days state: [Mon, Tue, Wed, Thu, Fri, Sat, Sun]
+
   var workingDays = <String, bool>{
     'M': true,
     'T': false,
@@ -19,17 +18,14 @@ class OperatingHoursController extends GetxController {
     'Sun': false,
   }.obs;
 
-  // Time controllers
   final openingTimeController = TextEditingController();
   final closingTimeController = TextEditingController();
 
-  // Toggle individual day selection
   void toggleDay(String dayKey) {
     workingDays[dayKey] = !(workingDays[dayKey] ?? false);
-    selectedPresetIndex.value = -1; // Preset reset hobe jodi custom click kora hoy
+    selectedPresetIndex.value = -1;
   }
 
-  // Select Preset (0: Mon-Sat, 1: Mon-Fri, 2: Everyday)
   void selectPreset(int index) {
     selectedPresetIndex.value = index;
     if (index == 0) {
@@ -41,7 +37,7 @@ class OperatingHoursController extends GetxController {
     }
   }
 
-  // Toggle 24/7
+
   void toggleOpen24_7(bool value) {
     isOpen24_7.value = value;
   }

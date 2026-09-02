@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import '../../../../services/api/api_service.dart';
 import '../../../../utils/constants/api_enpoint.dart';
+import '../../../profile_section/presentation/controller/profile_controller.dart';
 import '../model/product_city_model.dart';
 import '../model/product_store_model.dart';
 import '../model/service_store_model.dart';
@@ -25,14 +26,43 @@ class ExploreStoreController extends GetxController {
   var isListViewSelected = true.obs;
   var currentNavIndex = 0.obs;
 
+
   @override
   void onInit() {
     super.onInit();
     fetchCities();
     fetchStores();
+    initCityFromProfileAndFetchStores();
   }
 
 
+  void initCityFromProfileAndFetchStores() {
+    // ProfileController কে ফাইন্ড বা পুট করে নেওয়া
+    final profileController = Get.isRegistered<ProfileController>()
+        ? Get.find<ProfileController>()
+        : Get.put(ProfileController());
+
+    var profileData = profileController.profileModel.value.data;
+    if (profileData != null) {
+      String userCity = profileData.state ?? profileData.address ?? profileData.location?.address ?? "";
+      if (userCity.isNotEmpty) {
+        selectedCity.value = userCity;
+      }
+    }
+
+    fetchStores();
+
+    ever(profileController.profileModel, (profileModel) {
+      var data = profileModel.data;
+      if (data != null && selectedCity.value.isEmpty) {
+        String cityFromProfile = data.state ?? data.address ?? data.location?.address ?? "";
+        if (cityFromProfile.isNotEmpty) {
+          selectedCity.value = cityFromProfile;
+          fetchStores();
+        }
+      }
+    });
+  }
 
   Future<void> fetchCities() async {
     try {

@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:product_service/features/seller/my_list_flow/presentation/screen/my_list_screen.dart';
 import '../../../../../services/api/api_service.dart';
+import '../../../../../utils/constants/api_enpoint.dart';
 import '../../../../profile_section/presentation/controller/profile_controller.dart';
 import 'listing_controller.dart';
 
@@ -117,7 +118,7 @@ class AddProductController extends GetxController {
             .toList();
       }
 
-      String endpoint = storeType == "service_store" ? "/services" : "/products";
+      String endpoint = storeType == "service_store" ? ApiEndPoint.services : ApiEndPoint.products;
       String method = "POST";
 
       if (isEditMode && itemId != null) {

@@ -27,9 +27,9 @@ import '../../../../../../../utils/constants/api_enpoint.dart';
 
 
 class StoreCreationController extends GetxController {
-  // Steps & Selection
+
   var currentStep = 1.obs;
-  var selectedStoreType = "".obs; // "product_store" or "service_store"
+  var selectedStoreType = "".obs;
 
   final nameController = TextEditingController();
   final descriptionController = TextEditingController();

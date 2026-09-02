@@ -17,7 +17,6 @@ class FaqController extends GetxController {
   Future<void> fetchFaqs() async {
     try {
       isLoading.value = true;
-      // পোস্টম্যান অনুযায়ী এন্ডপয়েন্ট ধরে নিলাম ApiEndPoint.faqs (বা সরাসরি "/faqs")
       final response = await ApiService.get(ApiEndPoint.faqs);
 
       if (response.isSuccess) {

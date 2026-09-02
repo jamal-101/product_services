@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../../../services/api/api_service.dart';
+import '../../../../../utils/constants/api_enpoint.dart';
 import '../../../../profile_section/presentation/controller/profile_controller.dart';
 import '../model/service_model.dart' as s_model;
 import '../model/product_model.dart' as p_model;
@@ -52,7 +53,8 @@ class MyListingController extends GetxController {
   }
 
   Future<void> _fetchServices() async {
-    final response = await ApiService.get("/services/my-services");
+    // final response = await ApiService.get("/services/my-services");
+    final response = await ApiService.get(ApiEndPoint.myServices);
     if (response.isSuccess) {
       s_model.ServiceModel model = s_model.ServiceModel.fromJson(response.data as Map<String, dynamic>);
       serviceList.value = model.data ?? [];
@@ -60,7 +62,8 @@ class MyListingController extends GetxController {
   }
 
   Future<void> _fetchProducts() async {
-    final response = await ApiService.get("/products/my-products");
+    // final response = await ApiService.get("/products/my-products");
+    final response = await ApiService.get(ApiEndPoint.myProducts);
     if (response.isSuccess) {
       p_model.get_product_model model = p_model.get_product_model.fromJson(response.data as Map<String, dynamic>);
       productList.value = model.data ?? [];
@@ -69,7 +72,10 @@ class MyListingController extends GetxController {
 
   void deleteItem(String id) async {
     try {
-      String endpoint = storeType == "service_store" ? "/services/$id" : "/products/$id";
+      // String endpoint = storeType == "service_store" ? "/services/$id" : "/products/$id";
+      String endpoint = storeType == "service_store"
+          ? '${ApiEndPoint.services}/$id'
+          : '${ApiEndPoint.products}/$id';
       final response = await ApiService.delete(endpoint);
 
       if (response.isSuccess) {

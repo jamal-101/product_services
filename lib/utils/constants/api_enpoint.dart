@@ -23,6 +23,13 @@ class ApiEndPoint {
   static const verifySellerForPosting = "$baseUrl/advertisements/verify-seller";
   static const String myAdvertisements = "$baseUrl/advertisements/my-advertisements";
   static const String userAds = "$baseUrl/advertisements/user-ads";
+  static const String reviews = "$baseUrl/reviews";
+  static const myServices = "$baseUrl/services/my-services";
+  static const myProducts = "$baseUrl/products/my-products";
+  static const services = "$baseUrl/services";
+  static const products = "$baseUrl/products";
+  static const sellerDashboard = "$baseUrl/stores/seller/dashboard";
+  static const favorites = "$baseUrl/favorites";
 
 
 }

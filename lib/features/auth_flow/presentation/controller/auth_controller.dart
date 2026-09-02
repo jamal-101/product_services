@@ -215,51 +215,6 @@ class AuthController extends GetxController {
     }
   }
 
-  // Future<void> selectRole(String role) async {
-  //   String apiRole = (role == 'buyer') ? 'user' : role;
-  //
-  //   selectedRole.value = role;
-  //
-  //   final Map<String, dynamic> body = {
-  //     "role": apiRole,
-  //   };
-  //
-  //   try {
-  //     final response = await ApiService.post(ApiEndPoint.switchRole, body: body);
-  //
-  //     if (response.isSuccess) {
-  //       var responseData = response.data;
-  //
-  //       String? token = responseData['data']?['token'];
-  //       if (token != null) {
-  //         LocalStorage.token = token;
-  //         await LocalStorage.setString(LocalStorageKeys.token, token);
-  //       }
-  //
-  //       await LocalStorage.setUserRole(role);
-  //
-  //       if (role == 'seller') {
-  //         Get.offAllNamed(AppRoutes.sellerHomeScreen);
-  //       } else {
-  //         Get.offAllNamed(AppRoutes.homeScreen);
-  //       }
-  //     } else {
-  //       Get.snackbar(
-  //         "Failed",
-  //         response.message,
-  //         backgroundColor: Colors.red,
-  //         colorText: Colors.white,
-  //       );
-  //     }
-  //   } catch (e) {
-  //     Get.snackbar(
-  //       "Error",
-  //       e.toString(),
-  //       backgroundColor: Colors.red,
-  //       colorText: Colors.white,
-  //     );
-  //   }
-  // }
 
 
   Future<void> selectRole(String role) async {

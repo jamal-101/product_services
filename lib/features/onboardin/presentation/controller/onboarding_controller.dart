@@ -5,7 +5,7 @@ import 'package:product_service/config/route/app_route.dart';
 class OnboardingController extends GetxController {
   final PageController pageController = PageController();
 
-  // কারেন্ট পেজ ইনডেক্স ট্র্যাক করার জন্য রিঅ্যাক্টিভ ভেরিয়েবল (.obs)
+
   var currentIndex = 0.obs;
 
   void updateIndex(int index) {

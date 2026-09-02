@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../../services/api/api_service.dart';
 import '../../../../services/storage/storage_service.dart';
+import '../../../../utils/constants/api_enpoint.dart';
 import '../model/rivew_model.dart';
 
 class ReviewController extends GetxController {
@@ -12,7 +13,8 @@ class ReviewController extends GetxController {
   Future<void> fetchReviews(String storeId) async {
     try {
       isLoading.value = true;
-      final response = await ApiService.get('/reviews/$storeId');
+      // final response = await ApiService.get('/reviews/$storeId');
+      final response = await ApiService.get('${ApiEndPoint.reviews}/$storeId');
 
       if (response.isSuccess) {
         if (response.data is Map<String, dynamic>) {
@@ -31,54 +33,6 @@ class ReviewController extends GetxController {
     }
   }
 
-  // Future<void> sendOwnerReply(String reviewId, String commentText, String storeId) async {
-  //   try {
-  //     isLoading.value = true;
-  //
-  //     final Map<String, dynamic> bodyData = {
-  //       "comment": commentText,
-  //     };
-  //
-  //     final response = await ApiService.patch(
-  //       '/reviews/$reviewId/owner-reply',
-  //       body: bodyData,
-  //     );
-  //
-  //     if (response.isSuccess) {
-  //       Get.snackbar(
-  //         "Success",
-  //         "Reply sent successfully",
-  //         backgroundColor: Colors.green,
-  //         colorText: Colors.white,
-  //       );
-  //
-  //       await fetchReviews(storeId);
-  //
-  //     } else {
-  //       String errorMsg = "Failed to send reply";
-  //       if (response.data['message'] != null) {
-  //         errorMsg = response.data['message'];
-  //       }
-  //
-  //       Get.snackbar(
-  //         "Error",
-  //         errorMsg,
-  //         backgroundColor: Colors.red,
-  //         colorText: Colors.white,
-  //       );
-  //     }
-  //   } catch (e) {
-  //     debugPrint("Error in sendOwnerReply: $e");
-  //     Get.snackbar(
-  //       "Error",
-  //       "Something went wrong!",
-  //       backgroundColor: Colors.red,
-  //       colorText: Colors.white,
-  //     );
-  //   } finally {
-  //     isLoading.value = false;
-  //   }
-  // }
 
 
 
@@ -95,7 +49,8 @@ class ReviewController extends GetxController {
       };
 
       final response = await ApiService.patch(
-        '/reviews/$reviewId/owner-reply',
+        // '/reviews/$reviewId/owner-reply',
+        '${ApiEndPoint.reviews}/$reviewId/owner-reply',
         body: bodyData,
         header: {
           "Authorization": "Bearer ${LocalStorage.token}",
@@ -144,7 +99,8 @@ class ReviewController extends GetxController {
       };
 
       final response = await ApiService.post(
-        '/reviews',
+        // '/reviews',
+        ApiEndPoint.reviews,
         body: bodyData,
       );
 
@@ -157,11 +113,10 @@ class ReviewController extends GetxController {
           colorText: Colors.white,
         );
 
-        // রিভিউ সাবমিট হওয়ার পর লিস্ট রিফ্রেশ করার জন্য
         await fetchReviews(storeId);
       } else {
         String errorMsg = "Failed to submit review";
-        if (response.data != null && response.data['message'] != null) {
+        if (response.data['message'] != null) {
           errorMsg = response.data['message'];
         }
 

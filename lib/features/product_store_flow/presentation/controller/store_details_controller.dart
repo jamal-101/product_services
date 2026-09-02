@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../../services/api/api_service.dart';
+import '../../../../utils/constants/api_enpoint.dart';
 import '../model/store_details_model.dart';
 
 class StoreDetailsController extends GetxController {
@@ -11,7 +12,8 @@ class StoreDetailsController extends GetxController {
     try {
       isLoading.value = true;
 
-      final response = await ApiService.get('/stores/$storeId');
+      // final response = await ApiService.get('/stores/$storeId');
+      final response = await ApiService.get('${ApiEndPoint.stores}/$storeId');
 
       if (response.isSuccess) {
         debugPrint("API Response Body: ${response.data}");

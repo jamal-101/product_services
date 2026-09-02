@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../../../services/api/api_service.dart';
 import '../../../../../services/storage/storage_service.dart';
+import '../../../../../utils/constants/api_enpoint.dart';
 import '../model/desh_board_model.dart';
 
 class SellerHomeController extends GetxController {
@@ -19,7 +20,7 @@ class SellerHomeController extends GetxController {
     try {
       isDashboardLoading.value = true;
       final response = await ApiService.get(
-        "/stores/seller/dashboard",
+        ApiEndPoint.sellerDashboard,
         header: {
           'Authorization': 'Bearer ${LocalStorage.token}',
           'Content-Type': 'application/json',

@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import '../../../../services/api/api_service.dart';
 import '../../../../services/storage/storage_service.dart';
 import '../../../../utils/constants/api_enpoint.dart';
-import '../model/my_add_model.dart'; // আপনার মডেল ফাইলের সঠিক পাথ দিন
+import '../model/my_add_model.dart';
 
 class MyAddController extends GetxController {
   var isLoading = false.obs;
-  var myAds = <Data>[].obs; // মডেল থেকে Data লিস্ট
+  var myAds = <Data>[].obs;
 
   @override
   void onInit() {
@@ -21,7 +21,7 @@ class MyAddController extends GetxController {
       final response = await ApiService.get(
         ApiEndPoint.myAdvertisements,
         header: {
-          'Authorization': 'Bearer ${LocalStorage.token}', // টোকেন দিয়ে অথেন্টিকেশন
+          'Authorization': 'Bearer ${LocalStorage.token}',
           'Content-Type': 'application/json',
         },
       );
