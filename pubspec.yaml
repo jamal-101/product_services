@@ -80,11 +80,13 @@ flutter:
   assets:
     - assets/images/
     - assets/icons/
+    - assets/videos/
+    - assets/audio/
 
 flutter_launcher_icons:
   android: "launcher_icon"
   ios: true
-  image_path: "assets/app_logo/app_logo.png"
+  image_path: "assets/app_logo/applogo_julio.png"
   min_sdk_android: 21
   background_color: "#ffffff"
 

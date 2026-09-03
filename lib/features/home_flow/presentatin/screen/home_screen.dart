@@ -8,6 +8,8 @@ import 'package:product_service/utils/constants/api_enpoint.dart';
 import 'package:product_service/utils/constants/app_color.dart';
 import 'package:product_service/utils/constants/app_images.dart';
 import '../../../../component/bottom_navBar/nav_bar..dart';
+import '../../../../services/api/api_service.dart';
+import '../../../message_flow/presentation/controller/message_controller.dart';
 import '../../../post_add/controller/post_add_controller.dart';
 import '../../../product_store_flow/presentation/screen/store_details_page.dart';
 import '../../../profile_section/presentation/widget/app_drawer.dart';
@@ -53,8 +55,33 @@ class HomeScreen extends StatelessWidget {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Get.to(MessageScreen());
+        onPressed: () async {
+          try {
+            final response = await ApiService.get(ApiEndPoint.superAdmin); // আপনার এপিআই এন্ডপয়েন্ট অনুযায়ী দিন
+
+            if (response.isSuccess) {
+              var responseData = response.data;
+              String superAdminId = responseData['data']['_id'] ?? ""; // সুপার এডমিনের _id
+
+              if (superAdminId.isNotEmpty) {
+                final MessageController messageController = Get.put(MessageController());
+
+
+                messageController.createChat(
+                  participantId: superAdminId,
+                  communicationType: "support",
+                  referenceId: "",
+                  shopName: "Support",
+                );
+              } else {
+                Get.snackbar("Error", "Super Admin ID not found", backgroundColor: Colors.red, colorText: Colors.white);
+              }
+            } else {
+              Get.snackbar("Error", response.message, backgroundColor: Colors.red, colorText: Colors.white);
+            }
+          } catch (e) {
+            Get.snackbar("Error", e.toString(), backgroundColor: Colors.red, colorText: Colors.white);
+          }
         },
         backgroundColor: Colors.transparent,
         elevation: 0,

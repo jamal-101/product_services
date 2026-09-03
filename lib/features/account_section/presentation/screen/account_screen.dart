@@ -12,6 +12,7 @@ import '../../../../services/storage/storage_service.dart';
 import '../../../my_add/presentation/screen/my_add_screen.dart';
 import '../../../profile_section/presentation/controller/profile_controller.dart';
 import '../../../profile_section/presentation/screen/store_creation/presentation/screen/transection_history_screen.dart';
+import 'language_screen.dart';
 
 class AccountScreen extends StatelessWidget {
   const AccountScreen({super.key});
@@ -91,24 +92,24 @@ class AccountScreen extends StatelessWidget {
                         _buildSectionTitle(AppString.accounT),
                         _buildCardMenuItem(
                           Icons.person_outline,
-                          AppString.editeProfile,
-                          AppString.nameEx,
+                         'editeProfile'.tr,
+                          'nameEx'.tr,
                               () {
                             Get.toNamed(AppRoutes.editProfileScreen);
                           },
                         ),
                         _buildCardMenuItem(
                           Icons.credit_card,
-                          AppString.identity,
-                          AppString.uploadId,
+                          'identity'.tr,
+                          'uploadId'.tr,
                               () {
                             Get.toNamed(AppRoutes.identityVerificationScreen);
                           },
                         ),
                         _buildCardMenuItem(
                           Icons.lock_outline,
-                          AppString.changePassword,
-                          AppString.updateYour,
+                          'changePassword'.tr,
+                          'updateYour'.tr,
                               () {
                             Get.toNamed(AppRoutes.changePasswordScreen);
                           },
@@ -116,8 +117,8 @@ class AccountScreen extends StatelessWidget {
                         if (authController.selectedRole.value != 'seller') ...[
                           _buildCardMenuItem(
                             Icons.store,
-                            "Create Store",
-                            "Create your store",
+                            'createStore'.tr,
+                            'createYourStore'.tr,
                                 () {
                               Get.toNamed(AppRoutes.myStore);
                             },
@@ -145,8 +146,8 @@ class AccountScreen extends StatelessWidget {
                           ),
                           _buildCardMenuItem(
                             Icons.lock_clock,
-                            "Operating Hours",
-                            "09:00 AM – 09:00 PM (Mon - Sat)",
+                            'operatingHours'.tr,
+                            'operatingHoursTime'.tr,
                                 () {
                               Get.to(OperatingHoursScreen());
                             },
@@ -161,8 +162,8 @@ class AccountScreen extends StatelessWidget {
                           ),
                           _buildCardMenuItem(
                             Icons.add_shopping_cart,
-                            "My Adds",
-                            "See your add",
+                            'myAdds'.tr,
+                            'seeYourAdd'.tr,
                                 () {
                               Get.to(MyAddScreen());
                             },
@@ -174,8 +175,8 @@ class AccountScreen extends StatelessWidget {
                         _buildSectionTitle(AppString.settinG),
                         _buildCardMenuItem(
                           Icons.notifications_none,
-                          AppString.notifications,
-                          AppString.pushEmail,
+                          'notifications'.tr,
+                          'pushEmail'.tr,
                               () {
                             Get.toNamed(AppRoutes.notificationSettingScreen);
                           },
@@ -184,8 +185,8 @@ class AccountScreen extends StatelessWidget {
                         _buildSectionTitle("BILLING"),
                         _buildCardMenuItem(
                           Icons.balance,
-                          "Transaction History",
-                          "Payments, receipts & Stripe invoices",
+                          'transactionHistory'.tr,
+                          'payments,receipts&Stripeinvoices'.tr,
                               () {
                             Get.to(TransactionHistoryScreen());
                           },
@@ -201,18 +202,20 @@ class AccountScreen extends StatelessWidget {
                             Get.toNamed(AppRoutes.helpSupportScreen);
                           },
                         ),
+                        SizedBox(height: 20.h),
                         _buildCardMenuItem(
                           Icons.language,
-                          "Language",
-                          "Select Your Language",
+                          "language".tr,
+                          "selectLanguage".tr,
                               () {
-
+                            Get.to(() => const LanguageScreen());
                           },
                         ),
+
                         _buildCardMenuItem(
                           Icons.logout,
-                          AppString.logOut,
-                          AppString.singOut,
+                          'logOut'.tr,
+                           'singOut'.tr,
                               () {
                             Get.dialog(
                               AlertDialog(
@@ -220,14 +223,14 @@ class AccountScreen extends StatelessWidget {
                                   borderRadius: BorderRadius.circular(15.r),
                                 ),
                                 title: Text(
-                                  "Log Out",
+                                  'logOutTitle'.tr,
                                   style: GoogleFonts.montserrat(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 18.sp,
                                   ),
                                 ),
                                 content: Text(
-                                  "Are you sure you want to log out?",
+                                  'logOutMessage'.tr,
                                   style: GoogleFonts.montserrat(
                                     fontSize: 14.sp,
                                     color: Colors.grey.shade700,
@@ -237,7 +240,7 @@ class AccountScreen extends StatelessWidget {
                                   TextButton(
                                     onPressed: () => Get.back(),
                                     child: Text(
-                                      "Cancel",
+                                      'cancel'.tr,
                                       style: GoogleFonts.montserrat(
                                         color: Colors.grey,
                                         fontWeight: FontWeight.w600,
@@ -256,7 +259,7 @@ class AccountScreen extends StatelessWidget {
                                       Get.offAllNamed(AppRoutes.loginScreen);
                                     },
                                     child: Text(
-                                      "Yes, Logout",
+                                      'yesLogout'.tr,
                                       style: GoogleFonts.montserrat(
                                         color: Colors.white,
                                         fontWeight: FontWeight.bold,

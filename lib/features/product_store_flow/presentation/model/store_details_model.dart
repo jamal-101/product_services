@@ -60,6 +60,7 @@ class Store {
   CityData? cityId;
   CategoryData? categoryId;
   bool? isVerified;
+  StoreOwner? owner;
 
   Store({
     this.sId,
@@ -104,6 +105,7 @@ class Store {
     plan = json['plan'];
     listings = json['listings'];
     isVerified = json['isVerified'];
+    owner = json['owner'] != null ? StoreOwner.fromJson(json['owner']) : null;
   }
 }
 
@@ -164,5 +166,15 @@ class ServiceItem {
     description = json['description'];
     whatsIncluded = json['whatsIncluded'] != null ? List<String>.from(json['whatsIncluded']) : null;
     images = json['images'] != null ? List<String>.from(json['images']) : null;
+  }
+}
+
+class StoreOwner {
+  String? sId;
+
+  StoreOwner({this.sId});
+
+  StoreOwner.fromJson(Map<String, dynamic> json) {
+    sId = json['_id'];
   }
 }

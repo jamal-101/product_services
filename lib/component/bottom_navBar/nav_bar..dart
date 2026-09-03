@@ -45,13 +45,13 @@ class BottomNavBar extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                _buildNavItem(0, AppImages.homeIcon, AppString.home),
-                _buildNavItem(1, AppImages.listIcon, AppString.myList),
+                _buildNavItem(0, AppImages.homeIcon, 'home'.tr,),
+                _buildNavItem(1, AppImages.listIcon, 'myListing'.tr,),
                 if (authController.selectedRole.value == 'seller')
                   _buildMyStoreNavItem(2, AppImages.storeIcon, "My Store"),
 
-                _buildNavItem(3, AppImages.messageIcon, AppString.message),
-                _buildNavItem(4, AppImages.accountIcon, AppString.account),
+                _buildNavItem(3, AppImages.messageIcon, 'messages'.tr,),
+                _buildNavItem(4, AppImages.accountIcon, 'account'.tr,),
               ],
             ),
           ),
@@ -103,8 +103,8 @@ class BottomNavBar extends StatelessWidget {
               Text(
                 label,
                 style: GoogleFonts.montserrat(
-                  fontSize: 10.sp,
-                  color: isSelected ? activeColor : const Color(0xFF6B7280),
+                  fontSize: 12.sp,
+                  color: isSelected ? activeColor : const Color(0xFF1A1D24),
                   fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
                 ),
               ),

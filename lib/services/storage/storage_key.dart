@@ -11,4 +11,6 @@ class LocalStorageKeys {
   static const String hasSellerAccount = "hasSellerAccount";
   static const String sellerToken = "seller_token";
   static const String storeType = "storeType";
+  static const String languageCode = "languageCode";
+  static const String countryCode = "countryCode";
 }

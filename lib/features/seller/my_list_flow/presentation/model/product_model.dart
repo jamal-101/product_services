@@ -119,7 +119,8 @@ class StoreId {
   String? status;
   bool? isVerified;
   int? visitorCount;
-  int? averageRating;
+  // int? averageRating;
+  num? averageRating;
   int? ratingCount;
   List<String>? workingDays;
   String? openingTime;
@@ -187,6 +188,7 @@ class StoreId {
     status = json['status'];
     isVerified = json['isVerified'];
     visitorCount = json['visitorCount'];
+    // averageRating = json['averageRating'];
     averageRating = json['averageRating'];
     ratingCount = json['ratingCount'];
     workingDays = json['workingDays'].cast<String>();

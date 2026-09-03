@@ -8,8 +8,11 @@ import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:product_service/features/message_flow/screen/message_screen.dart';
 import '../../../../../component/bottom_navBar/nav_bar..dart';
+import '../../../../../services/api/api_service.dart';
+import '../../../../../utils/constants/api_enpoint.dart';
 import '../../../../../utils/constants/app_images.dart';
 import '../../../../home_flow/presentatin/screen/notification_screen.dart';
+import '../../../../message_flow/presentation/controller/message_controller.dart';
 import '../../../../post_add/controller/post_add_controller.dart';
 import '../../../../profile_section/presentation/widget/app_drawer.dart';
 import '../controller/seller_home_controller.dart';
@@ -51,8 +54,33 @@ class SellerHomeScreen extends StatelessWidget {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Get.to(MessageScreen());
+        onPressed: () async {
+          try {
+            final response = await ApiService.get(ApiEndPoint.superAdmin); // আপনার এপিআই এন্ডপয়েন্ট অনুযায়ী
+
+            if (response.isSuccess) {
+              var responseData = response.data;
+              String superAdminId = responseData['data']['_id'] ?? ""; // সুপার এডমিনের _id
+
+              if (superAdminId.isNotEmpty) {
+                final MessageController messageController = Get.put(MessageController());
+
+                // সাপোর্ট চ্যাট ক্রিয়েট করা হচ্ছে
+                messageController.createChat(
+                  participantId: superAdminId, // সুপার এডমিনের _id
+                  communicationType: "support", // টাইপ সাপোর্ট হবে
+                  referenceId: "", // সাপোর্ট চ্যাটে referenceId খালি থাকবে
+                  shopName: "Support",
+                );
+              } else {
+                Get.snackbar("Error", "Super Admin ID not found", backgroundColor: Colors.red, colorText: Colors.white);
+              }
+            } else {
+              Get.snackbar("Error", response.message, backgroundColor: Colors.red, colorText: Colors.white);
+            }
+          } catch (e) {
+            Get.snackbar("Error", e.toString(), backgroundColor: Colors.red, colorText: Colors.white);
+          }
         },
         backgroundColor: Colors.transparent,
         elevation: 0,

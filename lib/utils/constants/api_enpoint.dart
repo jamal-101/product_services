@@ -36,4 +36,5 @@ class ApiEndPoint {
   static const chats = "$baseUrl/chats";
   static const message = "$baseUrl/messages";
   static const sendMessage = "$baseUrl/messages/send-message";
+  static const superAdmin = "$baseUrl/users/super-admin";
 }

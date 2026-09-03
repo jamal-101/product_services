@@ -130,5 +130,47 @@ class MessageController extends GetxController {
       isLoadMoreLoading.value = false;
     }
   }
-}
 
+  Future<void> createChat({
+    required String participantId,
+    required String communicationType,
+    required String referenceId,
+    required String shopName,
+  }) async {
+    try {
+      final body = {
+        "participant": participantId,
+        "communicationType": communicationType,
+        "referenceId": referenceId,
+      };
+
+      final response = await ApiService.post(
+        "${ApiEndPoint.chats}/create-chat",
+        body: body,
+      );
+
+      if (response.isSuccess) {
+        String? chatId;
+        if (response.data != null && response.data['data'] != null) {
+          chatId = response.data['data']['_id'];
+        }
+
+        if (chatId != null) {
+          Get.toNamed(
+            AppRoutes.conversationScreen,
+            arguments: {'chatId': chatId, 'shopName': shopName},
+          );
+        }
+      } else {
+        Get.snackbar(
+          "Error",
+          response.message,
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+        );
+      }
+    } catch (e) {
+      appLog("Create chat error: $e");
+    }
+  }
+}
