@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:product_service/services/api/api_service.dart';
 import 'package:product_service/utils/constants/api_enpoint.dart';
-import '../model/faq_model.dart'; // আপনার প্রজেক্ট অনুযায়ী পাথ ঠিক করে নিন
+import '../model/faq_model.dart';
 
 class FaqController extends GetxController {
   var isLoading = false.obs;

@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:product_service/config/route/app_route.dart';
 import 'package:product_service/features/seller/my_list_flow/presentation/screen/add_product_screen.dart';
 import 'package:product_service/features/seller/my_list_flow/presentation/screen/my_list_screen.dart';
+import 'package:product_service/features/seller/my_store_flow/presentation/screen/my_store_screen.dart';
 import 'package:product_service/utils/constants/app_images.dart';
 import 'package:product_service/utils/constants/app_string.dart';
 import '../../features/auth_flow/presentation/controller/auth_controller.dart';
@@ -183,7 +184,7 @@ class BottomNavBar extends StatelessWidget {
             : Get.offAllNamed(AppRoutes.exploreStoriesScreen);
         break;
       case 2:
-        Get.offAll(() => AddProductScreen());
+        Get.offAll(() => MyStoreScreen());
         break;
       case 3:
         Get.offAllNamed(AppRoutes.messageScreen);

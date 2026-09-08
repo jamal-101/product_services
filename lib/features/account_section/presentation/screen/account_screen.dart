@@ -3,6 +3,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:product_service/features/account_section/presentation/screen/OperatingHoursScreen.dart';
+import 'package:product_service/features/account_section/presentation/screen/privacy_policy_screen.dart';
+import 'package:product_service/features/account_section/presentation/screen/safety_guidelines.dart';
+import 'package:product_service/features/account_section/presentation/screen/terms_and_conditation_screen.dart';
 import 'package:product_service/features/auth_flow/presentation/controller/auth_controller.dart';
 import 'package:product_service/utils/constants/api_enpoint.dart';
 import 'package:product_service/utils/constants/app_string.dart';
@@ -209,6 +212,30 @@ class AccountScreen extends StatelessWidget {
                           "selectLanguage".tr,
                               () {
                             Get.to(() => const LanguageScreen());
+                          },
+                        ),
+                        _buildCardMenuItem(
+                          Icons.security,
+                          "Safety Guidelines",
+                          "Rules and regulations for your safety",
+                              () {
+                            Get.to(() => const SafetyGuidelinesScreen());
+                          },
+                        ),
+                        _buildCardMenuItem(
+                          Icons.lock_outline,
+                          "Privacy Policy",
+                          "Your privacy and data security matter",
+                              () {
+                            Get.to(() => const PrivacyPolicyScreen());
+                          },
+                        ),
+                        _buildCardMenuItem(
+                          Icons.article,
+                          "Terms & Conditions",
+                          "Read our terms of service",
+                              () {
+                            Get.to(() => const TermsConditaionScreen());
                           },
                         ),
 

@@ -11,7 +11,7 @@ import '../../../../../component/bottom_navBar/nav_bar..dart';
 import '../../../../../services/api/api_service.dart';
 import '../../../../../utils/constants/api_enpoint.dart';
 import '../../../../../utils/constants/app_images.dart';
-import '../../../../home_flow/presentatin/screen/notification_screen.dart';
+import '../../../../notification/presentaiton/screen/notification_screen.dart';
 import '../../../../message_flow/presentation/controller/message_controller.dart';
 import '../../../../post_add/controller/post_add_controller.dart';
 import '../../../../profile_section/presentation/widget/app_drawer.dart';

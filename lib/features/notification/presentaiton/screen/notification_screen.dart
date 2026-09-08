@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import '../controller/notification_controller.dart';
+
 
 class NotificationScreen extends StatelessWidget {
   const NotificationScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+
+    final NotificationController controller = Get.put(NotificationController());
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -25,32 +31,49 @@ class NotificationScreen extends StatelessWidget {
           )
         ],
       ),
-      body: ListView(
-        padding: EdgeInsets.all(16.w),
-        children: [
-          _buildNotificationItem(
-            icon: Icons.percent,
-            title: "Flash Sale!",
-            desc: "Get 20% off on all electronics at Anytime store. Limited time offer!",
-            time: "10 min ago",
-            isNew: true,
-          ),
-          _buildNotificationItem(
-            icon: Icons.chat_bubble_outline,
-            title: "New Message",
-            desc: "Sarah from Organic Market replied to your inquiry.",
-            time: "2 hrs ago",
-            isNew: true,
-          ),
-          _buildNotificationItem(
-            icon: Icons.assignment_turned_in_outlined,
-            title: "New Message",
-            desc: "Sarah from Organic Market replied to your inquiry.",
-            time: "Oct 15",
-            isNew: false,
-          ),
-        ],
-      ),
+      body: Obx(() {
+
+        if (controller.isLoading.value) {
+          return const Center(
+            child: CircularProgressIndicator(color: Colors.orange),
+          );
+        }
+
+        if (controller.notificationList.isEmpty) {
+          return Center(
+            child: Text(
+              "No notifications found",
+              style: TextStyle(fontSize: 14.sp, color: Colors.grey),
+            ),
+          );
+        }
+
+
+        return ListView.builder(
+          padding: EdgeInsets.all(16.w),
+          itemCount: controller.notificationList.length,
+          itemBuilder: (context, index) {
+            var item = controller.notificationList[index];
+
+            IconData itemIcon = Icons.notifications_outlined;
+            if (item.type == 'sale') {
+              itemIcon = Icons.percent;
+            } else if (item.type == 'message') {
+              itemIcon = Icons.chat_bubble_outline;
+            }
+
+            bool isNew = !(item.read ?? true);
+
+            return _buildNotificationItem(
+              icon: itemIcon,
+              title: item.title ?? "Notification",
+              desc: item.text ?? "",
+              time: item.createdAt ?? "",
+              isNew: isNew,
+            );
+          },
+        );
+      }),
     );
   }
 
@@ -74,7 +97,7 @@ class NotificationScreen extends StatelessWidget {
         children: [
           CircleAvatar(
             radius: 20.r,
-            backgroundColor: const Color(0xFFE67E22).withOpacity(0.1),
+            backgroundColor: const Color(0xFFE67E22).withValues(alpha: 0.1),
             child: Icon(icon, color: const Color(0xFFE67E22), size: 18.w),
           ),
           SizedBox(width: 12.w),
@@ -85,7 +108,14 @@ class NotificationScreen extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(title, style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.bold)),
+                    Expanded(
+                      child: Text(
+                        title,
+                        style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.bold),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
                     Row(
                       children: [
                         if (isNew)

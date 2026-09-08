@@ -64,7 +64,7 @@ class Data {
 class Chat {
   String id;
   List<Participant> participants;
-  LastMessage lastMessage;
+  LastMessage? lastMessage;
   bool read;
   List<String> readBy;
   List<dynamic> deletedBy;
@@ -81,7 +81,7 @@ class Chat {
   Chat({
     required this.id,
     required this.participants,
-    required this.lastMessage,
+    this.lastMessage,
     required this.read,
     required this.readBy,
     required this.deletedBy,
@@ -102,10 +102,23 @@ class Chat {
 
   factory Chat.fromJson(Map<String, dynamic> json) => Chat(
     id: json["_id"] ?? "",
-    participants: List<Participant>.from(
+    // participants: List<Participant>.from(
+    //   json["participants"].map((x) => Participant.fromJson(x)),
+    // ),
+    // lastMessage: LastMessage.fromJson(json["lastMessage"]),
+
+
+    participants: json["participants"] != null
+        ? List<Participant>.from(
       json["participants"].map((x) => Participant.fromJson(x)),
-    ),
-    lastMessage: LastMessage.fromJson(json["lastMessage"]),
+    )
+        : [],
+
+    // ⭐ lastMessage যদি null হয় তবে ক্র্যাশ করবে না, null সেভ করবে
+    lastMessage: json["lastMessage"] != null
+        ? LastMessage.fromJson(json["lastMessage"])
+        : null,
+
     read: json["read"] ?? false,
     readBy: List<String>.from(json["readBy"].map((x) => x)),
     deletedBy: List<dynamic>.from(json["deletedBy"].map((x) => x)),
@@ -123,7 +136,8 @@ class Chat {
   Map<String, dynamic> toJson() => {
     "_id": id,
     "participants": List<dynamic>.from(participants.map((x) => x.toJson())),
-    "lastMessage": lastMessage.toJson(),
+    // "lastMessage": lastMessage.toJson(),
+    "lastMessage": lastMessage?.toJson(),
     "read": read,
     "readBy": List<dynamic>.from(readBy.map((x) => x)),
     "deletedBy": List<dynamic>.from(deletedBy.map((x) => x)),

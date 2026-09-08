@@ -21,7 +21,6 @@ class _ConversationScreenState extends State<ConversationScreen> {
   @override
   void initState() {
     super.initState();
-    // Use Get.find or Get.put but don't delete if already exists to avoid issues
     if (Get.isRegistered<ConversationController>()) {
       conversationController = Get.find<ConversationController>();
     } else {
@@ -32,9 +31,11 @@ class _ConversationScreenState extends State<ConversationScreen> {
   @override
   Widget build(BuildContext context) {
     String shopName = " ";
+    String? profileImage;
     if (Get.arguments != null) {
       if (Get.arguments is Map) {
         shopName = Get.arguments['shopName'] ?? " ";
+        profileImage = Get.arguments['profileImage'];
       } else if (Get.arguments is String) {
         shopName = Get.arguments;
       }
@@ -60,13 +61,29 @@ class _ConversationScreenState extends State<ConversationScreen> {
         ),
         title: Row(
           children: [
-            Container(
-              width: 35.w,
-              height: 35.w,
-              decoration: BoxDecoration(
-                color: Colors.green,
-                borderRadius: BorderRadius.circular(8.r),
-              ),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(8.r),
+              child: profileImage != null && profileImage.isNotEmpty
+                  ? Image.network(
+                      profileImage.startsWith('http')
+                          ? profileImage
+                          : "${ApiEndPoint.imageUrl}${profileImage.startsWith('/') ? '' : '/'}$profileImage",
+                      width: 35.w,
+                      height: 35.w,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) => Container(
+                        width: 35.w,
+                        height: 35.w,
+                        color: Colors.green,
+                        child: const Icon(Icons.store, color: Colors.white, size: 20),
+                      ),
+                    )
+                  : Container(
+                      width: 35.w,
+                      height: 35.w,
+                      color: Colors.green,
+                      child: const Icon(Icons.store, color: Colors.white, size: 20),
+                    ),
             ),
             SizedBox(width: 10.w),
             Column(

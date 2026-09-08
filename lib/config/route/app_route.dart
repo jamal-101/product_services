@@ -5,7 +5,7 @@ import 'package:product_service/features/account_section/presentation/screen/hel
 import 'package:product_service/features/account_section/presentation/screen/identity_verification_screen.dart';
 import 'package:product_service/features/home_flow/presentatin/controller/home_controller.dart';
 import 'package:product_service/features/home_flow/presentatin/screen/explore_stories_screen.dart';
-import 'package:product_service/features/home_flow/presentatin/screen/notification_screen.dart';
+import 'package:product_service/features/notification/presentaiton/screen/notification_screen.dart';
 import 'package:product_service/features/message_flow/screen/conversation_screen.dart';
 import 'package:product_service/features/message_flow/screen/message_screen.dart';
 import 'package:product_service/features/onboardin/presentation/screen/onboarding_screen.dart';
@@ -69,6 +69,7 @@ class AppRoutes {
       name: splashScreen,
       page: () => const SplashScreen(),
     ),
+
     GetPage(
       name: onboardingScreen,
       page: () => const OnboardingScreen(),

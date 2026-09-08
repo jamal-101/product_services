@@ -37,4 +37,9 @@ class ApiEndPoint {
   static const message = "$baseUrl/messages";
   static const sendMessage = "$baseUrl/messages/send-message";
   static const superAdmin = "$baseUrl/users/super-admin";
+  static const rulesGuidelines = "$baseUrl/rules/guidelines";
+  static const privacyPolicy = "$baseUrl/rules/privacy";
+  static const termsAndConditions = "$baseUrl/rules/terms";
+  static const notifications = "$baseUrl/notifications";
+  static const myStore = "$baseUrl/stores/me";
 }

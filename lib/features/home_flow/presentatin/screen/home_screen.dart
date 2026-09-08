@@ -3,7 +3,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:product_service/features/home_flow/presentatin/controller/home_controller.dart';
-import 'package:product_service/features/message_flow/screen/message_screen.dart';
 import 'package:product_service/utils/constants/api_enpoint.dart';
 import 'package:product_service/utils/constants/app_color.dart';
 import 'package:product_service/utils/constants/app_images.dart';
@@ -14,7 +13,7 @@ import '../../../post_add/controller/post_add_controller.dart';
 import '../../../product_store_flow/presentation/screen/store_details_page.dart';
 import '../../../profile_section/presentation/widget/app_drawer.dart';
 import '../model/city_model.dart';
-import 'notification_screen.dart';
+import '../../../notification/presentaiton/screen/notification_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -156,7 +155,6 @@ class HomeScreen extends StatelessWidget {
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(12.r),
                             color: Colors.grey[900],
-
                             image: banner.image != null && banner.image!.isNotEmpty
                                 ? DecorationImage(
                               image: NetworkImage("${ApiEndPoint.imageUrl}${banner.image}"),

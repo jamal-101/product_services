@@ -4,7 +4,9 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:product_service/features/auth_flow/presentation/controller/auth_controller.dart';
 import 'package:product_service/features/message_flow/presentation/controller/message_controller.dart';
+import 'package:product_service/features/message_flow/model/chat_model.dart';
 import 'package:product_service/services/storage/storage_service.dart';
+import 'package:product_service/utils/constants/api_enpoint.dart';
 import 'package:product_service/utils/constants/app_string.dart';
 import 'package:product_service/utils/constants/relative_time_extention.dart';
 import '../../../component/bottom_navBar/nav_bar..dart';
@@ -61,7 +63,6 @@ class MessageScreen extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 16.h),
-              // মেসেজ লিস্ট
               Expanded(
                 child: RefreshIndicator(
                   onRefresh: () async {
@@ -87,28 +88,41 @@ class MessageScreen extends StatelessWidget {
                         ],
                       );
                     }
-
                     return ListView.builder(
-                      
                       controller: messageController.scrollController,
                       physics: const AlwaysScrollableScrollPhysics(),
                       itemCount: messageController.chats.length + 1,
                       itemBuilder: (context, index) {
                         if (index < messageController.chats.length) {
                           final chat = messageController.chats[index];
+                          
+                          // Find the other participant to show their info
+                          final otherParticipant = chat.participants.firstWhere(
+                            (p) => p.id != userId,
+                            orElse: () => chat.participants.isNotEmpty
+                                ? chat.participants[0]
+                                : Participant(
+                                    id: "",
+                                    name: "User",
+                                    role: "",
+                                    activeRole: "",
+                                    email: "",
+                                    profileImage: "",
+                                  ),
+                          );
+
                           return _buildMessageItem(
                             chatId: chat.id,
-                            shopName: chat.participants.isNotEmpty
-                                ? chat.participants[0].name
-                                : "",
-                            lastMessage: chat.lastMessage.type != "text"
+                            shopName: otherParticipant.name,
+                            profileImage: otherParticipant.profileImage,
+                            lastMessage: chat.lastMessage?.type != "text" &&
+                                    chat.lastMessage?.image != null &&
+                                    chat.lastMessage!.image.isNotEmpty
                                 ? "image"
-                                : chat.lastMessage.text,
+                                : chat.lastMessage?.text,
                             time: chat.createdAt.toRelativeTime(fallback: ""),
                           );
                         }
-
-                        // Bottom Pagination Loading / No More Data Message
                         if (messageController.isLoadMoreLoading.value) {
                           return Padding(
                             padding: EdgeInsets.symmetric(vertical: 16.h),
@@ -117,7 +131,6 @@ class MessageScreen extends StatelessWidget {
                             ),
                           );
                         }
-
                         if (!messageController.hasMore.value &&
                             messageController.chats.isNotEmpty) {
                           return Padding(
@@ -133,7 +146,6 @@ class MessageScreen extends StatelessWidget {
                             ),
                           );
                         }
-
                         return const SizedBox.shrink();
                       },
                     );
@@ -150,6 +162,7 @@ class MessageScreen extends StatelessWidget {
   Widget _buildMessageItem({
     String? chatId,
     String? shopName,
+    String? profileImage,
     String? lastMessage,
     String? time,
   }) {
@@ -160,6 +173,7 @@ class MessageScreen extends StatelessWidget {
           arguments: {
             'chatId': chatId,
             'shopName': shopName,
+            'profileImage': profileImage,
           },
         );
       },
@@ -180,14 +194,29 @@ class MessageScreen extends StatelessWidget {
         ),
         child: Row(
           children: [
-            Container(
-              width: 50.w,
-              height: 50.w,
-              decoration: BoxDecoration(
-                color: Colors.grey.shade100,
-                borderRadius: BorderRadius.circular(12.r),
-              ),
-              child: const Icon(Icons.store, color: Colors.orange),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(12.r),
+              child: profileImage != null && profileImage.isNotEmpty
+                  ? Image.network(
+                      profileImage.startsWith('http')
+                          ? profileImage
+                          : "${ApiEndPoint.imageUrl}${profileImage.startsWith('/') ? '' : '/'}$profileImage",
+                      width: 50.w,
+                      height: 50.w,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) => Container(
+                        width: 50.w,
+                        height: 50.w,
+                        color: Colors.grey.shade100,
+                        child: const Icon(Icons.store, color: Colors.orange),
+                      ),
+                    )
+                  : Container(
+                      width: 50.w,
+                      height: 50.w,
+                      color: Colors.grey.shade100,
+                      child: const Icon(Icons.store, color: Colors.orange),
+                    ),
             ),
             SizedBox(width: 12.w),
             // মেসেজ ডিটেইলস
