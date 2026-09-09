@@ -110,7 +110,7 @@ class VerifyPhoneScreen extends StatelessWidget {
                         children: [
                           TextSpan(text: AppString.donH),
                           TextSpan(
-                            text: " ${AppString.resendIn} $formattedTime",
+                            text: " ${AppString.resendIn.tr} $formattedTime",
                             style: GoogleFonts.plusJakartaSans(
                               color: AppColor.primary,
                               fontWeight: FontWeight.w700,
@@ -154,7 +154,7 @@ class VerifyPhoneScreen extends StatelessWidget {
                       child: controller.isLoading.value
                           ? const CircularProgressIndicator(color: Colors.white)
                           : Text(
-                        AppString.verifyAndContinue,
+                        AppString.verifyAndContinue.tr,
                         style: GoogleFonts.plusJakartaSans(
                           fontSize: 16.sp,
                           color: Colors.white,

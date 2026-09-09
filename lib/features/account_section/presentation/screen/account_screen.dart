@@ -8,6 +8,7 @@ import 'package:product_service/features/account_section/presentation/screen/saf
 import 'package:product_service/features/account_section/presentation/screen/terms_and_conditation_screen.dart';
 import 'package:product_service/features/auth_flow/presentation/controller/auth_controller.dart';
 import 'package:product_service/utils/constants/api_enpoint.dart';
+import 'package:product_service/utils/constants/app_images.dart';
 import 'package:product_service/utils/constants/app_string.dart';
 import '../../../../component/bottom_navBar/nav_bar..dart';
 import '../../../../config/route/app_route.dart';
@@ -92,7 +93,7 @@ class AccountScreen extends StatelessWidget {
                         if (authController.selectedRole.value == 'seller') ...[
                           _buildGrowthPlanBanner(),
                         ],
-                        _buildSectionTitle(AppString.accounT),
+                        _buildSectionTitle('accounT'.tr),
                         _buildCardMenuItem(
                           Icons.person_outline,
                          'editeProfile'.tr,
@@ -128,11 +129,11 @@ class AccountScreen extends StatelessWidget {
                           ),
                         ],
                         if (authController.selectedRole.value == 'seller') ...[
-                          _buildSectionTitle(AppString.storeSetting),
+                          _buildSectionTitle('storeSetting'.tr),
                           _buildCardMenuItem(
                             Icons.storefront_outlined,
-                            AppString.branding,
-                            AppString.nameDescription,
+                            'branding'.tr,
+                            'nameDescription'.tr,
                                 () {
                               Get.toNamed(
                                 AppRoutes.editeBindingScreen,
@@ -141,8 +142,8 @@ class AccountScreen extends StatelessWidget {
                           ),
                           _buildCardMenuItem(
                             Icons.phone_outlined,
-                            AppString.contactDetails,
-                            AppString.phoneWhatUp,
+                            'contactDetails'.tr,
+                            'phoneWhatUp'.tr,
                                 () {
                               Get.toNamed(AppRoutes.editContactDetailsScreen);
                             },
@@ -157,8 +158,8 @@ class AccountScreen extends StatelessWidget {
                           ),
                           _buildCardMenuItem(
                             Icons.description_outlined,
-                            AppString.legalDocuments,
-                            AppString.tradeLicense,
+                            'legalDocuments'.tr,
+                            'tradeLicense'.tr,
                                 () {
                               Get.toNamed(AppRoutes.editLegalDocumentsScreen);
                             },
@@ -175,7 +176,7 @@ class AccountScreen extends StatelessWidget {
                         ],
 
                         SizedBox(height: 20.h),
-                        _buildSectionTitle(AppString.settinG),
+                        _buildSectionTitle('settinG'.tr),
                         _buildCardMenuItem(
                           Icons.notifications_none,
                           'notifications'.tr,
@@ -196,11 +197,11 @@ class AccountScreen extends StatelessWidget {
                         ),
 
                         SizedBox(height: 20.h),
-                        _buildSectionTitle(AppString.support),
+                        _buildSectionTitle('support'.tr),
                         _buildCardMenuItem(
                           Icons.help_outline,
-                          AppString.helpAndSupport,
-                          AppString.FAQand,
+                          'helpAndSupport'.tr,
+                          AppString.FAQand.tr,
                               () {
                             Get.toNamed(AppRoutes.helpSupportScreen);
                           },
@@ -329,7 +330,7 @@ class AccountScreen extends StatelessWidget {
                       (userData?.profileImage != null &&
                           userData!.profileImage!.isNotEmpty)
                           ? "${ApiEndPoint.imageUrl}${userData.profileImage}"
-                          : "https://via.placeholder.com/150",
+                          : AppImages.buyerImage,
                     ),
                   ),
                 ),
@@ -434,7 +435,7 @@ class AccountScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  AppString.growthPlan,
+                  'growthPlan'.tr,
                   style: GoogleFonts.montserrat(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
@@ -462,7 +463,7 @@ class AccountScreen extends StatelessWidget {
                 borderRadius: BorderRadius.circular(8.r),
               ),
               child: Text(
-                AppString.manage,
+                'manage'.tr,
                 style: GoogleFonts.montserrat(
                   color: const Color(0xFF2A9B4A),
                   fontWeight: FontWeight.bold,

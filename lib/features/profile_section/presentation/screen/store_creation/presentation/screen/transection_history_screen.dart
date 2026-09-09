@@ -35,7 +35,7 @@ class TransactionHistoryScreen extends StatelessWidget {
           ),
         ),
         title: Text(
-          "Transaction History",
+          'transactionHistoryTitle'.tr,
           style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 18.sp),
         ),
       ),
@@ -78,8 +78,6 @@ class TransactionHistoryScreen extends StatelessWidget {
                     String date = item.createdAt != null
                         ? (item.createdAt!.length >= 10 ? item.createdAt!.substring(0, 10) : item.createdAt!)
                         : "";
-
-                    // int বা double যাই আসুক না কেন সেফলি ডাবলে কনভার্ট করার জন্য
                     double amount = (item.amountPaid ?? 0).toDouble();
 
                     return Container(

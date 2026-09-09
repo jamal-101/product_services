@@ -34,13 +34,13 @@ class VerifyOtpScreen extends StatelessWidget {
                     ),
                     children: [
                       TextSpan(
-                        text: AppString.verify,
+                        text: AppString.verify.tr,
                         style: GoogleFonts.plusJakartaSans(
                           color: AppColor.textDark,
                         ),
                       ),
                       TextSpan(
-                        text: AppString.otp,
+                        text: AppString.otp.tr,
                         style: GoogleFonts.plusJakartaSans(
                           color: AppColor.accent,
                         ),
@@ -52,7 +52,7 @@ class VerifyOtpScreen extends StatelessWidget {
                 Wrap(
                   children: [
                     Text(
-                      AppString.weSent,
+                      AppString.weSent.tr,
                       style: GoogleFonts.plusJakartaSans(
                         fontSize: 14.sp,
                         color: AppColor.textLight,
@@ -127,7 +127,7 @@ class VerifyOtpScreen extends StatelessWidget {
                           color: AppColor.textLight,
                         ),
                         children: [
-                          const TextSpan(text: AppString.resendOtp),
+                           TextSpan(text: AppString.resendOtp.tr),
                           TextSpan(
                             text: " ${controller.resendCountdown.value}s",
                             style: GoogleFonts.plusJakartaSans(

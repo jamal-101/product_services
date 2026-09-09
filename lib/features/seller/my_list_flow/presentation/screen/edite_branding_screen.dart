@@ -21,7 +21,7 @@ class EditBrandingScreen extends StatelessWidget {
           onPressed: () => Get.back(),
         ),
         title: Text(
-          "Edit Branding",
+          'editBranding'.tr,
           style: GoogleFonts.montserrat(
             color: Colors.black,
             fontSize: 18.sp,
@@ -34,13 +34,13 @@ class EditBrandingScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text("Display Shop Name", style: GoogleFonts.montserrat(fontWeight: FontWeight.bold, fontSize: 13.sp)),
+            Text('displayShopName'.tr, style: GoogleFonts.montserrat(fontWeight: FontWeight.bold, fontSize: 13.sp)),
             SizedBox(height: 8.h),
             TextField(
               controller: controller.displayNameController,
               maxLength: 60,
               decoration: InputDecoration(
-                hintText: "e.g. Le Reve Organics",
+                hintText: 'displayShopNameHint'.tr,
                 hintStyle: GoogleFonts.montserrat(color: Colors.grey.shade400, fontSize: 14.sp),
                 border: OutlineInputBorder(borderRadius: BorderRadius.circular(12.r), borderSide: BorderSide(color: Colors.grey.shade300)),
                 enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12.r), borderSide: BorderSide(color: Colors.grey.shade300)),
@@ -49,14 +49,14 @@ class EditBrandingScreen extends StatelessWidget {
             ),
             SizedBox(height: 10.h),
 
-            Text("Description", style: GoogleFonts.montserrat(fontWeight: FontWeight.bold, fontSize: 13.sp)),
+            Text('description'.tr, style: GoogleFonts.montserrat(fontWeight: FontWeight.bold, fontSize: 13.sp)),
             SizedBox(height: 8.h),
             TextField(
               controller: controller.descriptionController,
               maxLines: 4,
               maxLength: 300,
               decoration: InputDecoration(
-                hintText: "Describe what you sell and what makes your shop unique.",
+                hintText: 'descriptionHint'.tr,
                 hintStyle: GoogleFonts.montserrat(color: Colors.grey.shade400, fontSize: 14.sp),
                 border: OutlineInputBorder(borderRadius: BorderRadius.circular(12.r), borderSide: BorderSide(color: Colors.grey.shade300)),
                 enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12.r), borderSide: BorderSide(color: Colors.grey.shade300)),
@@ -65,7 +65,7 @@ class EditBrandingScreen extends StatelessWidget {
             ),
             SizedBox(height: 10.h),
 
-            Text("Category", style: GoogleFonts.montserrat(fontWeight: FontWeight.bold, fontSize: 13.sp)),
+            Text('category'.tr, style: GoogleFonts.montserrat(fontWeight: FontWeight.bold, fontSize: 13.sp)),
             SizedBox(height: 8.h),
             Obx(() => controller.isCategoryLoading.value
                 ? const Center(child: CircularProgressIndicator())
@@ -81,7 +81,7 @@ class EditBrandingScreen extends StatelessWidget {
                       controller.categoryList.any((cat) => cat.sId == controller.selectedCategoryId.value)
                       ? controller.selectedCategoryId.value
                       : null,
-                  hint: Text("Select Category", style: GoogleFonts.montserrat(fontSize: 14.sp, color: Colors.black87)),
+                  hint: Text('selectCategory'.tr, style: GoogleFonts.montserrat(fontSize: 14.sp, color: Colors.black87)),
                   isExpanded: true,
                   icon: const Icon(Icons.keyboard_arrow_down, color: Colors.grey),
                   items: controller.categoryList.map((category) {
@@ -107,7 +107,7 @@ class EditBrandingScreen extends StatelessWidget {
             ),
             ),
             SizedBox(height: 20.h),
-            Text("Branding", style: GoogleFonts.montserrat(fontWeight: FontWeight.bold, fontSize: 14.sp)),
+            Text('brandingSection'.tr, style: GoogleFonts.montserrat(fontWeight: FontWeight.bold, fontSize: 14.sp)),
             SizedBox(height: 10.h),
             Container(
               padding: EdgeInsets.all(15.w),
@@ -135,8 +135,8 @@ class EditBrandingScreen extends StatelessWidget {
                           children: [
                             Icon(Icons.image, color: Colors.green, size: 28.sp),
                             SizedBox(height: 5.h),
-                            Text("Logo", style: GoogleFonts.montserrat(fontWeight: FontWeight.bold, fontSize: 12.sp)),
-                            Text("Square, 500x500 px", style: GoogleFonts.montserrat(color: Colors.grey, fontSize: 9.sp)),
+                            Text('logo'.tr, style: GoogleFonts.montserrat(fontWeight: FontWeight.bold, fontSize: 12.sp)),
+                            Text('logoSize'.tr, style: GoogleFonts.montserrat(color: Colors.grey, fontSize: 9.sp)),
                           ],
                         )),
                       ),
@@ -161,8 +161,8 @@ class EditBrandingScreen extends StatelessWidget {
                           children: [
                             Icon(Icons.image, color: Colors.green, size: 28.sp),
                             SizedBox(height: 5.h),
-                            Text("Cover", style: GoogleFonts.montserrat(fontWeight: FontWeight.bold, fontSize: 12.sp)),
-                            Text("16:9 ratio", style: GoogleFonts.montserrat(color: Colors.grey, fontSize: 9.sp)),
+                            Text('cover'.tr, style: GoogleFonts.montserrat(fontWeight: FontWeight.bold, fontSize: 12.sp)),
+                            Text('coverRatio'.tr, style: GoogleFonts.montserrat(color: Colors.grey, fontSize: 9.sp)),
                           ],
                         )),
                       ),
@@ -182,8 +182,8 @@ class EditBrandingScreen extends StatelessWidget {
                 ),
                 onPressed: () => controller.updateStore(),
                 child: Obx(() => controller.isLoading.value
-                    ? const CircularProgressIndicator(color: Colors.white)
-                    : Text("Save Changes", style: GoogleFonts.montserrat(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16.sp))),
+                    ? CircularProgressIndicator(color: Colors.white)
+                    : Text('saveChanges'.tr, style: GoogleFonts.montserrat(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16.sp))),
               ),
             ),
           ],

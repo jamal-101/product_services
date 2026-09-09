@@ -99,7 +99,7 @@ class SelectRoleScreen extends StatelessWidget {
       child: Column(
         children: [
             Padding(
-              padding: EdgeInsets.all(12.r), // ইমেজের চারদিকে কিছুটা স্পেস দেয়ার জন্য
+              padding: EdgeInsets.all(12.r),
               child: Image.asset(
                 assetPath,
               ),

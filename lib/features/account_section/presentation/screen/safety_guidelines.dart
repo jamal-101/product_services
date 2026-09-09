@@ -5,6 +5,7 @@ import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_instance/src/extension_instance.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
+import 'package:get/get_utils/src/extensions/internacionalization.dart';
 import '../../../../utils/constants/app_color.dart';
 import '../controller/support_controller.dart';
 
@@ -34,8 +35,8 @@ class SafetyGuidelinesScreen extends StatelessWidget {
             ),
           ),
         ),
-        title: const Text(
-          "Safety Guidelines",
+        title: Text(
+          'safetyGuidelines'.tr,
           style: TextStyle(
             color: Colors.black,
             fontWeight: FontWeight.bold,

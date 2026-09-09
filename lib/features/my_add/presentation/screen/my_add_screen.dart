@@ -46,7 +46,7 @@ class MyAddScreen extends StatelessWidget {
           ),
         ),
         title: Text(
-          "My Ads",
+          'myAdds'.tr,
           style: GoogleFonts.montserrat(
             color: Colors.black,
             fontWeight: FontWeight.bold,
@@ -64,7 +64,7 @@ class MyAddScreen extends StatelessWidget {
           if (controller.myAds.isEmpty) {
             return Center(
               child: Text(
-                "No advertisements found",
+                'noAdsFound'.tr,
                 style: GoogleFonts.plusJakartaSans(
                   fontSize: 16.sp,
                   color: Colors.grey.shade600,

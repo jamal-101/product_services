@@ -29,8 +29,8 @@ class TermsConditaionScreen extends StatelessWidget {
             ),
           ),
         ),
-        title: const Text(
-          "Privacy Policy",
+        title: Text(
+         'termsAndConditions'.tr,
           style: TextStyle(
             color: Colors.black,
             fontWeight: FontWeight.bold,

@@ -23,7 +23,7 @@ class OperatingHoursScreen extends StatelessWidget {
           onPressed: () => Get.back(),
         ),
         title: Text(
-          "Operating Hours",
+            'operatingHours'.tr,
           style: GoogleFonts.montserrat(color: Colors.black, fontSize: 18.sp, fontWeight: FontWeight.bold),
         ),
       ),
@@ -48,8 +48,8 @@ class OperatingHoursScreen extends StatelessWidget {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text("Operating Schedule", style: GoogleFonts.montserrat(fontWeight: FontWeight.bold, fontSize: 14.sp)),
-                          Text("Set opening hours & working days", style: GoogleFonts.montserrat(color: Colors.grey, fontSize: 11.sp)),
+                          Text('operatingSchedule'.tr, style: GoogleFonts.montserrat(fontWeight: FontWeight.bold, fontSize: 14.sp)),
+                          Text('setOpeningHours'.tr, style: GoogleFonts.montserrat(color: Colors.grey, fontSize: 11.sp)),
                         ],
                       ),
                       Container(
@@ -59,7 +59,7 @@ class OperatingHoursScreen extends StatelessWidget {
                           children: [
                             const Icon(Icons.access_time, size: 14, color: Colors.green),
                             SizedBox(width: 5.w),
-                            Text("Open 24/7", style: GoogleFonts.montserrat(fontSize: 11.sp, fontWeight: FontWeight.w600)),
+                            Text('open247'.tr, style: GoogleFonts.montserrat(fontSize: 11.sp, fontWeight: FontWeight.w600)),
                           ],
                         ),
                       ),
@@ -68,7 +68,7 @@ class OperatingHoursScreen extends StatelessWidget {
                   SizedBox(height: 15.h),
 
                   // Working Days Selection Tags
-                  Text("Working Days", style: GoogleFonts.montserrat(fontWeight: FontWeight.bold, fontSize: 12.sp)),
+                  Text('workingDays'.tr, style: GoogleFonts.montserrat(fontWeight: FontWeight.bold, fontSize: 12.sp)),
                   SizedBox(height: 10.h),
                   Wrap(
                     spacing: 8.w,
@@ -93,7 +93,7 @@ class OperatingHoursScreen extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text("Opening Time", style: GoogleFonts.montserrat(fontSize: 12.sp, fontWeight: FontWeight.bold)),
+                            Text('openingTime'.tr, style: GoogleFonts.montserrat(fontSize: 12.sp, fontWeight: FontWeight.bold)),
                             SizedBox(height: 5.h),
                             TextField(
                               controller: controller.openingTimeController,
@@ -112,7 +112,7 @@ class OperatingHoursScreen extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text("Closing Time", style: GoogleFonts.montserrat(fontSize: 12.sp, fontWeight: FontWeight.bold)),
+                            Text('closingTime'.tr, style: GoogleFonts.montserrat(fontSize: 12.sp, fontWeight: FontWeight.bold)),
                             SizedBox(height: 5.h),
                             TextField(
                               controller: controller.closingTimeController,
@@ -142,7 +142,7 @@ class OperatingHoursScreen extends StatelessWidget {
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
                 ),
                 onPressed: () => controller.updateStore(),
-                child: Text("Save Changes", style: GoogleFonts.montserrat(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16.sp)),
+                child: Text('saveChanges'.tr, style: GoogleFonts.montserrat(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16.sp)),
               ),
             ),
           ],

@@ -359,11 +359,11 @@ class LoginScreen extends StatelessWidget {
                     ),
                     children: [
                       TextSpan(
-                        text: AppString.welcome,
+                        text: AppString.welcome.tr,
                         style: GoogleFonts.plusJakartaSans(color: AppColor.textDark),
                       ),
                       TextSpan(
-                        text: AppString.back,
+                        text: AppString.back.tr,
                         style: GoogleFonts.plusJakartaSans(color: AppColor.accent),
                       ),
                     ],
@@ -371,7 +371,7 @@ class LoginScreen extends StatelessWidget {
                 ),
                 SizedBox(height: 8.h),
                 Text(
-                  AppString.loginTo,
+                  AppString.loginTo.tr,
                   style: GoogleFonts.plusJakartaSans(fontSize: 14.sp, color: AppColor.textLight),
                 ),
                 SizedBox(height: 32.h),
@@ -516,7 +516,7 @@ class LoginScreen extends StatelessWidget {
                   child: TextButton(
                     onPressed: () => Get.toNamed(AppRoutes.forgetPassword),
                     child: Text(
-                      AppString.forgotPassword,
+                      AppString.forgotPassword.tr,
                       style: GoogleFonts.plusJakartaSans(
                         color: AppColor.primary,
                         fontSize: 13.sp,
@@ -568,7 +568,7 @@ class LoginScreen extends StatelessWidget {
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 10.w),
                       child: Text(
-                        AppString.or,
+                        AppString.or.tr,
                         style: GoogleFonts.plusJakartaSans(
                           color: AppColor.textLight,
                           fontSize: 12.sp,
@@ -599,7 +599,7 @@ class LoginScreen extends StatelessWidget {
                         Image.asset(AppImages.googleIcon, height: 30.h, width: 30.w),
                         SizedBox(width: 8.w),
                         Text(
-                          AppString.continueWithGoogle,
+                          AppString.continueWithGoogle.tr,
                           style: GoogleFonts.plusJakartaSans(
                             fontSize: 14.sp,
                             color: const Color(0xFF1A1D24),
@@ -620,9 +620,9 @@ class LoginScreen extends StatelessWidget {
                         color: const Color(0xFF7A818F),
                       ),
                       children: [
-                        TextSpan(text: AppString.donH),
+                        TextSpan(text: AppString.donH.tr),
                         TextSpan(
-                          text: AppString.register,
+                          text: AppString.register.tr,
                           style: GoogleFonts.plusJakartaSans(
                             color: AppColor.primary,
                             fontSize: 14.sp,

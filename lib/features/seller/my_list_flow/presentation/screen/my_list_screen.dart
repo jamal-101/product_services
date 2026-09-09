@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:product_service/utils/constants/app_color.dart';
+import 'package:product_service/utils/constants/app_images.dart';
 import 'package:shimmer/shimmer.dart';
 import '../../../../../component/bottom_navBar/nav_bar..dart';
 import '../../../../../utils/constants/api_enpoint.dart';
@@ -119,7 +120,7 @@ class MyListingScreen extends StatelessWidget {
               itemId = item.sId;
             }
 
-            String imageUrl = "https://via.placeholder.com/150";
+            String imageUrl = AppImages.buyerImage;
             if (images != null && images.isNotEmpty) {
               String rawPath = images.first;
               if (rawPath.startsWith('http')) {

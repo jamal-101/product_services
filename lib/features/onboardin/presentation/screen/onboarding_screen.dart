@@ -11,24 +11,24 @@ import '../model/onboarding_model.dart';
 
 final List<OnboardingModel> onboardingData = [
   OnboardingModel(
-    titleFirst: AppString.find,
-    titleHighlight: AppString.trusted,
-    titleLast: AppString.localStores,
-    description: AppString.description1,
+    titleFirst: 'find'.tr,
+    titleHighlight: 'trusted'.tr,
+    titleLast: 'localStores'.tr,
+    description: 'findLocalStoresDesc'.tr,
     image: AppImages.splash1,
   ),
   OnboardingModel(
-    titleFirst: AppString.chat ,
-    titleHighlight: AppString.directly,
-    titleLast: AppString.withSellers,
-    description: AppString.description2,
+    titleFirst: 'chat'.tr ,
+    titleHighlight: AppString.directly.tr,
+    titleLast: 'withSellers'.tr,
+    description: AppString.description2.tr,
     image: AppImages.splash2,
   ),
   OnboardingModel(
-    titleFirst: AppString.promoteYour,
-    titleHighlight: AppString.business,
+    titleFirst: AppString.promoteYour.tr,
+    titleHighlight: AppString.business.tr,
     titleLast: "",
-    description: AppString.description3,
+    description: AppString.description3.tr,
     image: AppImages.splash3,
   ),
 ];
@@ -53,7 +53,7 @@ class OnboardingScreen extends StatelessWidget {
                 Get.toNamed(AppRoutes.loginScreen);
               },
               child: Text(
-                AppString.skip,
+                AppString.skip.tr,
                 style: GoogleFonts.plusJakartaSans(
                   color: Colors.black54,
                   fontWeight: FontWeight.w600,
@@ -156,8 +156,8 @@ class OnboardingScreen extends StatelessWidget {
                         children: [
                           Text(
                             controller.currentIndex.value == onboardingData.length - 1
-                                ? AppString.getStarted
-                                : AppString.next,
+                                ? AppString.getStarted.tr
+                                : AppString.next.tr,
                             style: GoogleFonts.plusJakartaSans(
                               fontSize: 16.sp,
                               color: Colors.white,

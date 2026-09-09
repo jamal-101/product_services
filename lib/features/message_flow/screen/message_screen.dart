@@ -32,7 +32,7 @@ class MessageScreen extends StatelessWidget {
           centerTitle: false,
           elevation: 0,
           title: Text(
-            AppString.message,
+            'messages'.tr,
             style: GoogleFonts.montserrat(
               color: Colors.black,
               fontSize: 20.sp,
@@ -56,7 +56,7 @@ class MessageScreen extends StatelessWidget {
                   onChanged: messageController.onSearchChanged,
                   decoration: InputDecoration(
                     icon: const Icon(Icons.search, color: Colors.grey),
-                    hintText: AppString.searchConversation,
+                    hintText: AppString.searchConversation.tr,
                     hintStyle: GoogleFonts.montserrat(color: Colors.grey),
                     border: InputBorder.none,
                   ),

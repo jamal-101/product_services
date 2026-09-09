@@ -34,14 +34,14 @@ class ForgetPasswordScreen extends StatelessWidget {
                       text: TextSpan(
                         style: TextStyle(fontSize: 28.sp, fontWeight: FontWeight.bold),
                         children: [
-                          TextSpan(text: AppString.forgot, style: TextStyle(color: AppColor.textDark)),
+                          TextSpan(text: AppString.forgot.tr, style: TextStyle(color: AppColor.textDark)),
                           TextSpan(text: "${AppString.password}?", style: TextStyle(color: AppColor.accent)),
                         ],
                       ),
                     ),
                     SizedBox(height: 8.h),
                     Text(
-                      AppString.noWorries,
+                      AppString.noWorries.tr,
                       style: TextStyle(fontSize: 14.sp, color: AppColor.textLight, height: 1.4),
                     ),
                     SizedBox(height: 32.h),
@@ -99,7 +99,7 @@ class ForgetPasswordScreen extends StatelessWidget {
                         child: controller.isForgotLoading.value
                             ? const CircularProgressIndicator(color: Colors.white)
                             : Text(
-                          AppString.sendOtp,
+                          AppString.sendOtp.tr,
                           style: GoogleFonts.plusJakartaSans(fontSize: 16.sp, color: Colors.white, fontWeight: FontWeight.bold),
                         ),
                       ),

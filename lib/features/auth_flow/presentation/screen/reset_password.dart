@@ -246,7 +246,7 @@ class ResetPasswordScreen extends StatelessWidget {
                     ),
                     children: [
                       TextSpan(
-                        text: AppString.reset,
+                        text: AppString.reset.tr,
                         style: GoogleFonts.plusJakartaSans(color: AppColor.textDark),
                       ),
                       TextSpan(
@@ -258,14 +258,14 @@ class ResetPasswordScreen extends StatelessWidget {
                 ),
                 SizedBox(height: 8.h),
                 Text(
-                  AppString.createNew,
+                  AppString.createNew.tr,
                   style: GoogleFonts.plusJakartaSans(fontSize: 14.sp, color: AppColor.textLight),
                 ),
                 SizedBox(height: 32.h),
 
                 // নতুন পাসওয়ার্ড ফিল্ড
                 Text(
-                  AppString.newPassword,
+                  AppString.newPassword.tr,
                   style: GoogleFonts.plusJakartaSans(
                     fontSize: 14.sp,
                     fontWeight: FontWeight.w500,
@@ -287,7 +287,7 @@ class ResetPasswordScreen extends StatelessWidget {
                       return null;
                     },
                     decoration: InputDecoration(
-                      hintText: AppString.createStrong,
+                      hintText: AppString.createStrong.tr,
                       prefixIcon: Padding(
                         padding: EdgeInsets.only(left: 12.sp, right: 5.sp, top: 12.sp, bottom: 12.sp),
                         child: Image.asset(AppImages.lockIcon, height: 5.h, width: 5),
@@ -337,7 +337,7 @@ class ResetPasswordScreen extends StatelessWidget {
 
                 // কনফার্ম পাসওয়ার্ড ফিল্ড
                 Text(
-                  AppString.confirmNew,
+                  AppString.confirmNew.tr,
                   style: GoogleFonts.plusJakartaSans(
                     fontSize: 14.sp,
                     fontWeight: FontWeight.w500,
@@ -359,7 +359,7 @@ class ResetPasswordScreen extends StatelessWidget {
                       return null;
                     },
                     decoration: InputDecoration(
-                      hintText: AppString.reEnter,
+                      hintText: AppString.reEnter.tr,
                       prefixIcon: Padding(
                         padding: EdgeInsets.only(left: 12.sp, right: 5.sp, top: 12.sp, bottom: 12.sp),
                         child: Image.asset(AppImages.lockIcon, height: 5.h, width: 5),
@@ -430,7 +430,7 @@ class ResetPasswordScreen extends StatelessWidget {
                       child: controller.isResetLoading.value
                           ? const CircularProgressIndicator(color: Colors.white)
                           : Text(
-                        AppString.resterPassword,
+                        AppString.resterPassword.tr,
                         style: GoogleFonts.plusJakartaSans(
                           fontSize: 16.sp,
                           color: Colors.white,

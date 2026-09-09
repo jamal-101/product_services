@@ -23,7 +23,7 @@ class EditLegalDocumentsScreen extends StatelessWidget {
           onPressed: () => Get.back(),
         ),
         title: Text(
-          "Edit Legal Documents",
+          'editLegalDocuments'.tr,
           style: GoogleFonts.montserrat(color: Colors.black, fontSize: 18.sp, fontWeight: FontWeight.bold),
         ),
       ),
@@ -32,12 +32,12 @@ class EditLegalDocumentsScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text("Trade License No. *", style: GoogleFonts.montserrat(fontWeight: FontWeight.bold, fontSize: 13.sp)),
+            Text('tradeLicenseNo'.tr, style: GoogleFonts.montserrat(fontWeight: FontWeight.bold, fontSize: 13.sp)),
             SizedBox(height: 8.h),
             TextField(
               controller: controller.tradeLicenseNoController,
               decoration: InputDecoration(
-                hintText: "e.g. TL-8829-2024",
+                hintText: 'tradeLicenseHint'.tr,
                 border: OutlineInputBorder(borderRadius: BorderRadius.circular(12.r), borderSide: BorderSide(color: Colors.grey.shade300)),
                 enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12.r), borderSide: BorderSide(color: Colors.grey.shade300)),
                 contentPadding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 15.h),
@@ -45,7 +45,7 @@ class EditLegalDocumentsScreen extends StatelessWidget {
             ),
             SizedBox(height: 15.h),
 
-            Text("Upload Trade License *", style: GoogleFonts.montserrat(fontWeight: FontWeight.bold, fontSize: 13.sp)),
+            Text('uploadTradeLicense'.tr, style: GoogleFonts.montserrat(fontWeight: FontWeight.bold, fontSize: 13.sp)),
             SizedBox(height: 8.h),
             GestureDetector(
               onTap: () => controller.pickImage('tradeLicense'),
@@ -63,24 +63,24 @@ class EditLegalDocumentsScreen extends StatelessWidget {
                     Icon(Icons.description_outlined, color: Colors.green, size: 32.sp),
                     SizedBox(height: 8.h),
                     Obx(() => Text(
-                      controller.selectedTradeLicenseFile.value != null ? "File Selected Successfully" : "Upload your file here",
+                      controller.selectedTradeLicenseFile.value != null ? 'fileSelected'.tr : 'uploadFileHere'.tr,
                       style: GoogleFonts.montserrat(fontWeight: FontWeight.bold, fontSize: 13.sp, color: Colors.black87),
                     )),
                     SizedBox(height: 4.h),
-                    Text("PDF or image . or PNG up to 10MB", style: GoogleFonts.montserrat(color: Colors.grey, fontSize: 11.sp)),
+                    Text('fileFormatInfo'.tr, style: GoogleFonts.montserrat(color: Colors.grey, fontSize: 11.sp)),
                   ],
                 ),
               ),
             ),
             SizedBox(height: 15.h),
 
-            Text("TIN Number *", style: GoogleFonts.montserrat(fontWeight: FontWeight.bold, fontSize: 13.sp)),
+            Text('tinNumber'.tr, style: GoogleFonts.montserrat(fontWeight: FontWeight.bold, fontSize: 13.sp)),
             SizedBox(height: 8.h),
             TextField(
               controller: controller.tinNumberController,
               keyboardType: TextInputType.number,
               decoration: InputDecoration(
-                hintText: "e.g. 123-456-789",
+                hintText: 'tinHint'.tr,
                 border: OutlineInputBorder(borderRadius: BorderRadius.circular(12.r), borderSide: BorderSide(color: Colors.grey.shade300)),
                 enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12.r), borderSide: BorderSide(color: Colors.grey.shade300)),
                 contentPadding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 15.h),
@@ -97,7 +97,7 @@ class EditLegalDocumentsScreen extends StatelessWidget {
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
                 ),
                 onPressed: () => controller.updateStore(),
-                child: Text("Save Changes", style: GoogleFonts.montserrat(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16.sp)),
+                child: Text('saveChanges'.tr, style: GoogleFonts.montserrat(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16.sp)),
               ),
             ),
           ],

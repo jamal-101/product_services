@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:product_service/utils/constants/app_string.dart';
-import '../../../../config/route/app_route.dart';
 import '../controller/faq_controller.dart';
 
 class HelpSupportScreen extends StatelessWidget {
@@ -33,7 +31,7 @@ class HelpSupportScreen extends StatelessWidget {
           ),
         ),
         title: Text(
-          AppString.helpAndSupport,
+          'helpAndSupport'.tr,
           style: GoogleFonts.montserrat(
             color: Colors.black,
             fontSize: 18.sp,

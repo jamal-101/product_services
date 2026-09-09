@@ -42,11 +42,11 @@ class ExploreStoriesScreen extends StatelessWidget {
                 ),
                 children: [
                   TextSpan(
-                    text: AppString.explore,
+                    text: AppString.explore.tr,
                     style: GoogleFonts.plusJakartaSans(color: Colors.black),
                   ),
                   TextSpan(
-                    text: AppString.stores,
+                    text: AppString.stores.tr,
                     style: GoogleFonts.plusJakartaSans(
                       color: const Color(0xFFE67E22),
                     ),
@@ -82,7 +82,7 @@ class ExploreStoriesScreen extends StatelessWidget {
                           children: [
                             Expanded(
                               child: _buildToggleButton(
-                                title: AppString.productsStores,
+                                title: AppString.productsStores.tr,
                                 isSelected:
                                 controllers.isProductStoreSelected.value,
                                 onTap: () => controllers.toggleStoreType(true),
@@ -90,7 +90,7 @@ class ExploreStoriesScreen extends StatelessWidget {
                             ),
                             Expanded(
                               child: _buildToggleButton(
-                                title: AppString.servicesProvider,
+                                title: AppString.servicesProvider.tr,
                                 isSelected:
                                 !controllers.isProductStoreSelected.value,
                                 onTap: () => controllers.toggleStoreType(false),
@@ -110,7 +110,7 @@ class ExploreStoriesScreen extends StatelessWidget {
                           controllers.updateSearchQuery(value);
                         },
                         decoration: InputDecoration(
-                          hintText: AppString.searchStores,
+                          hintText: AppString.searchStores.tr,
                           prefixIcon: const Icon(
                             Icons.search,
                             color: Colors.grey,

@@ -14,6 +14,7 @@ import 'package:product_service/features/profile_section/presentation/screen/sav
 import 'package:product_service/features/profile_section/presentation/screen/save_flow/presentation/screen/save_screen.dart';
 import 'package:product_service/features/profile_section/presentation/screen/store_creation/presentation/screen/my_store.dart';
 import 'package:product_service/features/save/presentation/screen/save_store_screen.dart';
+import 'package:product_service/utils/constants/app_images.dart';
 
 import '../../../../services/storage/storage_service.dart';
 import '../../../../utils/constants/api_enpoint.dart';
@@ -47,14 +48,22 @@ class AppDrawer extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  // CircleAvatar(
+                  //   radius: 30.r,
+                  //   backgroundImage: NetworkImage(
+                  //     (userData?.profileImage != null &&
+                  //         userData!.profileImage!.isNotEmpty)
+                  //         ? "${ApiEndPoint.imageUrl}${userData.profileImage}"
+                  //         : ,
+                  //   ),
+                  // ),
                   CircleAvatar(
                     radius: 30.r,
-                    backgroundImage: NetworkImage(
-                      (userData?.profileImage != null &&
-                          userData!.profileImage!.isNotEmpty)
-                          ? "${ApiEndPoint.imageUrl}${userData.profileImage}"
-                          : "https://via.placeholder.com/150",
-                    ),
+                    backgroundImage: (userData?.profileImage != null &&
+                        userData!.profileImage!.isNotEmpty)
+                        ? NetworkImage("${ApiEndPoint.imageUrl}${userData.profileImage}")
+                    as ImageProvider
+                        : const AssetImage("assets/images/buyer.png"),
                   ),
                   SizedBox(height: 10.h),
                   Text(

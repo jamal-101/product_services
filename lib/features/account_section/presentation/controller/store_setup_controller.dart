@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:dio/dio.dart' as dio;
+import 'package:product_service/config/route/app_route.dart';
 import 'dart:convert';
 import '../../../../services/api/api_service.dart';
 import '../../../../utils/constants/api_enpoint.dart';
+import '../../../home_flow/presentatin/model/city_model.dart';
 import '../../../profile_section/presentation/screen/store_creation/presentation/model/category_model.dart';
 
 
@@ -105,6 +107,13 @@ class StoreUpdateController extends GetxController {
     }
   }
 
+  void selectCity(CityData city) {
+    cityController.text = city.city ?? "";
+    latitude.value = city.latitude ?? 0.0;
+    longitude.value = city.longitude ?? 0.0;
+    update();
+  }
+
   Future<void> updateStore() async {
     try {
       isLoading.value = true;
@@ -112,7 +121,7 @@ class StoreUpdateController extends GetxController {
         "storeType": "product_store",
         "displayName": displayNameController.text.trim(),
         "description": descriptionController.text.trim(),
-        "categoryId": selectedCategoryId.value, // ডাইনামিক আইডি এখানে পাস হবে
+        "categoryId": selectedCategoryId.value,
         "phone": phoneController.text.trim(),
         "whatsapp": whatsappController.text.trim().isNotEmpty ? whatsappController.text.trim() : phoneController.text.trim(),
         "email": emailController.text.trim(),
@@ -176,9 +185,10 @@ class StoreUpdateController extends GetxController {
         Get.snackbar(
           "Success",
           "Store updated successfully",
-          backgroundColor: Colors.green,
-          colorText: Colors.white,
+          backgroundColor: Colors.white,
+          colorText: Colors.green,
         );
+        Get.toNamed(AppRoutes.accountScreen);
       } else {
         Get.snackbar(
           "Failed",

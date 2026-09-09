@@ -353,7 +353,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
                 child: TextField(
                   controller: conversationController.textController,
                   decoration: InputDecoration(
-                    hintText: AppString.typeMessage,
+                    hintText: AppString.typeMessage.tr,
                     border: InputBorder.none,
                     hintStyle: GoogleFonts.montserrat(
                       color: Colors.grey,

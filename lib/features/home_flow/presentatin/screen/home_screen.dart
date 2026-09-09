@@ -24,7 +24,7 @@ class HomeScreen extends StatelessWidget {
     final HomeController controller = Get.put(HomeController());
     return Scaffold(
       key: scaffoldKey,
-      drawer:  AppDrawer(),
+      drawer: AppDrawer(),
       bottomNavigationBar: BottomNavBar(selectedIndex: 0),
       appBar: AppBar(
         backgroundColor: AppColor.appBackgroundColor,
@@ -56,16 +56,17 @@ class HomeScreen extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           try {
-            final response = await ApiService.get(ApiEndPoint.superAdmin); // আপনার এপিআই এন্ডপয়েন্ট অনুযায়ী দিন
-
+            final response = await ApiService.get(
+              ApiEndPoint.superAdmin,
+            );
             if (response.isSuccess) {
               var responseData = response.data;
-              String superAdminId = responseData['data']['_id'] ?? ""; // সুপার এডমিনের _id
-
+              String superAdminId =
+                  responseData['data']['_id'] ?? "";
               if (superAdminId.isNotEmpty) {
-                final MessageController messageController = Get.put(MessageController());
-
-
+                final MessageController messageController = Get.put(
+                  MessageController(),
+                );
                 messageController.createChat(
                   participantId: superAdminId,
                   communicationType: "support",
@@ -73,13 +74,28 @@ class HomeScreen extends StatelessWidget {
                   shopName: "Support",
                 );
               } else {
-                Get.snackbar("Error", "Super Admin ID not found", backgroundColor: Colors.red, colorText: Colors.white);
+                Get.snackbar(
+                  "Error",
+                  "Super Admin ID not found",
+                  backgroundColor: Colors.red,
+                  colorText: Colors.white,
+                );
               }
             } else {
-              Get.snackbar("Error", response.message, backgroundColor: Colors.red, colorText: Colors.white);
+              Get.snackbar(
+                "Error",
+                response.message,
+                backgroundColor: Colors.red,
+                colorText: Colors.white,
+              );
             }
           } catch (e) {
-            Get.snackbar("Error", e.toString(), backgroundColor: Colors.red, colorText: Colors.white);
+            Get.snackbar(
+              "Error",
+              e.toString(),
+              backgroundColor: Colors.red,
+              colorText: Colors.white,
+            );
           }
         },
         backgroundColor: Colors.transparent,
@@ -95,7 +111,7 @@ class HomeScreen extends StatelessWidget {
               decoration: BoxDecoration(
                 color: const Color(0xFF27AE60),
                 shape: BoxShape.circle,
-                border: Border.all(width: 3.w,color: Color(0xFFFFFFFF)),
+                border: Border.all(width: 3.w, color: Color(0xFFFFFFFF)),
                 boxShadow: [
                   BoxShadow(
                     color: Colors.black.withValues(alpha: 0.1),
@@ -106,7 +122,11 @@ class HomeScreen extends StatelessWidget {
               ),
               child: Padding(
                 padding: const EdgeInsets.all(12.0),
-                child: Image.asset(AppImages.floatingIcon,height: 12.h,width: 12.w),
+                child: Image.asset(
+                  AppImages.floatingIcon,
+                  height: 12.h,
+                  width: 12.w,
+                ),
               ),
             ),
             Positioned(
@@ -132,11 +152,9 @@ class HomeScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-
             SizedBox(
               height: 140.h,
               child: Obx(() {
-
                 if (controller.bannerList.isEmpty) {
                   return const Center(child: Text("No banners found"));
                 }
@@ -146,7 +164,7 @@ class HomeScreen extends StatelessWidget {
                     PageView.builder(
                       controller: controller.bannerPageController,
                       onPageChanged: (index) =>
-                      controller.currentBannerIndex.value = index,
+                          controller.currentBannerIndex.value = index,
                       itemCount: controller.bannerList.length,
                       itemBuilder: (context, index) {
                         final banner = controller.bannerList[index];
@@ -155,15 +173,18 @@ class HomeScreen extends StatelessWidget {
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(12.r),
                             color: Colors.grey[900],
-                            image: banner.image != null && banner.image!.isNotEmpty
+                            image:
+                                banner.image != null && banner.image!.isNotEmpty
                                 ? DecorationImage(
-                              image: NetworkImage("${ApiEndPoint.imageUrl}${banner.image}"),
-                              fit: BoxFit.cover,
-                              colorFilter: ColorFilter.mode(
-                                Colors.black.withValues(alpha: 0.3),
-                                BlendMode.darken,
-                              ),
-                            )
+                                    image: NetworkImage(
+                                      "${ApiEndPoint.imageUrl}${banner.image}",
+                                    ),
+                                    fit: BoxFit.cover,
+                                    colorFilter: ColorFilter.mode(
+                                      Colors.black.withValues(alpha: 0.3),
+                                      BlendMode.darken,
+                                    ),
+                                  )
                                 : null,
                           ),
                           padding: EdgeInsets.all(16.w),
@@ -208,15 +229,17 @@ class HomeScreen extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: List.generate(
                           controller.bannerList.length,
-                              (index) => Obx(
-                                () => Container(
+                          (index) => Obx(
+                            () => Container(
                               margin: EdgeInsets.symmetric(horizontal: 3.w),
-                              width: controller.currentBannerIndex.value == index
+                              width:
+                                  controller.currentBannerIndex.value == index
                                   ? 12.w
                                   : 6.w,
                               height: 6.h,
                               decoration: BoxDecoration(
-                                color: controller.currentBannerIndex.value == index
+                                color:
+                                    controller.currentBannerIndex.value == index
                                     ? Colors.white
                                     : Colors.white54,
                                 borderRadius: BorderRadius.circular(3.r),
@@ -230,18 +253,20 @@ class HomeScreen extends StatelessWidget {
                 );
               }),
             ),
-
             SizedBox(height: 16.h),
             _buildAdvertiseCard(),
             SizedBox(height: 10.h),
             Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text("Featured Stores",style: GoogleFonts.plusJakartaSans(
-                  fontWeight: FontWeight.w700,
-                  color: Color(0xFF1A1D24),
-                  fontSize: 18.sp,
-                ),),
+                Text(
+                  "Featured Stores",
+                  style: GoogleFonts.plusJakartaSans(
+                    fontWeight: FontWeight.w700,
+                    color: Color(0xFF1A1D24),
+                    fontSize: 18.sp,
+                  ),
+                ),
                 _buildCitySelectionBox(controller),
               ],
             ),
@@ -251,11 +276,12 @@ class HomeScreen extends StatelessWidget {
                 return Center(
                   child: Padding(
                     padding: EdgeInsets.symmetric(vertical: 20.h),
-                    child: const CircularProgressIndicator(color: Color(0xFF27AE60)),
+                    child: const CircularProgressIndicator(
+                      color: Color(0xFF27AE60),
+                    ),
                   ),
                 );
               }
-
               if (controller.featuredList.isEmpty) {
                 return Center(
                   child: Padding(
@@ -270,14 +296,15 @@ class HomeScreen extends StatelessWidget {
                   ),
                 );
               }
-             return ListView.builder(
+              return ListView.builder(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
                 itemCount: controller.featuredList.length,
                 itemBuilder: (context, index) {
                   final item = controller.featuredList[index];
                   String imageUrl = "";
-                  if (item.featuredImage != null && item.featuredImage!.isNotEmpty) {
+                  if (item.featuredImage != null &&
+                      item.featuredImage!.isNotEmpty) {
                     if (item.featuredImage!.startsWith('http')) {
                       imageUrl = item.featuredImage!;
                     } else {
@@ -291,7 +318,7 @@ class HomeScreen extends StatelessWidget {
                     onTap: () {
                       if (storeId != null && storeId.isNotEmpty) {
                         Get.to(
-                              () => const ProductDetailsScreen(),
+                          () => const ProductDetailsScreen(),
                           arguments: {
                             'storeId': storeId,
                             'storeType': storeType,
@@ -318,17 +345,23 @@ class HomeScreen extends StatelessWidget {
                         children: [
                           if (imageUrl.isNotEmpty)
                             ClipRRect(
-                              borderRadius: BorderRadius.vertical(top: Radius.circular(16.r)),
+                              borderRadius: BorderRadius.vertical(
+                                top: Radius.circular(16.r),
+                              ),
                               child: Image.network(
                                 imageUrl,
                                 height: 150.h,
                                 width: double.infinity,
                                 fit: BoxFit.cover,
-                                errorBuilder: (context, error, stackTrace) => Container(
-                                  height: 150.h,
-                                  color: Colors.grey.shade200,
-                                  child: const Icon(Icons.image_not_supported, color: Colors.grey),
-                                ),
+                                errorBuilder: (context, error, stackTrace) =>
+                                    Container(
+                                      height: 150.h,
+                                      color: Colors.grey.shade200,
+                                      child: const Icon(
+                                        Icons.image_not_supported,
+                                        color: Colors.grey,
+                                      ),
+                                    ),
                               ),
                             ),
                           Padding(
@@ -370,16 +403,12 @@ class HomeScreen extends StatelessWidget {
                   );
                 },
               );
-
             }),
           ],
         ),
       ),
     );
   }
-
-
-
 
   Widget _buildCitySelectionBox(HomeController controller) {
     return Align(
@@ -389,7 +418,10 @@ class HomeScreen extends StatelessWidget {
           return SizedBox(
             height: 20.h,
             width: 20.w,
-            child: const CircularProgressIndicator(strokeWidth: 2, color: Color(0xFF2E7D32)),
+            child: const CircularProgressIndicator(
+              strokeWidth: 2,
+              color: Color(0xFF2E7D32),
+            ),
           );
         }
 
@@ -402,7 +434,11 @@ class HomeScreen extends StatelessWidget {
           ),
           itemBuilder: (BuildContext context) => <PopupMenuEntry<CityData>>[
             PopupMenuItem<CityData>(
-              value: CityData(city: "Choose city", latitude: null, longitude: null),
+              value: CityData(
+                city: "Choose city",
+                latitude: null,
+                longitude: null,
+              ),
               child: const Text('Choose city'),
             ),
             ...controller.cityList.map((city) {
@@ -429,7 +465,11 @@ class HomeScreen extends StatelessWidget {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(Icons.location_on_outlined, size: 18.sp, color: const Color(0xFF2E7D32)),
+                Icon(
+                  Icons.location_on_outlined,
+                  size: 18.sp,
+                  color: const Color(0xFF2E7D32),
+                ),
                 SizedBox(width: 6.w),
                 Text(
                   controller.selectedCityName.value,
@@ -440,7 +480,11 @@ class HomeScreen extends StatelessWidget {
                   ),
                 ),
                 SizedBox(width: 8.w),
-                Icon(Icons.keyboard_arrow_down, size: 18.sp, color: Colors.grey),
+                Icon(
+                  Icons.keyboard_arrow_down,
+                  size: 18.sp,
+                  color: Colors.grey,
+                ),
               ],
             ),
           ),
@@ -454,28 +498,25 @@ class HomeScreen extends StatelessWidget {
       margin: EdgeInsets.symmetric(horizontal: 1.w, vertical: 8.h),
       padding: EdgeInsets.all(10.w),
       decoration: BoxDecoration(
-        gradient:  LinearGradient(
+        gradient: LinearGradient(
           begin: Alignment.centerLeft,
           end: Alignment.centerRight,
-          colors: [
-            Color(0xFFE7FCF0),
-            Color(0xFFFFFFFF),
-          ],
+          colors: [Color(0xFFE7FCF0), Color(0xFFFFFFFF)],
         ),
         borderRadius: BorderRadius.circular(16.r),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.05),
-            offset:  Offset(0, 1),
+            offset: Offset(0, 1),
             blurRadius: 2,
             spreadRadius: 0,
           ),
         ],
-        border: Border.all(color:  Color(0xFFF3F4F6), width: 1.11),
+        border: Border.all(color: Color(0xFFF3F4F6), width: 1.11),
       ),
       child: Row(
         children: [
-          Image.asset(AppImages.add_icon,height: 60.h,width: 60.w,),
+          Image.asset(AppImages.add_icon, height: 60.h, width: 60.w),
           SizedBox(width: 14.w),
           Expanded(
             child: Column(
@@ -501,10 +542,14 @@ class HomeScreen extends StatelessWidget {
             ),
           ),
           ElevatedButton(
-            onPressed: onTap ?? () {
-              final PostAddController postController = Get.put(PostAddController());
-              postController.checkAndNavigateToPostAd();
-            },
+            onPressed:
+                onTap ??
+                () {
+                  final PostAddController postController = Get.put(
+                    PostAddController(),
+                  );
+                  postController.checkAndNavigateToPostAd();
+                },
             style: ElevatedButton.styleFrom(
               backgroundColor: Color(0xFF228B22),
               foregroundColor: Colors.white,

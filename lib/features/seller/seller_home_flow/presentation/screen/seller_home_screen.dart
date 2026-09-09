@@ -6,7 +6,6 @@ import 'package:get/get_instance/src/extension_instance.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:product_service/features/message_flow/screen/message_screen.dart';
 import '../../../../../component/bottom_navBar/nav_bar..dart';
 import '../../../../../services/api/api_service.dart';
 import '../../../../../utils/constants/api_enpoint.dart';
@@ -56,20 +55,19 @@ class SellerHomeScreen extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           try {
-            final response = await ApiService.get(ApiEndPoint.superAdmin); // আপনার এপিআই এন্ডপয়েন্ট অনুযায়ী
+            final response = await ApiService.get(ApiEndPoint.superAdmin);
 
             if (response.isSuccess) {
               var responseData = response.data;
-              String superAdminId = responseData['data']['_id'] ?? ""; // সুপার এডমিনের _id
+              String superAdminId = responseData['data']['_id'] ?? "";
 
               if (superAdminId.isNotEmpty) {
                 final MessageController messageController = Get.put(MessageController());
 
-                // সাপোর্ট চ্যাট ক্রিয়েট করা হচ্ছে
                 messageController.createChat(
-                  participantId: superAdminId, // সুপার এডমিনের _id
-                  communicationType: "support", // টাইপ সাপোর্ট হবে
-                  referenceId: "", // সাপোর্ট চ্যাটে referenceId খালি থাকবে
+                  participantId: superAdminId,
+                  communicationType: "support",
+                  referenceId: "",
                   shopName: "Support",
                 );
               } else {
@@ -136,12 +134,25 @@ class SellerHomeScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(height: 20),
-            Row(
+            Obx(() => controller.isDashboardLoading.value
+                ? const Center(child: CircularProgressIndicator())
+                : Row(
               children: [
-                _buildStatCard("Total Items Listed", "4"),
+                Expanded(
+                  child: _buildStatCard(
+                      "Total Items Listed",
+                      controller.dashboardData.value.data?.totalItems?.toString() ?? "0"
+                  ),
+                ),
                 const SizedBox(width: 16),
-                _buildStatCard("Store Visitors (week)", "428"),
+                Expanded(
+                  child: _buildStatCard(
+                      "Store Visitors (week)",
+                      controller.dashboardData.value.data?.storeVisitors?.toString() ?? "0"
+                  ),
+                ),
               ],
+            ),
             ),
             _buildAdvertiseCard(),
             const SizedBox(height: 16),

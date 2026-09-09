@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get_utils/src/extensions/internacionalization.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:product_service/utils/constants/app_string.dart';
 
@@ -36,7 +37,7 @@ class _NotificationSettingsScreenState extends State<NotificationSettingsScreen>
           ),
         ),
         title: Text(
-          AppString.notificationSettings,
+          'notificationSettings'.tr,
           style: GoogleFonts.montserrat(
             color: Colors.black,
             fontSize: 18.sp,
@@ -52,7 +53,7 @@ class _NotificationSettingsScreenState extends State<NotificationSettingsScreen>
             borderRadius: BorderRadius.circular(20.r),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.05),
+                color: Colors.black.withValues(alpha: 0.05),
                 blurRadius: 10,
                 offset: const Offset(0, 5),
               ),
@@ -63,16 +64,16 @@ class _NotificationSettingsScreenState extends State<NotificationSettingsScreen>
             children: [
               _buildNotificationTile(
                 icon: Icons.email_outlined,
-                title: AppString.emailAlerts,
-                subtitle: AppString.receiveAlerts,
+                title: 'emailAlerts'.tr,
+                subtitle: 'receiveAlerts'.tr,
                 value: isEmailAlertsEnabled,
                 onChanged: (val) => setState(() => isEmailAlertsEnabled = val),
               ),
               Divider(height: 1, indent: 20.w, endIndent: 20.w),
               _buildNotificationTile(
                 icon: Icons.notifications_none_outlined,
-                title: AppString.pushNotification,
-                subtitle: AppString.getInstant,
+                title: 'pushNotificationSetting'.tr,
+                subtitle: 'getInstant'.tr,
                 value: isPushNotificationsEnabled,
                 onChanged: (val) => setState(() => isPushNotificationsEnabled = val),
               ),
