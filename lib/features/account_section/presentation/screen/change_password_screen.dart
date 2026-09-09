@@ -33,7 +33,7 @@ class ChangePasswordScreen extends StatelessWidget {
           ),
         ),
         title: Text(
-          AppString.changePassword,
+          'changePassword'.tr,
           style: GoogleFonts.montserrat(
             color: Colors.black,
             fontSize: 18.sp,
@@ -63,20 +63,18 @@ class ChangePasswordScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Current Password Field
                     Obx(() => _buildPasswordField(
-                      label: AppString.currentPassword,
-                      hint: AppString.enterCurrentPassword,
+                      label: 'currentPassword'.tr,
+                      hint: 'enterCurrentPassword'.tr,
                       textEditingController: controller.currentPasswordController,
                       isHidden: controller.isCurrentPasswordHidden.value,
                       onToggle: controller.toggleCurrentPasswordVisibility,
                       validator: (value) => Utils.passwordValidator(value),
                     )),
 
-                    // New Password Field
                     Obx(() => _buildPasswordField(
-                      label: AppString.newPassword,
-                      hint: "Enter new password",
+                      label: 'newPassword'.tr,
+                      hint: 'enterNewPassword'.tr,
                       textEditingController: controller.newPasswordController,
                       isHidden: controller.isNewPasswordHidden.value,
                       onToggle: controller.toggleNewPasswordVisibility,
@@ -86,7 +84,7 @@ class ChangePasswordScreen extends StatelessWidget {
                     Padding(
                       padding: EdgeInsets.only(bottom: 15.h),
                       child: Text(
-                        "Minimum 6 characters",
+                        'minCharacters'.tr,
                         style: GoogleFonts.montserrat(
                           fontSize: 12.sp,
                           color: Colors.grey.shade600,
@@ -94,10 +92,9 @@ class ChangePasswordScreen extends StatelessWidget {
                       ),
                     ),
 
-                    // Confirm New Password Field
                     Obx(() => _buildPasswordField(
-                      label: AppString.confirmNewPassword,
-                      hint: "Confirm new password",
+                      label: 'confirmNewPassword'.tr,
+                      hint: 'confirmNewPasswordHint'.tr,
                       textEditingController: controller.confirmPasswordController,
                       isHidden: controller.isConfirmPasswordHidden.value,
                       onToggle: controller.toggleConfirmPasswordVisibility,
@@ -128,7 +125,7 @@ class ChangePasswordScreen extends StatelessWidget {
                   child: controller.isLoading.value
                       ? const CircularProgressIndicator(color: Colors.white)
                       : Text(
-                    "Save Changes",
+                    'saveChanges'.tr,
                     style: GoogleFonts.montserrat(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,

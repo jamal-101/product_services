@@ -102,10 +102,6 @@ class Chat {
 
   factory Chat.fromJson(Map<String, dynamic> json) => Chat(
     id: json["_id"] ?? "",
-    // participants: List<Participant>.from(
-    //   json["participants"].map((x) => Participant.fromJson(x)),
-    // ),
-    // lastMessage: LastMessage.fromJson(json["lastMessage"]),
 
 
     participants: json["participants"] != null
@@ -114,7 +110,6 @@ class Chat {
     )
         : [],
 
-    // ⭐ lastMessage যদি null হয় তবে ক্র্যাশ করবে না, null সেভ করবে
     lastMessage: json["lastMessage"] != null
         ? LastMessage.fromJson(json["lastMessage"])
         : null,
