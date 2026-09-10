@@ -67,6 +67,7 @@ class ServiceStoreData {
   String? updatedAt;
   String? plan;
   int? listings;
+  bool? isFavorite;
 
   ServiceStoreData({
     this.sId,
@@ -98,6 +99,7 @@ class ServiceStoreData {
     this.updatedAt,
     this.plan,
     this.listings,
+    this.isFavorite,
   });
 
   factory ServiceStoreData.fromJson(Map<String, dynamic> json) {
@@ -135,6 +137,7 @@ class ServiceStoreData {
       updatedAt: json['updatedAt'],
       plan: json['plan'],
       listings: json['listings'],
+      isFavorite: json['isFavorite'],
     );
   }
 
@@ -175,6 +178,8 @@ class ServiceStoreData {
     data['updatedAt'] = updatedAt;
     data['plan'] = plan;
     data['listings'] = listings;
+    data['isFavorite'] = isFavorite;
+
     return data;
   }
 }

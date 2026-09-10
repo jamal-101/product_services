@@ -37,7 +37,6 @@ class ExploreStoreController extends GetxController {
 
 
   void initCityFromProfileAndFetchStores() {
-    // ProfileController কে ফাইন্ড বা পুট করে নেওয়া
     final profileController = Get.isRegistered<ProfileController>()
         ? Get.find<ProfileController>()
         : Get.put(ProfileController());
@@ -165,4 +164,103 @@ class ExploreStoreController extends GetxController {
   void changeNavIndex(int index) {
     currentNavIndex.value = index;
   }
+
+
+
+  // toggleStoreFavorite method updated for better reactivity
+  Future<void> toggleStoreFavorite(String storeId, bool isProductStore, int index) async {
+    final bool previousFavoriteState;
+
+    if (isProductStore) {
+      if (index < 0 || index >= productStoreList.length) return;
+      previousFavoriteState = productStoreList[index].isFavorite ?? false;
+      
+      // Update locally
+      var updatedItem = productStoreList[index];
+      updatedItem.isFavorite = !previousFavoriteState;
+      productStoreList[index] = updatedItem; 
+      productStoreList.refresh();
+    } else {
+      if (index < 0 || index >= serviceStoreList.length) return;
+      previousFavoriteState = serviceStoreList[index].isFavorite ?? false;
+      
+      // Update locally
+      var updatedItem = serviceStoreList[index];
+      updatedItem.isFavorite = !previousFavoriteState;
+      serviceStoreList[index] = updatedItem;
+      serviceStoreList.refresh();
+    }
+
+    try {
+      final body = {
+        "targetId": storeId,
+        "targetType": isProductStore ? "product_store" : "service_store",
+      };
+
+      final response = await ApiService.post(
+        ApiEndPoint.favoritesToggle,
+        body: body,
+      );
+
+      if (response.isSuccess) {
+        final responseData = response.data;
+        if (responseData is Map<String, dynamic>) {
+          final dynamic innerData = responseData['data'];
+          bool? serverStatus;
+
+          if (innerData is Map<String, dynamic>) {
+            serverStatus = innerData['isFavorited'] ?? innerData['isFavorite'];
+          } else {
+            serverStatus = responseData['isFavorited'] ?? responseData['isFavorite'];
+          }
+
+          if (serverStatus != null) {
+            if (isProductStore) {
+              var updatedItem = productStoreList[index];
+              updatedItem.isFavorite = serverStatus;
+              productStoreList[index] = updatedItem;
+              productStoreList.refresh();
+            } else {
+              var updatedItem = serviceStoreList[index];
+              updatedItem.isFavorite = serverStatus;
+              serviceStoreList[index] = updatedItem;
+              serviceStoreList.refresh();
+            }
+          }
+        }
+      } else {
+        // Rollback on Failure
+        _rollbackFavoriteState(isProductStore, index, previousFavoriteState);
+      }
+    } catch (e) {
+      // Rollback on Exception
+      _rollbackFavoriteState(isProductStore, index, previousFavoriteState);
+    }
+  }
+
+
+  void _rollbackFavoriteState(bool isProductStore, int index, bool previousState) {
+    if (isProductStore) {
+      if (index < productStoreList.length) {
+        var updatedItem = productStoreList[index];
+        updatedItem.isFavorite = previousState;
+        productStoreList[index] = updatedItem;
+        productStoreList.refresh();
+      }
+    } else {
+      if (index < serviceStoreList.length) {
+        var updatedItem = serviceStoreList[index];
+        updatedItem.isFavorite = previousState;
+        serviceStoreList[index] = updatedItem;
+        serviceStoreList.refresh();
+      }
+    }
+  }
+
+
+  void handleBookmarkTap(String storeId, int index) {
+    bool isProduct = isProductStoreSelected.value;
+    toggleStoreFavorite(storeId, isProduct, index);
+  }
+
 }

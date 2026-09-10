@@ -28,10 +28,16 @@ class ProductDetailsScreen extends StatelessWidget {
       storeId = argument;
     }
 
+
+
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (storeId.isNotEmpty &&
-          controller.storeDetailsModel.value.data == null) {
-        controller.fetchStoreDetails(storeId);
+      if (storeId.isNotEmpty) {
+        final currentLoadedStoreId = controller.storeDetailsModel.value.data?.store?.sId;
+        if (currentLoadedStoreId != storeId) {
+          controller.clearData();
+          controller.fetchStoreDetails(storeId);
+        }
       }
     });
 
@@ -60,6 +66,8 @@ class ProductDetailsScreen extends StatelessWidget {
                   background: _buildHeaderSection(
                     controller.storeDetailsModel.value.data,
                     isProductStore,
+                    controller,
+                    rawStoreType,
                   ),
                 ),
               ),
@@ -163,7 +171,7 @@ class ProductDetailsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildHeaderSection(storeData, bool isProductStore) {
+  Widget _buildHeaderSection(storeData, bool isProductStore,StoreDetailsController controller, String rawStoreType) {
     final store = storeData?.store;
 
     final String? coverUrl =
@@ -225,18 +233,31 @@ class ProductDetailsScreen extends StatelessWidget {
             ),
           ),
         ),
+
         Positioned(
           top: 40.h,
           right: 16.w,
-          child: Container(
-            padding: EdgeInsets.all(8.w),
-            decoration: BoxDecoration(
-              color: const Color(0xFF000000).withValues(alpha: 0.2),
-              shape: BoxShape.circle,
+          child: GestureDetector(
+            onTap: () {
+              final storeItem = storeData?.store;
+              if (storeItem?.sId != null) {
+                controller.toggleFavorite(storeItem!.sId!, rawStoreType);
+              }
+            },
+            child: Container(
+              padding: EdgeInsets.all(8.w),
+              decoration: BoxDecoration(
+                color: const Color(0xFF000000).withValues(alpha: 0.2),
+                shape: BoxShape.circle,
+              ),
+              child: Obx(() => Icon(
+                controller.isFavorite.value ? Icons.bookmark : Icons.bookmark_border,
+                color: Colors.white,
+              )),
             ),
-            child: const Icon(Icons.bookmark_border, color: Colors.white),
           ),
         ),
+
         Positioned(
           top: 140.h,
           left: 16.w,

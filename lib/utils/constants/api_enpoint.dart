@@ -42,4 +42,5 @@ class ApiEndPoint {
   static const termsAndConditions = "$baseUrl/rules/terms";
   static const notifications = "$baseUrl/notifications";
   static const myStore = "$baseUrl/stores/me";
+  static const favoritesToggle = "$baseUrl/favorites/toggle";
 }

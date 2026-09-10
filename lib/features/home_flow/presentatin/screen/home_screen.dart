@@ -56,13 +56,10 @@ class HomeScreen extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           try {
-            final response = await ApiService.get(
-              ApiEndPoint.superAdmin,
-            );
+            final response = await ApiService.get(ApiEndPoint.superAdmin);
             if (response.isSuccess) {
               var responseData = response.data;
-              String superAdminId =
-                  responseData['data']['_id'] ?? "";
+              String superAdminId = responseData['data']['_id'] ?? "";
               if (superAdminId.isNotEmpty) {
                 final MessageController messageController = Get.put(
                   MessageController(),

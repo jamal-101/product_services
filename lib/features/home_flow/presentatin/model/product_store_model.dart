@@ -71,6 +71,7 @@ class StoreData {
   String? streetAddress;
   String? plan;
   int? listings;
+  bool? isFavorite;
 
   StoreData({
     this.sId,
@@ -107,6 +108,7 @@ class StoreData {
     this.streetAddress,
     this.plan,
     this.listings,
+    this.isFavorite,
   });
 
   factory StoreData.fromJson(Map<String, dynamic> json) {
@@ -132,6 +134,7 @@ class StoreData {
       isVerified: json['isVerified'],
       visitorCount: json['visitorCount'],
       averageRating: json['averageRating'],
+
       ratingCount: json['ratingCount'],
       workingDays: json['workingDays'] != null
           ? List<String>.from(json['workingDays'])
@@ -149,6 +152,7 @@ class StoreData {
       streetAddress: json['streetAddress'],
       plan: json['plan'],
       listings: json['listings'],
+        isFavorite : json['isFavorite'],
     );
   }
 
@@ -167,6 +171,7 @@ class StoreData {
     data['logo'] = logo;
     data['coverImage'] = coverImage;
     data['phone'] = phone;
+    data['isFavorite'] = isFavorite;
     data['whatsapp'] = whatsapp;
     data['email'] = email;
     if (cityId != null) {

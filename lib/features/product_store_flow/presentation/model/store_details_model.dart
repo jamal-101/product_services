@@ -1,3 +1,5 @@
+import 'package:get/get_rx/src/rx_types/rx_types.dart';
+
 import '../../../home_flow/presentatin/model/city_model.dart';
 import '../../../profile_section/presentation/screen/store_creation/presentation/model/category_model.dart';
 
@@ -61,6 +63,7 @@ class Store {
   CategoryData? categoryId;
   bool? isVerified;
   StoreOwner? owner;
+  bool? isFavorite;
 
   Store({
     this.sId,
@@ -82,6 +85,7 @@ class Store {
     this.listings,
     this.isVerified,
     this.categoryId,
+    this.isFavorite,
   });
 
   Store.fromJson(Map<String, dynamic> json) {
@@ -106,6 +110,7 @@ class Store {
     listings = json['listings'];
     isVerified = json['isVerified'];
     owner = json['owner'] != null ? StoreOwner.fromJson(json['owner']) : null;
+    isFavorite = json['isFavorite'];
   }
 }
 
@@ -117,6 +122,7 @@ class ProductItem {
   String? description;
   String? additionalInformation;
   List<String>? images;
+  bool? isFavorite;
 
   ProductItem({
     this.sId,
@@ -126,7 +132,10 @@ class ProductItem {
     this.description,
     this.additionalInformation,
     this.images,
+    this.isFavorite,
   });
+
+
 
   ProductItem.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
@@ -136,6 +145,7 @@ class ProductItem {
     description = json['description'];
     additionalInformation = json['additionalInformation'];
     images = json['images'] != null ? List<String>.from(json['images']) : null;
+    isFavorite = json['isFavorite'];
   }
 }
 
@@ -147,6 +157,7 @@ class ServiceItem {
   String? description;
   List<String>? whatsIncluded;
   List<String>? images;
+  bool? isFavorite;
 
   ServiceItem({
     this.sId,
@@ -156,6 +167,7 @@ class ServiceItem {
     this.description,
     this.whatsIncluded,
     this.images,
+    this.isFavorite,
   });
 
   ServiceItem.fromJson(Map<String, dynamic> json) {
@@ -166,6 +178,7 @@ class ServiceItem {
     description = json['description'];
     whatsIncluded = json['whatsIncluded'] != null ? List<String>.from(json['whatsIncluded']) : null;
     images = json['images'] != null ? List<String>.from(json['images']) : null;
+    isFavorite = json['isFavorite'];
   }
 }
 

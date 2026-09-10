@@ -1,261 +1,3 @@
-// class ProductModel {
-//   bool? success;
-//   String? message;
-//   Data? data;
-//
-//   ProductModel({this.success, this.message, this.data});
-//
-//   ProductModel.fromJson(Map<String, dynamic> json) {
-//     success = json['success'];
-//     message = json['message'];
-//     data = json['data'] != null ? new Data.fromJson(json['data']) : null;
-//   }
-//
-//   Map<String, dynamic> toJson() {
-//     final Map<String, dynamic> data = new Map<String, dynamic>();
-//     data['success'] = this.success;
-//     data['message'] = this.message;
-//     if (this.data != null) {
-//       data['data'] = this.data!.toJson();
-//     }
-//     return data;
-//   }
-// }
-//
-// class Data {
-//   String? sId;
-//   SellerId? sellerId;
-//   StoreId? storeId;
-//   String? title;
-//   int? activePrice;
-//   int? originalPrice;
-//   String? description;
-//   String? additionalInformation;
-//   List<String>? images;
-//   String? status;
-//   bool? isDeleted;
-//   String? createdAt;
-//   String? updatedAt;
-//
-//   Data(
-//       {this.sId,
-//         this.sellerId,
-//         this.storeId,
-//         this.title,
-//         this.activePrice,
-//         this.originalPrice,
-//         this.description,
-//         this.additionalInformation,
-//         this.images,
-//         this.status,
-//         this.isDeleted,
-//         this.createdAt,
-//         this.updatedAt});
-//
-//   Data.fromJson(Map<String, dynamic> json) {
-//     sId = json['_id'];
-//     sellerId = json['sellerId'] != null
-//         ? new SellerId.fromJson(json['sellerId'])
-//         : null;
-//     storeId =
-//     json['storeId'] != null ? new StoreId.fromJson(json['storeId']) : null;
-//     title = json['title'];
-//     activePrice = json['activePrice'];
-//     originalPrice = json['originalPrice'];
-//     description = json['description'];
-//     additionalInformation = json['additionalInformation'];
-//     images = json['images'].cast<String>();
-//     status = json['status'];
-//     isDeleted = json['isDeleted'];
-//     createdAt = json['createdAt'];
-//     updatedAt = json['updatedAt'];
-//   }
-//
-//   Map<String, dynamic> toJson() {
-//     final Map<String, dynamic> data = new Map<String, dynamic>();
-//     data['_id'] = this.sId;
-//     if (this.sellerId != null) {
-//       data['sellerId'] = this.sellerId!.toJson();
-//     }
-//     if (this.storeId != null) {
-//       data['storeId'] = this.storeId!.toJson();
-//     }
-//     data['title'] = this.title;
-//     data['activePrice'] = this.activePrice;
-//     data['originalPrice'] = this.originalPrice;
-//     data['description'] = this.description;
-//     data['additionalInformation'] = this.additionalInformation;
-//     data['images'] = this.images;
-//     data['status'] = this.status;
-//     data['isDeleted'] = this.isDeleted;
-//     data['createdAt'] = this.createdAt;
-//     data['updatedAt'] = this.updatedAt;
-//     return data;
-//   }
-// }
-//
-// class SellerId {
-//   String? sId;
-//   String? name;
-//   String? email;
-//
-//   SellerId({this.sId, this.name, this.email});
-//
-//   SellerId.fromJson(Map<String, dynamic> json) {
-//     sId = json['_id'];
-//     name = json['name'];
-//     email = json['email'];
-//   }
-//
-//   Map<String, dynamic> toJson() {
-//     final Map<String, dynamic> data = new Map<String, dynamic>();
-//     data['_id'] = this.sId;
-//     data['name'] = this.name;
-//     data['email'] = this.email;
-//     return data;
-//   }
-// }
-//
-// class StoreId {
-//   String? sId;
-//   String? owner;
-//   String? storeType;
-//   String? displayName;
-//   String? description;
-//   String? categoryId;
-//   String? logo;
-//   String? coverImage;
-//   String? phone;
-//   String? whatsapp;
-//   String? email;
-//   String? cityId;
-//   String? businessLicenseNumber;
-//   String? tradeLicense;
-//   String? tinNumber;
-//   String? status;
-//   bool? isVerified;
-//   int? visitorCount;
-//   int? averageRating;
-//   int? ratingCount;
-//   List<String>? workingDays;
-//   String? openingTime;
-//   String? closingTime;
-//   bool? isOpen24Hours;
-//   bool? isDeleted;
-//   String? createdAt;
-//   String? updatedAt;
-//   String? city;
-//   double? latitude;
-//   double? longitude;
-//   String? postalCode;
-//   String? streetAddress;
-//
-//   StoreId(
-//       {this.sId,
-//         this.owner,
-//         this.storeType,
-//         this.displayName,
-//         this.description,
-//         this.categoryId,
-//         this.logo,
-//         this.coverImage,
-//         this.phone,
-//         this.whatsapp,
-//         this.email,
-//         this.cityId,
-//         this.businessLicenseNumber,
-//         this.tradeLicense,
-//         this.tinNumber,
-//         this.status,
-//         this.isVerified,
-//         this.visitorCount,
-//         this.averageRating,
-//         this.ratingCount,
-//         this.workingDays,
-//         this.openingTime,
-//         this.closingTime,
-//         this.isOpen24Hours,
-//         this.isDeleted,
-//         this.createdAt,
-//         this.updatedAt,
-//         this.city,
-//         this.latitude,
-//         this.longitude,
-//         this.postalCode,
-//         this.streetAddress});
-//
-//   StoreId.fromJson(Map<String, dynamic> json) {
-//     sId = json['_id'];
-//     owner = json['owner'];
-//     storeType = json['storeType'];
-//     displayName = json['displayName'];
-//     description = json['description'];
-//     categoryId = json['categoryId'];
-//     logo = json['logo'];
-//     coverImage = json['coverImage'];
-//     phone = json['phone'];
-//     whatsapp = json['whatsapp'];
-//     email = json['email'];
-//     cityId = json['cityId'];
-//     businessLicenseNumber = json['businessLicenseNumber'];
-//     tradeLicense = json['tradeLicense'];
-//     tinNumber = json['tinNumber'];
-//     status = json['status'];
-//     isVerified = json['isVerified'];
-//     visitorCount = json['visitorCount'];
-//     averageRating = json['averageRating'];
-//     ratingCount = json['ratingCount'];
-//     workingDays = json['workingDays'].cast<String>();
-//     openingTime = json['openingTime'];
-//     closingTime = json['closingTime'];
-//     isOpen24Hours = json['isOpen24Hours'];
-//     isDeleted = json['isDeleted'];
-//     createdAt = json['createdAt'];
-//     updatedAt = json['updatedAt'];
-//     city = json['city'];
-//     latitude = json['latitude'];
-//     longitude = json['longitude'];
-//     postalCode = json['postalCode'];
-//     streetAddress = json['streetAddress'];
-//   }
-//
-//   Map<String, dynamic> toJson() {
-//     final Map<String, dynamic> data = new Map<String, dynamic>();
-//     data['_id'] = this.sId;
-//     data['owner'] = this.owner;
-//     data['storeType'] = this.storeType;
-//     data['displayName'] = this.displayName;
-//     data['description'] = this.description;
-//     data['categoryId'] = this.categoryId;
-//     data['logo'] = this.logo;
-//     data['coverImage'] = this.coverImage;
-//     data['phone'] = this.phone;
-//     data['whatsapp'] = this.whatsapp;
-//     data['email'] = this.email;
-//     data['cityId'] = this.cityId;
-//     data['businessLicenseNumber'] = this.businessLicenseNumber;
-//     data['tradeLicense'] = this.tradeLicense;
-//     data['tinNumber'] = this.tinNumber;
-//     data['status'] = this.status;
-//     data['isVerified'] = this.isVerified;
-//     data['visitorCount'] = this.visitorCount;
-//     data['averageRating'] = this.averageRating;
-//     data['ratingCount'] = this.ratingCount;
-//     data['workingDays'] = this.workingDays;
-//     data['openingTime'] = this.openingTime;
-//     data['closingTime'] = this.closingTime;
-//     data['isOpen24Hours'] = this.isOpen24Hours;
-//     data['isDeleted'] = this.isDeleted;
-//     data['createdAt'] = this.createdAt;
-//     data['updatedAt'] = this.updatedAt;
-//     data['city'] = this.city;
-//     data['latitude'] = this.latitude;
-//     data['longitude'] = this.longitude;
-//     data['postalCode'] = this.postalCode;
-//     data['streetAddress'] = this.streetAddress;
-//     return data;
-//   }
-// }
 
 class ProductModel {
   bool? success;
@@ -321,12 +63,9 @@ class Data {
     originalPrice = json['originalPrice'];
     description = json['description'];
     additionalInformation = json['additionalInformation'];
-
-    // সেফ কাস্টিং লিস্টের জন্য
     images = json['images'] != null
         ? List<String>.from(json['images'].map((x) => x.toString()))
         : [];
-
     status = json['status'];
     isDeleted = json['isDeleted'];
     createdAt = json['createdAt'];
@@ -384,13 +123,13 @@ class StoreId {
   String? storeType;
   String? displayName;
   String? description;
-  CategoryModel? categoryId; // অবজেক্ট হিসেবে হ্যান্ডেল করা হলো
+  CategoryModel? categoryId;
   String? logo;
   String? coverImage;
   String? phone;
   String? whatsapp;
   String? email;
-  CityModel? cityId; // অবজেক্ট হিসেবে হ্যান্ডেল করা হলো
+  CityModel? cityId;
   String? businessLicenseNumber;
   String? tradeLicense;
   String? tinNumber;
@@ -453,8 +192,6 @@ class StoreId {
     storeType = json['storeType'];
     displayName = json['displayName'];
     description = json['description'];
-
-    // CategoryId অবজেক্ট পার্স করা
     categoryId = json['categoryId'] != null
         ? CategoryModel.fromJson(json['categoryId'])
         : null;
@@ -464,8 +201,6 @@ class StoreId {
     phone = json['phone'];
     whatsapp = json['whatsapp'];
     email = json['email'];
-
-    // CityId অবজেক্ট পার্স করা
     cityId = json['cityId'] != null
         ? CityModel.fromJson(json['cityId'])
         : null;
@@ -478,8 +213,6 @@ class StoreId {
     visitorCount = json['visitorCount'];
     averageRating = json['averageRating'];
     ratingCount = json['ratingCount'];
-
-    // workingDays সেফ কাস্টিং
     workingDays = json['workingDays'] != null
         ? List<String>.from(json['workingDays'].map((x) => x.toString()))
         : [];
@@ -539,7 +272,6 @@ class StoreId {
   }
 }
 
-// নতুন সাব-মডেল: CategoryId এর জন্য
 class CategoryModel {
   String? sId;
   String? name;
@@ -568,7 +300,7 @@ class CategoryModel {
   }
 }
 
-// নতুন সাব-মডেল: CityId এর জন্য
+
 class CityModel {
   String? sId;
   String? country;

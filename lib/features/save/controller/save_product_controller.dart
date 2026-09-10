@@ -78,4 +78,30 @@ class SaveProductController extends GetxController {
       isLoading.value = false;
     }
   }
+
+  // Favorite Toggle / Remove Method
+  Future<void> toggleFavorite(String targetId, String targetType) async {
+    try {
+      final body = {
+        "targetId": targetId,
+        "targetType": targetType,
+      };
+
+      ApiResponseModel response = await ApiService.post(
+        ApiEndPoint.favoritesToggle,
+        body: body,
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        if (selectedTab.value == 0) {
+          favoriteProductList.removeWhere((item) => item.targetId?.sId == targetId);
+        } else {
+          favoriteStoreList.removeWhere((item) => item.targetId?.sId == targetId);
+        }
+      }
+    } catch (e) {
+      debugPrint("Error toggling favorite: $e");
+    }
+  }
+
 }

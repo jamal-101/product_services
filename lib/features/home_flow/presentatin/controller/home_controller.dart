@@ -15,11 +15,10 @@ class HomeController extends GetxController {
     fetchCities();
     fetchFeaturedStores();
   }
+
   var currentNavIndex = 0.obs;
   var currentBannerIndex = 0.obs;
   final PageController bannerPageController = PageController();
-
-
 
   var isBannerLoading = false.obs;
   var bannerList = <Data>[].obs;
@@ -30,7 +29,9 @@ class HomeController extends GetxController {
       final response = await ApiService.get(ApiEndPoint.banner);
 
       if (response.isSuccess) {
-        Banner_model bannerModel = Banner_model.fromJson(response.data as Map<String, dynamic>);
+        Banner_model bannerModel = Banner_model.fromJson(
+          response.data as Map<String, dynamic>,
+        );
         if (bannerModel.data != null) {
           bannerList.value = bannerModel.data!;
         }
@@ -42,7 +43,6 @@ class HomeController extends GetxController {
     }
   }
 
-
   var featuredList = <FeaturedData>[].obs;
   var isFeaturedLoading = false.obs;
 
@@ -52,7 +52,6 @@ class HomeController extends GetxController {
 
   double? selectedLatitude;
   double? selectedLongitude;
-
 
   Future<void> fetchCities() async {
     try {
@@ -67,7 +66,9 @@ class HomeController extends GetxController {
       );
 
       if (response.isSuccess) {
-        CityModel model = CityModel.fromJson(response.data as Map<String, dynamic>);
+        CityModel model = CityModel.fromJson(
+          response.data as Map<String, dynamic>,
+        );
         if (model.data != null) {
           cityList.value = model.data!;
         }
@@ -86,7 +87,6 @@ class HomeController extends GetxController {
     fetchFeaturedStores();
   }
 
-
   Future<void> fetchFeaturedStores() async {
     try {
       isFeaturedLoading.value = true;
@@ -94,7 +94,8 @@ class HomeController extends GetxController {
       String endpoint = ApiEndPoint.userAds;
       List<String> queryParams = [];
 
-      if (selectedCityName.value.isNotEmpty && selectedCityName.value != "Choose city") {
+      if (selectedCityName.value.isNotEmpty &&
+          selectedCityName.value != "Choose city") {
         queryParams.add("city=${Uri.encodeComponent(selectedCityName.value)}");
       }
 
@@ -116,7 +117,9 @@ class HomeController extends GetxController {
       );
 
       if (response.isSuccess) {
-        featuresModel model = featuresModel.fromJson(response.data as Map<String, dynamic>);
+        featuresModel model = featuresModel.fromJson(
+          response.data as Map<String, dynamic>,
+        );
         featuredList.value = model.data ?? [];
       } else {
         featuredList.clear();
@@ -127,8 +130,6 @@ class HomeController extends GetxController {
       isFeaturedLoading.value = false;
     }
   }
-
-
 
   @override
   void onClose() {

@@ -2,10 +2,30 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:product_service/features/product_store_flow/presentation/controller/store_details_controller.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../../message_flow/presentation/controller/message_controller.dart';
 
 class ContactFooterWidget extends StatelessWidget {
   const ContactFooterWidget({super.key});
+
+
+
+  Future<void> _makePhoneCall(String phoneNumber) async {
+    final Uri launchUri = Uri(
+      scheme: 'tel',
+      path: phoneNumber,
+    );
+    if (await canLaunchUrl(launchUri)) {
+      await launchUrl(launchUri);
+    } else {
+      Get.snackbar(
+        "Error",
+        "Could not launch phone dialer",
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,9 +49,24 @@ class ContactFooterWidget extends StatelessWidget {
       ),
       child: Row(
         children: [
-          _buildIconButton(Icons.phone, () {}),
+          // _buildIconButton(Icons.phone, () {}),
+          _buildIconButton(Icons.phone, () {
+            final storeData = storeController.storeDetailsModel.value.data?.store;
+            final String? phoneNumber = storeData?.phone;
+
+            if (phoneNumber != null && phoneNumber.trim().isNotEmpty) {
+              _makePhoneCall(phoneNumber);
+            } else {
+              Get.snackbar(
+                "Unavailable",
+                "Phone number is not available",
+                backgroundColor: Colors.orange,
+                colorText: Colors.white,
+              );
+            }
+          }),
           SizedBox(width: 8.w),
-          _buildIconButton(Icons.directions, () {}),
+          // _buildIconButton(Icons.directions, () {}),
           SizedBox(width: 8.w),
           Expanded(
             child: ElevatedButton.icon(
@@ -74,13 +109,19 @@ class ContactFooterWidget extends StatelessWidget {
   }
 
   Widget _buildIconButton(IconData icon, VoidCallback onTap) {
-    return Container(
-      padding: EdgeInsets.all(14.w),
-      decoration: BoxDecoration(
-        color: Colors.grey.shade100,
-        shape: BoxShape.circle,
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: EdgeInsets.all(14.w),
+        decoration: BoxDecoration(
+          color: Colors.grey.shade100,
+          shape: BoxShape.circle,
+        ),
+        child: Icon(icon, color: Colors.black87, size: 20.sp),
       ),
-      child: Icon(icon, color: Colors.black87, size: 20.sp),
     );
   }
+
+
+
 }

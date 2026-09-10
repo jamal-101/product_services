@@ -1,7 +1,3 @@
-
-
-
-
 import 'dart:core';
 import 'package:get/get.dart';
 import '../../../../services/api/api_service.dart';

@@ -144,6 +144,12 @@ class SavedProductScreen extends StatelessWidget {
                       oldPrice: originalPrice != null ? "\$$originalPrice" : null,
                       discountText: discountText,
                       isNetworkImage: true,
+                      onTapFavorite: () {
+                        String targetType = controllers.selectedTab.value == 0 ? "product" : "service";
+                        if (target?.sId != null) {
+                          controllers.toggleFavorite(target!.sId!, targetType);
+                        }
+                      },
                     );
                   },
                 );
@@ -212,6 +218,7 @@ class SavedProductScreen extends StatelessWidget {
     String? oldPrice,
     String? discountText,
     bool isNetworkImage = false,
+    required VoidCallback onTapFavorite,
   }) {
     return Container(
       decoration: BoxDecoration(
@@ -246,15 +253,19 @@ class SavedProductScreen extends StatelessWidget {
                 Positioned(
                   top: 8.h,
                   right: 8.w,
-                  child: Container(
-                    padding: EdgeInsets.all(6.r),
-                    decoration: const BoxDecoration(
-                      color: Colors.white,
-                      shape: BoxShape.circle,
+                  child: GestureDetector(
+                    onTap: onTapFavorite,
+                    child: Container(
+                      padding: EdgeInsets.all(6.r),
+                      decoration: const BoxDecoration(
+                        color: Colors.white,
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(Icons.favorite, color: Colors.orange, size: 14),
                     ),
-                    child: const Icon(Icons.favorite, color: Colors.orange, size: 14),
                   ),
                 ),
+
                 if (discountText != null)
                   Positioned(
                     top: 8.h,

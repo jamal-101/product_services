@@ -9,7 +9,9 @@ class featuresModel {
     success = json['success'];
     message = json['message'];
     if (json['data'] != null) {
-      data = List<FeaturedData>.from(json['data'].map((v) => FeaturedData.fromJson(v)));
+      data = List<FeaturedData>.from(
+        json['data'].map((v) => FeaturedData.fromJson(v)),
+      );
     }
   }
 
@@ -45,7 +47,6 @@ class FeaturedData {
   String? createdAt;
   String? updatedAt;
 
-
   FeaturedData({
     this.price,
     this.sId,
@@ -72,7 +73,9 @@ class FeaturedData {
     price = json['price'];
     sId = json['_id'];
     sellerId = json['sellerId'];
-    storeId = json['storeId'] != null ? StoreId.fromJson(json['storeId']) : null;
+    storeId = json['storeId'] != null
+        ? StoreId.fromJson(json['storeId'])
+        : null;
     advertisementType = json['advertisementType'];
     campaignName = json['campaignName'];
     cityAdConfigId = json['cityAdConfigId'];
@@ -210,7 +213,9 @@ class StoreId {
         : null;
     visitorCount = json['visitorCount'];
     ratingCount = json['ratingCount'];
-    workingDays = json['workingDays'] != null ? List<String>.from(json['workingDays']) : null;
+    workingDays = json['workingDays'] != null
+        ? List<String>.from(json['workingDays'])
+        : null;
     openingTime = json['openingTime'];
     closingTime = json['closingTime'];
     isOpen24Hours = json['isOpen24Hours'];
@@ -222,7 +227,6 @@ class StoreId {
     longitude = json['longitude'];
     postalCode = json['postalCode'];
     streetAddress = json['streetAddress'];
-
   }
 
   Map<String, dynamic> toJson() {

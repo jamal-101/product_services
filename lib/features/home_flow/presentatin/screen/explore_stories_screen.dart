@@ -14,7 +14,6 @@ import '../controller/explore_store_controller.dart';
 import '../widget/city_dialog.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 
-
 class ExploreStoriesScreen extends StatelessWidget {
   const ExploreStoriesScreen({super.key});
 
@@ -84,7 +83,7 @@ class ExploreStoriesScreen extends StatelessWidget {
                               child: _buildToggleButton(
                                 title: AppString.productsStores.tr,
                                 isSelected:
-                                controllers.isProductStoreSelected.value,
+                                    controllers.isProductStoreSelected.value,
                                 onTap: () => controllers.toggleStoreType(true),
                               ),
                             ),
@@ -92,7 +91,7 @@ class ExploreStoriesScreen extends StatelessWidget {
                               child: _buildToggleButton(
                                 title: AppString.servicesProvider.tr,
                                 isSelected:
-                                !controllers.isProductStoreSelected.value,
+                                    !controllers.isProductStoreSelected.value,
                                 onTap: () => controllers.toggleStoreType(false),
                               ),
                             ),
@@ -131,40 +130,42 @@ class ExploreStoriesScreen extends StatelessWidget {
                       physics: const BouncingScrollPhysics(),
                       child: Row(
                         children: [
-                          Obx(() => _buildFilterChip(
-                            Icons.location_on_outlined,
-                            controllers.selectedCity.value.isEmpty
-                                ? "City"
-                                : controllers.selectedCity.value,
-                            onTap: () {
-                              showModalBottomSheet(
-                                context: context,
-                                isScrollControlled: true,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.vertical(
-                                    top: Radius.circular(20.r),
-                                  ),
-                                ),
-                                builder: (context) => Padding(
-                                  padding: EdgeInsets.only(
-                                    bottom: MediaQuery.of(context)
-                                        .viewInsets
-                                        .bottom,
-                                  ),
-                                  child: SizedBox(
-                                    height: 0.5.sh,
-                                    child: CityDialog(
-                                      selectedCity:
-                                      controllers.selectedCity.value,
-                                      onCitySelected: (newCity) {
-                                        controllers.updateCity(newCity);
-                                      },
+                          Obx(
+                            () => _buildFilterChip(
+                              Icons.location_on_outlined,
+                              controllers.selectedCity.value.isEmpty
+                                  ? "City"
+                                  : controllers.selectedCity.value,
+                              onTap: () {
+                                showModalBottomSheet(
+                                  context: context,
+                                  isScrollControlled: true,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.vertical(
+                                      top: Radius.circular(20.r),
                                     ),
                                   ),
-                                ),
-                              );
-                            },
-                          )),
+                                  builder: (context) => Padding(
+                                    padding: EdgeInsets.only(
+                                      bottom: MediaQuery.of(
+                                        context,
+                                      ).viewInsets.bottom,
+                                    ),
+                                    child: SizedBox(
+                                      height: 0.5.sh,
+                                      child: CityDialog(
+                                        selectedCity:
+                                            controllers.selectedCity.value,
+                                        onCitySelected: (newCity) {
+                                          controllers.updateCity(newCity);
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
                           Obx(() {
                             if (!controllers.isListViewSelected.value) {
                               return const SizedBox.shrink();
@@ -190,63 +191,78 @@ class ExploreStoriesScreen extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(12.r),
                               ),
                               itemBuilder: (BuildContext context) =>
-                              <PopupMenuEntry<String>>[
-                                const PopupMenuItem<String>(
-                                  value: '1',
-                                  child: Row(
-                                    children: [
-                                      Icon(Icons.star,
-                                          color: Colors.amber, size: 16),
-                                      SizedBox(width: 8),
-                                      Text('1 Star'),
-                                    ],
-                                  ),
-                                ),
-                                const PopupMenuItem<String>(
-                                  value: '2',
-                                  child: Row(
-                                    children: [
-                                      Icon(Icons.star,
-                                          color: Colors.amber, size: 16),
-                                      SizedBox(width: 8),
-                                      Text('2 Stars'),
-                                    ],
-                                  ),
-                                ),
-                                const PopupMenuItem<String>(
-                                  value: '3',
-                                  child: Row(
-                                    children: [
-                                      Icon(Icons.star,
-                                          color: Colors.amber, size: 16),
-                                      SizedBox(width: 8),
-                                      Text('3 Stars'),
-                                    ],
-                                  ),
-                                ),
-                                const PopupMenuItem<String>(
-                                  value: '4',
-                                  child: Row(
-                                    children: [
-                                      Icon(Icons.star,
-                                          color: Colors.amber, size: 16),
-                                      SizedBox(width: 8),
-                                      Text('4 Stars'),
-                                    ],
-                                  ),
-                                ),
-                                const PopupMenuItem<String>(
-                                  value: '5',
-                                  child: Row(
-                                    children: [
-                                      Icon(Icons.star,
-                                          color: Colors.amber, size: 16),
-                                      SizedBox(width: 8),
-                                      Text('5 Stars'),
-                                    ],
-                                  ),
-                                ),
-                              ],
+                                  <PopupMenuEntry<String>>[
+                                    const PopupMenuItem<String>(
+                                      value: '1',
+                                      child: Row(
+                                        children: [
+                                          Icon(
+                                            Icons.star,
+                                            color: Colors.amber,
+                                            size: 16,
+                                          ),
+                                          SizedBox(width: 8),
+                                          Text('1 Star'),
+                                        ],
+                                      ),
+                                    ),
+                                    const PopupMenuItem<String>(
+                                      value: '2',
+                                      child: Row(
+                                        children: [
+                                          Icon(
+                                            Icons.star,
+                                            color: Colors.amber,
+                                            size: 16,
+                                          ),
+                                          SizedBox(width: 8),
+                                          Text('2 Stars'),
+                                        ],
+                                      ),
+                                    ),
+                                    const PopupMenuItem<String>(
+                                      value: '3',
+                                      child: Row(
+                                        children: [
+                                          Icon(
+                                            Icons.star,
+                                            color: Colors.amber,
+                                            size: 16,
+                                          ),
+                                          SizedBox(width: 8),
+                                          Text('3 Stars'),
+                                        ],
+                                      ),
+                                    ),
+                                    const PopupMenuItem<String>(
+                                      value: '4',
+                                      child: Row(
+                                        children: [
+                                          Icon(
+                                            Icons.star,
+                                            color: Colors.amber,
+                                            size: 16,
+                                          ),
+                                          SizedBox(width: 8),
+                                          Text('4 Stars'),
+                                        ],
+                                      ),
+                                    ),
+                                    const PopupMenuItem<String>(
+                                      value: '5',
+                                      child: Row(
+                                        children: [
+                                          Icon(
+                                            Icons.star,
+                                            color: Colors.amber,
+                                            size: 16,
+                                          ),
+                                          SizedBox(width: 8),
+                                          Text('5 Stars'),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
                               child: Container(
                                 margin: EdgeInsets.only(right: 8.w),
                                 padding: EdgeInsets.symmetric(
@@ -254,8 +270,9 @@ class ExploreStoriesScreen extends StatelessWidget {
                                   vertical: 6.h,
                                 ),
                                 decoration: BoxDecoration(
-                                  color: controllers.selectedRatingEnum.value !=
-                                      null
+                                  color:
+                                      controllers.selectedRatingEnum.value !=
+                                          null
                                       ? const Color(0xFF2C3E50)
                                       : Colors.white,
                                   borderRadius: BorderRadius.circular(20.r),
@@ -268,23 +285,27 @@ class ExploreStoriesScreen extends StatelessWidget {
                                     Icon(
                                       Icons.star_border,
                                       size: 14.w,
-                                      color: controllers.selectedRatingEnum
-                                          .value !=
-                                          null
+                                      color:
+                                          controllers
+                                                  .selectedRatingEnum
+                                                  .value !=
+                                              null
                                           ? Colors.white
                                           : Colors.black54,
                                     ),
                                     SizedBox(width: 4.w),
                                     Text(
                                       controllers.selectedRatingEnum.value ==
-                                          null
+                                              null
                                           ? "Rating"
                                           : "${controllers.selectedRatingEnum.value.toString().split('.').last} Star",
                                       style: GoogleFonts.plusJakartaSans(
                                         fontSize: 12.sp,
-                                        color: controllers.selectedRatingEnum
-                                            .value !=
-                                            null
+                                        color:
+                                            controllers
+                                                    .selectedRatingEnum
+                                                    .value !=
+                                                null
                                             ? Colors.white
                                             : Colors.black54,
                                       ),
@@ -293,9 +314,11 @@ class ExploreStoriesScreen extends StatelessWidget {
                                     Icon(
                                       Icons.arrow_drop_down,
                                       size: 16.w,
-                                      color: controllers.selectedRatingEnum
-                                          .value !=
-                                          null
+                                      color:
+                                          controllers
+                                                  .selectedRatingEnum
+                                                  .value !=
+                                              null
                                           ? Colors.white
                                           : Colors.black54,
                                     ),
@@ -335,11 +358,14 @@ class ExploreStoriesScreen extends StatelessWidget {
                           itemBuilder: (context, index) {
                             var store = controllers.productStoreList[index];
                             return _buildStoreListItem(
+                              storeId: store.sId ?? "",
+                              index: index,
                               title: store.displayName ?? "No Name",
                               subtitle:
-                              "${store.categoryId?.name ?? 'Store'} • ${store.phone ?? ''}",
+                                  "${store.categoryId?.name ?? 'Store'} • ${store.phone ?? ''}",
                               rating: store.averageRating?.toString() ?? "0.0",
                               logoBg: const Color(0xFFE67E22),
+                              isFavorite: store.isFavorite ?? false,
                             );
                           },
                         );
@@ -354,11 +380,14 @@ class ExploreStoriesScreen extends StatelessWidget {
                           itemBuilder: (context, index) {
                             var store = controllers.serviceStoreList[index];
                             return _buildStoreListItem(
+                              storeId: store.sId ?? "",
+                              index: index,
                               title: store.displayName ?? "No Name",
                               subtitle:
-                              "${store.categoryId?.name ?? 'Service'} • ${store.phone ?? ''}",
+                                  "${store.categoryId?.name ?? 'Service'} • ${store.phone ?? ''}",
                               rating: store.averageRating?.toString() ?? "0.0",
                               logoBg: const Color(0xFF9B59B6),
+                              isFavorite: store.isFavorite ?? false,
                             );
                           },
                         );
@@ -403,11 +432,11 @@ class ExploreStoriesScreen extends StatelessWidget {
   }
 
   Widget _buildFilterChip(
-      IconData icon,
-      String label, {
-        bool isSelected = false,
-        VoidCallback? onTap,
-      }) {
+    IconData icon,
+    String label, {
+    bool isSelected = false,
+    VoidCallback? onTap,
+  }) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -444,9 +473,12 @@ class ExploreStoriesScreen extends StatelessWidget {
     required String subtitle,
     required String rating,
     required Color logoBg,
+    bool isFavorite = false,
+    required String storeId,
+    required int index,
   }) {
     final ExploreStoreController controllers =
-    Get.find<ExploreStoreController>();
+        Get.find<ExploreStoreController>();
     return GestureDetector(
       onTap: () {
         Get.toNamed(
@@ -516,7 +548,21 @@ class ExploreStoriesScreen extends StatelessWidget {
                   ],
                 ),
                 SizedBox(height: 8.h),
-                const Icon(Icons.bookmark_border, color: Colors.grey, size: 18),
+
+                GestureDetector(
+                  behavior: HitTestBehavior.opaque,
+                  onTap: () {
+                    controllers.handleBookmarkTap(storeId, index);
+                  },
+                  child: Padding(
+                    padding: EdgeInsets.all(4.w),
+                    child: Icon(
+                      isFavorite ? Icons.bookmark : Icons.bookmark_border,
+                      color: isFavorite ? const Color(0xFFE67E22) : Colors.grey,
+                      size: 18,
+                    ),
+                  ),
+                ),
               ],
             ),
           ],
@@ -532,7 +578,9 @@ class ExploreStoriesScreen extends StatelessWidget {
         child: Text(
           "No stores found",
           style: GoogleFonts.plusJakartaSans(
-              fontSize: 14.sp, color: Colors.grey),
+            fontSize: 14.sp,
+            color: Colors.grey,
+          ),
         ),
       ),
     );
@@ -540,7 +588,7 @@ class ExploreStoriesScreen extends StatelessWidget {
 
   Widget _buildTopBarActions(ExploreStoreController controllers) {
     return Obx(
-          () => Row(
+      () => Row(
         children: [
           SizedBox(width: 160.w),
           Container(
@@ -602,19 +650,20 @@ class ExploreStoriesScreen extends StatelessWidget {
   }
 }
 
-
 Future<BitmapDescriptor> _createCustomMarkerBitmap(
-    String title, String rating, Color logoBg, String? logoUrl) async {
+  String title,
+  String rating,
+  Color logoBg,
+  String? logoUrl,
+) async {
   final ui.PictureRecorder pictureRecorder = ui.PictureRecorder();
   final Canvas canvas = Canvas(pictureRecorder);
-
 
   const Size size = Size(160, 62);
 
   final Paint shadowPaint = Paint()
     ..color = Colors.black.withValues(alpha: 0.15)
     ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 5);
-
 
   final RRect cardRect = RRect.fromRectAndRadius(
     const Rect.fromLTWH(4, 4, 152, 46),
@@ -642,14 +691,18 @@ Future<BitmapDescriptor> _createCustomMarkerBitmap(
       canvas.clipRRect(logoRect);
       canvas.drawImageRect(
         fi.image,
-        Rect.fromLTWH(0, 0, fi.image.width.toDouble(), fi.image.height.toDouble()),
+        Rect.fromLTWH(
+          0,
+          0,
+          fi.image.width.toDouble(),
+          fi.image.height.toDouble(),
+        ),
         Rect.fromLTWH(10, 10, 32, 32),
         Paint(),
       );
       canvas.restore();
     } catch (_) {}
   }
-
 
   final TextPainter titlePainter = TextPainter(
     text: TextSpan(
@@ -666,7 +719,6 @@ Future<BitmapDescriptor> _createCustomMarkerBitmap(
   titlePainter.layout(maxWidth: 100);
   titlePainter.paint(canvas, const Offset(48, 10));
 
-
   final TextPainter ratingPainter = TextPainter(
     text: TextSpan(
       text: "⭐  $rating",
@@ -681,7 +733,6 @@ Future<BitmapDescriptor> _createCustomMarkerBitmap(
   ratingPainter.layout();
   ratingPainter.paint(canvas, const Offset(48, 27));
 
-
   final Path path = Path();
   path.moveTo(74, 50);
   path.lineTo(86, 50);
@@ -693,8 +744,9 @@ Future<BitmapDescriptor> _createCustomMarkerBitmap(
     size.width.toInt(),
     size.height.toInt(),
   );
-  final ByteData? byteData =
-  await image.toByteData(format: ui.ImageByteFormat.png);
+  final ByteData? byteData = await image.toByteData(
+    format: ui.ImageByteFormat.png,
+  );
   final Uint8List uint8List = byteData!.buffer.asUint8List();
 
   return BitmapDescriptor.bytes(uint8List);
@@ -728,7 +780,6 @@ Widget _buildMapViewContent(ExploreStoreController controllers) {
   });
 }
 
-
 Future<Set<Marker>> _loadMarkers(ExploreStoreController controllers) async {
   Set<Marker> markers = {};
 
@@ -742,10 +793,12 @@ Future<Set<Marker>> _loadMarkers(ExploreStoreController controllers) async {
       double lng = 90.4122;
 
       try {
-        lat = store.latitude?.toDouble() ??
+        lat =
+            store.latitude?.toDouble() ??
             store.cityId?.latitude?.toDouble() ??
             23.8103;
-        lng = store.longitude?.toDouble() ??
+        lng =
+            store.longitude?.toDouble() ??
             store.cityId?.longitude?.toDouble() ??
             90.4122;
       } catch (_) {
@@ -762,8 +815,12 @@ Future<Set<Marker>> _loadMarkers(ExploreStoreController controllers) async {
             : "${ApiEndPoint.imageUrl}${store.logo}";
       }
 
-      BitmapDescriptor customIcon =
-      await _createCustomMarkerBitmap(title, rating, logoBgColor, logoUrl);
+      BitmapDescriptor customIcon = await _createCustomMarkerBitmap(
+        title,
+        rating,
+        logoBgColor,
+        logoUrl,
+      );
 
       markers.add(
         Marker(
@@ -802,8 +859,12 @@ Future<Set<Marker>> _loadMarkers(ExploreStoreController controllers) async {
             : "${ApiEndPoint.imageUrl}${store.logo}";
       }
 
-      BitmapDescriptor customIcon =
-      await _createCustomMarkerBitmap(title, rating, logoBgColor, logoUrl);
+      BitmapDescriptor customIcon = await _createCustomMarkerBitmap(
+        title,
+        rating,
+        logoBgColor,
+        logoUrl,
+      );
 
       markers.add(
         Marker(

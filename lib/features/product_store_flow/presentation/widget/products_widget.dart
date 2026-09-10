@@ -72,6 +72,8 @@ class ProductsWidget extends StatelessWidget {
                     originalPrice: product.originalPrice ?? 0,
                     imageUrl: imageUrl,
                     isProduct: true,
+                    controller: controller,
+                    itemId: product.sId ?? "",
                   ),
                 );
               } else {
@@ -89,11 +91,13 @@ class ProductsWidget extends StatelessWidget {
                     ));
                   },
                   child: _buildItemCard(
+                    controller: controller,
                     title: service.title ?? "",
                     activePrice: service.activePrice ?? 0,
                     originalPrice: service.originalPrice ?? 0,
                     imageUrl: imageUrl,
                     isProduct: false,
+                    itemId: service.sId ?? "",
                   ),
                 );
               }
@@ -111,11 +115,13 @@ class ProductsWidget extends StatelessWidget {
   }
 
   Widget _buildItemCard({
+    required StoreDetailsController controller,
     required String title,
     required num activePrice,
     required num originalPrice,
     required String imageUrl,
     required bool isProduct,
+    required String itemId,
   }) {
     return Container(
       decoration: BoxDecoration(
@@ -163,14 +169,33 @@ class ProductsWidget extends StatelessWidget {
                 Positioned(
                   top: 8.h,
                   right: 8.w,
-                  child: Container(
-                    decoration: const BoxDecoration(shape: BoxShape.circle, color: Colors.white),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Icon(Icons.favorite_border, color: Colors.grey.shade700, size: 20.sp),
+                  child: GestureDetector(
+                    onTap: () {
+                      String targetType = isProduct ? "product" : "service";
+                      if (itemId.isNotEmpty) {
+                        controller.toggleItemFavorite(itemId, targetType);
+                      }
+                    },
+                    child: Container(
+                      decoration: const BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.white,
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Obx(() {
+                          bool isFav = controller.isItemFavorite(itemId);
+                          return Icon(
+                            isFav ? Icons.favorite : Icons.favorite_border,
+                            color: isFav ? Colors.orange : Colors.grey.shade700,
+                            size: 20.sp,
+                          );
+                        }),
+                      ),
                     ),
                   ),
                 ),
+
               ],
             ),
           ),
