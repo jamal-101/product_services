@@ -331,7 +331,6 @@ import '../controller/auth_controller.dart';
 class LoginScreen extends StatelessWidget {
   LoginScreen({super.key});
 
-  // ফর্মের স্টেট কন্ট্রোল করার জন্য গ্লোবাল কি (GlobalKey)
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
@@ -346,7 +345,7 @@ class LoginScreen extends StatelessWidget {
         child: SingleChildScrollView(
           padding: EdgeInsets.symmetric(horizontal: 24.w),
           child: Form(
-            key: _formKey, // ফর্ম উইজেটের সাথে কি যুক্ত করা হলো
+            key: _formKey,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -388,7 +387,6 @@ class LoginScreen extends StatelessWidget {
                 TextFormField(
                   controller: controller.loginEmailController,
                   keyboardType: TextInputType.emailAddress,
-                  // ইমেইল ভ্যালিডেশন Utils ক্লাস থেকে কল করা হলো
                   validator: (value) => Utils.emailValidator(value),
                   decoration: InputDecoration(
                     fillColor: const Color(0xFFFFFFFF),
@@ -447,7 +445,6 @@ class LoginScreen extends StatelessWidget {
                       () => TextFormField(
                     controller: controller.loginPasswordController,
                     obscureText: !controller.isLoginPasswordVisible.value,
-                    // পাসওয়ার্ড ভ্যালিডেশন Utils ক্লাস থেকে কল করা হলো
                     validator: (value) => Utils.passwordValidator(value),
                     decoration: InputDecoration(
                       fillColor: const Color(0xFFFFFFFF),
@@ -541,16 +538,14 @@ class LoginScreen extends StatelessWidget {
                       onPressed: controller.isLoading.value
                           ? null
                           : () {
-                        // এখানে ফর্ম ভ্যালিডেশন চেক করা হচ্ছে
                         if (_formKey.currentState!.validate()) {
-                          // ভ্যালিডেশন পাস করলে API কল হবে
                           controller.loginUser();
                         }
                       },
                       child: controller.isLoading.value
                           ? const CircularProgressIndicator(color: Colors.white)
                           : Text(
-                        AppString.login,
+                        AppString.login.tr,
                         style: GoogleFonts.plusJakartaSans(
                           fontSize: 16.sp,
                           color: Colors.white,
