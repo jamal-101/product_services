@@ -90,9 +90,9 @@ class AccountScreen extends StatelessWidget {
                         vertical: 20.h,
                       ),
                       children: [
-                        if (authController.selectedRole.value == 'seller') ...[
-                          _buildGrowthPlanBanner(),
-                        ],
+                        // if (authController.selectedRole.value == 'seller') ...[
+                        //   _buildGrowthPlanBanner(),
+                        // ],
                         _buildSectionTitle('accounT'.tr),
                         _buildCardMenuItem(
                           Icons.person_outline,
@@ -411,69 +411,69 @@ class AccountScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildGrowthPlanBanner() {
-    return Container(
-      margin: EdgeInsets.only(bottom: 20.h),
-      padding: EdgeInsets.all(16.w),
-      decoration: BoxDecoration(
-        color: const Color(0xFF2A9B4A),
-        borderRadius: BorderRadius.circular(15.r),
-      ),
-      child: Row(
-        children: [
-          Container(
-            padding: EdgeInsets.all(8.w),
-            decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.2),
-              shape: BoxShape.circle,
-            ),
-            child: const Icon(Icons.diamond, color: Colors.white, size: 20),
-          ),
-          SizedBox(width: 12.w),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'growthPlan'.tr,
-                  style: GoogleFonts.montserrat(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 14.sp,
-                  ),
-                ),
-                Text(
-                  "Renews on July 18, 2026 (\$49/mo)",
-                  style: GoogleFonts.montserrat(
-                    color: Colors.white.withValues(alpha: 0.9),
-                    fontSize: 11.sp,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          GestureDetector(
-            onTap: () {
-              Get.toNamed(AppRoutes.subscriptionBillingScreen);
-            },
-            child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(8.r),
-              ),
-              child: Text(
-                'manage'.tr,
-                style: GoogleFonts.montserrat(
-                  color: const Color(0xFF2A9B4A),
-                  fontWeight: FontWeight.bold,
-                  fontSize: 10.sp,
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+  // Widget _buildGrowthPlanBanner() {
+  //   return Container(
+  //     margin: EdgeInsets.only(bottom: 20.h),
+  //     padding: EdgeInsets.all(16.w),
+  //     decoration: BoxDecoration(
+  //       color: const Color(0xFF2A9B4A),
+  //       borderRadius: BorderRadius.circular(15.r),
+  //     ),
+  //     child: Row(
+  //       children: [
+  //         Container(
+  //           padding: EdgeInsets.all(8.w),
+  //           decoration: BoxDecoration(
+  //             color: Colors.white.withValues(alpha: 0.2),
+  //             shape: BoxShape.circle,
+  //           ),
+  //           child: const Icon(Icons.diamond, color: Colors.white, size: 20),
+  //         ),
+  //         SizedBox(width: 12.w),
+  //         Expanded(
+  //           child: Column(
+  //             crossAxisAlignment: CrossAxisAlignment.start,
+  //             children: [
+  //               Text(
+  //                 'growthPlan'.tr,
+  //                 style: GoogleFonts.montserrat(
+  //                   color: Colors.white,
+  //                   fontWeight: FontWeight.bold,
+  //                   fontSize: 14.sp,
+  //                 ),
+  //               ),
+  //               Text(
+  //                 "Renews on July 18, 2026 (\$49/mo)",
+  //                 style: GoogleFonts.montserrat(
+  //                   color: Colors.white.withValues(alpha: 0.9),
+  //                   fontSize: 11.sp,
+  //                 ),
+  //               ),
+  //             ],
+  //           ),
+  //         ),
+  //         GestureDetector(
+  //           onTap: () {
+  //             Get.toNamed(AppRoutes.subscriptionBillingScreen);
+  //           },
+  //           child: Container(
+  //             padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
+  //             decoration: BoxDecoration(
+  //               color: Colors.white,
+  //               borderRadius: BorderRadius.circular(8.r),
+  //             ),
+  //             child: Text(
+  //               'manage'.tr,
+  //               style: GoogleFonts.montserrat(
+  //                 color: const Color(0xFF2A9B4A),
+  //                 fontWeight: FontWeight.bold,
+  //                 fontSize: 10.sp,
+  //               ),
+  //             ),
+  //           ),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 }

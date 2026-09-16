@@ -231,6 +231,15 @@ class PostAdStep1Screen extends StatelessWidget {
                                 .toList(),
                             onChanged: (value) {
                               controller.selectedCityId.value = value!;
+                              String cityName = '';
+                              for (final city in controller.citiesList) {
+                                if (city is Map &&
+                                    city['_id']?.toString() == value) {
+                                  cityName = (city['city'] ?? '').toString();
+                                  break;
+                                }
+                              }
+                              controller.selectedCityName.value = cityName;
                               controller.fetchSlotAvailability();
                             },
                           ),

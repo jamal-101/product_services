@@ -1,36 +1,50 @@
-
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_instance/src/extension_instance.dart';
-import 'package:get/get_navigation/src/extension_navigation.dart';
-import 'package:get/get_navigation/src/snackbar/snackbar.dart';
-import 'package:get/get_rx/src/rx_types/rx_types.dart';
-import 'package:get/get_state_manager/src/simple/get_controllers.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../services/api/api_service.dart';
 import '../../../services/storage/storage_key.dart';
 import '../../../services/storage/storage_service.dart';
 import '../../../utils/constants/api_enpoint.dart';
+import '../../../utils/constants/api_response_model.dart';
 import '../../auth_flow/presentation/controller/auth_controller.dart';
+import '../../profile_section/presentation/screen/store_creation/presentation/screen/datafast_payment_screen.dart';
 import '../presentation/screen/campaign_success_view.dart';
 import '../presentation/screen/post_add_step1.dart';
 
-class PostAddController extends GetxController {
+class AdSlot {
+  final int position;
+  final bool isAvailable;
+  final double? weeklyPrice;
+  final double? monthlyPrice;
+  final String? label;
 
+  const AdSlot({
+    required this.position,
+    required this.isAvailable,
+    this.weeklyPrice,
+    this.monthlyPrice,
+    this.label,
+  });
+
+  String get displayName => label?.isNotEmpty == true ? label! : 'Slot $position';
+}
+
+class PostAddController extends GetxController {
   final campaignNameController = TextEditingController();
   var selectedCityId = "".obs;
   var selectedCityName = "".obs;
   var citiesList = [].obs;
   var isLoadingCities = false.obs;
 
-  var slotAvailabilityData = Rxn<Map<String, dynamic>>();
+  var slotAvailabilityData = Rxn<dynamic>();
+  var availableSlots = <AdSlot>[].obs;
   var selectedSlot = "".obs;
+  var selectedPosition = 0.obs;
   var slotPrice = 0.0.obs;
   var isLoadingSlots = false.obs;
 
@@ -42,10 +56,19 @@ class PostAddController extends GetxController {
 
   var isSubmitting = false.obs;
   var isVerifying = false.obs;
+  var isCreatingCheckout = false.obs;
+  var isVerifyingPayment = false.obs;
+  var isLoadingPackages = false.obs;
+  var selectedPackageId = "".obs;
+  var packagePrice = 0.0.obs;
+  var packageName = "".obs;
+  var activeCheckoutId = "".obs;
+  var postAddPackages = <Map<String, dynamic>>[].obs;
 
   @override
   void onInit() {
     super.onInit();
+    fetchPostAddPackages();
   }
 
   Future<void> checkAndNavigateToPostAd() async {
@@ -82,14 +105,30 @@ class PostAddController extends GetxController {
           );
           return;
         }
+
+        // verify-seller returns a seller-scoped accessToken — must replace old user token
+        final tokens = responseData is Map ? responseData['tokens'] : null;
+        final sellerToken = tokens is Map
+            ? (tokens['accessToken'] ?? tokens['token'])?.toString()
+            : null;
+        if (sellerToken != null && sellerToken.isNotEmpty) {
+          LocalStorage.token = sellerToken;
+          await LocalStorage.setString(LocalStorageKeys.token, sellerToken);
+          await LocalStorage.setSellerToken(sellerToken);
+          debugPrint('🔐 Seller token saved from verify-seller');
+        } else if (LocalStorage.token.isNotEmpty) {
+          // Keep current token as seller token when already in seller mode
+          await LocalStorage.setSellerToken(LocalStorage.token);
+        }
+
         final AuthController authController = Get.find<AuthController>();
         authController.selectedRole.value = 'seller';
         await LocalStorage.setUserRole('seller');
 
         bool isCityFetched = await fetchActiveCities();
         if (!isCityFetched) return;
+        fetchPostAddPackages();
         Get.to(() => const PostAdStep1Screen());
-
       } else {
         Get.rawSnackbar(
           messageText: Text(
@@ -160,11 +199,121 @@ class PostAddController extends GetxController {
     }
   }
 
+  /// GET /subscription-packages?packageType=post_add
+  Future<void> fetchPostAddPackages() async {
+    try {
+      isLoadingPackages.value = true;
+      final response = await ApiService.get(
+        "${ApiEndPoint.baseUrl}/subscription-packages?packageType=post_add",
+      );
+
+      if (response.isSuccess) {
+        final list = response.data['data'];
+        if (list is List) {
+          postAddPackages.assignAll(
+            list
+                .whereType<Map>()
+                .map((e) => Map<String, dynamic>.from(e))
+                .toList(),
+          );
+          _syncSelectedPackage();
+        }
+      }
+    } catch (e) {
+      debugPrint('fetchPostAddPackages error: $e');
+    } finally {
+      isLoadingPackages.value = false;
+    }
+  }
+
+  void onDurationChanged(String duration) {
+    selectedDuration.value = duration;
+    _syncSelectedPackage();
+    _refreshSlotPrice();
+  }
+
+  /// Select a package from GET /subscription-packages?packageType=post_add
+  void selectPackage(Map<String, dynamic> pkg) {
+    final id = (pkg['_id'] ?? '').toString();
+    if (id.isEmpty) return;
+
+    selectedPackageId.value = id;
+    packageName.value = (pkg['name'] ?? '').toString();
+    packagePrice.value = _toDouble(pkg['price']) ?? 0;
+    selectedDuration.value = _uiDurationFromApi(
+      (pkg['duration'] ?? '').toString(),
+    );
+    _refreshSlotPrice();
+  }
+
+  String _uiDurationFromApi(String apiDuration) {
+    final d = apiDuration.toLowerCase();
+    if (d.contains('week')) return 'weekly';
+    if (d.contains('year')) return 'yearly';
+    return 'monthly';
+  }
+
+  String packageDurationLabel(String? apiDuration) {
+    final d = (apiDuration ?? '').toLowerCase();
+    if (d.contains('week')) return '7 days';
+    if (d.contains('year')) return '365 days';
+    if (d.contains('month')) return '30 days';
+    return apiDuration?.isNotEmpty == true ? apiDuration! : '—';
+  }
+
+  void _syncSelectedPackage() {
+    if (postAddPackages.isEmpty) {
+      selectedPackageId.value = '';
+      packagePrice.value = 0;
+      packageName.value = '';
+      return;
+    }
+
+    // Keep explicit user selection if still present in list
+    if (selectedPackageId.value.isNotEmpty) {
+      final existing = postAddPackages.firstWhereOrNull(
+        (p) => (p['_id'] ?? '').toString() == selectedPackageId.value,
+      );
+      if (existing != null) {
+        selectPackage(existing);
+        return;
+      }
+    }
+
+    final matched = _matchPackageForDuration(selectedDuration.value);
+    selectPackage(matched ?? postAddPackages.first);
+  }
+
+  Map<String, dynamic>? _matchPackageForDuration(String duration) {
+    final normalized = duration.toLowerCase();
+    for (final pkg in postAddPackages) {
+      final pkgDuration = (pkg['duration'] ?? '').toString().toLowerCase();
+      if (_durationsMatch(normalized, pkgDuration)) return pkg;
+    }
+    return null;
+  }
+
+  bool _durationsMatch(String uiDuration, String apiDuration) {
+    if (uiDuration.contains('week') || uiDuration == 'weekly') {
+      return apiDuration.contains('week');
+    }
+    if (uiDuration.contains('month') || uiDuration == 'monthly') {
+      return apiDuration.contains('month');
+    }
+    return apiDuration.contains(uiDuration) || uiDuration.contains(apiDuration);
+  }
+
+  /// GET /advertisements/availability?cityAdConfigId=...&advertisementType=featured
   Future<void> fetchSlotAvailability() async {
     if (selectedCityId.value.isEmpty) return;
     try {
       isLoadingSlots.value = true;
-      String url = "${ApiEndPoint.slotAvailability}?cityAdConfigId=${selectedCityId.value}&advertisementType=featured";
+      selectedSlot.value = '';
+      selectedPosition.value = 0;
+      slotPrice.value = 0;
+
+      final url =
+          "${ApiEndPoint.slotAvailability}?cityAdConfigId=${selectedCityId.value}&advertisementType=featured";
 
       final response = await ApiService.get(
         url,
@@ -175,13 +324,195 @@ class PostAddController extends GetxController {
       );
 
       if (response.isSuccess) {
-        slotAvailabilityData.value = response.data['data'];
+        final data = response.data['data'];
+        slotAvailabilityData.value = data;
+        availableSlots.assignAll(_parseSlots(data));
+      } else {
+        availableSlots.clear();
+        Get.snackbar(
+          "Error",
+          response.message.isNotEmpty
+              ? response.message
+              : "Failed to load slot availability",
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+        );
       }
     } catch (e) {
-      Get.snackbar("Error", e.toString(), backgroundColor: Colors.red, colorText: Colors.white);
+      availableSlots.clear();
+      Get.snackbar("Error", e.toString(),
+          backgroundColor: Colors.red, colorText: Colors.white);
     } finally {
       isLoadingSlots.value = false;
     }
+  }
+
+  List<AdSlot> _parseSlots(dynamic data) {
+    if (data == null) return [];
+
+    if (data is List) {
+      return _slotsFromList(data);
+    }
+
+    if (data is! Map) return [];
+    final map = Map<String, dynamic>.from(data);
+
+    for (final key in [
+      'slots',
+      'availableSlots',
+      'slotList',
+      'positions',
+      'availability',
+      'data',
+    ]) {
+      final value = map[key];
+      if (value is List && value.isNotEmpty) {
+        return _slotsFromList(value);
+      }
+    }
+
+    final availablePositions = _toIntList(
+      map['availablePositions'] ?? map['available'] ?? map['freePositions'],
+    );
+    final bookedPositions = _toIntList(
+      map['bookedPositions'] ?? map['booked'] ?? map['occupiedPositions'],
+    );
+    final capacity = _toInt(
+          map['featuredCapacity'] ??
+              map['capacity'] ??
+              map['totalSlots'] ??
+              map['maxSlots'] ??
+              map['slotCount'],
+        ) ??
+        0;
+
+    if (availablePositions.isNotEmpty ||
+        bookedPositions.isNotEmpty ||
+        capacity > 0) {
+      final total = capacity > 0
+          ? capacity
+          : [
+              ...availablePositions,
+              ...bookedPositions,
+            ].fold<int>(0, (m, p) => p > m ? p : m);
+
+      final slots = <AdSlot>[];
+      for (var i = 1; i <= (total > 0 ? total : availablePositions.length); i++) {
+        final isAvailable = availablePositions.isNotEmpty
+            ? availablePositions.contains(i)
+            : !bookedPositions.contains(i);
+        slots.add(AdSlot(position: i, isAvailable: isAvailable));
+      }
+      if (slots.isEmpty && availablePositions.isNotEmpty) {
+        for (final p in availablePositions) {
+          slots.add(AdSlot(position: p, isAvailable: true));
+        }
+      }
+      return slots;
+    }
+
+    return [];
+  }
+
+  List<AdSlot> _slotsFromList(List raw) {
+    final slots = <AdSlot>[];
+    for (var i = 0; i < raw.length; i++) {
+      final item = raw[i];
+      if (item is num) {
+        slots.add(AdSlot(position: item.toInt(), isAvailable: true));
+        continue;
+      }
+      if (item is! Map) continue;
+      final map = Map<String, dynamic>.from(item);
+      final position = _toInt(
+            map['position'] ??
+                map['slot'] ??
+                map['slotNumber'] ??
+                map['index'] ??
+                map['id'],
+          ) ??
+          (i + 1);
+
+      // API shape: { position, slotNumber, price, isBooked, status: available|booked }
+      bool isAvailable = true;
+      if (map['isBooked'] == true) {
+        isAvailable = false;
+      } else if (map['isBooked'] == false) {
+        isAvailable = true;
+      } else {
+        final availableRaw = map['isAvailable'] ??
+            map['available'] ??
+            map['isFree'] ??
+            map['free'] ??
+            map['status'];
+        if (availableRaw is bool) {
+          isAvailable = availableRaw;
+        } else if (availableRaw != null) {
+          final s = availableRaw.toString().toLowerCase();
+          isAvailable = s == 'available' ||
+              s == 'free' ||
+              s == 'true' ||
+              s == 'open' ||
+              s == '1';
+          if (s == 'booked' ||
+              s == 'occupied' ||
+              s == 'unavailable' ||
+              s == 'false' ||
+              s == '0') {
+            isAvailable = false;
+          }
+        }
+      }
+
+      final price = _toDouble(map['price']);
+      slots.add(
+        AdSlot(
+          position: position,
+          isAvailable: isAvailable,
+          weeklyPrice: _toDouble(
+                map['weeklyPrice'] ??
+                    map['priceWeekly'] ??
+                    map['priceWk'] ??
+                    map['weekPrice'],
+              ) ??
+              price,
+          monthlyPrice: _toDouble(
+                map['monthlyPrice'] ??
+                    map['priceMonthly'] ??
+                    map['priceMo'] ??
+                    map['monthPrice'],
+              ) ??
+              price,
+          label: (map['name'] ?? map['label'] ?? map['title'] ?? 'Slot $position')
+              ?.toString(),
+        ),
+      );
+    }
+    slots.sort((a, b) => a.position.compareTo(b.position));
+    return slots;
+  }
+
+  void selectSlot(AdSlot slot) {
+    if (!slot.isAvailable) return;
+    selectedSlot.value = slot.displayName;
+    selectedPosition.value = slot.position;
+    _refreshSlotPrice(slot: slot);
+  }
+
+  void _refreshSlotPrice({AdSlot? slot}) {
+    final selected = slot ??
+        availableSlots.firstWhereOrNull(
+          (s) => s.position == selectedPosition.value,
+        );
+    if (selected == null) {
+      slotPrice.value = packagePrice.value;
+      return;
+    }
+
+    final isWeekly = selectedDuration.value.toLowerCase().contains('week');
+    final fromSlot =
+        isWeekly ? selected.weeklyPrice : selected.monthlyPrice;
+    slotPrice.value = fromSlot ?? packagePrice.value;
   }
 
   Future<void> pickFeaturedImage() async {
@@ -191,18 +522,275 @@ class PostAddController extends GetxController {
     }
   }
 
+  int _selectedPosition() {
+    if (selectedPosition.value > 0) return selectedPosition.value;
+    if (selectedSlot.value.isEmpty) return 1;
+    final digits = selectedSlot.value.replaceAll(RegExp(r'[^0-9]'), '');
+    return int.tryParse(digits) ?? 1;
+  }
+
+  Future<String?> _resolveAdPackageId() async {
+    if (selectedPackageId.value.isNotEmpty) {
+      return selectedPackageId.value;
+    }
+
+    await fetchPostAddPackages();
+    if (selectedPackageId.value.isNotEmpty) {
+      return selectedPackageId.value;
+    }
+
+    return null;
+  }
+
+  /// Prefer seller token (same one used for post_add package APIs).
+  String _sellerAuthToken() {
+    if (LocalStorage.sellerAccessToken.isNotEmpty) {
+      return LocalStorage.sellerAccessToken;
+    }
+    return LocalStorage.token;
+  }
+
+  Map<String, String> _sellerAuthHeader() => {
+        'Authorization': 'Bearer ${_sellerAuthToken()}',
+        'Content-Type': 'application/json',
+      };
+
+  /// Post-ad: POST /datafast/create-checkout-session then open WebView widget.
+  Future<void> startDatafastPayment() async {
+    if (selectedCityId.value.isEmpty) {
+      Get.snackbar("Warning", "Please select a city first");
+      return;
+    }
+    if (selectedSlot.value.isEmpty || selectedPosition.value <= 0) {
+      Get.snackbar("Warning", "Please select a slot first");
+      return;
+    }
+
+    try {
+      isCreatingCheckout.value = true;
+
+      final packageId = await _resolveAdPackageId();
+      if (packageId == null || packageId.isEmpty) {
+        Get.snackbar(
+          "Error",
+          "No post_add package found. Please try again.",
+        );
+        return;
+      }
+
+      final body = {
+        "packageId": packageId,
+        "cityConfigId": selectedCityId.value,
+        "position": _selectedPosition(),
+      };
+
+      final response = await ApiService.post(
+        "${ApiEndPoint.baseUrl}/datafast/create-checkout-session",
+        body: body,
+        header: _sellerAuthHeader(),
+      );
+
+      if (response.isSuccess) {
+        final checkoutId = _extractCheckoutId(response.data);
+        if (checkoutId != null && checkoutId.isNotEmpty) {
+          activeCheckoutId.value = checkoutId;
+          Get.to(
+            () => DatafastPaymentScreen(
+              checkoutId: checkoutId,
+              onPaymentSuccess: (resultUrl) =>
+                  handlePaymentCompleted(checkoutId, resultUrl),
+            ),
+          );
+        } else {
+          Get.snackbar("Error", "Checkout ID not found in server response");
+        }
+      } else {
+        Get.snackbar(
+          "Error",
+          response.message.isNotEmpty
+              ? response.message
+              : "Failed to create checkout session",
+        );
+      }
+    } catch (e) {
+      Get.snackbar("Error", e.toString());
+    } finally {
+      isCreatingCheckout.value = false;
+    }
+  }
+
+  /// After widget redirect with resourcePath → verify → create ad.
+  Future<void> handlePaymentCompleted(
+    String checkoutId,
+    String resultUrl,
+  ) async {
+    final verified = await verifyDatafastPayment(checkoutId, resultUrl);
+    if (!verified) return;
+    await submitAdvertisement();
+  }
+
+  /// POST /datafast/verify-payment
+  /// Sends checkoutId + resourcePath from Datafast redirect (OPPWA requirement).
+  Future<bool> verifyDatafastPayment(
+    String checkoutId, [
+    String? resultUrl,
+  ]) async {
+    final packageId = selectedPackageId.value.isNotEmpty
+        ? selectedPackageId.value
+        : await _resolveAdPackageId();
+
+    if (packageId == null || packageId.isEmpty) {
+      Get.snackbar("Error", "Package ID missing for payment verification");
+      return false;
+    }
+    if (selectedCityId.value.isEmpty) {
+      Get.snackbar("Error", "City config missing for payment verification");
+      return false;
+    }
+
+    final token = _sellerAuthToken();
+    if (token.isEmpty) {
+      Get.snackbar("Error", "Seller token missing. Please re-login as seller.");
+      return false;
+    }
+
+    final parsed = _parsePaymentResultUrl(resultUrl);
+    final resolvedCheckoutId =
+        parsed['checkoutId']?.isNotEmpty == true
+            ? parsed['checkoutId']!
+            : checkoutId;
+    final resourcePath = parsed['resourcePath'] ?? '';
+
+    try {
+      isVerifyingPayment.value = true;
+
+      final body = <String, dynamic>{
+        "checkoutId": resolvedCheckoutId,
+        "packageId": packageId,
+        "cityConfigId": selectedCityId.value,
+        "position": _selectedPosition(),
+      };
+      if (resourcePath.isNotEmpty) {
+        body["resourcePath"] = resourcePath;
+      }
+
+      debugPrint('🔐 verify-payment body: $body');
+
+      // OPPWA settle + max 2 status checks/min — wait then verify once, one retry
+      await Future.delayed(const Duration(seconds: 5));
+
+      ApiResponseModel? response;
+      for (var attempt = 1; attempt <= 2; attempt++) {
+        response = await ApiService.post(
+          "${ApiEndPoint.baseUrl}/datafast/verify-payment",
+          body: body,
+          header: _sellerAuthHeader(),
+        );
+        if (response.isSuccess) break;
+
+        final msg = response.message.toLowerCase();
+        // Do not hammer retries on hard auth credential errors from gateway
+        final isHardAuth = msg.contains('authorization failed');
+        if (isHardAuth || attempt == 2) break;
+
+        debugPrint('⏳ verify-payment retry $attempt after settle...');
+        await Future.delayed(const Duration(seconds: 8));
+      }
+
+      if (response != null && response.isSuccess) {
+        return true;
+      }
+
+      Get.snackbar(
+        "Payment verification failed",
+        (response?.message.isNotEmpty == true)
+            ? "${response!.message}\n(Ask backend to fix Datafast entityId/Bearer on GET status — code 800.900.300)"
+            : "Backend Datafast status check rejected credentials (800.900.300).",
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+        duration: const Duration(seconds: 8),
+      );
+      return false;
+    } catch (e) {
+      Get.snackbar(
+        "Error",
+        e.toString(),
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+      return false;
+    } finally {
+      isVerifyingPayment.value = false;
+    }
+  }
+
+  /// Extract checkoutId + resourcePath from shopper result URL.
+  Map<String, String> _parsePaymentResultUrl(String? resultUrl) {
+    if (resultUrl == null || resultUrl.isEmpty) {
+      return {};
+    }
+    final uri = Uri.tryParse(resultUrl);
+    if (uri == null) return {};
+
+    final resourcePath = uri.queryParameters['resourcePath'] ?? '';
+    final idFromQuery = uri.queryParameters['id'] ?? '';
+
+    String checkoutId = idFromQuery;
+    if (checkoutId.isEmpty && resourcePath.isNotEmpty) {
+      final match = RegExp(r'/checkouts/([^/]+)/payment')
+          .firstMatch(resourcePath);
+      checkoutId = match?.group(1) ?? '';
+    }
+
+    return {
+      'checkoutId': checkoutId,
+      'resourcePath': resourcePath,
+    };
+  }
+
+  String? _extractCheckoutId(dynamic resData) {
+    if (resData is! Map) return null;
+    final map = Map<String, dynamic>.from(resData);
+    final data = map['data'];
+
+    String? fromMap(Map source) {
+      final id = source['checkoutId']?.toString() ??
+          source['sessionId']?.toString() ??
+          source['id']?.toString() ??
+          source['ndc']?.toString();
+      if (id != null && id.isNotEmpty) return id;
+
+      final url = source['url']?.toString() ?? '';
+      final match = RegExp(r'checkoutId=([^&\s]+)').firstMatch(url);
+      if (match != null) return match.group(1);
+
+      final raw = source['raw'];
+      if (raw is Map) {
+        return raw['id']?.toString() ??
+            raw['ndc']?.toString() ??
+            raw['checkoutId']?.toString();
+      }
+      return null;
+    }
+
+    if (data is Map) {
+      final id = fromMap(Map<String, dynamic>.from(data));
+      if (id != null && id.isNotEmpty) return id;
+    }
+    return fromMap(map);
+  }
+
   Future<void> submitAdvertisement() async {
     try {
       isSubmitting.value = true;
-      final prefs = await SharedPreferences.getInstance();
-
-      String currentToken = prefs.getString(LocalStorageKeys.token) ?? "";
+      final int positionValue = _selectedPosition();
 
       Map<String, dynamic> bodyData = {
         "campaignName": campaignNameController.text.trim(),
         "cityAdConfigId": selectedCityId.value,
         "advertisementType": "featured",
         "slot": selectedSlot.value,
+        "position": positionValue,
         "duration": selectedDuration.value,
         "startDate": startDate.value,
       };
@@ -216,9 +804,7 @@ class PostAddController extends GetxController {
         bodyData: bodyData,
         files: files,
         method: "POST",
-        header: {
-          'Authorization': 'Bearer $currentToken',
-        },
+        header: _sellerAuthHeader(),
       );
 
       if (response.isSuccess) {
@@ -243,5 +829,24 @@ class PostAddController extends GetxController {
     } finally {
       isSubmitting.value = false;
     }
+  }
+
+  double? _toDouble(dynamic value) {
+    if (value == null) return null;
+    if (value is num) return value.toDouble();
+    return double.tryParse(value.toString());
+  }
+
+  int? _toInt(dynamic value) {
+    if (value == null) return null;
+    if (value is int) return value;
+    if (value is num) return value.toInt();
+    final digits = value.toString().replaceAll(RegExp(r'[^0-9]'), '');
+    return int.tryParse(digits);
+  }
+
+  List<int> _toIntList(dynamic value) {
+    if (value is! List) return [];
+    return value.map(_toInt).whereType<int>().toList();
   }
 }

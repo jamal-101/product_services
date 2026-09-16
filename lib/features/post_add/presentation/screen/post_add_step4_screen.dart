@@ -147,85 +147,123 @@ class PostAdStep4Screen extends StatelessWidget {
                       children: [
                         _buildInfoRow("Campaign", controller.campaignNameController.text),
                         Divider(height: 20.h, color: Colors.grey.shade100),
-                        _buildInfoRow("City ID", controller.selectedCityId.value), // চাইলে সিটি নামও দেখাতে পারেন
+                        _buildInfoRow(
+                          "Package",
+                          controller.packageName.value.isNotEmpty
+                              ? "${controller.packageName.value} (\$${controller.packagePrice.value.toStringAsFixed(0)})"
+                              : "N/A",
+                        ),
                         Divider(height: 20.h, color: Colors.grey.shade100),
-                        _buildInfoRow("Slot", controller.selectedSlot.value),
+                        _buildInfoRow(
+                          "City",
+                          controller.selectedCityName.value.isNotEmpty
+                              ? controller.selectedCityName.value
+                              : controller.selectedCityId.value,
+                        ),
                         Divider(height: 20.h, color: Colors.grey.shade100),
-                        _buildInfoRow("Duration", "${controller.selectedDuration.value.capitalizeFirst} • ${controller.selectedDuration.value == 'weekly' ? '7 days' : '30 days'}"),
+                        _buildInfoRow(
+                          "Slot",
+                          controller.selectedSlot.value.isNotEmpty
+                              ? controller.selectedSlot.value
+                              : "Position ${controller.selectedPosition.value}",
+                        ),
                         Divider(height: 20.h, color: Colors.grey.shade100),
-                        _buildInfoRow("Dates", controller.startDate.value.isEmpty ? "Aug 19, 2026 → Sep 18, 2026" : controller.startDate.value),
+                        _buildInfoRow(
+                          "Duration",
+                          "${controller.selectedDuration.value.capitalizeFirst} • ${controller.selectedDuration.value == 'weekly' ? '7 days' : '30 days'}",
+                        ),
+                        Divider(height: 20.h, color: Colors.grey.shade100),
+                        _buildInfoRow(
+                          "Dates",
+                          controller.startDate.value.isEmpty
+                              ? "N/A"
+                              : controller.startDate.value,
+                        ),
                       ],
                     ),
                   ),
                   SizedBox(height: 12.h),
-
-                  // Total Amount Box (Ad fee ও Tax বাদ দিয়ে শুধু Total দেখানো হয়েছে)
-                  Container(
-                    padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
-                    decoration: BoxDecoration(
-                      color: Colors.green.shade50.withOpacity(0.5),
-                      borderRadius: BorderRadius.circular(16.r),
-                      border: Border.all(color: Colors.green.shade200),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          "Total",
-                          style: GoogleFonts.plusJakartaSans(
-                            fontSize: 15.sp,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black87,
+                  Obx(() {
+                    final total = controller.slotPrice.value > 0
+                        ? controller.slotPrice.value
+                        : controller.packagePrice.value;
+                    return Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 16.w,
+                        vertical: 14.h,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.green.shade50.withOpacity(0.5),
+                        borderRadius: BorderRadius.circular(16.r),
+                        border: Border.all(color: Colors.green.shade200),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Total",
+                            style: GoogleFonts.plusJakartaSans(
+                              fontSize: 15.sp,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black87,
+                            ),
                           ),
-                        ),
-                        Text(
-                          "\$105.00", // আপনার টোটাল অ্যামাউন্ট ভ্যারিয়েবল এখানে বসাতে পারেন
-                          style: GoogleFonts.plusJakartaSans(
-                            fontSize: 16.sp,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.green.shade700,
+                          Text(
+                            "\$${total.toStringAsFixed(2)}",
+                            style: GoogleFonts.plusJakartaSans(
+                              fontSize: 16.sp,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.green.shade700,
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
-                  ),
+                        ],
+                      ),
+                    );
+                  }),
                   SizedBox(height: 10.h),
                 ],
               ),
             ),
 
-            // Submit & Pay Button
             SizedBox(
               width: double.infinity,
               height: 50.h,
-              child: Obx(() => ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.green.shade700,
-                  foregroundColor: Colors.white,
-                  elevation: 0,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12.r),
+              child: Obx(() {
+                final busy = controller.isCreatingCheckout.value ||
+                    controller.isVerifyingPayment.value ||
+                    controller.isSubmitting.value;
+                return ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.green.shade700,
+                    foregroundColor: Colors.white,
+                    elevation: 0,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12.r),
+                    ),
                   ),
-                ),
-                onPressed: controller.isSubmitting.value
-                    ? null
-                    : () {
-                  controller.submitAdvertisement();
-                },
-                child: controller.isSubmitting.value
-                    ? SizedBox(
-                  height: 20.h,
-                  width: 20.h,
-                  child: const CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
-                )
-                    : Text(
-                  "Submit & Pay",
-                  style: GoogleFonts.plusJakartaSans(
-                    fontSize: 15.sp,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              )),
+                  onPressed: busy
+                      ? null
+                      : () {
+                          controller.startDatafastPayment();
+                        },
+                  child: busy
+                      ? SizedBox(
+                          height: 20.h,
+                          width: 20.h,
+                          child: const CircularProgressIndicator(
+                            color: Colors.white,
+                            strokeWidth: 2,
+                          ),
+                        )
+                      : Text(
+                          "Submit & Pay",
+                          style: GoogleFonts.plusJakartaSans(
+                            fontSize: 15.sp,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                );
+              }),
             ),
             SizedBox(height: 15.h),
           ],

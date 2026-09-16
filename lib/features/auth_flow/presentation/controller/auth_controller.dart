@@ -182,6 +182,11 @@ class AuthController extends GetxController {
           await LocalStorage.setString(LocalStorageKeys.token, token);
           await LocalStorage.setString(LocalStorageKeys.userId, userId);
 
+          final activeRole =
+              responseData['data']?['user']?['activeRole']?.toString() ?? '';
+          if (activeRole == 'seller') {
+            await LocalStorage.setSellerToken(token);
+          }
         }
         bool hasSellerAccount = responseData['data']?['hasSellerAccount'] ?? false;
         LocalStorage.hasSellerAccount = hasSellerAccount;
@@ -260,10 +265,14 @@ class AuthController extends GetxController {
       if (response.isSuccess) {
         var responseData = response.data;
 
-        String? token = responseData['data']?['token'];
-        if (token != null) {
+        String? token = responseData['data']?['accessToken']?.toString() ??
+            responseData['data']?['token']?.toString();
+        if (token != null && token.isNotEmpty) {
           LocalStorage.token = token;
           await LocalStorage.setString(LocalStorageKeys.token, token);
+          if (role == 'seller') {
+            await LocalStorage.setSellerToken(token);
+          }
         }
 
         selectedRole.value = role;
