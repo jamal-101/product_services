@@ -170,7 +170,14 @@ class ApiService {
     final headers = Map<String, String>.from(header);
     headers['Content-Type'] = 'multipart/form-data';
 
-    return _request(url, method, body: formData, header: headers);
+    return _request(
+      url,
+      method,
+      body: formData,
+      header: headers,
+      sendTimeout: const Duration(minutes: 2),
+      receiveTimeout: const Duration(minutes: 2),
+    );
   }
 
   /// ========== [ API REQUEST HANDLER ] ========== ///
@@ -179,12 +186,19 @@ class ApiService {
       String method, {
         dynamic body,
         Map<String, String>? header,
+        Duration? sendTimeout,
+        Duration? receiveTimeout,
       }) async {
     try {
       final response = await _dio.request(
         url,
         data: body,
-        options: Options(method: method, headers: header),
+        options: Options(
+          method: method,
+          headers: header,
+          sendTimeout: sendTimeout,
+          receiveTimeout: receiveTimeout,
+        ),
       );
       return _handleResponse(response);
     } catch (e) {
@@ -248,14 +262,19 @@ Dio _getMyDio() {
     InterceptorsWrapper(
       onRequest: (options, handler) {
         final token = LocalStorage.token;
+        final isMultipart = options.data is FormData;
         options
           ..headers["Authorization"] ??= "Bearer ${LocalStorage.token}"
           ..headers["Content-Type"] ??= "application/json"
           ..connectTimeout = const Duration(seconds: 30)
-          ..sendTimeout = const Duration(seconds: 30)
+          ..sendTimeout = isMultipart
+              ? const Duration(minutes: 2)
+              : const Duration(seconds: 30)
           ..receiveDataWhenStatusError = true
           ..responseType = ResponseType.json
-          ..receiveTimeout = const Duration(seconds: 30)
+          ..receiveTimeout = isMultipart
+              ? const Duration(minutes: 2)
+              : const Duration(seconds: 30)
           ..baseUrl = options.baseUrl.startsWith("http")
               ? ""
               : ApiEndPoint.baseUrl;

@@ -1,6 +1,7 @@
 class ApiEndPoint {
-  static const baseUrl = "http://10.10.7.10:5009/api/v1";
-  static const imageUrl = "http://10.10.7.10:5009";
+  // static const baseUrl = "http://10.10.7.10:5009/api/v1";
+  static const baseUrl = "https://api.jaganaecuador.com/api/v1";
+  static const imageUrl = "https://api.jaganaecuador.com";
   static const signUp = "$baseUrl/users";
   static const verifyOtp = "$baseUrl/auth/verify-email";
   static const login = "$baseUrl/auth/login";
@@ -15,8 +16,7 @@ class ApiEndPoint {
   static const changePass = "$baseUrl/auth/change-password";
   static const stores = "$baseUrl/stores";
   static const categories = "$baseUrl/categories";
-  static const cityAdConfigurationsAdmin =
-      "$baseUrl/city-ad-configurations/admin";
+  static const cityAdConfigurationsAdmin = "$baseUrl/city-ad-configurations/admin";
   static const faqs = "$baseUrl/faqs";
   static const activeCities = "$baseUrl/city-ad-configurations/seller/active";
   static const slotAvailability = "$baseUrl/advertisements/availability";
@@ -31,8 +31,6 @@ class ApiEndPoint {
   static const products = "$baseUrl/products";
   static const sellerDashboard = "$baseUrl/stores/seller/dashboard";
   static const favorites = "$baseUrl/favorites";
-
-
   static const chats = "$baseUrl/chats";
   static const message = "$baseUrl/messages";
   static const sendMessage = "$baseUrl/messages/send-message";

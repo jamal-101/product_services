@@ -206,7 +206,9 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import '../../../../controller/profile_controller.dart';
 import '../controller/store_creation_controller.dart';
+import 'creat_new_store_step5.dart';
 
 class CreateNewStoreStep4 extends StatelessWidget {
   const CreateNewStoreStep4({super.key});
@@ -233,12 +235,12 @@ class CreateNewStoreStep4 extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             const Text("Create New Store", style: TextStyle(color: Colors.black, fontWeight: FontWeight.w600)),
-            Text("Step 4 of 4", style: TextStyle(color: Colors.grey, fontSize: 14.sp)),
+            Text("Step 4 of 5", style: TextStyle(color: Colors.grey, fontSize: 14.sp)),
           ],
         ),
         bottom: PreferredSize(
           preferredSize: Size.fromHeight(4.h),
-          child: LinearProgressIndicator(value: 1.0, backgroundColor: Colors.grey.shade200, color: const Color(0xFF2A9B4A)),
+          child: LinearProgressIndicator(value: 0.8, backgroundColor: Colors.grey.shade200, color: const Color(0xFF2A9B4A)),
         ),
       ),
       body: SingleChildScrollView(
@@ -270,9 +272,30 @@ class CreateNewStoreStep4 extends StatelessWidget {
               ),
             ),
             SizedBox(height: 40.h),
-            Obx(() => controller.isLoading.value
-                ? const Center(child: CircularProgressIndicator(color: Color(0xFF2A9B4A)))
-                : buildNextButton(() => controller.createStore(), text: "Create Store")),
+            Obx(() {
+              if (controller.isLoading.value) {
+                return const Center(
+                  child: CircularProgressIndicator(color: Color(0xFF2A9B4A)),
+                );
+              }
+              return buildNextButton(
+                () {
+                  // Already subscribed: create store without paying again.
+                  final profile = Get.isRegistered<ProfileController>()
+                      ? Get.find<ProfileController>()
+                      : null;
+                  final alreadyPaid = profile
+                          ?.profileModel.value.data?.storeSubscription?.isPurchased ??
+                      false;
+                  if (alreadyPaid) {
+                    controller.createStore();
+                  } else {
+                    Get.to(() => const CreateNewStoreStep5(payMode: true));
+                  }
+                },
+                text: "Continue",
+              );
+            }),
           ],
         ),
       ),

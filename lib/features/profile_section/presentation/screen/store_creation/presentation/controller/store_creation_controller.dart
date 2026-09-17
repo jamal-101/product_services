@@ -18,6 +18,7 @@
 
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:product_service/config/route/app_route.dart';
@@ -135,28 +136,103 @@ class StoreCreationController extends GetxController {
         "timezone": "Asia/Dhaka"
       };
 
+      final compressedLogo = await _compressImage(logoFile.value, 'logo');
+      final compressedCover = await _compressImage(coverImageFile.value, 'cover');
+      final compressedLicense =
+          await _compressImage(tradeLicenseFile.value, 'license');
+
       Map<String, File?> files = {
-        "logo": logoFile.value,
-        "coverImage": coverImageFile.value,
-        "tradeLicense": tradeLicenseFile.value,
+        "logo": compressedLogo,
+        "coverImage": compressedCover,
+        "tradeLicense": compressedLicense,
       };
       final response = await ApiService.multipartRequest(
         ApiEndPoint.stores,
         bodyData: {"data": storePayload},
         files: files,
+        header: {
+          'Authorization':
+              'Bearer ${LocalStorage.sellerAccessToken.isNotEmpty ? LocalStorage.sellerAccessToken : LocalStorage.token}',
+        },
       );
 
       if (response.isSuccess) {
         await LocalStorage.setStoreType(selectedStoreType.value);
-        Get.to(AppRoutes.accountScreen);
-        Get.snackbar("Success", "Store created successfully!", backgroundColor: Colors.green, colorText: Colors.white);
+        Get.snackbar(
+          "Success",
+          "Store created successfully!",
+          backgroundColor: Colors.green,
+          colorText: Colors.white,
+        );
+        Get.offAllNamed(AppRoutes.sellerHomeScreen);
       } else {
-        Get.snackbar("Error", response.message, backgroundColor: Colors.red, colorText: Colors.white);
+        Get.snackbar(
+          "Error",
+          response.message,
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+        );
       }
     } catch (e) {
       debugPrint("Store creation error: $e");
+      Get.snackbar(
+        "Error",
+        e.toString(),
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
     } finally {
       isLoading.value = false;
+    }
+  }
+
+  /// Shrink store images so multipart upload finishes within timeout / nginx limits.
+  Future<File?> _compressImage(File? file, String label) async {
+    if (file == null || !await file.exists()) return file;
+
+    final originalBytes = await file.length();
+    debugPrint(
+      '📷 store $label original: ${(originalBytes / 1024).toStringAsFixed(1)} KB',
+    );
+
+    if (originalBytes <= 500 * 1024) return file;
+
+    try {
+      final tempDir = Directory.systemTemp;
+      final targetPath =
+          '${tempDir.path}/store_${label}_${DateTime.now().millisecondsSinceEpoch}.jpg';
+
+      XFile? result = await FlutterImageCompress.compressAndGetFile(
+        file.absolute.path,
+        targetPath,
+        quality: 70,
+        minWidth: 1280,
+        minHeight: 1280,
+        format: CompressFormat.jpeg,
+      );
+
+      if (result != null && await result.length() > 800 * 1024) {
+        final strongerPath =
+            '${tempDir.path}/store_${label}_sm_${DateTime.now().millisecondsSinceEpoch}.jpg';
+        result = await FlutterImageCompress.compressAndGetFile(
+          file.absolute.path,
+          strongerPath,
+          quality: 55,
+          minWidth: 1024,
+          minHeight: 1024,
+          format: CompressFormat.jpeg,
+        );
+      }
+
+      if (result == null) return file;
+      final out = File(result.path);
+      debugPrint(
+        '📷 store $label compressed: ${(await out.length() / 1024).toStringAsFixed(1)} KB',
+      );
+      return out;
+    } catch (e) {
+      debugPrint('📷 store $label compress failed: $e');
+      return file;
     }
   }
 }

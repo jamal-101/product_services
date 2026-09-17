@@ -326,12 +326,12 @@ class AccountScreen extends StatelessWidget {
                   backgroundColor: Colors.white,
                   child: CircleAvatar(
                     radius: 38.r,
-                    backgroundImage: NetworkImage(
-                      (userData?.profileImage != null &&
-                          userData!.profileImage!.isNotEmpty)
-                          ? "${ApiEndPoint.imageUrl}${userData.profileImage}"
-                          : AppImages.buyerImage,
-                    ),
+                    backgroundImage: (userData?.profileImage != null &&
+                            userData!.profileImage!.isNotEmpty)
+                        ? NetworkImage(
+                            "${ApiEndPoint.imageUrl}${userData.profileImage}",
+                          ) as ImageProvider
+                        : const AssetImage(AppImages.buyerImage),
                   ),
                 ),
               ),

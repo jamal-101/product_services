@@ -61,11 +61,14 @@ class MyStore extends StatelessWidget {
                   );
                   return;
                 }
-                bool isPurchased = profileData?.storeSubscription?.isPurchased ?? false;
+                // First time: subscription select → setup → payment → home.
+                // Already paid (no store yet): skip to setup → create store.
+                bool isPurchased =
+                    profileData?.storeSubscription?.isPurchased ?? false;
                 if (isPurchased) {
                   Get.to(() => CreateNewStoreStep1());
                 } else {
-                  Get.to(() => const CreateNewStoreStep5());
+                  Get.to(() => const CreateNewStoreStep5(payMode: false));
                 }
               },
               child: const Text(

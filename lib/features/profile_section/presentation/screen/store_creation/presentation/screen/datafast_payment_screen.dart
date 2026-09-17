@@ -5,6 +5,10 @@ import 'package:webview_flutter/webview_flutter.dart';
 class DatafastPaymentScreen extends StatefulWidget {
   final String checkoutId;
 
+  /// Backend-hosted pay page, e.g.
+  /// `http://host/api/v1/datafast/pay/{checkoutId}`
+  final String? paymentUrl;
+
   /// Called after Datafast redirects with `resourcePath`.
   /// [resultUrl] is the full shopper-result URL (includes resourcePath).
   final Future<void> Function(String resultUrl)? onPaymentSuccess;
@@ -12,6 +16,7 @@ class DatafastPaymentScreen extends StatefulWidget {
   const DatafastPaymentScreen({
     super.key,
     required this.checkoutId,
+    this.paymentUrl,
     this.onPaymentSuccess,
   });
 
@@ -27,25 +32,21 @@ class _DatafastPaymentScreenState extends State<DatafastPaymentScreen> {
   bool _isLoading = true;
   bool _isFinalizing = false;
 
+  bool get _hasPaymentUrl =>
+      widget.paymentUrl != null && widget.paymentUrl!.trim().isNotEmpty;
+
+  String _normalizePaymentUrl(String raw) {
+    final uri = Uri.tryParse(raw);
+    if (uri == null) return raw;
+    if (uri.scheme == 'http' && uri.host.isNotEmpty && uri.host != 'localhost') {
+      return uri.replace(scheme: 'https').toString();
+    }
+    return raw;
+  }
+
   @override
   void initState() {
     super.initState();
-
-    final String paymentHtml = '''
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-    <style>
-      body { margin: 12px; font-family: -apple-system, BlinkMacSystemFont, sans-serif; }
-    </style>
-    <script src="https://test.oppwa.com/v1/paymentWidgets.js?checkoutId=${widget.checkoutId}"></script>
-  </head>
-  <body>
-    <form action="$_shopperResultUrl" class="paymentWidgets" data-brands="VISA MASTER DINERS DISCOVER"></form>
-  </body>
-</html>
-''';
 
     controller = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
@@ -72,15 +73,45 @@ class _DatafastPaymentScreenState extends State<DatafastPaymentScreen> {
             }
           },
         ),
-      )
-      ..loadHtmlString(paymentHtml, baseUrl: 'https://test.oppwa.com');
+      );
+
+    if (_hasPaymentUrl) {
+      final url = _normalizePaymentUrl(widget.paymentUrl!.trim());
+      debugPrint('🌐 Loading backend paymentUrl: $url');
+      controller.loadRequest(Uri.parse(url));
+    } else {
+      final String paymentHtml = '''
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <style>
+      body { margin: 12px; font-family: -apple-system, BlinkMacSystemFont, sans-serif; }
+    </style>
+    <script src="https://eu-test.oppwa.com/v1/paymentWidgets.js?checkoutId=${widget.checkoutId}"></script>
+  </head>
+  <body>
+    <form action="$_shopperResultUrl" class="paymentWidgets" data-brands="VISA MASTER DINERS DISCOVER"></form>
+  </body>
+</html>
+''';
+      controller.loadHtmlString(
+        paymentHtml,
+        baseUrl: 'https://eu-test.oppwa.com',
+      );
+    }
   }
 
   bool _isPaymentResult(String url) {
     final uri = Uri.tryParse(url);
     if (uri == null) return false;
     if (uri.queryParameters.containsKey('resourcePath')) return true;
-    return url.contains('resourcePath=');
+    if (url.contains('resourcePath=')) return true;
+    // Backend pay page success/cancel redirects
+    if (url.contains('/payment-result') || url.contains('payment-success')) {
+      return true;
+    }
+    return false;
   }
 
   Future<void> _handlePaymentResult(String url) async {

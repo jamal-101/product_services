@@ -66,20 +66,37 @@ class Data {
   Data.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
     name = json['name'];
-    price = json['price'];
+    price = _toDouble(json['price']);
     duration = json['duration'];
     status = json['status'];
     packageType = json['packageType'];
-    listingLimit = json['listingLimit'];
+    listingLimit = _toInt(json['listingLimit']);
     isUnlimitedListings = json['isUnlimitedListings'];
     trialEnabled = json['trialEnabled'];
-    trialPeriodDays = json['trialPeriodDays'];
+    trialPeriodDays = _toInt(json['trialPeriodDays']);
     stripeProductId = json['stripeProductId'];
     stripePriceId = json['stripePriceId'];
-    features = json['features'].cast<String>();
+    features = (json['features'] is List)
+        ? (json['features'] as List).map((e) => e.toString()).toList()
+        : <String>[];
     isDeleted = json['isDeleted'];
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
+  }
+
+  static double? _toDouble(dynamic value) {
+    if (value == null) return null;
+    if (value is double) return value;
+    if (value is int) return value.toDouble();
+    if (value is num) return value.toDouble();
+    return double.tryParse(value.toString());
+  }
+
+  static int? _toInt(dynamic value) {
+    if (value == null) return null;
+    if (value is int) return value;
+    if (value is num) return value.toInt();
+    return int.tryParse(value.toString());
   }
 
   Map<String, dynamic> toJson() {

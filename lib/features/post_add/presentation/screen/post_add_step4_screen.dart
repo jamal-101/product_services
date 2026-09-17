@@ -277,20 +277,26 @@ class PostAdStep4Screen extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(
-          title,
-          style: GoogleFonts.plusJakartaSans(
-            fontSize: 13.sp,
-            color: Colors.grey.shade500,
-            fontWeight: FontWeight.w500,
+        Flexible(
+          child: Text(
+            title,
+            style: GoogleFonts.plusJakartaSans(
+              fontSize: 13.sp,
+              color: Colors.grey.shade500,
+              fontWeight: FontWeight.w500,
+            ),
           ),
         ),
-        Text(
-          value.isEmpty ? "N/A" : value,
-          style: GoogleFonts.plusJakartaSans(
-            fontSize: 13.sp,
-            color: Colors.black87,
-            fontWeight: FontWeight.w600,
+        const SizedBox(width: 8),
+        Flexible(
+          child: Text(
+            value.isEmpty ? "N/A" : value,
+            textAlign: TextAlign.end,
+            style: GoogleFonts.plusJakartaSans(
+              fontSize: 13.sp,
+              color: Colors.black87,
+              fontWeight: FontWeight.w600,
+            ),
           ),
         ),
       ],

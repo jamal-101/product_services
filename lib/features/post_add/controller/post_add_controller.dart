@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -210,12 +211,16 @@ class PostAddController extends GetxController {
       if (response.isSuccess) {
         final list = response.data['data'];
         if (list is List) {
-          postAddPackages.assignAll(
-            list
-                .whereType<Map>()
-                .map((e) => Map<String, dynamic>.from(e))
-                .toList(),
-          );
+          final packages = list
+              .whereType<Map>()
+              .map((e) => Map<String, dynamic>.from(e))
+              .where((p) {
+                final status = (p['status'] ?? '').toString().toLowerCase();
+                // Prefer active; keep unknown status (older APIs)
+                return status.isEmpty || status == 'active';
+              })
+              .toList();
+          postAddPackages.assignAll(packages);
           _syncSelectedPackage();
         }
       }
@@ -516,7 +521,12 @@ class PostAddController extends GetxController {
   }
 
   Future<void> pickFeaturedImage() async {
-    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+    final XFile? image = await _picker.pickImage(
+      source: ImageSource.gallery,
+      maxWidth: 1280,
+      maxHeight: 1280,
+      imageQuality: 70,
+    );
     if (image != null) {
       featuredImage.value = File(image.path);
     }
@@ -592,11 +602,13 @@ class PostAddController extends GetxController {
 
       if (response.isSuccess) {
         final checkoutId = _extractCheckoutId(response.data);
+        final paymentUrl = _extractPaymentUrl(response.data);
         if (checkoutId != null && checkoutId.isNotEmpty) {
           activeCheckoutId.value = checkoutId;
           Get.to(
             () => DatafastPaymentScreen(
               checkoutId: checkoutId,
+              paymentUrl: paymentUrl,
               onPaymentSuccess: (resultUrl) =>
                   handlePaymentCompleted(checkoutId, resultUrl),
             ),
@@ -760,7 +772,13 @@ class PostAddController extends GetxController {
           source['ndc']?.toString();
       if (id != null && id.isNotEmpty) return id;
 
-      final url = source['url']?.toString() ?? '';
+      final url = source['url']?.toString() ??
+          source['paymentUrl']?.toString() ??
+          '';
+      final fromPayPath =
+          RegExp(r'/datafast/pay/([^/?&#\s]+)').firstMatch(url);
+      if (fromPayPath != null) return fromPayPath.group(1);
+
       final match = RegExp(r'checkoutId=([^&\s]+)').firstMatch(url);
       if (match != null) return match.group(1);
 
@@ -780,6 +798,57 @@ class PostAddController extends GetxController {
     return fromMap(map);
   }
 
+  /// Prefer backend-hosted pay page: `paymentUrl` / `url`.
+  /// Upgrades http → https for public API hosts (Android cleartext / mixed content).
+  String? _extractPaymentUrl(dynamic resData) {
+    if (resData is! Map) return null;
+    final map = Map<String, dynamic>.from(resData);
+    final data = map['data'];
+
+    String? normalize(String? raw) {
+      if (raw == null || raw.trim().isEmpty) return null;
+      var url = raw.trim();
+      final uri = Uri.tryParse(url);
+      if (uri == null) return url;
+      // Backend sometimes returns http://api.jaganaecuador.com — force https
+      if (uri.scheme == 'http' &&
+          (uri.host.contains('jaganaecuador.com') ||
+              uri.host.endsWith('.com') ||
+              uri.host.endsWith('.net'))) {
+        url = uri.replace(scheme: 'https').toString();
+      }
+      return url;
+    }
+
+    String? fromMap(Map source) {
+      final candidates = [
+        source['paymentUrl']?.toString(),
+        source['url']?.toString(),
+      ];
+      for (final value in candidates) {
+        if (value != null &&
+            value.isNotEmpty &&
+            value.contains('/datafast/pay/')) {
+          return normalize(value);
+        }
+      }
+      final paymentUrl = source['paymentUrl']?.toString();
+      if (paymentUrl != null &&
+          paymentUrl.isNotEmpty &&
+          (paymentUrl.startsWith('http://') ||
+              paymentUrl.startsWith('https://'))) {
+        return normalize(paymentUrl);
+      }
+      return null;
+    }
+
+    if (data is Map) {
+      final url = fromMap(Map<String, dynamic>.from(data));
+      if (url != null) return url;
+    }
+    return fromMap(map);
+  }
+
   Future<void> submitAdvertisement() async {
     try {
       isSubmitting.value = true;
@@ -795,8 +864,9 @@ class PostAddController extends GetxController {
         "startDate": startDate.value,
       };
 
+      final compressedImage = await _compressFeaturedImage(featuredImage.value);
       Map<String, File?> files = {
-        "featuredImage": featuredImage.value,
+        "featuredImage": compressedImage,
       };
 
       var response = await ApiService.multipartRequest(
@@ -810,9 +880,14 @@ class PostAddController extends GetxController {
       if (response.isSuccess) {
         Get.offAll(() => const CampaignSuccessView());
       } else {
+        final isTooLarge = response.statusCode == 413 ||
+            response.message.toLowerCase().contains('too large') ||
+            response.message.contains('413');
         Get.snackbar(
           "Error",
-          response.message,
+          isTooLarge
+              ? "Image is still too large for the server. Please pick a smaller photo."
+              : response.message,
           backgroundColor: Colors.red,
           colorText: Colors.white,
           snackPosition: SnackPosition.BOTTOM,
@@ -828,6 +903,58 @@ class PostAddController extends GetxController {
       );
     } finally {
       isSubmitting.value = false;
+    }
+  }
+
+  /// Shrink featured image so nginx does not reject with 413.
+  Future<File?> _compressFeaturedImage(File? file) async {
+    if (file == null || !await file.exists()) return file;
+
+    final originalBytes = await file.length();
+    debugPrint(
+      '📷 featuredImage original: ${(originalBytes / 1024).toStringAsFixed(1)} KB',
+    );
+
+    // Already small enough for typical nginx 1–2MB limits
+    if (originalBytes <= 700 * 1024) return file;
+
+    try {
+      final tempDir = Directory.systemTemp;
+      final targetPath =
+          '${tempDir.path}/featured_${DateTime.now().millisecondsSinceEpoch}.jpg';
+
+      XFile? result = await FlutterImageCompress.compressAndGetFile(
+        file.absolute.path,
+        targetPath,
+        quality: 70,
+        minWidth: 1280,
+        minHeight: 1280,
+        format: CompressFormat.jpeg,
+      );
+
+      // Still large → stronger pass
+      if (result != null && await result.length() > 900 * 1024) {
+        final strongerPath =
+            '${tempDir.path}/featured_sm_${DateTime.now().millisecondsSinceEpoch}.jpg';
+        result = await FlutterImageCompress.compressAndGetFile(
+          file.absolute.path,
+          strongerPath,
+          quality: 55,
+          minWidth: 1024,
+          minHeight: 1024,
+          format: CompressFormat.jpeg,
+        );
+      }
+
+      if (result == null) return file;
+      final out = File(result.path);
+      debugPrint(
+        '📷 featuredImage compressed: ${(await out.length() / 1024).toStringAsFixed(1)} KB',
+      );
+      return out;
+    } catch (e) {
+      debugPrint('📷 compress failed: $e');
+      return file;
     }
   }
 
