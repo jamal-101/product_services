@@ -338,9 +338,7 @@ class LoginScreen extends StatelessWidget {
     final controller = Get.put(AuthController());
 
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-      ),
+      appBar: AppBar(automaticallyImplyLeading: false),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: EdgeInsets.symmetric(horizontal: 24.w),
@@ -358,29 +356,37 @@ class LoginScreen extends StatelessWidget {
                     ),
                     children: [
                       TextSpan(
-                        text: AppString.welcome.tr,
-                        style: GoogleFonts.plusJakartaSans(color: AppColor.textDark),
+                        text: AppString.welcome,
+                        style: GoogleFonts.plusJakartaSans(
+                          color: AppColor.textDark,
+                        ),
                       ),
                       TextSpan(
-                        text: AppString.back.tr,
-                        style: GoogleFonts.plusJakartaSans(color: AppColor.accent),
+                        text: AppString.back,
+                        style: GoogleFonts.plusJakartaSans(
+                          color: AppColor.accent,
+                        ),
                       ),
                     ],
                   ),
                 ),
                 SizedBox(height: 8.h),
                 Text(
-                  AppString.loginTo.tr,
-                  style: GoogleFonts.plusJakartaSans(fontSize: 14.sp, color: AppColor.textLight),
+                  AppString.loginTo,
+                  style: GoogleFonts.plusJakartaSans(
+                    fontSize: 16.sp,
+                    color: AppColor.textLight,
+                    fontWeight: FontWeight.w400,
+                  ),
                 ),
                 SizedBox(height: 32.h),
 
                 Text(
                   AppString.email,
                   style: GoogleFonts.plusJakartaSans(
-                    fontSize: 14.sp,
-                    fontWeight: FontWeight.w500,
-                    color: AppColor.textDark,
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.w600,
+                    color: Color(0xFF1A1D24),
                   ),
                 ),
                 SizedBox(height: 8.h),
@@ -422,11 +428,17 @@ class LoginScreen extends StatelessWidget {
                     ),
                     errorBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10.r),
-                      borderSide: const BorderSide(color: Colors.red, width: 1.0),
+                      borderSide: const BorderSide(
+                        color: Colors.red,
+                        width: 1.0,
+                      ),
                     ),
                     focusedErrorBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10.r),
-                      borderSide: const BorderSide(color: Colors.red, width: 2.0),
+                      borderSide: const BorderSide(
+                        color: Colors.red,
+                        width: 2.0,
+                      ),
                     ),
                   ),
                 ),
@@ -435,14 +447,14 @@ class LoginScreen extends StatelessWidget {
                 Text(
                   AppString.password,
                   style: GoogleFonts.plusJakartaSans(
-                    fontSize: 14.sp,
-                    fontWeight: FontWeight.w500,
-                    color: AppColor.textDark,
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.w600,
+                    color: Color(0xFF1A1D24),
                   ),
                 ),
                 SizedBox(height: 8.h),
                 Obx(
-                      () => TextFormField(
+                  () => TextFormField(
                     controller: controller.loginPasswordController,
                     obscureText: !controller.isLoginPasswordVisible.value,
                     validator: (value) => Utils.passwordValidator(value),
@@ -467,7 +479,8 @@ class LoginScreen extends StatelessWidget {
                       suffixIcon: IconButton(
                         icon: Icon(
                           controller.isLoginPasswordVisible.value
-                              ? Icons.visibility_outlined : Icons.visibility_off_outlined,
+                              ? Icons.visibility_outlined
+                              : Icons.visibility_off_outlined,
                           color: const Color(0xFF9D9D9D),
                         ),
                         onPressed: () =>
@@ -513,7 +526,7 @@ class LoginScreen extends StatelessWidget {
                   child: TextButton(
                     onPressed: () => Get.toNamed(AppRoutes.forgetPassword),
                     child: Text(
-                      AppString.forgotPassword.tr,
+                      AppString.forgotPassword,
                       style: GoogleFonts.plusJakartaSans(
                         color: AppColor.primary,
                         fontSize: 13.sp,
@@ -528,7 +541,7 @@ class LoginScreen extends StatelessWidget {
                   width: double.infinity,
                   height: 50.h,
                   child: Obx(
-                        () => ElevatedButton(
+                    () => ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColor.primary,
                         shape: RoundedRectangleBorder(
@@ -538,20 +551,20 @@ class LoginScreen extends StatelessWidget {
                       onPressed: controller.isLoading.value
                           ? null
                           : () {
-                        if (_formKey.currentState!.validate()) {
-                          controller.loginUser();
-                        }
-                      },
+                              if (_formKey.currentState!.validate()) {
+                                controller.loginUser();
+                              }
+                            },
                       child: controller.isLoading.value
                           ? const CircularProgressIndicator(color: Colors.white)
                           : Text(
-                        AppString.login.tr,
-                        style: GoogleFonts.plusJakartaSans(
-                          fontSize: 16.sp,
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
+                              AppString.login,
+                              style: GoogleFonts.plusJakartaSans(
+                                fontSize: 16.sp,
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
                     ),
                   ),
                 ),
@@ -591,7 +604,11 @@ class LoginScreen extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Image.asset(AppImages.googleIcon, height: 30.h, width: 30.w),
+                        Image.asset(
+                          AppImages.googleIcon,
+                          height: 30.h,
+                          width: 30.w,
+                        ),
                         SizedBox(width: 8.w),
                         Text(
                           AppString.continueWithGoogle.tr,
@@ -610,17 +627,17 @@ class LoginScreen extends StatelessWidget {
                   child: RichText(
                     text: TextSpan(
                       style: GoogleFonts.plusJakartaSans(
-                        fontSize: 14.sp,
+                        fontSize: 16.sp,
                         fontWeight: FontWeight.w600,
                         color: const Color(0xFF7A818F),
                       ),
                       children: [
-                        TextSpan(text: AppString.donH.tr),
+                        TextSpan(text: AppString.donH),
                         TextSpan(
                           text: AppString.register.tr,
                           style: GoogleFonts.plusJakartaSans(
                             color: AppColor.primary,
-                            fontSize: 14.sp,
+                            fontSize: 16.sp,
                             fontWeight: FontWeight.w600,
                           ),
                           recognizer: TapGestureRecognizer()

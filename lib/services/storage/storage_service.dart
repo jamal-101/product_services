@@ -78,6 +78,8 @@ class LocalStorage {
     localStorage.setBool(LocalStorageKeys.hasSellerAccount, false);
     hasSellerAccount = false;
     localStorage.remove(LocalStorageKeys.storeType);
+    localStorage.setString(LocalStorageKeys.languageCode, 'en');
+    localStorage.setString(LocalStorageKeys.countryCode, 'US');
   }
 
   static Future<void> setUserRole(String role) async {

@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:product_service/config/route/app_route.dart';
+import 'package:product_service/features/account_section/presentation/screen/privacy_policy_screen.dart';
+import 'package:product_service/features/account_section/presentation/screen/terms_and_conditation_screen.dart';
 import 'package:product_service/utils/constants/app_images.dart';
 import 'package:product_service/utils/constants/app_string.dart';
 import '../../../../utils/constants/app_color.dart';
@@ -114,6 +117,76 @@ class CreateAccountScreen extends StatelessWidget {
                       controller.registerPasswordController.text,
                     ),
                   ),
+                  SizedBox(height: 16.h),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        height: 24.w,
+                        width: 24.w,
+                        child: Obx(
+                              () => Checkbox(
+                            value: controller.isTermsAccepted.value,
+                            onChanged: controller.toggleTermsAccepted,
+                            activeColor: AppColor.primary,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(4.r),
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 12.w),
+                      Expanded(
+                        child: Wrap(
+                          children: [
+                            Text(
+                              "I agree to the ",
+                              style: GoogleFonts.plusJakartaSans(
+                                fontSize: 14.sp,
+                                color: AppColor.textLight,
+                                fontWeight: FontWeight.w400
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                Get.to(TermsConditaionScreen());
+                              },
+                              child: Text(
+                                "Terms & Conditions",
+                                style: GoogleFonts.plusJakartaSans(
+                                  fontSize: 14.sp,
+                                  color: AppColor.primary,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                            Text(
+                              " and ",
+                              style: GoogleFonts.plusJakartaSans(
+                                  fontSize: 14.sp,
+                                  color: AppColor.textLight,
+                                  fontWeight: FontWeight.w400
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                Get.to(PrivacyPolicyScreen());
+                              },
+                              child: Text(
+                                "Privacy Policy",
+                                style: GoogleFonts.plusJakartaSans(
+                                  fontSize: 14.sp,
+                                  color: AppColor.primary,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+
                   SizedBox(height: 32.h),
                   SizedBox(
                     width: double.infinity,
@@ -127,7 +200,28 @@ class CreateAccountScreen extends StatelessWidget {
                       ),
                       onPressed: controller.isLoading.value
                           ? null
-                          : () => controller.signUp(),
+                          : () {
+                        if (!controller.isTermsAccepted.value) {
+                          Get.rawSnackbar(
+                            messageText: Text(
+                              "Please accept the Terms & Conditions to continue",
+                              style: GoogleFonts.plusJakartaSans(
+                                fontSize: 13.sp,
+                                color: Colors.white,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            backgroundColor: Colors.red.shade600,
+                            snackPosition: SnackPosition.TOP,
+                            margin: EdgeInsets.all(16.w),
+                            borderRadius: 12.r,
+                            duration: const Duration(seconds: 3),
+                            icon: const Icon(Icons.error_outline, color: Colors.white),
+                          );
+                          return;
+                        }
+                        controller.signUp();
+                      },
                       child: controller.isLoading.value
                           ? const CircularProgressIndicator(color: Colors.white)
                           : Text(
@@ -140,6 +234,7 @@ class CreateAccountScreen extends StatelessWidget {
                       ),
                     ),
                   ),
+
                   SizedBox(height: 24.h),
                   Center(
                     child: GestureDetector(

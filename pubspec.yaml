@@ -48,7 +48,7 @@ dependencies:
   image_picker: ^1.2.3
   flutter_image_compress: ^2.4.0
   permission_handler: ^11.3.1
-  dio: ^5.11.0
+  dio: ^5.11.1
   pretty_dio_logger: ^1.4.0
   url_launcher: ^6.3.2
   shimmer: ^3.0.0

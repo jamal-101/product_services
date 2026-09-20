@@ -40,6 +40,13 @@ class AuthController extends GetxController {
   }
 
 
+  var isTermsAccepted = false.obs;
+
+  void toggleTermsAccepted(bool? value) {
+    isTermsAccepted.value = value ?? false;
+  }
+
+
   Future<void> signUp() async {
 
     isLoading.value = true;

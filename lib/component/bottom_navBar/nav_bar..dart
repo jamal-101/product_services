@@ -47,7 +47,13 @@ class BottomNavBar extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 _buildNavItem(0, AppImages.homeIcon, 'home'.tr,),
-                _buildNavItem(1, AppImages.listIcon, 'myListing'.tr,),
+                _buildNavItem(
+                  1,
+                  authController.selectedRole.value == 'seller'
+                      ? AppImages.myListIcon
+                      : AppImages.listIcon,
+                  authController.selectedRole.value == 'seller' ? 'myListing'.tr : 'store'.tr,
+                ),
                 if (authController.selectedRole.value == 'seller')
                   _buildMyStoreNavItem(2, AppImages.storeIcon, "My Store"),
 

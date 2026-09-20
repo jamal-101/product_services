@@ -127,13 +127,11 @@ class ApiService {
   static Future<ApiResponseModel> multipartRequest(
       String url, {
         Map<String, String> header = const {},
-        required Map<String, dynamic> bodyData, // যেমন: {"data": storePayload}
-        Map<String, File?> files = const {},   // যেমন: {"logo": file1, "coverImage": file2}
+        required Map<String, dynamic> bodyData,
+        Map<String, File?> files = const {},
         String method = "POST",
       }) async {
     FormData formData = FormData();
-
-    // ১. ফাইলগুলো ফরমডেটাতে যুক্ত করা
     for (var entry in files.entries) {
       String fieldName = entry.key;
       File? file = entry.value;
@@ -157,10 +155,8 @@ class ApiService {
       }
     }
 
-    // ২. মেইন বডি বা JSON ডাটা ফিল্ডগুলো ফরমডেটাতে যুক্ত করা
     bodyData.forEach((key, value) {
       if (value is Map || value is List) {
-        // যদি অবজেক্ট বা লিস্ট হয়, তবে তা JSON স্ট্রিং হিসেবে রূপান্তর করে পাঠানো
         formData.fields.add(MapEntry(key, jsonEncode(value)));
       } else {
         formData.fields.add(MapEntry(key, value.toString()));

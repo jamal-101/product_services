@@ -16,6 +16,7 @@ import '../../../../services/storage/storage_service.dart';
 import '../../../my_add/presentation/screen/my_add_screen.dart';
 import '../../../profile_section/presentation/controller/profile_controller.dart';
 import '../../../profile_section/presentation/screen/store_creation/presentation/screen/transection_history_screen.dart';
+import '../controller/delete_account_controller.dart';
 import 'language_screen.dart';
 
 class AccountScreen extends StatelessWidget {
@@ -238,6 +239,107 @@ class AccountScreen extends StatelessWidget {
                               () {
                             Get.to(() => const TermsConditaionScreen());
                           },
+                        ),
+                        _buildCardMenuItem(
+                          Icons.delete_forever_outlined,
+                          "Delete Account",
+                          "Permanently delete your account and data",
+                              () {
+                            final DeleteAccountController deleteController = Get.put(DeleteAccountController());
+                            Get.dialog(
+                              AlertDialog(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(15.r),
+                                ),
+                                title: Text(
+                                  'Delete Account',
+                                  style: GoogleFonts.montserrat(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18.sp,
+                                  ),
+                                ),
+                                content: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'Please enter your password to confirm account deletion.',
+                                      style: GoogleFonts.montserrat(
+                                        fontSize: 13.sp,
+                                        color: Colors.grey.shade700,
+                                      ),
+                                    ),
+                                    SizedBox(height: 15.h),
+
+                                    // পাসওয়ার্ড ইনপুট ফিল্ড এবং হাইড/শো আইকন যুক্ত করা
+                                    Obx(() => TextField(
+                                      controller: deleteController.passwordController,
+                                      obscureText: deleteController.isPasswordHidden.value,
+                                      decoration: InputDecoration(
+                                        labelText: 'Password',
+                                        labelStyle: GoogleFonts.montserrat(fontSize: 14.sp),
+                                        border: OutlineInputBorder(
+                                          borderRadius: BorderRadius.circular(8.r),
+                                        ),
+                                        suffixIcon: IconButton(
+                                          icon: Icon(
+                                            deleteController.isPasswordHidden.value
+                                                ? Icons.visibility_off
+                                                : Icons.visibility,
+                                            size: 20.sp,
+                                          ),
+                                          onPressed: deleteController.togglePasswordVisibility,
+                                        ),
+                                      ),
+                                    )),
+                                  ],
+                                ),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () => Get.back(),
+                                    child: Text(
+                                      'Cancel',
+                                      style: GoogleFonts.montserrat(
+                                        color: Colors.grey,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ),
+                                  Obx(() => ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.red,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(8.r),
+                                      ),
+                                    ),
+                                    onPressed: deleteController.isLoading.value
+                                        ? null
+                                        : () async {
+                                      // আপনার তৈরি করা ডিলিট এপিআই কল ফাংশন
+                                      await deleteController.deleteAccountApiCall();
+                                    },
+                                    child: deleteController.isLoading.value
+                                        ? SizedBox(
+                                      width: 20.w,
+                                      height: 20.h,
+                                      child: const CircularProgressIndicator(
+                                        color: Colors.white,
+                                        strokeWidth: 2,
+                                      ),
+                                    )
+                                        : Text(
+                                      'Delete',
+                                      style: GoogleFonts.montserrat(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  )),
+                                ],
+                              ),
+                            );
+                          },
+                          isLogout: true, // এটি দিলে আইকন এবং ব্যাকগ্রাউন্ড লাল (Red) কালার হয়ে যাবে
                         ),
 
                         _buildCardMenuItem(

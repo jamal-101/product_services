@@ -41,4 +41,5 @@ class ApiEndPoint {
   static const notifications = "$baseUrl/notifications";
   static const myStore = "$baseUrl/stores/me";
   static const favoritesToggle = "$baseUrl/favorites/toggle";
+  static const deleteAccount = "$baseUrl/users/profile";
 }

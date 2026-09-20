@@ -42,6 +42,7 @@ class AppTranslations extends Translations {
       'myStore': 'My Store',
       'messages': 'Messages',
       'account': 'Account',
+      'stores': 'Stores',
 
 
       'tapToChange': 'Tap to change profile picture',
@@ -306,6 +307,7 @@ class AppTranslations extends Translations {
       'findLocalStoresDesc': 'Busca y encuentra tiendas locales cerca de ti, vendedor y tienda para satisfacer tus necesidades habituales',
       'chat': 'Chat',
       'withSellers': 'Con vendedores',
+      'stores': 'Tiendas',
     },
   };
 }
