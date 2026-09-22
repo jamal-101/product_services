@@ -36,7 +36,6 @@
 //   }
 // }
 
-
 import 'package:get/get.dart';
 import 'package:product_service/config/route/app_route.dart';
 import 'package:product_service/services/socket_service.dart';
@@ -61,17 +60,15 @@ class SplashController extends GetxController {
 
   void _prepareSplashMedia() async {
     try {
-
       videoController = VideoPlayerController.asset('assets/videos/intro.mp4');
 
       await videoController.initialize();
 
       isVideoReady.value = true;
 
-
       videoController.play();
 
-      // await audioPlayer.play(AssetSource('audio/audio_logo.mp3'));
+      await audioPlayer.play(AssetSource('audio/audio_logo.mp3'));
 
       int durationInSeconds = videoController.value.duration.inSeconds > 0
           ? videoController.value.duration.inSeconds
@@ -80,7 +77,6 @@ class SplashController extends GetxController {
       Future.delayed(Duration(seconds: durationInSeconds), () {
         _navigateToNextScreen();
       });
-
     } catch (e) {
       debugPrint("Splash Error: $e");
       Future.delayed(const Duration(seconds: 4), () {

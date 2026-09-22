@@ -52,5 +52,6 @@ class AppImages {
   static const String setting_notifi = "$baseurlIcon/setting_notifi.png" ;
   static const String add_icon = "$baseurlIcon/add_icon.png" ;
   static const String myListIcon = "$baseurlIcon/my_listing.png" ;
+  static const String jagan = "$baseurlIcon/jagana.png" ;
 
 }

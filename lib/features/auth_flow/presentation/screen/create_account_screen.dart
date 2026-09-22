@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:product_service/config/route/app_route.dart';
 import 'package:product_service/features/account_section/presentation/screen/privacy_policy_screen.dart';
 import 'package:product_service/features/account_section/presentation/screen/terms_and_conditation_screen.dart';
 import 'package:product_service/utils/constants/app_images.dart';
 import 'package:product_service/utils/constants/app_string.dart';
+import '../../../../config/route/app_route.dart';
 import '../../../../utils/constants/app_color.dart';
 import '../../../../utils/constants/app_utils.dart';
 import '../controller/auth_controller.dart';
@@ -20,7 +20,7 @@ class CreateAccountScreen extends StatelessWidget {
       builder: (controller) {
         return Scaffold(
           appBar: AppBar(
-            backgroundColor: Colors.white,
+            surfaceTintColor: AppColor.appBackgroundColor,
             elevation: 0,
             leading: Padding(
               padding: EdgeInsets.only(left: 16.w, top: 8.h, bottom: 8.h),
@@ -76,7 +76,7 @@ class CreateAccountScreen extends StatelessWidget {
                     hint: "John Doe",
                     imagePath: AppImages.personIcon,
                     controller: controller.registerNameController,
-                    validator: Utils.fullNameValidator,
+                    // validator: Utils.fullNameValidator,
                   ),
                   SizedBox(height: 16.h),
                   _buildCommonTextField(
@@ -186,7 +186,6 @@ class CreateAccountScreen extends StatelessWidget {
                       ),
                     ],
                   ),
-
                   SizedBox(height: 32.h),
                   SizedBox(
                     width: double.infinity,
@@ -234,7 +233,6 @@ class CreateAccountScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-
                   SizedBox(height: 24.h),
                   Center(
                     child: GestureDetector(

@@ -3,6 +3,7 @@ import 'package:product_service/features/account_section/presentation/screen/acc
 import 'package:product_service/features/account_section/presentation/screen/change_password_screen.dart';
 import 'package:product_service/features/account_section/presentation/screen/help_and_support_screen.dart';
 import 'package:product_service/features/account_section/presentation/screen/identity_verification_screen.dart';
+import 'package:product_service/features/auth_flow/presentation/screen/forget_pass_verify_otp_screen.dart';
 import 'package:product_service/features/home_flow/presentatin/controller/home_controller.dart';
 import 'package:product_service/features/home_flow/presentatin/screen/explore_stories_screen.dart';
 import 'package:product_service/features/notification/presentaiton/screen/notification_screen.dart';
@@ -21,8 +22,7 @@ import '../../features/auth_flow/presentation/screen/forget_password.dart';
 import '../../features/auth_flow/presentation/screen/login_screen.dart';
 import '../../features/auth_flow/presentation/screen/reset_password.dart';
 import '../../features/auth_flow/presentation/screen/select_rol_screen.dart';
-import '../../features/auth_flow/presentation/screen/verify_otp.dart';
-import '../../features/auth_flow/presentation/screen/verify_phone_screen.dart';
+import '../../features/auth_flow/presentation/screen/verify_signUp_otp_screen.dart';
 import '../../features/home_flow/presentatin/screen/home_screen.dart';
 import '../../features/seller/my_list_flow/presentation/screen/edite_branding_screen.dart';
 import '../../features/seller/my_list_flow/presentation/screen/edite_legel_document_screen.dart';
@@ -36,10 +36,10 @@ class AppRoutes {
   static const String loginScreen = "/loginScreen";
   static const String selectRoleScreen = "/selectRoleScreen";
   static const String forgetPassword = "/forgetPassword";
-  static const String verifyOtp = "/verifyOtp";
+  static const String forgetPassVerifyOtpScreen = "/forgetPassVerifyOtpScreen";
   static const String resetPassword = "/resetPassword";
   static const String createAccount = "/createAccount";
-  static const String verifyPhone = "/verifyPhone";
+  static const String verifySignUpOtpScreen = "/verifySignUpOtpScreen";
   static const String homeScreen = "/homeScreen";
   static const String exploreStoriesScreen = "/exploreStoriesScreen";
   static const String storeDetailsPage = "/storeDetailsPage";
@@ -97,8 +97,8 @@ class AppRoutes {
       }),
     ),
     GetPage(
-      name: verifyOtp,
-      page: () => VerifyOtpScreen(),
+      name: forgetPassVerifyOtpScreen,
+      page: () => ForgetPassVerifyOtpScreen(),
       binding: BindingsBuilder(() {
         Get.lazyPut<AuthController>(() => AuthController());
       }),
@@ -111,17 +111,19 @@ class AppRoutes {
       }),
     ),
     GetPage(
-      name: createAccount,
+      name: AppRoutes.createAccount,
       page: () => const CreateAccountScreen(),
       binding: BindingsBuilder(() {
         Get.lazyPut<AuthController>(() => AuthController());
       }),
     ),
     GetPage(
-      name: verifyPhone,
-      page: () => VerifyPhoneScreen(),
+      name: AppRoutes.verifySignUpOtpScreen,
+      page: () => const VerifySignupOtpScreen(),
       binding: BindingsBuilder(() {
-        Get.lazyPut<AuthController>(() => AuthController());
+        if (!Get.isRegistered<AuthController>()) {
+          Get.lazyPut<AuthController>(() => AuthController());
+        }
       }),
     ),
     GetPage(

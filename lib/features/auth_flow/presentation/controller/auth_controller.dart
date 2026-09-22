@@ -7,10 +7,7 @@ import '../../../../services/storage/storage_key.dart';
 import '../../../../services/storage/storage_service.dart';
 import '../../../../utils/constants/api_enpoint.dart';
 
-
-
 class AuthController extends GetxController {
-
   final registerNameController = TextEditingController();
   final registerPhoneController = TextEditingController();
   final registerEmailController = TextEditingController();
@@ -31,7 +28,10 @@ class AuthController extends GetxController {
   var resendCountdown = 55.obs;
   Timer? _timer;
   var isLoading = false.obs;
-  final List<TextEditingController> otpControllers = List.generate(6, (index) => TextEditingController());
+  final List<TextEditingController> otpControllers = List.generate(
+    6,
+    (index) => TextEditingController(),
+  );
 
   @override
   void onInit() {
@@ -39,16 +39,86 @@ class AuthController extends GetxController {
     selectedRole.value = LocalStorage.myRole;
   }
 
-
   var isTermsAccepted = false.obs;
 
   void toggleTermsAccepted(bool? value) {
     isTermsAccepted.value = value ?? false;
   }
 
+  Timer? _phoneTimer;
+
+  void startPhoneOtpTimer() {
+    phoneCountdown.value = 180;
+    _phoneTimer?.cancel();
+    _phoneTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (phoneCountdown.value > 0) {
+        phoneCountdown.value--;
+      } else {
+        _phoneTimer?.cancel();
+      }
+    });
+  }
+
+  // Future<void> signUp() async {
+  //
+  //   isLoading.value = true;
+  //
+  //   final Map<String, dynamic> body = {
+  //     "name": registerNameController.text.trim(),
+  //     "email": registerEmailController.text.trim(),
+  //     "phone": registerPhoneController.text.trim(),
+  //     "countryCode": "+880",
+  //     "password": registerPasswordController.text,
+  //     "role": "user",
+  //   };
+  //
+  //   try {
+  //     final response = await ApiService.post(ApiEndPoint.signUp, body: body);
+  //
+  //     if (response.isSuccess) {
+  //       var responseData = response.data;
+  //       // if (responseData['token'] != null) {
+  //       //   String token = responseData['token'];
+  //       //   LocalStorage.token = token;
+  //       //   await LocalStorage.setString(LocalStorageKeys.token, token);
+  //       // }
+  //       String? token = responseData['data']?['token'];
+  //
+  //       if (token != null && token.isNotEmpty) {
+  //         LocalStorage.token = token;
+  //         await LocalStorage.setString(LocalStorageKeys.token, token);
+  //       }
+  //       Get.snackbar(
+  //         "Success",
+  //         response.message,
+  //         backgroundColor: Colors.green,
+  //         colorText: Colors.white,
+  //       );
+  //       startPhoneOtpTimer();
+  //       Get.toNamed(AppRoutes.verifySignUpOtpScreen);
+  //     } else {
+  //       Get.snackbar(
+  //         "Failed",
+  //         response.message,
+  //         backgroundColor: Colors.red,
+  //         colorText: Colors.white,
+  //       );
+  //     }
+  //   } catch (e) {
+  //     Get.snackbar(
+  //       "Error",
+  //       e.toString(),
+  //       backgroundColor: Colors.red,
+  //       colorText: Colors.white,
+  //     );
+  //   } finally {
+  //     isLoading.value = false;
+  //   }
+  //
+  //
+  // }
 
   Future<void> signUp() async {
-
     isLoading.value = true;
 
     final Map<String, dynamic> body = {
@@ -64,19 +134,32 @@ class AuthController extends GetxController {
       final response = await ApiService.post(ApiEndPoint.signUp, body: body);
 
       if (response.isSuccess) {
-        var responseData = response.data;
-        if (responseData['token'] != null) {
-          String token = responseData['token'];
+        final responseData = response.data;
+        String? token;
+
+        if (responseData is Map<String, dynamic>) {
+          if (responseData.containsKey('data') &&
+              responseData['data'] != null) {
+            token = responseData['data']['token']?.toString();
+          } else if (responseData.containsKey('token')) {
+            token = responseData['token']?.toString();
+          }
+        }
+
+        if (token != null && token.isNotEmpty) {
           LocalStorage.token = token;
           await LocalStorage.setString(LocalStorageKeys.token, token);
         }
+
         Get.snackbar(
           "Success",
           response.message,
           backgroundColor: Colors.green,
           colorText: Colors.white,
         );
-        Get.toNamed(AppRoutes.verifyPhone);
+
+        startPhoneOtpTimer();
+        Get.toNamed(AppRoutes.verifySignUpOtpScreen);
       } else {
         Get.snackbar(
           "Failed",
@@ -85,7 +168,10 @@ class AuthController extends GetxController {
           colorText: Colors.white,
         );
       }
-    } catch (e) {
+    } catch (e, stackTrace) {
+      debugPrint("SignUp Error: $e");
+      debugPrint("StackTrace: $stackTrace");
+
       Get.snackbar(
         "Error",
         e.toString(),
@@ -97,7 +183,6 @@ class AuthController extends GetxController {
     }
   }
 
-
   void toggleRegisterPasswordVisibility() {
     isRegisterPasswordVisible.toggle();
     update();
@@ -108,8 +193,10 @@ class AuthController extends GetxController {
     update();
   }
 
+
+
   void startOtpTimer() {
-    resendCountdown.value = 55;
+    resendCountdown.value = 180;
     _timer?.cancel();
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (resendCountdown.value > 0) {
@@ -119,7 +206,6 @@ class AuthController extends GetxController {
       }
     });
   }
-
 
 
   Future<void> verifyOtp() async {
@@ -163,9 +249,58 @@ class AuthController extends GetxController {
     }
   }
 
+  Future<void> resendSignUpOtp() async {
+    if (phoneCountdown.value > 0) {
+      Get.snackbar(
+        "Wait",
+        "Please wait until the countdown finishes.",
+        backgroundColor: Colors.orange,
+        colorText: Colors.white,
+      );
+      return;
+    }
+
+    isLoading.value = true;
+
+    final Map<String, dynamic> body = {
+      "email": registerEmailController.text.trim(),
+    };
+
+    try {
+      final response = await ApiService.post(
+        ApiEndPoint.resendOtp,
+        body: body,
+      );
+
+      if (response.isSuccess) {
+        Get.snackbar(
+          "Success",
+          response.message,
+          backgroundColor: Colors.green,
+          colorText: Colors.white,
+        );
+        startPhoneOtpTimer();
+      } else {
+        Get.snackbar(
+          "Failed",
+          response.message,
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+        );
+      }
+    } catch (e) {
+      Get.snackbar(
+        "Error",
+        e.toString(),
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
   var isLoginLoading = false.obs;
-
-
 
   Future<void> loginUser() async {
     isLoginLoading.value = true;
@@ -195,6 +330,26 @@ class AuthController extends GetxController {
             await LocalStorage.setSellerToken(token);
           }
         }
+        // bool hasSellerAccount =
+        //     responseData['data']?['hasSellerAccount'] ?? false;
+        // LocalStorage.hasSellerAccount = hasSellerAccount;
+        // await LocalStorage.setBool(
+        //   LocalStorageKeys.hasSellerAccount,
+        //   hasSellerAccount,
+        // );
+        //
+        // Get.snackbar(
+        //   "Success",
+        //   response.message,
+        //   backgroundColor: Colors.green,
+        //   colorText: Colors.white,
+        // );
+        // if (hasSellerAccount) {
+        //   Get.offAllNamed(AppRoutes.selectRoleScreen);
+        // } else {
+        //   Get.offAllNamed(AppRoutes.homeScreen);
+        // }
+
         bool hasSellerAccount = responseData['data']?['hasSellerAccount'] ?? false;
         LocalStorage.hasSellerAccount = hasSellerAccount;
         await LocalStorage.setBool(LocalStorageKeys.hasSellerAccount, hasSellerAccount);
@@ -205,9 +360,13 @@ class AuthController extends GetxController {
           backgroundColor: Colors.green,
           colorText: Colors.white,
         );
-        if (hasSellerAccount) {
+
+        // ✅ পরিবর্তনকৃত কন্ডিশন:
+        if (!hasSellerAccount) {
+          // false হলে Select Role Screen-এ পাঠাবে
           Get.offAllNamed(AppRoutes.selectRoleScreen);
         } else {
+          // true হলে Home Screen-এ পাঠাবে
           Get.offAllNamed(AppRoutes.homeScreen);
         }
 
@@ -231,39 +390,66 @@ class AuthController extends GetxController {
     }
   }
 
-  // void selectRole(String role) async {
-  //   selectedRole.value = role;
-  //   await LocalStorage.setUserRole(role);
-  //   Future.delayed(const Duration(milliseconds: 300), () {
-  //     if (role == 'seller') {
-  //       Get.offAllNamed(AppRoutes.sellerHomeScreen);
-  //     } else {
-  //       Get.offAllNamed(AppRoutes.homeScreen);
-  //     }
-  //   });
-  // }
+  // Future<void> selectRole(String role) async {
+  //   String apiRole = (role == 'buyer') ? 'user' : role;
   //
-  // void toggleRole() async {
-  //   String currentRole = LocalStorage.myRole;
-  //   String newRole = (currentRole == 'buyer') ? 'seller' : 'buyer';
-  //   await LocalStorage.setUserRole(newRole);
-  //   selectedRole.value = newRole;
-  //   if (newRole == 'seller') {
-  //     Get.offAllNamed(AppRoutes.sellerHomeScreen);
-  //   } else {
-  //     Get.offAllNamed(AppRoutes.homeScreen);
+  //   final Map<String, dynamic> body = {"role": apiRole};
+  //   selectedRole.value = role;
+  //
+  //   try {
+  //     final response = await ApiService.post(
+  //       ApiEndPoint.switchRole,
+  //       body: body,
+  //     );
+  //
+  //     if (response.isSuccess) {
+  //       var responseData = response.data;
+  //
+  //       String? token =
+  //           responseData['data']?['accessToken']?.toString() ??
+  //           responseData['data']?['token']?.toString();
+  //       if (token != null && token.isNotEmpty) {
+  //         LocalStorage.token = token;
+  //         await LocalStorage.setString(LocalStorageKeys.token, token);
+  //         if (role == 'seller') {
+  //           await LocalStorage.setSellerToken(token);
+  //         }
+  //       }
+  //
+  //       selectedRole.value = role;
+  //       await LocalStorage.setUserRole(role);
+  //       if (role == 'seller') {
+  //         Get.offAllNamed(AppRoutes.sellerHomeScreen);
+  //       } else {
+  //         Get.offAllNamed(AppRoutes.homeScreen);
+  //       }
+  //     } else {
+  //       Get.snackbar(
+  //         "Failed",
+  //         response.message,
+  //         backgroundColor: Colors.red,
+  //         colorText: Colors.white,
+  //       );
+  //     }
+  //   } catch (e) {
+  //     Get.snackbar(
+  //       "Error",
+  //       e.toString(),
+  //       backgroundColor: Colors.red,
+  //       colorText: Colors.white,
+  //     );
   //   }
   // }
 
 
-  // Role select ba switch korar API integration
+
   Future<void> selectRole(String role) async {
+    String previousRole = selectedRole.value; // আগের রোল সেইভ রাখা হলো
     String apiRole = (role == 'buyer') ? 'user' : role;
 
     final Map<String, dynamic> body = {
       "role": apiRole,
     };
-    selectedRole.value = role;
 
 
     try {
@@ -282,15 +468,8 @@ class AuthController extends GetxController {
           }
         }
 
-        selectedRole.value = role;
+        selectedRole.value = role; // ✅ API Successful হলে মান আপডেট হবে
         await LocalStorage.setUserRole(role);
-
-        // Get.snackbar(
-        //   "Success",
-        //   response.message,
-        //   backgroundColor: Colors.green,
-        //   colorText: Colors.white,
-        // );
 
         if (role == 'seller') {
           Get.offAllNamed(AppRoutes.sellerHomeScreen);
@@ -298,6 +477,9 @@ class AuthController extends GetxController {
           Get.offAllNamed(AppRoutes.homeScreen);
         }
       } else {
+        // ❌ ব্যর্থ হলে রোল আগেরটাই থাকবে
+        selectedRole.value = previousRole;
+
         Get.snackbar(
           "Failed",
           response.message,
@@ -306,6 +488,9 @@ class AuthController extends GetxController {
         );
       }
     } catch (e) {
+      // ❌ Exception হলেও রোল আগেরটাই থাকবে
+      selectedRole.value = previousRole;
+
       Get.snackbar(
         "Error",
         e.toString(),
@@ -320,6 +505,7 @@ class AuthController extends GetxController {
     String newRole = (currentRole == 'buyer') ? 'seller' : 'buyer';
     await selectRole(newRole);
   }
+
   var isForgotLoading = false.obs;
 
   Future<void> forgotPassword() async {
@@ -334,14 +520,8 @@ class AuthController extends GetxController {
         body: body,
       );
       if (response.isSuccess) {
-        // Get.snackbar(
-        //   "Success",
-        //   response.message,
-        //   backgroundColor: Colors.green,
-        //   colorText: Colors.white,
-        // );
         startOtpTimer();
-        Get.toNamed(AppRoutes.verifyOtp);
+        Get.toNamed(AppRoutes.forgetPassVerifyOtpScreen);
       } else {
         Get.snackbar(
           "Failed",
@@ -361,7 +541,6 @@ class AuthController extends GetxController {
       isForgotLoading.value = false;
     }
   }
-
 
   var isVerifyLoading = false.obs;
   final List<TextEditingController> otpEmailControllers = List.generate(
@@ -421,6 +600,48 @@ class AuthController extends GetxController {
     }
   }
 
+  Future<void> resendForgotEmailOtp() async {
+    if (resendCountdown.value > 0) return;
+
+    isForgotLoading.value = true;
+
+    final Map<String, dynamic> body = {
+      "email": forgotEmailController.text.trim(),
+    };
+
+    try {
+      final response = await ApiService.post(
+        ApiEndPoint.forgotPassword,
+        body: body,
+      );
+
+      if (response.isSuccess) {
+        Get.snackbar(
+          "Success",
+          response.message,
+          backgroundColor: Colors.green,
+          colorText: Colors.white,
+        );
+        startOtpTimer();
+      } else {
+        Get.snackbar(
+          "Failed",
+          response.message,
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+        );
+      }
+    } catch (e) {
+      Get.snackbar(
+        "Error",
+        e.toString(),
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+    } finally {
+      isForgotLoading.value = false;
+    }
+  }
 
   var isResetLoading = false.obs;
 
@@ -433,13 +654,10 @@ class AuthController extends GetxController {
     };
 
     try {
-
       final response = await ApiService.post(
         ApiEndPoint.resetPassword,
         body: body,
-        header: {
-          "resettoken": LocalStorage.token,
-        },
+        header: {"resettoken": LocalStorage.token},
       );
 
       if (response.isSuccess) {
@@ -473,7 +691,7 @@ class AuthController extends GetxController {
   @override
   void onClose() {
     _timer?.cancel();
-
+    _phoneTimer?.cancel();
     super.onClose();
   }
 }

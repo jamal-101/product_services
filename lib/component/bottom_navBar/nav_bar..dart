@@ -52,7 +52,7 @@ class BottomNavBar extends StatelessWidget {
                   authController.selectedRole.value == 'seller'
                       ? AppImages.myListIcon
                       : AppImages.listIcon,
-                  authController.selectedRole.value == 'seller' ? 'myListing'.tr : 'store'.tr,
+                  authController.selectedRole.value == 'seller' ? 'myListing'.tr : AppString.stores.tr,
                 ),
                 if (authController.selectedRole.value == 'seller')
                   _buildMyStoreNavItem(2, AppImages.storeIcon, "My Store"),

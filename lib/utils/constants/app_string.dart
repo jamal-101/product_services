@@ -135,7 +135,6 @@
 import 'package:get/get.dart';
 
 class AppString {
-  // Static keys for localization mapping
   static const String startServer = "startServer";
   static const String someThingWrong = "someThingWrong";
   static const String requestTimeOut = "requestTimeOut";
@@ -180,20 +179,21 @@ class AppString {
   static const String enterThe = "enter The";
   static const String resendOtp = "resend Otp";
   static const String reset = "reset";
-  static const String createNew = "create New";
-  static const String newPassword = "new Password";
-  static const String createStrong = "create Strong";
-  static const String confirmNew = "confirm New";
-  static const String reEnter = "reEnter";
-  static const String resterPassword = "rester Password";
-  static const String featuredStores = "featured Stores";
-  static const String seeAll = "see All";
-  static const String anyTime = "any Time";
+  static const String createNew = "Create New";
+  static const String newPassword = "New Password";
+  static const String createStrong = "Create Strong";
+  static const String confirmNew = "Confirm New";
+  static const String reEnter = "Re Enter";
+  static const String resterPassword = "Rester Password";
+  static const String featuredStores = "Featured Stores";
+  static const String seeAll = "See All";
+  static const String anyTime = "Any Time";
   static const String electronics = "electronics";
   static const String home = "home";
   static const String message = "message";
   static const String myList = "myList";
-  static const String explore = "explore";
+  static const String explore = "Explore";
+  // static const String stores = "Stores";
   static const String stores = "stores";
   static const String productsStores = "products Stores";
   static const String servicesProvider = "services Provider";

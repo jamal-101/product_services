@@ -12,6 +12,7 @@ import 'package:product_service/features/profile_section/presentation/screen/sav
 import 'package:product_service/features/profile_section/presentation/screen/save_flow/presentation/screen/safety_guidelines.dart';
 import 'package:product_service/features/profile_section/presentation/screen/save_flow/presentation/screen/save_product_screen.dart';
 import 'package:product_service/features/profile_section/presentation/screen/save_flow/presentation/screen/save_screen.dart';
+import 'package:product_service/features/profile_section/presentation/screen/store_creation/presentation/screen/creat_new_store_step1.dart';
 import 'package:product_service/features/profile_section/presentation/screen/store_creation/presentation/screen/my_store.dart';
 import 'package:product_service/features/save/presentation/screen/save_store_screen.dart';
 import 'package:product_service/utils/constants/app_images.dart';
@@ -82,9 +83,24 @@ class AppDrawer extends StatelessWidget {
                   ),
                   SizedBox(height: 15.h),
                   GestureDetector(
+                    // onTap: () {
+                    //   Navigator.pop(context);
+                    //   authController.toggleRole();
+                    // },
                     onTap: () {
                       Navigator.pop(context);
-                      authController.toggleRole();
+                      if (authController.selectedRole.value == 'buyer' && !LocalStorage.hasSellerAccount) {
+                        Get.snackbar(
+                          "Notice",
+                          "Please create a store to switch to seller mode.",
+                          backgroundColor: Colors.orange,
+                          colorText: Colors.white,
+                        );
+
+                        Get.toNamed(AppRoutes.createNewStoreStep1);
+                      } else {
+                        authController.toggleRole();
+                      }
                     },
                     child: Container(
                       padding: EdgeInsets.symmetric(
@@ -127,15 +143,16 @@ class AppDrawer extends StatelessWidget {
               padding: EdgeInsets.symmetric(horizontal: 10.w),
               children: [
                 if (!isSeller) ...[
-                  // _buildMenuItem(context, Icons.storefront_outlined, "My Ads"),
+                  _buildMenuItem(context, Icons.store, "Create Store"),
                   _buildMenuItem(context, Icons.storefront_outlined, "Save Store"),
-                  // _buildMenuItem(context, Icons.analytics, "Store Analytics"),
                   _buildMenuItem(context, Icons.bookmark_border, "Saved Products"),
-                  // _buildMenuItem(context, Icons.shopping_bag_outlined, "Saved Services"),
                 ],
-                _buildMenuItem(context, Icons.description_outlined, "Safety Guidelines"),
-                _buildMenuItem(context, Icons.privacy_tip_outlined, "Privacy Policy"),
-                _buildMenuItem(context, Icons.article_outlined, "Terms & Conditions"),
+                if(isSeller) ...[
+                  _buildMenuItem(context, Icons.description_outlined, "Safety Guidelines"),
+                  _buildMenuItem(context, Icons.privacy_tip_outlined, "Privacy Policy"),
+                  _buildMenuItem(context, Icons.article_outlined, "Terms & Conditions"),
+                ],
+
               ],
             ),
           ),
@@ -183,8 +200,8 @@ class AppDrawer extends StatelessWidget {
         Navigator.pop(context);
 
         switch (title) {
-          case "My Ads":
-            Get.to(() => const MyAddScreen());
+          case "Create Store":
+            Get.toNamed(AppRoutes.myStore);
             break;
           case "Save Store":
            Get.to(()=>SaveStoreScreen());

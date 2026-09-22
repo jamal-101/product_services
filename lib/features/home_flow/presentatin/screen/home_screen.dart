@@ -36,18 +36,35 @@ class HomeScreen extends StatelessWidget {
             scaffoldKey.currentState?.openDrawer();
           },
         ),
-        title: Image.asset(
-          AppImages.home_center_icon,
-          height: 180.h,
-          width: 180.w,
-          fit: BoxFit.contain,
+        centerTitle: true,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset(
+              AppImages.rollLOgoImage,
+              height: 60.h,
+              width: 60.w,
+              fit: BoxFit.contain,
+            ),
+            SizedBox(width: 5.w),
+            Padding(
+              padding: const EdgeInsets.only(top: 12.0),
+              child: Image.asset(
+                AppImages.jagan,
+                height: 160.h,
+                width: 160.w,
+                fit: BoxFit.contain,
+              ),
+            ),
+          ],
+
         ),
         actions: [
           IconButton(
             icon: Image.asset(
               AppImages.homeNotificationIcon,
-              height: 35.h,
-              width: 35.w,
+              height: 30.h,
+              width: 30.w,
             ),
             onPressed: () => Get.to(() => const NotificationScreen()),
           ),
@@ -145,7 +162,7 @@ class HomeScreen extends StatelessWidget {
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
-        padding: EdgeInsets.symmetric(horizontal: 16.w),
+        padding: EdgeInsets.symmetric(horizontal: 16.w,vertical: 10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
