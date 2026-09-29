@@ -97,7 +97,7 @@ class MyAddScreen extends StatelessWidget {
                   date: formattedDate,
                   price: "N/A",
                   imageUrl: imgUrl,
-                  onTap: () => Get.to(() => const AddDetailsScreen()),
+                  onTap: () => Get.to(() => null),
                 ),
               );
             },

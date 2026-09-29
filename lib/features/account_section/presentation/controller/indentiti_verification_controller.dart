@@ -21,14 +21,109 @@ class IdentityVerificationController extends GetxController {
     }
   }
 
+  // Future<void> pickImage(bool isFront) async {
+  //   final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+  //   if (image != null) {
+  //     if (isFront) {
+  //       frontImagePath.value = image.path;
+  //     } else {
+  //       backImagePath.value = image.path;
+  //     }
+  //   }
+  // }
+
+
   Future<void> pickImage(bool isFront) async {
-    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
-    if (image != null) {
-      if (isFront) {
-        frontImagePath.value = image.path;
-      } else {
-        backImagePath.value = image.path;
+    Get.bottomSheet(
+      Container(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: 40,
+              height: 4,
+              decoration: BoxDecoration(
+                color: Colors.grey[300],
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+            const SizedBox(height: 20),
+
+            // Camera Option
+            InkWell(
+              onTap: () async {
+                Get.back();
+                await _getImage(ImageSource.camera, isFront);
+              },
+              child: Row(
+                children: [
+                  CircleAvatar(
+                    radius: 26,
+                    backgroundColor: const Color(0xFFE3F2FD),
+                    child: const Icon(Icons.camera_alt_outlined, color: Color(0xFF1E88E5), size: 24),
+                  ),
+                  const SizedBox(width: 16),
+                  const Text(
+                    'Camera',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 16),
+
+            // Gallery Option
+            InkWell(
+              onTap: () async {
+                Get.back();
+                await _getImage(ImageSource.gallery, isFront);
+              },
+              child: Row(
+                children: [
+                  CircleAvatar(
+                    radius: 26,
+                    backgroundColor: const Color(0xFFE8F5E9),
+                    child: const Icon(Icons.photo_library_outlined, color: Color(0xFF43A047), size: 24),
+                  ),
+                  const SizedBox(width: 16),
+                  const Text(
+                    'Gallery',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 10),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // Image source ও compression হ্যান্ডেল করার প্রাইভেট মেথড
+  Future<void> _getImage(ImageSource source, bool isFront) async {
+    try {
+      final XFile? image = await _picker.pickImage(
+        source: source,
+        imageQuality: 50, // ৪১৩ এরর আটকানোর জন্য ইমেজের সাইজ কমানো হয়েছে
+        maxWidth: 1024,
+        maxHeight: 1024,
+      );
+
+      if (image != null) {
+        if (isFront) {
+          frontImagePath.value = image.path;
+        } else {
+          backImagePath.value = image.path;
+        }
       }
+    } catch (e) {
+      debugPrint('Error picking image: $e');
     }
   }
 

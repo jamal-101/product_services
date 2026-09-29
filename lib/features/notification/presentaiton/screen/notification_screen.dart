@@ -25,10 +25,17 @@ class NotificationScreen extends StatelessWidget {
           style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold, color: Colors.black),
         ),
         actions: [
-          TextButton(
-            onPressed: () {},
-            child: Text("Clear all", style: TextStyle(color: Colors.orange, fontSize: 13.sp)),
-          )
+          Obx(() {
+            if (controller.notificationList.isEmpty) {
+              return const SizedBox.shrink();
+            }
+            return TextButton(
+              onPressed: () {
+                controller.clearAllNotifications();
+              },
+              child: Text("Clear all", style: TextStyle(color: Colors.orange, fontSize: 13.sp)),
+            );
+          }),
         ],
       ),
       body: Obx(() {
@@ -47,8 +54,6 @@ class NotificationScreen extends StatelessWidget {
             ),
           );
         }
-
-
         return ListView.builder(
           padding: EdgeInsets.all(16.w),
           itemCount: controller.notificationList.length,

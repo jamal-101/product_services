@@ -44,6 +44,7 @@ class StoreUpdateController extends GetxController {
   final tradeLicenseNoController = TextEditingController();
   final tinNumberController = TextEditingController();
   Rx<File?> selectedTradeLicenseFile = Rx<File?>(null);
+  final ImagePicker _picker = ImagePicker();
 
   var isLoading = false.obs;
 
@@ -62,8 +63,6 @@ class StoreUpdateController extends GetxController {
         CategoryModel categoryModel = CategoryModel.fromJson(response.data as Map<String, dynamic>);
         if (categoryModel.data != null && categoryModel.data!.isNotEmpty) {
           categoryList.value = categoryModel.data!;
-
-
           selectedCategoryId.value = categoryList.first.sId ?? "";
           selectedCategoryName.value = categoryList.first.name ?? "Select Category";
         }
@@ -77,18 +76,101 @@ class StoreUpdateController extends GetxController {
     }
   }
 
+
+
   Future<void> pickImage(String type) async {
-    final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
-    if (pickedFile != null) {
-      if (type == 'logo') {
-        selectedLogo.value = File(pickedFile.path);
-      } else if (type == 'cover') {
-        selectedCover.value = File(pickedFile.path);
-      } else if (type == 'tradeLicense') {
-        selectedTradeLicenseFile.value = File(pickedFile.path);
+    Get.bottomSheet(
+      Container(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: 40,
+              height: 4,
+              decoration: BoxDecoration(
+                color: Colors.grey[300],
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+            const SizedBox(height: 20),
+
+            // Camera Option
+            InkWell(
+              onTap: () async {
+                Get.back();
+                await _getImage(ImageSource.camera, type);
+              },
+              child: Row(
+                children: [
+                  CircleAvatar(
+                    radius: 26,
+                    backgroundColor: const Color(0xFFE3F2FD),
+                    child: const Icon(Icons.camera_alt_outlined, color: Color(0xFF1E88E5), size: 24),
+                  ),
+                  const SizedBox(width: 16),
+                  const Text(
+                    'Camera',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 16),
+            InkWell(
+              onTap: () async {
+                Get.back();
+                await _getImage(ImageSource.gallery, type);
+              },
+              child: Row(
+                children: [
+                  CircleAvatar(
+                    radius: 26,
+                    backgroundColor: const Color(0xFFE8F5E9),
+                    child: const Icon(Icons.photo_library_outlined, color: Color(0xFF43A047), size: 24),
+                  ),
+                  const SizedBox(width: 16),
+                  const Text(
+                    'Gallery',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 10),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Future<void> _getImage(ImageSource source, String type) async {
+    try {
+      final pickedFile = await _picker.pickImage(
+        source: source,
+        imageQuality: 50,
+        maxWidth: 1024,
+        maxHeight: 1024,
+      );
+
+      if (pickedFile != null) {
+        if (type == 'logo') {
+          selectedLogo.value = File(pickedFile.path);
+        } else if (type == 'cover') {
+          selectedCover.value = File(pickedFile.path);
+        } else if (type == 'tradeLicense') {
+          selectedTradeLicenseFile.value = File(pickedFile.path);
+        }
       }
+    } catch (e) {
+      debugPrint('Error picking image: $e');
     }
   }
+
 
   void toggleSameAsPhone(bool value) {
     isSameAsPhone.value = value;

@@ -3,6 +3,8 @@ class ApiEndPoint {
   // static const baseUrl = "https://api.jaganaecuador.com/api/v1";
   // static const imageUrl = "https://api.jaganaecuador.com";
   static const imageUrl = "http://10.10.7.10:5009";
+
+  //================  sign Up
   static const signUp = "$baseUrl/users";
   static const verifyOtp = "$baseUrl/auth/verify-email";
   static const login = "$baseUrl/auth/login";
@@ -44,4 +46,5 @@ class ApiEndPoint {
   static const favoritesToggle = "$baseUrl/favorites/toggle";
   static const deleteAccount = "$baseUrl/users/profile";
   static const String resendOtp = "$baseUrl/auth/resend-otp";
+  static const String notificationsMessages = "$baseUrl/notifications/messages";
 }

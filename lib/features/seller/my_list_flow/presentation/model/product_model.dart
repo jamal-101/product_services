@@ -37,8 +37,8 @@ class Data {
   String? sellerId;
   StoreId? storeId;
   String? title;
-  int? activePrice;
-  int? originalPrice;
+  num? activePrice;
+  num? originalPrice;
   String? description;
   String? additionalInformation;
   List<String>? images;

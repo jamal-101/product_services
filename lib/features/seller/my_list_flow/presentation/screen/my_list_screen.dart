@@ -99,23 +99,25 @@ class MyListingScreen extends StatelessWidget {
           itemCount: itemCount,
           itemBuilder: (context, index) {
             String title = "No Title";
-            int activePrice = 0;
-            int originalPrice = 0;
+            double activePrice = 0;
+            double originalPrice = 0;
             List<String>? images;
             String? itemId;
 
             if (isService) {
               s_model.Data item = controller.serviceList[index];
               title = item.title ?? "No Title";
-              activePrice = item.activePrice ?? 0;
-              originalPrice = item.originalPrice ?? 0;
+              activePrice = (item.activePrice ?? 0).toDouble(); // int বা double যাই আসুক safely double-এ কনভার্ট হবে
+              originalPrice = (item.originalPrice ?? 0).toDouble();
               images = item.images;
               itemId = item.sId;
             } else {
               p_model.Data item = controller.productList[index];
               title = item.title ?? "No Title";
-              activePrice = item.activePrice ?? 0;
-              originalPrice = item.originalPrice ?? 0;
+              // activePrice = item.activePrice ?? 0;
+              // originalPrice = item.originalPrice ?? 0;
+              activePrice = (item.activePrice ?? 0).toDouble(); // int বা double যাই আসুক safely double-এ কনভার্ট হবে
+              originalPrice = (item.originalPrice ?? 0).toDouble();
               images = item.images;
               itemId = item.sId;
             }

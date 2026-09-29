@@ -1,11 +1,16 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:image_picker/image_picker.dart';
 import '../../../../config/route/app_route.dart';
 import '../../../../services/api/api_service.dart';
 import '../../../../services/storage/storage_key.dart';
 import '../../../../services/storage/storage_service.dart';
 import '../../../../utils/constants/api_enpoint.dart';
+import '../../../../utils/constants/app_color.dart';
 
 class AuthController extends GetxController {
   final registerNameController = TextEditingController();
@@ -28,6 +33,14 @@ class AuthController extends GetxController {
   var resendCountdown = 55.obs;
   Timer? _timer;
   var isLoading = false.obs;
+  final documentTypeController = TextEditingController();
+  final documentNumberController = TextEditingController();
+  Rxn<File> documentFrontImage = Rxn<File>();
+  Rxn<File> documentBackImage = Rxn<File>();
+
+  var selectedDocumentType = "".obs;
+  List<String> documentTypes = ['NID', 'Passport'];
+
   final List<TextEditingController> otpControllers = List.generate(
     6,
     (index) => TextEditingController(),
@@ -59,79 +72,91 @@ class AuthController extends GetxController {
     });
   }
 
-  // Future<void> signUp() async {
-  //
-  //   isLoading.value = true;
-  //
-  //   final Map<String, dynamic> body = {
-  //     "name": registerNameController.text.trim(),
-  //     "email": registerEmailController.text.trim(),
-  //     "phone": registerPhoneController.text.trim(),
-  //     "countryCode": "+880",
-  //     "password": registerPasswordController.text,
-  //     "role": "user",
-  //   };
-  //
-  //   try {
-  //     final response = await ApiService.post(ApiEndPoint.signUp, body: body);
-  //
-  //     if (response.isSuccess) {
-  //       var responseData = response.data;
-  //       // if (responseData['token'] != null) {
-  //       //   String token = responseData['token'];
-  //       //   LocalStorage.token = token;
-  //       //   await LocalStorage.setString(LocalStorageKeys.token, token);
-  //       // }
-  //       String? token = responseData['data']?['token'];
-  //
-  //       if (token != null && token.isNotEmpty) {
-  //         LocalStorage.token = token;
-  //         await LocalStorage.setString(LocalStorageKeys.token, token);
-  //       }
-  //       Get.snackbar(
-  //         "Success",
-  //         response.message,
-  //         backgroundColor: Colors.green,
-  //         colorText: Colors.white,
-  //       );
-  //       startPhoneOtpTimer();
-  //       Get.toNamed(AppRoutes.verifySignUpOtpScreen);
-  //     } else {
-  //       Get.snackbar(
-  //         "Failed",
-  //         response.message,
-  //         backgroundColor: Colors.red,
-  //         colorText: Colors.white,
-  //       );
-  //     }
-  //   } catch (e) {
-  //     Get.snackbar(
-  //       "Error",
-  //       e.toString(),
-  //       backgroundColor: Colors.red,
-  //       colorText: Colors.white,
-  //     );
-  //   } finally {
-  //     isLoading.value = false;
-  //   }
-  //
-  //
-  // }
+
+
+  Future<void> pickDocumentImage(bool isFront) async {
+    Get.bottomSheet(
+      Container(
+        padding: EdgeInsets.all(20.r),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(20.r),
+            topRight: Radius.circular(20.r),
+          ),
+        ),
+        child: Wrap(
+          children: [
+            ListTile(
+              leading: const Icon(Icons.camera_alt, color: AppColor.primary),
+              title: Text(
+                'Take a Photo',
+                style: GoogleFonts.plusJakartaSans(fontWeight: FontWeight.w600),
+              ),
+              onTap: () async {
+                Get.back();
+                final ImagePicker picker = ImagePicker();
+                final XFile? image = await picker.pickImage(source: ImageSource.camera);
+                if (image != null) {
+                  if (isFront) {
+                    documentFrontImage.value = File(image.path);
+                  } else {
+                    documentBackImage.value = File(image.path);
+                  }
+                }
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.photo_library, color: AppColor.primary),
+              title: Text(
+                'Choose from Gallery',
+                style: GoogleFonts.plusJakartaSans(fontWeight: FontWeight.w600),
+              ),
+              onTap: () async {
+                Get.back();
+                final ImagePicker picker = ImagePicker();
+                final XFile? image = await picker.pickImage(source: ImageSource.gallery);
+                if (image != null) {
+                  if (isFront) {
+                    documentFrontImage.value = File(image.path);
+                  } else {
+                    documentBackImage.value = File(image.path);
+                  }
+                }
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 
   Future<void> signUp() async {
     isLoading.value = true;
 
-    final Map<String, dynamic> body = {
-      "name": registerNameController.text.trim(),
-      "email": registerEmailController.text.trim(),
-      "phone": registerPhoneController.text.trim(),
-      "countryCode": "+880",
-      "password": registerPasswordController.text,
-      "role": "user",
-    };
-
     try {
-      final response = await ApiService.post(ApiEndPoint.signUp, body: body);
+      final Map<String, dynamic> bodyData = {
+        "name": registerNameController.text.trim(),
+        "email": registerEmailController.text.trim(),
+        "phone": registerPhoneController.text.trim(),
+        "countryCode": "+880",
+        "password": registerPasswordController.text,
+        "documentType": selectedDocumentType.value.toLowerCase(),
+        "documentNumber": documentNumberController.text.trim(),
+        "role": "user",
+      };
+
+      Map<String, File?> files = {
+        "documentFront": documentFrontImage.value,
+        "documentBack": documentBackImage.value,
+      };
+
+      final response = await ApiService.multipartRequest(
+        ApiEndPoint.signUp,
+        bodyData: bodyData,
+        files: files,
+        method: "POST",
+      );
 
       if (response.isSuccess) {
         final responseData = response.data;
@@ -182,6 +207,8 @@ class AuthController extends GetxController {
       isLoading.value = false;
     }
   }
+
+
 
   void toggleRegisterPasswordVisibility() {
     isRegisterPasswordVisible.toggle();

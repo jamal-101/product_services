@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:product_service/utils/constants/app_string.dart';
+import 'package:product_service/utils/constants/api_enpoint.dart';
 import '../controller/edite_profile_controller.dart';
-
 
 class EditProfileScreen extends StatelessWidget {
   const EditProfileScreen({super.key});
@@ -53,14 +52,18 @@ class EditProfileScreen extends StatelessWidget {
                   onTap: () => controller.pickImage(),
                   child: Stack(
                     children: [
-                      Obx(() => CircleAvatar(
-                        radius: 50.r,
-                        backgroundImage: controller.selectedImage.value != null
-                            ? FileImage(controller.selectedImage.value!) as ImageProvider
-                            : (controller.profileImageUrl.value.isNotEmpty
-                            ? NetworkImage("http://10.10.7.10:5009${controller.profileImageUrl.value}") as ImageProvider
-                            : const AssetImage('assets/images/profile.png') as ImageProvider),
-                      )),
+                      Obx(() {
+                        return Container(
+                          width: 100.r,
+                          height: 100.r,
+                          decoration: const BoxDecoration(
+                            shape: BoxShape.circle,
+                          ),
+                          child: ClipOval(
+                            child: _buildProfileImage(controller),
+                          ),
+                        );
+                      }),
                       Positioned(
                         bottom: 0,
                         right: 0,
@@ -165,6 +168,40 @@ class EditProfileScreen extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildProfileImage(EditProfileController controller) {
+    if (controller.selectedImage.value != null) {
+      return Image.file(
+        controller.selectedImage.value!,
+        fit: BoxFit.cover,
+      );
+    }
+
+    if (controller.profileImageUrl.value.isNotEmpty) {
+      final fullUrl = "${ApiEndPoint.imageUrl}${controller.profileImageUrl.value}";
+      return Image.network(
+        fullUrl,
+        fit: BoxFit.cover,
+        errorBuilder: (context, error, stackTrace) {
+          return Image.asset(
+            'assets/icons/person_icon.png',
+            fit: BoxFit.cover,
+            errorBuilder: (context, error, stackTrace) {
+              return const Icon(Icons.person, size: 30, color: Colors.grey);
+            },
+          );
+        },
+      );
+    }
+
+    return Image.asset(
+      'assets/icons/person_icon.png',
+      fit: BoxFit.cover,
+      errorBuilder: (context, error, stackTrace) {
+        return const Icon(Icons.person, size: 30, color: Colors.grey);
+      },
     );
   }
 
@@ -300,6 +337,7 @@ class EditProfileScreen extends StatelessWidget {
             contentPadding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 15.h),
             filled: true,
             fillColor: Colors.grey.shade50,
+            errorStyle: GoogleFonts.montserrat(fontSize: 11.sp, color: Colors.red),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12.r),
               borderSide: BorderSide(color: Colors.grey.shade200, width: 1),
@@ -307,6 +345,15 @@ class EditProfileScreen extends StatelessWidget {
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12.r),
               borderSide: const BorderSide(color: Color(0xFF27AE60), width: 1.5),
+            ),
+            // <--- নিচের এরর বর্ডারগুলো যুক্ত করুন --->
+            errorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12.r),
+              borderSide: const BorderSide(color: Colors.red, width: 1),
+            ),
+            focusedErrorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12.r),
+              borderSide: const BorderSide(color: Colors.red, width: 1.5),
             ),
           ),
         ),
@@ -335,6 +382,7 @@ class EditProfileScreen extends StatelessWidget {
             contentPadding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 15.h),
             filled: true,
             fillColor: Colors.grey.shade50,
+            errorStyle: GoogleFonts.montserrat(fontSize: 11.sp, color: Colors.red),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12.r),
               borderSide: BorderSide(color: Colors.grey.shade200, width: 1),
@@ -343,40 +391,14 @@ class EditProfileScreen extends StatelessWidget {
               borderRadius: BorderRadius.circular(12.r),
               borderSide: const BorderSide(color: Color(0xFF27AE60), width: 1.5),
             ),
-          ),
-        ),
-        SizedBox(height: 10.h),
-        RichText(
-          text: TextSpan(
-            text: 'streetAddress'.tr,
-            style: GoogleFonts.montserrat(fontSize: 11.sp, color: Colors.grey),
-            children: const [
-              TextSpan(text: ' *', style: TextStyle(color: Colors.red)),
-            ],
-          ),
-        ),
-        SizedBox(height: 5.h),
-        TextFormField(
-          controller: controller.streetController,
-          maxLines: 2,
-          validator: (value) {
-            if (value == null || value.trim().isEmpty) {
-              return 'streetAddressRequired'.tr;
-            }
-            return null;
-          },
-          decoration: InputDecoration(
-            hintText: 'streetAddressHint'.tr,
-            contentPadding: EdgeInsets.all(15.w),
-            filled: true,
-            fillColor: Colors.grey.shade50,
-            enabledBorder: OutlineInputBorder(
+            // <--- নিচের এরর বর্ডারগুলো যুক্ত করুন --->
+            errorBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12.r),
-              borderSide: BorderSide(color: Colors.grey.shade200, width: 1),
+              borderSide: const BorderSide(color: Colors.red, width: 1),
             ),
-            focusedBorder: OutlineInputBorder(
+            focusedErrorBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12.r),
-              borderSide: const BorderSide(color: Color(0xFF27AE60), width: 1.5),
+              borderSide: const BorderSide(color: Colors.red, width: 1.5),
             ),
           ),
         ),

@@ -1,12 +1,10 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
-
 import '../../../services/api/api_service.dart';
 import '../../../services/storage/storage_key.dart';
 import '../../../services/storage/storage_service.dart';
@@ -32,7 +30,8 @@ class AdSlot {
     this.label,
   });
 
-  String get displayName => label?.isNotEmpty == true ? label! : 'Slot $position';
+  String get displayName =>
+      label?.isNotEmpty == true ? label! : 'Slot $position';
 }
 
 class PostAddController extends GetxController {
@@ -107,7 +106,6 @@ class PostAddController extends GetxController {
           return;
         }
 
-        // verify-seller returns a seller-scoped accessToken — must replace old user token
         final tokens = responseData is Map ? responseData['tokens'] : null;
         final sellerToken = tokens is Map
             ? (tokens['accessToken'] ?? tokens['token'])?.toString()
@@ -118,7 +116,6 @@ class PostAddController extends GetxController {
           await LocalStorage.setSellerToken(sellerToken);
           debugPrint('🔐 Seller token saved from verify-seller');
         } else if (LocalStorage.token.isNotEmpty) {
-          // Keep current token as seller token when already in seller mode
           await LocalStorage.setSellerToken(LocalStorage.token);
         }
 
@@ -152,7 +149,10 @@ class PostAddController extends GetxController {
       Get.rawSnackbar(
         messageText: Text(
           e.toString(),
-          style: GoogleFonts.plusJakartaSans(fontSize: 13.sp, color: Colors.white),
+          style: GoogleFonts.plusJakartaSans(
+            fontSize: 13.sp,
+            color: Colors.white,
+          ),
         ),
         backgroundColor: Colors.red.shade600,
         snackPosition: SnackPosition.TOP,
@@ -345,8 +345,12 @@ class PostAddController extends GetxController {
       }
     } catch (e) {
       availableSlots.clear();
-      Get.snackbar("Error", e.toString(),
-          backgroundColor: Colors.red, colorText: Colors.white);
+      Get.snackbar(
+        "Error",
+        e.toString(),
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
     } finally {
       isLoadingSlots.value = false;
     }
@@ -382,7 +386,8 @@ class PostAddController extends GetxController {
     final bookedPositions = _toIntList(
       map['bookedPositions'] ?? map['booked'] ?? map['occupiedPositions'],
     );
-    final capacity = _toInt(
+    final capacity =
+        _toInt(
           map['featuredCapacity'] ??
               map['capacity'] ??
               map['totalSlots'] ??
@@ -402,7 +407,11 @@ class PostAddController extends GetxController {
             ].fold<int>(0, (m, p) => p > m ? p : m);
 
       final slots = <AdSlot>[];
-      for (var i = 1; i <= (total > 0 ? total : availablePositions.length); i++) {
+      for (
+        var i = 1;
+        i <= (total > 0 ? total : availablePositions.length);
+        i++
+      ) {
         final isAvailable = availablePositions.isNotEmpty
             ? availablePositions.contains(i)
             : !bookedPositions.contains(i);
@@ -429,7 +438,8 @@ class PostAddController extends GetxController {
       }
       if (item is! Map) continue;
       final map = Map<String, dynamic>.from(item);
-      final position = _toInt(
+      final position =
+          _toInt(
             map['position'] ??
                 map['slot'] ??
                 map['slotNumber'] ??
@@ -445,7 +455,8 @@ class PostAddController extends GetxController {
       } else if (map['isBooked'] == false) {
         isAvailable = true;
       } else {
-        final availableRaw = map['isAvailable'] ??
+        final availableRaw =
+            map['isAvailable'] ??
             map['available'] ??
             map['isFree'] ??
             map['free'] ??
@@ -454,7 +465,8 @@ class PostAddController extends GetxController {
           isAvailable = availableRaw;
         } else if (availableRaw != null) {
           final s = availableRaw.toString().toLowerCase();
-          isAvailable = s == 'available' ||
+          isAvailable =
+              s == 'available' ||
               s == 'free' ||
               s == 'true' ||
               s == 'open' ||
@@ -474,22 +486,25 @@ class PostAddController extends GetxController {
         AdSlot(
           position: position,
           isAvailable: isAvailable,
-          weeklyPrice: _toDouble(
+          weeklyPrice:
+              _toDouble(
                 map['weeklyPrice'] ??
                     map['priceWeekly'] ??
                     map['priceWk'] ??
                     map['weekPrice'],
               ) ??
               price,
-          monthlyPrice: _toDouble(
+          monthlyPrice:
+              _toDouble(
                 map['monthlyPrice'] ??
                     map['priceMonthly'] ??
                     map['priceMo'] ??
                     map['monthPrice'],
               ) ??
               price,
-          label: (map['name'] ?? map['label'] ?? map['title'] ?? 'Slot $position')
-              ?.toString(),
+          label:
+              (map['name'] ?? map['label'] ?? map['title'] ?? 'Slot $position')
+                  ?.toString(),
         ),
       );
     }
@@ -505,7 +520,8 @@ class PostAddController extends GetxController {
   }
 
   void _refreshSlotPrice({AdSlot? slot}) {
-    final selected = slot ??
+    final selected =
+        slot ??
         availableSlots.firstWhereOrNull(
           (s) => s.position == selectedPosition.value,
         );
@@ -515,20 +531,108 @@ class PostAddController extends GetxController {
     }
 
     final isWeekly = selectedDuration.value.toLowerCase().contains('week');
-    final fromSlot =
-        isWeekly ? selected.weeklyPrice : selected.monthlyPrice;
+    final fromSlot = isWeekly ? selected.weeklyPrice : selected.monthlyPrice;
     slotPrice.value = fromSlot ?? packagePrice.value;
   }
 
+  // Future<void> pickFeaturedImage() async {
+  //   final XFile? image = await _picker.pickImage(
+  //     source: ImageSource.gallery,
+  //     maxWidth: 1280,
+  //     maxHeight: 1280,
+  //     imageQuality: 70,
+  //   );
+  //   if (image != null) {
+  //     featuredImage.value = File(image.path);
+  //   }
+  // }
+
   Future<void> pickFeaturedImage() async {
-    final XFile? image = await _picker.pickImage(
-      source: ImageSource.gallery,
-      maxWidth: 1280,
-      maxHeight: 1280,
-      imageQuality: 70,
+    Get.bottomSheet(
+      Container(
+        padding: const EdgeInsets.all(20),
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: 40,
+              height: 4,
+              decoration: BoxDecoration(
+                color: Colors.grey[300],
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+            Column(
+              children: [
+                GestureDetector(
+                  onTap: () async {
+                    Get.back();
+                    await _getImage(ImageSource.camera);
+                  },
+                  child: Row(
+                    children: [
+                      CircleAvatar(
+                        radius: 30,
+                        backgroundColor: Colors.blue.shade50,
+                        child: const Icon(
+                          Icons.camera_alt,
+                          color: Colors.blue,
+                          size: 30,
+                        ),
+                      ),
+                      SizedBox(width: 8.w),
+                      Text('Camera'),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 15),
+                GestureDetector(
+                  onTap: () async {
+                    Get.back();
+                    await _getImage(ImageSource.gallery);
+                  },
+                  child: Row(
+                    children: [
+                      CircleAvatar(
+                        radius: 30,
+                        backgroundColor: Colors.green.shade50,
+                        child: const Icon(
+                          Icons.photo_library,
+                          color: Colors.green,
+                          size: 30,
+                        ),
+                      ),
+                    SizedBox(width : 8.w),
+                      const Text('Gallery'),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 15),
+          ],
+        ),
+      ),
     );
-    if (image != null) {
-      featuredImage.value = File(image.path);
+  }
+
+  Future<void> _getImage(ImageSource source) async {
+    try {
+      final XFile? image = await _picker.pickImage(
+        source: source,
+        maxWidth: 1280,
+        maxHeight: 1280,
+        imageQuality: 70,
+      );
+      if (image != null) {
+        featuredImage.value = File(image.path);
+      }
+    } catch (e) {
+      debugPrint('Error picking image: $e');
     }
   }
 
@@ -561,9 +665,9 @@ class PostAddController extends GetxController {
   }
 
   Map<String, String> _sellerAuthHeader() => {
-        'Authorization': 'Bearer ${_sellerAuthToken()}',
-        'Content-Type': 'application/json',
-      };
+    'Authorization': 'Bearer ${_sellerAuthToken()}',
+    'Content-Type': 'application/json',
+  };
 
   /// Post-ad: POST /datafast/create-checkout-session then open WebView widget.
   Future<void> startDatafastPayment() async {
@@ -581,10 +685,7 @@ class PostAddController extends GetxController {
 
       final packageId = await _resolveAdPackageId();
       if (packageId == null || packageId.isEmpty) {
-        Get.snackbar(
-          "Error",
-          "No post_add package found. Please try again.",
-        );
+        Get.snackbar("Error", "No post_add package found. Please try again.");
         return;
       }
 
@@ -631,7 +732,6 @@ class PostAddController extends GetxController {
     }
   }
 
-  /// After widget redirect with resourcePath → verify → create ad.
   Future<void> handlePaymentCompleted(
     String checkoutId,
     String resultUrl,
@@ -641,8 +741,6 @@ class PostAddController extends GetxController {
     await submitAdvertisement();
   }
 
-  /// POST /datafast/verify-payment
-  /// Sends checkoutId + resourcePath from Datafast redirect (OPPWA requirement).
   Future<bool> verifyDatafastPayment(
     String checkoutId, [
     String? resultUrl,
@@ -667,10 +765,9 @@ class PostAddController extends GetxController {
     }
 
     final parsed = _parsePaymentResultUrl(resultUrl);
-    final resolvedCheckoutId =
-        parsed['checkoutId']?.isNotEmpty == true
-            ? parsed['checkoutId']!
-            : checkoutId;
+    final resolvedCheckoutId = parsed['checkoutId']?.isNotEmpty == true
+        ? parsed['checkoutId']!
+        : checkoutId;
     final resourcePath = parsed['resourcePath'] ?? '';
 
     try {
@@ -685,12 +782,8 @@ class PostAddController extends GetxController {
       if (resourcePath.isNotEmpty) {
         body["resourcePath"] = resourcePath;
       }
-
       debugPrint('🔐 verify-payment body: $body');
-
-      // OPPWA settle + max 2 status checks/min — wait then verify once, one retry
       await Future.delayed(const Duration(seconds: 5));
-
       ApiResponseModel? response;
       for (var attempt = 1; attempt <= 2; attempt++) {
         response = await ApiService.post(
@@ -699,9 +792,7 @@ class PostAddController extends GetxController {
           header: _sellerAuthHeader(),
         );
         if (response.isSuccess) break;
-
         final msg = response.message.toLowerCase();
-        // Do not hammer retries on hard auth credential errors from gateway
         final isHardAuth = msg.contains('authorization failed');
         if (isHardAuth || attempt == 2) break;
 
@@ -736,7 +827,6 @@ class PostAddController extends GetxController {
     }
   }
 
-  /// Extract checkoutId + resourcePath from shopper result URL.
   Map<String, String> _parsePaymentResultUrl(String? resultUrl) {
     if (resultUrl == null || resultUrl.isEmpty) {
       return {};
@@ -749,15 +839,13 @@ class PostAddController extends GetxController {
 
     String checkoutId = idFromQuery;
     if (checkoutId.isEmpty && resourcePath.isNotEmpty) {
-      final match = RegExp(r'/checkouts/([^/]+)/payment')
-          .firstMatch(resourcePath);
+      final match = RegExp(
+        r'/checkouts/([^/]+)/payment',
+      ).firstMatch(resourcePath);
       checkoutId = match?.group(1) ?? '';
     }
 
-    return {
-      'checkoutId': checkoutId,
-      'resourcePath': resourcePath,
-    };
+    return {'checkoutId': checkoutId, 'resourcePath': resourcePath};
   }
 
   String? _extractCheckoutId(dynamic resData) {
@@ -766,17 +854,16 @@ class PostAddController extends GetxController {
     final data = map['data'];
 
     String? fromMap(Map source) {
-      final id = source['checkoutId']?.toString() ??
+      final id =
+          source['checkoutId']?.toString() ??
           source['sessionId']?.toString() ??
           source['id']?.toString() ??
           source['ndc']?.toString();
       if (id != null && id.isNotEmpty) return id;
 
-      final url = source['url']?.toString() ??
-          source['paymentUrl']?.toString() ??
-          '';
-      final fromPayPath =
-          RegExp(r'/datafast/pay/([^/?&#\s]+)').firstMatch(url);
+      final url =
+          source['url']?.toString() ?? source['paymentUrl']?.toString() ?? '';
+      final fromPayPath = RegExp(r'/datafast/pay/([^/?&#\s]+)').firstMatch(url);
       if (fromPayPath != null) return fromPayPath.group(1);
 
       final match = RegExp(r'checkoutId=([^&\s]+)').firstMatch(url);
@@ -849,6 +936,63 @@ class PostAddController extends GetxController {
     return fromMap(map);
   }
 
+  // Future<void> submitAdvertisement() async {
+  //   try {
+  //     isSubmitting.value = true;
+  //     final int positionValue = _selectedPosition();
+  //
+  //     Map<String, dynamic> bodyData = {
+  //       "campaignName": campaignNameController.text.trim(),
+  //       "cityAdConfigId": selectedCityId.value,
+  //       "advertisementType": "featured",
+  //       "slot": selectedSlot.value,
+  //       "position": positionValue,
+  //       "duration": selectedDuration.value,
+  //       "startDate": startDate.value,
+  //     };
+  //
+  //     final compressedImage = await _compressFeaturedImage(featuredImage.value);
+  //     Map<String, File?> files = {
+  //       "featuredImage": compressedImage,
+  //     };
+  //
+  //     var response = await ApiService.multipartRequest(
+  //       ApiEndPoint.createAdvertisement,
+  //       bodyData: bodyData,
+  //       files: files,
+  //       method: "POST",
+  //       header: _sellerAuthHeader(),
+  //     );
+  //
+  //     if (response.isSuccess) {
+  //       Get.offAll(() => const CampaignSuccessView());
+  //     } else {
+  //       final isTooLarge = response.statusCode == 413 ||
+  //           response.message.toLowerCase().contains('too large') ||
+  //           response.message.contains('413');
+  //       Get.snackbar(
+  //         "Error",
+  //         isTooLarge
+  //             ? "Image is still too large for the server. Please pick a smaller photo."
+  //             : response.message,
+  //         backgroundColor: Colors.red,
+  //         colorText: Colors.white,
+  //         snackPosition: SnackPosition.BOTTOM,
+  //       );
+  //     }
+  //   } catch (e) {
+  //     Get.snackbar(
+  //       "Error",
+  //       e.toString(),
+  //       backgroundColor: Colors.red,
+  //       colorText: Colors.white,
+  //       snackPosition: SnackPosition.BOTTOM,
+  //     );
+  //   } finally {
+  //     isSubmitting.value = false;
+  //   }
+  // }
+
   Future<void> submitAdvertisement() async {
     try {
       isSubmitting.value = true;
@@ -865,9 +1009,7 @@ class PostAddController extends GetxController {
       };
 
       final compressedImage = await _compressFeaturedImage(featuredImage.value);
-      Map<String, File?> files = {
-        "featuredImage": compressedImage,
-      };
+      Map<String, File?> files = {"featuredImage": compressedImage};
 
       var response = await ApiService.multipartRequest(
         ApiEndPoint.createAdvertisement,
@@ -880,7 +1022,8 @@ class PostAddController extends GetxController {
       if (response.isSuccess) {
         Get.offAll(() => const CampaignSuccessView());
       } else {
-        final isTooLarge = response.statusCode == 413 ||
+        final isTooLarge =
+            response.statusCode == 413 ||
             response.message.toLowerCase().contains('too large') ||
             response.message.contains('413');
         Get.snackbar(
@@ -907,54 +1050,71 @@ class PostAddController extends GetxController {
   }
 
   /// Shrink featured image so nginx does not reject with 413.
-  Future<File?> _compressFeaturedImage(File? file) async {
-    if (file == null || !await file.exists()) return file;
+  // Future<File?> _compressFeaturedImage(File? file) async {
+  //   if (file == null || !await file.exists()) return file;
+  //
+  //   final originalBytes = await file.length();
+  //   debugPrint(
+  //     '📷 featuredImage original: ${(originalBytes / 1024).toStringAsFixed(1)} KB',
+  //   );
+  //
+  //   // Already small enough for typical nginx 1–2MB limits
+  //   if (originalBytes <= 700 * 1024) return file;
+  //
+  //   try {
+  //     final tempDir = Directory.systemTemp;
+  //     final targetPath =
+  //         '${tempDir.path}/featured_${DateTime.now().millisecondsSinceEpoch}.jpg';
+  //
+  //     XFile? result = await FlutterImageCompress.compressAndGetFile(
+  //       file.absolute.path,
+  //       targetPath,
+  //       quality: 70,
+  //       minWidth: 1280,
+  //       minHeight: 1280,
+  //       format: CompressFormat.jpeg,
+  //     );
+  //
+  //     // Still large → stronger pass
+  //     if (result != null && await result.length() > 900 * 1024) {
+  //       final strongerPath =
+  //           '${tempDir.path}/featured_sm_${DateTime.now().millisecondsSinceEpoch}.jpg';
+  //       result = await FlutterImageCompress.compressAndGetFile(
+  //         file.absolute.path,
+  //         strongerPath,
+  //         quality: 55,
+  //         minWidth: 1024,
+  //         minHeight: 1024,
+  //         format: CompressFormat.jpeg,
+  //       );
+  //     }
+  //
+  //     if (result == null) return file;
+  //     final out = File(result.path);
+  //     debugPrint(
+  //       '📷 featuredImage compressed: ${(await out.length() / 1024).toStringAsFixed(1)} KB',
+  //     );
+  //     return out;
+  //   } catch (e) {
+  //     debugPrint('📷 compress failed: $e');
+  //     return file;
+  //   }
+  // }
 
-    final originalBytes = await file.length();
-    debugPrint(
-      '📷 featuredImage original: ${(originalBytes / 1024).toStringAsFixed(1)} KB',
-    );
-
-    // Already small enough for typical nginx 1–2MB limits
-    if (originalBytes <= 700 * 1024) return file;
-
+  Future<File?> _compressFeaturedImage(File? imageFile) async {
+    if (imageFile == null) return null;
     try {
-      final tempDir = Directory.systemTemp;
       final targetPath =
-          '${tempDir.path}/featured_${DateTime.now().millisecondsSinceEpoch}.jpg';
-
-      XFile? result = await FlutterImageCompress.compressAndGetFile(
-        file.absolute.path,
+          '${imageFile.parent.path}/compressed_${DateTime.now().millisecondsSinceEpoch}.jpg';
+      final compressedFile = await FlutterImageCompress.compressAndGetFile(
+        imageFile.absolute.path,
         targetPath,
-        quality: 70,
-        minWidth: 1280,
-        minHeight: 1280,
-        format: CompressFormat.jpeg,
+        quality: 60,
       );
-
-      // Still large → stronger pass
-      if (result != null && await result.length() > 900 * 1024) {
-        final strongerPath =
-            '${tempDir.path}/featured_sm_${DateTime.now().millisecondsSinceEpoch}.jpg';
-        result = await FlutterImageCompress.compressAndGetFile(
-          file.absolute.path,
-          strongerPath,
-          quality: 55,
-          minWidth: 1024,
-          minHeight: 1024,
-          format: CompressFormat.jpeg,
-        );
-      }
-
-      if (result == null) return file;
-      final out = File(result.path);
-      debugPrint(
-        '📷 featuredImage compressed: ${(await out.length() / 1024).toStringAsFixed(1)} KB',
-      );
-      return out;
+      return compressedFile != null ? File(compressedFile.path) : imageFile;
     } catch (e) {
-      debugPrint('📷 compress failed: $e');
-      return file;
+      debugPrint('Error compressing image: $e');
+      return imageFile;
     }
   }
 

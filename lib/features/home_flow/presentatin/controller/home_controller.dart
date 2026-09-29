@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import '../../../../services/api/api_service.dart';
 import '../../../../services/storage/storage_service.dart';
 import '../../../../utils/constants/api_enpoint.dart';
+import '../../../notification/presentaiton/controller/notification_controller.dart';
 import '../model/banner_model.dart';
 import '../model/city_model.dart';
 import '../model/features_model.dart';
@@ -14,6 +15,7 @@ class HomeController extends GetxController {
     getBanners();
     fetchCities();
     fetchFeaturedStores();
+    Get.put(NotificationController(), permanent: true);
   }
 
   var currentNavIndex = 0.obs;
@@ -21,7 +23,7 @@ class HomeController extends GetxController {
   final PageController bannerPageController = PageController();
 
   var isBannerLoading = false.obs;
-  var bannerList = <Data>[].obs;
+  var bannerList = <BannerData>[].obs;
 
   Future<void> getBanners() async {
     try {

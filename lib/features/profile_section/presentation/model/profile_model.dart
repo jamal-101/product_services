@@ -44,6 +44,8 @@ class Data {
   String? stripeCustomerId;
   String? subscriptionStatus;
   String? stripeSubscriptionId;
+  String? datafastRegistrationToken;
+  bool? isVerified;
   String? subscriptionExpiresAt;
   String? subscriptionPackageId;
   String? timezone;
@@ -113,6 +115,8 @@ class Data {
     stripeCustomerId = json['stripeCustomerId'];
     subscriptionStatus = json['subscriptionStatus'];
     stripeSubscriptionId = json['stripeSubscriptionId'];
+    datafastRegistrationToken = json['datafastRegistrationToken']; // <--- [ADD] পার্সিং
+    isVerified = json['isVerified'];
     subscriptionExpiresAt = json['subscriptionExpiresAt'];
     subscriptionPackageId = json['subscriptionPackageId'];
     timezone = json['timezone'];
@@ -155,6 +159,8 @@ class Data {
     data['stripeCustomerId'] = stripeCustomerId;
     data['subscriptionStatus'] = subscriptionStatus;
     data['stripeSubscriptionId'] = stripeSubscriptionId;
+    data['datafastRegistrationToken'] = datafastRegistrationToken; // <--- [ADD] JSON ম্যাপে যুক্ত
+    data['isVerified'] = isVerified;
     data['subscriptionExpiresAt'] = subscriptionExpiresAt;
     data['subscriptionPackageId'] = subscriptionPackageId;
     data['timezone'] = timezone;
@@ -178,8 +184,20 @@ class Location {
   String? type;
   List<double>? coordinates;
   String? address;
+  String? canton;       // <--- নতুন
+  String? city;         // <--- নতুন
+  String? country;      // <--- নতুন
+  String? neighborhood; // <--- নতুন
+  String? province;     // <--- নতুন
+  String? sector;
 
-  Location({this.type, this.coordinates, this.address});
+
+  Location({this.type, this.coordinates, this.address,this.canton,
+    this.city,
+    this.country,
+    this.neighborhood,
+    this.province,
+    this.sector,});
 
   Location.fromJson(Map<String, dynamic> json) {
     type = json['type'];
@@ -187,6 +205,12 @@ class Location {
       coordinates = (json['coordinates'] as List).map((e) => (e as num).toDouble()).toList();
     }
     address = json['address'];
+    canton = json['canton'];             // <--- [ADD] fromJson-এ যুক্ত
+    city = json['city'];                 // <--- [ADD] fromJson-এ যুক্ত
+    country = json['country'];           // <--- [ADD] fromJson-এ যুক্ত
+    neighborhood = json['neighborhood']; // <--- [ADD] fromJson-এ যুক্ত
+    province = json['province'];         // <--- [ADD] fromJson-এ যুক্ত
+    sector = json['sector'];
   }
 
   Map<String, dynamic> toJson() {
@@ -194,6 +218,12 @@ class Location {
     data['type'] = type;
     data['coordinates'] = coordinates;
     data['address'] = address;
+    data['canton'] = canton;             // <--- [ADD] toJson-এ যুক্ত
+    data['city'] = city;                 // <--- [ADD] toJson-এ যুক্ত
+    data['country'] = country;           // <--- [ADD] toJson-এ যুক্ত
+    data['neighborhood'] = neighborhood; // <--- [ADD] toJson-এ যুক্ত
+    data['province'] = province;         // <--- [ADD] toJson-এ যুক্ত
+    data['sector'] = sector;
     return data;
   }
 }
@@ -201,18 +231,27 @@ class Location {
 class StoreSubscription {
   bool? isPurchased;
   String? expiresAt;
+  String? status;
+  int? remainingDays;
 
-  StoreSubscription({this.isPurchased, this.expiresAt});
+
+  StoreSubscription({this.isPurchased, this.expiresAt,this.status,        // <--- [ADD] কনস্ট্রাক্টরে যুক্ত
+    this.remainingDays,});
 
   StoreSubscription.fromJson(Map<String, dynamic> json) {
     isPurchased = json['isPurchased'];
     expiresAt = json['expiresAt'];
+    status = json['status'];               // <--- [ADD] fromJson-এ যুক্ত
+    remainingDays = json['remainingDays'];
+
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['isPurchased'] = isPurchased;
     data['expiresAt'] = expiresAt;
+    data['status'] = status;               // <--- [ADD] toJson-এ যুক্ত
+    data['remainingDays'] = remainingDays;
     return data;
   }
 }
@@ -220,18 +259,25 @@ class StoreSubscription {
 class PostSubscription {
   bool? isPurchased;
   String? expiresAt;
+  int? remainingDays;
+  String? status;
 
-  PostSubscription({this.isPurchased, this.expiresAt});
+  PostSubscription({this.isPurchased, this.expiresAt,this.remainingDays, // <--- [ADD] কনস্ট্রাক্টরে যুক্ত
+    this.status,});
 
   PostSubscription.fromJson(Map<String, dynamic> json) {
     isPurchased = json['isPurchased'];
     expiresAt = json['expiresAt'];
+    remainingDays = json['remainingDays']; // <--- [ADD] fromJson-এ যুক্ত
+    status = json['status'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['isPurchased'] = isPurchased;
     data['expiresAt'] = expiresAt;
+    data['remainingDays'] = remainingDays; // <--- [ADD] toJson-এ যুক্ত
+    data['status'] = status;
     return data;
   }
 }

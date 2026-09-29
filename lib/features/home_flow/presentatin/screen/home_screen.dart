@@ -9,6 +9,7 @@ import 'package:product_service/utils/constants/app_images.dart';
 import '../../../../component/bottom_navBar/nav_bar..dart';
 import '../../../../services/api/api_service.dart';
 import '../../../message_flow/presentation/controller/message_controller.dart';
+import '../../../notification/presentaiton/controller/notification_controller.dart';
 import '../../../post_add/controller/post_add_controller.dart';
 import '../../../product_store_flow/presentation/screen/store_details_page.dart';
 import '../../../profile_section/presentation/widget/app_drawer.dart';
@@ -22,6 +23,7 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
     final HomeController controller = Get.put(HomeController());
+    final NotificationController notificationController = Get.put(NotificationController());
     return Scaffold(
       key: scaffoldKey,
       drawer: AppDrawer(),
@@ -60,13 +62,55 @@ class HomeScreen extends StatelessWidget {
 
         ),
         actions: [
-          IconButton(
-            icon: Image.asset(
-              AppImages.homeNotificationIcon,
-              height: 30.h,
-              width: 30.w,
+          Padding(
+            padding: EdgeInsets.only(right: 12.w),
+            child: Center(
+              child: Obx(() {
+                final notificationCtrl = Get.find<NotificationController>();
+                int notificationCount = notificationCtrl.notificationList.length;
+
+                return Stack(
+                  clipBehavior: Clip.none,
+                  children: [
+                    IconButton(
+                      icon: Image.asset(
+                        AppImages.homeNotificationIcon,
+                        height: 30.h,
+                        width: 30.w,
+                      ),
+                      onPressed: () => Get.to(() =>NotificationScreen()),
+                    ),
+                    if (notificationCount > 0)
+                      Positioned(
+                        right: 6,
+                        top: 6,
+                        child: Container(
+                          padding: EdgeInsets.all(4.r),
+                          decoration: const BoxDecoration(
+                            color: Colors.red,
+                            shape: BoxShape.circle,
+                          ),
+                          constraints: BoxConstraints(
+                            minWidth: 18.w,
+                            minHeight: 18.h,
+                          ),
+                          child: Center(
+                            child: Text(
+                              '$notificationCount',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 10.sp,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        ),
+                      ),
+                  ],
+                );
+              }),
             ),
-            onPressed: () => Get.to(() => const NotificationScreen()),
           ),
         ],
       ),

@@ -95,12 +95,52 @@ class AccountScreen extends StatelessWidget {
                         //   _buildGrowthPlanBanner(),
                         // ],
                         _buildSectionTitle('accounT'.tr),
+                        // _buildCardMenuItem(
+                        //   Icons.person_outline,
+                        //  'editeProfile'.tr,
+                        //   'nameEx'.tr,
+                        //       () {
+                        //         final profileData = profileController.profileModel.value.data;
+                        //         Get.toNamed(
+                        //           AppRoutes.editProfileScreen,
+                        //           arguments: {
+                        //             'name': userController.userData.value.name ?? '',
+                        //             'email': userController.userData.value.email ?? '',
+                        //             'phone': userController.userData.value.phone ?? '',
+                        //             'postalCode': userController.userData.value.postalCode ?? '',
+                        //             'state': userController.userData.value.state ?? '',
+                        //             'address': userController.userData.value.address ?? '',
+                        //             'profileImage': userController.userData.value.profileImage ?? '',
+                        //           },
+                        //         );
+                        //   },
+                        // ),
+
                         _buildCardMenuItem(
                           Icons.person_outline,
-                         'editeProfile'.tr,
+                          'editeProfile'.tr,
                           'nameEx'.tr,
                               () {
-                            Get.toNamed(AppRoutes.editProfileScreen);
+                            final profileData = profileController.profileModel.value.data;
+
+                            Get.toNamed(
+                              AppRoutes.editProfileScreen,
+                              arguments: {
+                                'name': profileData?.name ?? '',
+                                'email': profileData?.email ?? '',
+                                'phone': profileData?.phone ?? '',
+                                'postalCode': profileData?.postalCode ?? '',
+                                'state': profileData?.state ?? '',
+                                'city': profileData?.location?.city ?? profileData?.state ?? '',
+                                'address': profileData?.address ?? profileData?.location?.address ?? '',
+                                'canton': profileData?.location?.canton ?? '',
+                                'country': profileData?.location?.country ?? '',
+                                'neighborhood': profileData?.location?.neighborhood ?? '',
+                                'province': profileData?.location?.province ?? '',
+                                'sector': profileData?.location?.sector ?? '',
+                                'profileImage': profileData?.profileImage ?? '',
+                              },
+                            );
                           },
                         ),
                         _buildCardMenuItem(

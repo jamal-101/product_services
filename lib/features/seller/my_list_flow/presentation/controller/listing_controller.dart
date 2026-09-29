@@ -62,7 +62,6 @@ class MyListingController extends GetxController {
   }
 
   Future<void> _fetchProducts() async {
-    // final response = await ApiService.get("/products/my-products");
     final response = await ApiService.get(ApiEndPoint.myProducts);
     if (response.isSuccess) {
       p_model.get_product_model model = p_model.get_product_model.fromJson(response.data as Map<String, dynamic>);
