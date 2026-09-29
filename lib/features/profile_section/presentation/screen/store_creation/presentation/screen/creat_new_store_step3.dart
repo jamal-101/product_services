@@ -282,29 +282,24 @@ class CreateNewStoreStep3 extends StatelessWidget {
 
             _buildLabel("Phone Number *"),
             _buildTextField("+880 1XXX XXX XXX", controller.phoneController),
+            _buildLabel("WhatsApp"),
+                // Row(
+                //   children: [
+                //     Text("Same as phone number", style: TextStyle(fontSize: 12.sp, color: Color(0xFF7A818F))),
+                //     Obx(
+                //           () => Transform.scale(
+                //         scale: 0.70,
+                //         child: Switch(
+                //           value: controller.isWhatsAppSameAsPhone.value,
+                //           activeColor: Colors.white,
+                //           activeTrackColor: const Color(0xFF2A9B4A),
+                //           onChanged: (val) => controller.toggleWhatsApp(val),
+                //         ),
+                //       ),
+                //     ),
+                //   ],
+                // ),
 
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                _buildLabel("WhatsApp"),
-                Row(
-                  children: [
-                    Text("Same as phone number", style: TextStyle(fontSize: 12.sp, color: Color(0xFF7A818F))),
-                    Obx(
-                          () => Transform.scale(
-                        scale: 0.70,
-                        child: Switch(
-                          value: controller.isWhatsAppSameAsPhone.value,
-                          activeColor: Colors.white,
-                          activeTrackColor: const Color(0xFF2A9B4A),
-                          onChanged: (val) => controller.toggleWhatsApp(val),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
             _buildTextField("+880 1XXX XXX XXX", controller.whatsappController),
 
             _buildLabel("Email Address *"),

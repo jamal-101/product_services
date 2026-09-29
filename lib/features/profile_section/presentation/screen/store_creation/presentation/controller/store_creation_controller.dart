@@ -1,21 +1,3 @@
-// import 'package:get/get.dart';
-//
-// class StoreCreationController extends GetxController {
-//   var currentStep = 1.obs;
-//
-//   var isWhatsAppSameAsPhone = false.obs;
-//
-//   void toggleWhatsApp(bool value) {
-//     isWhatsAppSameAsPhone.value = value;
-//   }
-//
-//   void nextStep() {
-//     if (currentStep < 4) currentStep++;
-//   }
-//
-// }
-
-
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
@@ -26,9 +8,7 @@ import '../../../../../../../services/api/api_service.dart';
 import '../../../../../../../services/storage/storage_service.dart';
 import '../../../../../../../utils/constants/api_enpoint.dart';
 
-
 class StoreCreationController extends GetxController {
-
   var currentStep = 1.obs;
   var selectedStoreType = "".obs;
 
@@ -43,10 +23,13 @@ class StoreCreationController extends GetxController {
   var selectedCityName = "Select location".obs;
   var selectedCityId = "".obs;
 
+  var categoryPage = 1.obs;
+  var hasMoreCategory = true.obs;
+  var isCategoryLoadingMore = false.obs;
+
   Rx<File?> logoFile = Rx<File?>(null);
   Rx<File?> coverImageFile = Rx<File?>(null);
   Rx<File?> tradeLicenseFile = Rx<File?>(null);
-
 
   final phoneController = TextEditingController();
   final whatsappController = TextEditingController();
@@ -61,26 +44,63 @@ class StoreCreationController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    fetchCategories();
+    fetchCategories(isRefresh: true);
     fetchCitiesOnDemand();
   }
 
+  Future<void> fetchCategories({bool isRefresh = false}) async {
+    if (isRefresh) {
+      categoryPage.value = 1;
+      hasMoreCategory.value = true;
+      categories.clear();
+    }
 
-  void fetchCategories() async {
+    if (!hasMoreCategory.value || isLoading.value) return;
+
     try {
-      final response = await ApiService.get(ApiEndPoint.categories);
+      if (categoryPage.value == 1) {
+        isLoading.value = true;
+      } else {
+        isCategoryLoadingMore.value = true;
+      }
+      final response = await ApiService.get(
+        '${ApiEndPoint.categories}?page=${categoryPage.value}&limit=10',
+      );
+
       if (response.isSuccess) {
-        categories.value = response.data['data'] ?? [];
+        final List fetchedData = response.data['data'] ?? [];
+        final meta = response.data['meta'];
+
+        if (fetchedData.isNotEmpty) {
+          categories.addAll(fetchedData);
+        }
+        if (meta != null) {
+          hasMoreCategory.value = meta['hasNextPage'] ?? false;
+        } else {
+          hasMoreCategory.value = false;
+        }
       }
     } catch (e) {
       debugPrint("Error fetching categories: $e");
+    } finally {
+      isLoading.value = false;
+      isCategoryLoadingMore.value = false;
+    }
+  }
+
+  void loadMoreCategories() {
+    if (!isCategoryLoadingMore.value && hasMoreCategory.value) {
+      categoryPage.value++;
+      fetchCategories();
     }
   }
 
   void fetchCitiesOnDemand() async {
     print("🔄 User clicked City dropdown. Hitting Cities API...");
     try {
-      final response = await ApiService.get(ApiEndPoint.cityAdConfigurationsAdmin);
+      final response = await ApiService.get(
+        ApiEndPoint.cityAdConfigurationsAdmin,
+      );
 
       print("========== CITIES ON-DEMAND RESPONSE ==========");
       print("Status Code: ${response.statusCode}");
@@ -95,13 +115,13 @@ class StoreCreationController extends GetxController {
     }
   }
 
-  Future<void> pickImage(String type) async {
+  Future<void> pickImage(String type, ImageSource source) async {
     final picker = ImagePicker();
-    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+    final pickedFile = await picker.pickImage(source: source);
     if (pickedFile != null) {
       if (type == 'logo') logoFile.value = File(pickedFile.path);
       if (type == 'cover') coverImageFile.value = File(pickedFile.path);
-      if (type == 'license') tradeLicenseFile.value = File(pickedFile.path);
+      if (type == 'trade_license') tradeLicenseFile.value = File(pickedFile.path);
     }
   }
 
@@ -133,13 +153,18 @@ class StoreCreationController extends GetxController {
         "openingTime": "09:00",
         "closingTime": "18:00",
         "isOpen24Hours": false,
-        "timezone": "Asia/Dhaka"
+        "timezone": "Asia/Dhaka",
       };
 
       final compressedLogo = await _compressImage(logoFile.value, 'logo');
-      final compressedCover = await _compressImage(coverImageFile.value, 'cover');
-      final compressedLicense =
-          await _compressImage(tradeLicenseFile.value, 'license');
+      final compressedCover = await _compressImage(
+        coverImageFile.value,
+        'cover',
+      );
+      final compressedLicense = await _compressImage(
+        tradeLicenseFile.value,
+        'license',
+      );
 
       Map<String, File?> files = {
         "logo": compressedLogo,
@@ -186,7 +211,6 @@ class StoreCreationController extends GetxController {
     }
   }
 
-  /// Shrink store images so multipart upload finishes within timeout / nginx limits.
   Future<File?> _compressImage(File? file, String label) async {
     if (file == null || !await file.exists()) return file;
 

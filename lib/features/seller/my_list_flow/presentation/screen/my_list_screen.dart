@@ -72,11 +72,6 @@ class MyListingScreen extends StatelessWidget {
       ),
       bottomNavigationBar: BottomNavBar(selectedIndex: 1),
       body: Obx(() {
-        // if (controller.isLoading.value) {
-        //   return const Center(
-        //     child: CircularProgressIndicator(color: Color(0xFF27AE60)),
-        //   );
-        // }
 
         if (controller.isLoading.value) {
           return _buildListingShimmerLoader();

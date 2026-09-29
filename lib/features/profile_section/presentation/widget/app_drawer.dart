@@ -49,15 +49,6 @@ class AppDrawer extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // CircleAvatar(
-                  //   radius: 30.r,
-                  //   backgroundImage: NetworkImage(
-                  //     (userData?.profileImage != null &&
-                  //         userData!.profileImage!.isNotEmpty)
-                  //         ? "${ApiEndPoint.imageUrl}${userData.profileImage}"
-                  //         : ,
-                  //   ),
-                  // ),
                   CircleAvatar(
                     radius: 30.r,
                     backgroundImage: (userData?.profileImage != null &&
@@ -83,24 +74,9 @@ class AppDrawer extends StatelessWidget {
                   ),
                   SizedBox(height: 15.h),
                   GestureDetector(
-                    // onTap: () {
-                    //   Navigator.pop(context);
-                    //   authController.toggleRole();
-                    // },
                     onTap: () {
                       Navigator.pop(context);
-                      if (authController.selectedRole.value == 'buyer' && !LocalStorage.hasSellerAccount) {
-                        Get.snackbar(
-                          "Notice",
-                          "Please create a store to switch to seller mode.",
-                          backgroundColor: Colors.orange,
-                          colorText: Colors.white,
-                        );
-
-                        Get.toNamed(AppRoutes.createNewStoreStep1);
-                      } else {
-                        authController.toggleRole();
-                      }
+                      authController.toggleRole();
                     },
                     child: Container(
                       padding: EdgeInsets.symmetric(

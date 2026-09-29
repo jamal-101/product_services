@@ -209,6 +209,7 @@ import 'package:get/get.dart';
 import '../../../../controller/profile_controller.dart';
 import '../controller/store_creation_controller.dart';
 import 'creat_new_store_step5.dart';
+import 'package:image_picker/image_picker.dart' as img_picker;
 
 class CreateNewStoreStep4 extends StatelessWidget {
   const CreateNewStoreStep4({super.key});
@@ -260,9 +261,15 @@ class CreateNewStoreStep4 extends StatelessWidget {
                   _buildLabel("Trade License No. *"),
                   _buildTextField("e.g. TL-8829-2024", controller.tradeLicenseNoController),
 
+                  // _buildLabel("Upload Trade License *"),
+                  // InkWell(
+                  //   onTap: () => controller.pickImage('trade_license'),
+                  //   child: Obx(() => _buildUploadBox(controller.tradeLicenseFile.value)),
+                  // ),
+
                   _buildLabel("Upload Trade License *"),
                   InkWell(
-                    onTap: () => controller.pickImage('license'),
+                    onTap: () => _showImageSourceBottomSheet(context, controller), // 🔹 Bottom sheet function call kora holo
                     child: Obx(() => _buildUploadBox(controller.tradeLicenseFile.value)),
                   ),
 
@@ -328,11 +335,35 @@ class CreateNewStoreStep4 extends StatelessWidget {
         strokeWidth: 1.5,
         child: Container(
           width: double.infinity,
-          padding: EdgeInsets.symmetric(vertical: 24.h),
-          decoration: BoxDecoration(color: const Color(0xFFF9F9F9), borderRadius: BorderRadius.circular(12.r)),
+          padding: EdgeInsets.symmetric(vertical: 16.h, horizontal: 16.w),
+          decoration: BoxDecoration(
+            color: const Color(0xFFF9F9F9),
+            borderRadius: BorderRadius.circular(12.r),
+          ),
           child: Center(
             child: file != null
-                ? Text("File Selected: ${file.path.split('/').last}", style: TextStyle(color: Colors.green, fontWeight: FontWeight.bold))
+                ? Column(
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(8.r),
+                  child: Image.file(
+                    file,
+                    height: 100.h,
+                    width: double.infinity,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                SizedBox(height: 8.h),
+                Text(
+                  "File Selected: ${file.path.split('/').last}",
+                  style: TextStyle(
+                    color: Colors.green,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 12.sp,
+                  ),
+                ),
+              ],
+            )
                 : Column(
               children: [
                 Icon(Icons.badge_outlined, color: Colors.grey.shade500, size: 30.sp),
@@ -360,6 +391,52 @@ class CreateNewStoreStep4 extends StatelessWidget {
           ),
           alignment: Alignment.center,
           child: Text(text, style: TextStyle(color: Colors.white, fontSize: 16.sp, fontWeight: FontWeight.bold)),
+        ),
+      ),
+    );
+  }
+
+
+  void _showImageSourceBottomSheet(
+      BuildContext context,
+      StoreCreationController controller,
+      ) {
+    Get.bottomSheet(
+      Container(
+        padding: EdgeInsets.all(20.w),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
+        ),
+        child: Wrap(
+          children: [
+            Padding(
+              padding: EdgeInsets.only(bottom: 12.h),
+              child: Text(
+                "Select Image Source",
+                style: TextStyle(
+                  fontSize: 16.sp,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            ListTile(
+              leading: const Icon(Icons.photo_library, color: Color(0xFF2A9B4A)),
+              title: const Text("Gallery"),
+              onTap: () {
+                Get.back();
+                controller.pickImage('trade_license', img_picker.ImageSource.gallery); // 🔹 type ebong source duitai pass kora holo
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.camera_alt, color: Color(0xFF2A9B4A)),
+              title: const Text("Camera"),
+              onTap: () {
+                Get.back();
+                controller.pickImage('trade_license', img_picker.ImageSource.camera); // 🔹 type ebong source duitai pass kora holo
+              },
+            ),
+          ],
         ),
       ),
     );

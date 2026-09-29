@@ -27,28 +27,24 @@ class ExploreStoreController extends GetxController {
   var currentNavIndex = 0.obs;
 
 
-  // @override
-  // void onInit() {
-  //   super.onInit();
-  //   fetchCities();
-  //   fetchStores();
-  //   initCityFromProfileAndFetchStores();
-  // }
-
-
+  @override
   @override
   void onInit() {
     super.onInit();
-    fetchCities();
-    // ✅ প্রথমে সিটি ফিল্টার ছাড়া (সব স্টোর) লোড করার জন্য সরাসরি fetchStores() কল করুন
-    fetchStores();
 
-    // প্রোফাইল থেকে সিটি এনে শুধুমাত্র ব্যাকগ্রাউন্ডে বা ভেরিয়েবলে সেট করতে পারেন,
-    // কিন্তু অ্যাপ ওপেন হতেই সিটির ওপর ভিত্তি করে সাথে সাথে আবার API হিট করে খালি লিস্ট আনবেন না।
+    // searchQuery পরিবর্তন হলে ৩০০ মিলি-সেকেন্ড পর অটোমেটিক fetchStores() কল হবে
+    debounce(
+      searchQuery,
+          (_) => fetchStores(),
+      time: const Duration(milliseconds: 400),
+    );
+
+    fetchCities();
+    fetchStores();
     initCityFromProfileOnly();
   }
 
-  // নতুন মেথড: শুধু প্রোফাইল থেকে সিটি সেট করে রাখবে, কিন্তু অটো API কল করবে না
+
   void initCityFromProfileOnly() {
     final profileController = Get.isRegistered<ProfileController>()
         ? Get.find<ProfileController>()
@@ -57,9 +53,6 @@ class ExploreStoreController extends GetxController {
     var profileData = profileController.profileModel.value.data;
     if (profileData != null) {
       String userCity = profileData.state ?? profileData.address ?? profileData.location?.address ?? "";
-      if (userCity.isNotEmpty) {
-        // selectedCity.value = userCity; // চাইলে এখানে ইনিশিয়ালি বসাতে পারেন, তবে API হিট করবেন না
-      }
     }
 
     ever(profileController.profileModel, (profileModel) {
@@ -171,15 +164,27 @@ class ExploreStoreController extends GetxController {
     isListViewSelected.value = isList;
   }
 
+
+
   void updateCity(String newCity) {
-    selectedCity.value = newCity;
+    if (newCity == "All Cities") {
+      selectedCity.value = "";
+    } else {
+      selectedCity.value = newCity;
+    }
     fetchStores();
   }
 
+  // void updateSearchQuery(String query) {
+  //   searchQuery.value = query;
+  //   fetchStores();
+  // }
+
   void updateSearchQuery(String query) {
-    searchQuery.value = query;
+    searchQuery.value = query.trim();
     fetchStores();
   }
+
 
   void toggleOpenNow() {
     isOpenNow.value = !isOpenNow.value;

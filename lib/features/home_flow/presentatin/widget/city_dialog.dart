@@ -47,8 +47,6 @@ class CityDialog extends StatelessWidget {
               ],
             ),
           ),
-
-          // Flexible ও ListView দিয়ে লিস্টটি স্ক্রোলযোগ্য করা হয়েছে
           Flexible(
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 20.w),
@@ -71,16 +69,33 @@ class CityDialog extends StatelessWidget {
                   );
                 }
 
+                // return ListView.builder(
+                //   shrinkWrap: true,
+                //   itemCount: cityController.cityList.length,
+                //   itemBuilder: (context, index) {
+                //     final cityData = cityController.cityList[index];
+                //     String cityName = cityData.city ?? "";
+                //     bool isSelected = cityName == selectedCity;
+                //     return _buildCityOption(cityName, isSelected, context);
+                //   },
+                // );
+
                 return ListView.builder(
                   shrinkWrap: true,
-                  itemCount: cityController.cityList.length,
+                  itemCount: cityController.cityList.length + 1,
                   itemBuilder: (context, index) {
-                    final cityData = cityController.cityList[index];
+                    if (index == 0) {
+                      String cityName = "All Cities";
+                      bool isSelected = selectedCity.isEmpty || selectedCity == "All Cities";
+                      return _buildCityOption(cityName, isSelected, context);
+                    }
+                    final cityData = cityController.cityList[index - 1];
                     String cityName = cityData.city ?? "";
                     bool isSelected = cityName == selectedCity;
                     return _buildCityOption(cityName, isSelected, context);
                   },
                 );
+
               }),
             ),
           ),

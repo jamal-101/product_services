@@ -10,6 +10,7 @@ import 'package:product_service/utils/constants/app_color.dart';
 import 'package:product_service/utils/constants/app_string.dart';
 import '../../../../component/bottom_navBar/nav_bar..dart';
 import '../../../../utils/constants/api_enpoint.dart';
+import '../../../product_store_flow/presentation/screen/store_details_page.dart';
 import '../controller/explore_store_controller.dart';
 import '../widget/city_dialog.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
@@ -179,154 +180,154 @@ class ExploreStoriesScreen extends StatelessWidget {
                               },
                             );
                           }),
-                          Obx(() {
-                            if (!controllers.isListViewSelected.value) {
-                              return const SizedBox.shrink();
-                            }
-                            return PopupMenuButton<String>(
-                              onSelected: (String ratingValue) {
-                                controllers.updateRating(ratingValue);
-                              },
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12.r),
-                              ),
-                              itemBuilder: (BuildContext context) =>
-                                  <PopupMenuEntry<String>>[
-                                    const PopupMenuItem<String>(
-                                      value: '1',
-                                      child: Row(
-                                        children: [
-                                          Icon(
-                                            Icons.star,
-                                            color: Colors.amber,
-                                            size: 16,
-                                          ),
-                                          SizedBox(width: 8),
-                                          Text('1 Star'),
-                                        ],
-                                      ),
-                                    ),
-                                    const PopupMenuItem<String>(
-                                      value: '2',
-                                      child: Row(
-                                        children: [
-                                          Icon(
-                                            Icons.star,
-                                            color: Colors.amber,
-                                            size: 16,
-                                          ),
-                                          SizedBox(width: 8),
-                                          Text('2 Stars'),
-                                        ],
-                                      ),
-                                    ),
-                                    const PopupMenuItem<String>(
-                                      value: '3',
-                                      child: Row(
-                                        children: [
-                                          Icon(
-                                            Icons.star,
-                                            color: Colors.amber,
-                                            size: 16,
-                                          ),
-                                          SizedBox(width: 8),
-                                          Text('3 Stars'),
-                                        ],
-                                      ),
-                                    ),
-                                    const PopupMenuItem<String>(
-                                      value: '4',
-                                      child: Row(
-                                        children: [
-                                          Icon(
-                                            Icons.star,
-                                            color: Colors.amber,
-                                            size: 16,
-                                          ),
-                                          SizedBox(width: 8),
-                                          Text('4 Stars'),
-                                        ],
-                                      ),
-                                    ),
-                                    const PopupMenuItem<String>(
-                                      value: '5',
-                                      child: Row(
-                                        children: [
-                                          Icon(
-                                            Icons.star,
-                                            color: Colors.amber,
-                                            size: 16,
-                                          ),
-                                          SizedBox(width: 8),
-                                          Text('5 Stars'),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                              child: Container(
-                                margin: EdgeInsets.only(right: 8.w),
-                                padding: EdgeInsets.symmetric(
-                                  horizontal: 12.w,
-                                  vertical: 6.h,
-                                ),
-                                decoration: BoxDecoration(
-                                  color:
-                                      controllers.selectedRatingEnum.value !=
-                                          null
-                                      ? const Color(0xFF2C3E50)
-                                      : Colors.white,
-                                  borderRadius: BorderRadius.circular(20.r),
-                                  border: Border.all(
-                                    color: const Color(0xFFECECF0),
-                                  ),
-                                ),
-                                child: Row(
-                                  children: [
-                                    Icon(
-                                      Icons.star_border,
-                                      size: 14.w,
-                                      color:
-                                          controllers
-                                                  .selectedRatingEnum
-                                                  .value !=
-                                              null
-                                          ? Colors.white
-                                          : Colors.black54,
-                                    ),
-                                    SizedBox(width: 4.w),
-                                    Text(
-                                      controllers.selectedRatingEnum.value ==
-                                              null
-                                          ? "Rating"
-                                          : "${controllers.selectedRatingEnum.value.toString().split('.').last} Star",
-                                      style: GoogleFonts.plusJakartaSans(
-                                        fontSize: 12.sp,
-                                        color:
-                                            controllers
-                                                    .selectedRatingEnum
-                                                    .value !=
-                                                null
-                                            ? Colors.white
-                                            : Colors.black54,
-                                      ),
-                                    ),
-                                    SizedBox(width: 4.w),
-                                    Icon(
-                                      Icons.arrow_drop_down,
-                                      size: 16.w,
-                                      color:
-                                          controllers
-                                                  .selectedRatingEnum
-                                                  .value !=
-                                              null
-                                          ? Colors.white
-                                          : Colors.black54,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            );
-                          }),
+                          // Obx(() {
+                          //   if (!controllers.isListViewSelected.value) {
+                          //     return const SizedBox.shrink();
+                          //   }
+                          //   return PopupMenuButton<String>(
+                          //     onSelected: (String ratingValue) {
+                          //       controllers.updateRating(ratingValue);
+                          //     },
+                          //     shape: RoundedRectangleBorder(
+                          //       borderRadius: BorderRadius.circular(12.r),
+                          //     ),
+                          //     itemBuilder: (BuildContext context) =>
+                          //         <PopupMenuEntry<String>>[
+                          //           const PopupMenuItem<String>(
+                          //             value: '1',
+                          //             child: Row(
+                          //               children: [
+                          //                 Icon(
+                          //                   Icons.star,
+                          //                   color: Colors.amber,
+                          //                   size: 16,
+                          //                 ),
+                          //                 SizedBox(width: 8),
+                          //                 Text('1 Star'),
+                          //               ],
+                          //             ),
+                          //           ),
+                          //           const PopupMenuItem<String>(
+                          //             value: '2',
+                          //             child: Row(
+                          //               children: [
+                          //                 Icon(
+                          //                   Icons.star,
+                          //                   color: Colors.amber,
+                          //                   size: 16,
+                          //                 ),
+                          //                 SizedBox(width: 8),
+                          //                 Text('2 Stars'),
+                          //               ],
+                          //             ),
+                          //           ),
+                          //           const PopupMenuItem<String>(
+                          //             value: '3',
+                          //             child: Row(
+                          //               children: [
+                          //                 Icon(
+                          //                   Icons.star,
+                          //                   color: Colors.amber,
+                          //                   size: 16,
+                          //                 ),
+                          //                 SizedBox(width: 8),
+                          //                 Text('3 Stars'),
+                          //               ],
+                          //             ),
+                          //           ),
+                          //           const PopupMenuItem<String>(
+                          //             value: '4',
+                          //             child: Row(
+                          //               children: [
+                          //                 Icon(
+                          //                   Icons.star,
+                          //                   color: Colors.amber,
+                          //                   size: 16,
+                          //                 ),
+                          //                 SizedBox(width: 8),
+                          //                 Text('4 Stars'),
+                          //               ],
+                          //             ),
+                          //           ),
+                          //           const PopupMenuItem<String>(
+                          //             value: '5',
+                          //             child: Row(
+                          //               children: [
+                          //                 Icon(
+                          //                   Icons.star,
+                          //                   color: Colors.amber,
+                          //                   size: 16,
+                          //                 ),
+                          //                 SizedBox(width: 8),
+                          //                 Text('5 Stars'),
+                          //               ],
+                          //             ),
+                          //           ),
+                          //         ],
+                          //     child: Container(
+                          //       margin: EdgeInsets.only(right: 8.w),
+                          //       padding: EdgeInsets.symmetric(
+                          //         horizontal: 12.w,
+                          //         vertical: 6.h,
+                          //       ),
+                          //       decoration: BoxDecoration(
+                          //         color:
+                          //             controllers.selectedRatingEnum.value !=
+                          //                 null
+                          //             ? const Color(0xFF2C3E50)
+                          //             : Colors.white,
+                          //         borderRadius: BorderRadius.circular(20.r),
+                          //         border: Border.all(
+                          //           color: const Color(0xFFECECF0),
+                          //         ),
+                          //       ),
+                          //       child: Row(
+                          //         children: [
+                          //           Icon(
+                          //             Icons.star_border,
+                          //             size: 14.w,
+                          //             color:
+                          //                 controllers
+                          //                         .selectedRatingEnum
+                          //                         .value !=
+                          //                     null
+                          //                 ? Colors.white
+                          //                 : Colors.black54,
+                          //           ),
+                          //           SizedBox(width: 4.w),
+                          //           Text(
+                          //             controllers.selectedRatingEnum.value ==
+                          //                     null
+                          //                 ? "Rating"
+                          //                 : "${controllers.selectedRatingEnum.value.toString().split('.').last} Star",
+                          //             style: GoogleFonts.plusJakartaSans(
+                          //               fontSize: 12.sp,
+                          //               color:
+                          //                   controllers
+                          //                           .selectedRatingEnum
+                          //                           .value !=
+                          //                       null
+                          //                   ? Colors.white
+                          //                   : Colors.black54,
+                          //             ),
+                          //           ),
+                          //           SizedBox(width: 4.w),
+                          //           Icon(
+                          //             Icons.arrow_drop_down,
+                          //             size: 16.w,
+                          //             color:
+                          //                 controllers
+                          //                         .selectedRatingEnum
+                          //                         .value !=
+                          //                     null
+                          //                 ? Colors.white
+                          //                 : Colors.black54,
+                          //           ),
+                          //         ],
+                          //       ),
+                          //     ),
+                          //   );
+                          // }),
                         ],
                       ),
                     ),
@@ -366,6 +367,7 @@ class ExploreStoriesScreen extends StatelessWidget {
                               rating: store.averageRating?.toString() ?? "0.0",
                               logoBg: const Color(0xFFE67E22),
                               isFavorite: store.isFavorite ?? false,
+                              storeType: store.storeType ?? "product_store",
                             );
                           },
                         );
@@ -388,6 +390,7 @@ class ExploreStoriesScreen extends StatelessWidget {
                               rating: store.averageRating?.toString() ?? "0.0",
                               logoBg: const Color(0xFF9B59B6),
                               isFavorite: store.isFavorite ?? false,
+                              storeType: store.storeType ?? "service_store",
                             );
                           },
                         );
@@ -475,15 +478,16 @@ class ExploreStoriesScreen extends StatelessWidget {
     required Color logoBg,
     bool isFavorite = false,
     required String storeId,
+    required String storeType,
     required int index,
   }) {
     final ExploreStoreController controllers =
         Get.find<ExploreStoreController>();
     return GestureDetector(
       onTap: () {
-        Get.toNamed(
-          AppRoutes.storeDetailsPage,
-          arguments: controllers.isProductStoreSelected.value,
+        Get.to(
+          () => const ProductDetailsScreen(),
+          arguments: {'storeId': storeId, 'storeType': storeType},
         );
       },
       child: Container(

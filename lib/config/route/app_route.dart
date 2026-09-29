@@ -24,13 +24,15 @@ import '../../features/auth_flow/presentation/screen/reset_password.dart';
 import '../../features/auth_flow/presentation/screen/select_rol_screen.dart';
 import '../../features/auth_flow/presentation/screen/verify_signUp_otp_screen.dart';
 import '../../features/home_flow/presentatin/screen/home_screen.dart';
+import '../../features/product_store_flow/presentation/screen/productServiceDetailsScreen.dart';
+import '../../features/product_store_flow/presentation/screen/store_details_page.dart';
 import '../../features/seller/my_list_flow/presentation/screen/edite_branding_screen.dart';
 import '../../features/seller/my_list_flow/presentation/screen/edite_legel_document_screen.dart';
 import '../../features/seller/my_list_flow/presentation/screen/subsCription_billing_screen.dart';
 import '../../features/splash/presentation/screen/splash_screen.dart';
 
 class AppRoutes {
-  // Route Names
+
   static const String splashScreen = "/splashScreen";
   static const String onboardingScreen = "/onboardingScreen";
   static const String loginScreen = "/loginScreen";
@@ -63,7 +65,6 @@ class AppRoutes {
   static const String advertiseWithUs = "/AdvertiseWithUs";
   static const String adProductScreen = "/addProductScreen";
 
-  // GetPage List
   static List<GetPage> routes = [
     GetPage(
       name: splashScreen,
@@ -140,138 +141,70 @@ class AppRoutes {
         Get.lazyPut<AuthController>(() =>AuthController());
       }),
     ),
-    // GetPage(
-    //   name: storeDetailsPage,
-    //   page: () =>  StoreDetailsPage(),
-    //   // binding: BindingsBuilder((){
-    //   //   Get.lazyPut<S>(() => HomeController());
-    //   // })
-    // ),
-    // GetPage(
-    //   name: productDetailsScreen,
-      // page: () =>  ProductDetailsScreen(),
-      // binding: BindingsBuilder((){
-      //   Get.lazyPut<S>(() => HomeController());
-      // })
-    // ),
+
     GetPage(
       name: accountScreen,
       page: () =>  AccountScreen(),
-      // binding: BindingsBuilder((){
-      //   Get.lazyPut<S>(() => HomeController());
-      // })
     ),
     GetPage(
       name: editProfileScreen,
       page: () =>  EditProfileScreen(),
-      // binding: BindingsBuilder((){
-      //   Get.lazyPut<S>(() => HomeController());
-      // })
     ),
     GetPage(
       name: identityVerificationScreen,
       page: () =>  IdentityVerificationScreen(),
-      // binding: BindingsBuilder((){
-      //   Get.lazyPut<S>(() => HomeController());
-      // })
     ),
     GetPage(
       name: notificationSettingScreen,
       page: () =>  NotificationSettingsScreen(),
-      // binding: BindingsBuilder((){
-      //   Get.lazyPut<S>(() => HomeController());
-      // })
     ),
     GetPage(
       name: notificationScreen,
       page: () =>  NotificationScreen(),
-      // binding: BindingsBuilder((){
-      //   Get.lazyPut<S>(() => HomeController());
-      // })
     ),
     GetPage(
       name: helpSupportScreen,
       page: () => HelpSupportScreen(),
-      // binding: BindingsBuilder((){
-      //   Get.lazyPut<S>(() => HomeController());
-      // })
     ),
     GetPage(
       name: changePasswordScreen,
       page: () => ChangePasswordScreen(),
-      // binding: BindingsBuilder((){
-      //   Get.lazyPut<S>(() => HomeController());
-      // })
     ),
     GetPage(
       name: myStore,
       page: () => MyStore(),
-      // binding: BindingsBuilder((){
-      //   Get.lazyPut<S>(() => HomeController());
-      // })
     ),
     GetPage(
       name: createNewStoreStep1,
       page: () => CreateNewStoreStep1(),
-      // binding: BindingsBuilder((){
-      //   Get.lazyPut<S>(() => HomeController());
-      // })
     ),
     GetPage(
       name: messageScreen,
       page: () => MessageScreen(),
-      // binding: BindingsBuilder((){
-      //   Get.lazyPut<S>(() => HomeController());
-      // })
     ),
     GetPage(
       name: conversationScreen,
       page: () => ConversationScreen(),
-      // binding: BindingsBuilder((){
-      //   Get.lazyPut<S>(() => HomeController());
-      // })
     ),
     GetPage(
       name: sellerHomeScreen,
       page: () => SellerHomeScreen(),
-      // binding: BindingsBuilder((){
-      //   Get.lazyPut<S>(() => HomeController());
-      // })
     ),
     GetPage(
       name: editeBindingScreen,
       page: () => EditBrandingScreen(),
-      // binding: BindingsBuilder((){
-      //   Get.lazyPut<S>(() => HomeController());
-      // })
     ),
     GetPage(
       name: editContactDetailsScreen,
       page: () => EditContactDetailsScreen(),
-      // binding: BindingsBuilder((){
-      //   Get.lazyPut<S>(() => HomeController());
-      // })
     ),
     GetPage(
       name: editLegalDocumentsScreen,
       page: () => EditLegalDocumentsScreen(),
-      // binding: BindingsBuilder((){
-      //   Get.lazyPut<S>(() => HomeController());
-      // })
     ),
     GetPage(
       name: subscriptionBillingScreen,
       page: () => SubscriptionBillingScreen(),
-      // binding: BindingsBuilder((){
-      //   Get.lazyPut<S>(() => HomeController());
-      // })
     ),
-    // GetPage(
-    //   name: advertiseWithUs,
-      // page: () => AdvertiseWithUs(),
-      // binding: BindingsBuilder((){
-      //   Get.lazyPut<S>(() => HomeController());
-      // })
-    // ),
   ];
 }

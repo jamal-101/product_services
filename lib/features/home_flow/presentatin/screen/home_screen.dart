@@ -23,7 +23,7 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
     final HomeController controller = Get.put(HomeController());
-    final NotificationController notificationController = Get.put(NotificationController());
+
     return Scaffold(
       key: scaffoldKey,
       drawer: AppDrawer(),
@@ -59,7 +59,6 @@ class HomeScreen extends StatelessWidget {
               ),
             ),
           ],
-
         ),
         actions: [
           Padding(
@@ -67,7 +66,8 @@ class HomeScreen extends StatelessWidget {
             child: Center(
               child: Obx(() {
                 final notificationCtrl = Get.find<NotificationController>();
-                int notificationCount = notificationCtrl.notificationList.length;
+                int notificationCount =
+                    notificationCtrl.notificationList.length;
 
                 return Stack(
                   clipBehavior: Clip.none,
@@ -78,7 +78,7 @@ class HomeScreen extends StatelessWidget {
                         height: 30.h,
                         width: 30.w,
                       ),
-                      onPressed: () => Get.to(() =>NotificationScreen()),
+                      onPressed: () => Get.to(() => NotificationScreen()),
                     ),
                     if (notificationCount > 0)
                       Positioned(
@@ -206,7 +206,7 @@ class HomeScreen extends StatelessWidget {
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
-        padding: EdgeInsets.symmetric(horizontal: 16.w,vertical: 10),
+        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

@@ -1,8 +1,8 @@
 class ApiEndPoint {
-  static const baseUrl = "http://10.10.7.10:5009/api/v1";
-  // static const baseUrl = "https://api.jaganaecuador.com/api/v1";
-  // static const imageUrl = "https://api.jaganaecuador.com";
-  static const imageUrl = "http://10.10.7.10:5009";
+  // static const baseUrl = "http://10.10.7.10:5009/api/v1";
+  static const baseUrl = "https://api.jaganaecuador.com/api/v1";
+  static const imageUrl = "https://api.jaganaecuador.com";
+  // static const imageUrl = "http://10.10.7.10:5009";
 
   //================  sign Up
   static const signUp = "$baseUrl/users";
