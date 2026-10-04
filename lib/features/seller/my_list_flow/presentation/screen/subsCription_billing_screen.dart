@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:get/get.dart';
-// সঠিক প্যাকেজ ইমপোর্ট ব্যবহার করা হলো
 import 'package:product_service/features/profile_section/presentation/screen/store_creation/presentation/controller/suscription_controller.dart';
 
 class SubscriptionBillingScreen extends StatelessWidget {
@@ -10,10 +9,10 @@ class SubscriptionBillingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // কন্ট্রোলারটি এখানে ইনজেক্ট করা হচ্ছে
     final SubscriptionController controller = Get.put(SubscriptionController());
 
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
@@ -135,29 +134,30 @@ class SubscriptionBillingScreen extends StatelessWidget {
               ),
               SizedBox(height: 16.h),
 
-              // dynamic Plan Cards from Controller
               if (controller.subscriptionList.isEmpty)
                 const Center(child: Text("No plans available"))
               else
-                GridView.builder(
+                ListView.separated(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 16.w,
-                    mainAxisSpacing: 16.h,
-                    childAspectRatio: 0.75,
-                  ),
                   itemCount: controller.subscriptionList.length,
+                  separatorBuilder: (context, index) => SizedBox(height: 16.h),
                   itemBuilder: (context, index) {
                     final plan = controller.subscriptionList[index];
-                    bool isRecommended = index == 1; // Assuming 2nd plan is recommended
+                    bool isRecommended = index == 1;
+                    
+                    String fullDesc = "Standard features";
+                    if (plan.features != null && plan.features!.isNotEmpty) {
+                      fullDesc = plan.features!.join('\n• ');
+                      if (plan.features!.length > 1) fullDesc = '• $fullDesc';
+                    }
+
                     return _buildPlanCard(
                       controller,
                       plan.sId ?? "",
                       plan.name ?? "",
                       "\$${plan.price ?? 0}/mo",
-                      plan.features?.isNotEmpty == true ? plan.features!.first : "Standard features",
+                      fullDesc,
                       isRecommended,
                     );
                   },
@@ -226,15 +226,12 @@ class SubscriptionBillingScreen extends StatelessWidget {
               ),
             ),
             SizedBox(height: 10.h),
-            Expanded(
-              child: Text(
-                desc,
-                style: GoogleFonts.montserrat(
-                  color: Colors.grey,
-                  fontSize: 11.sp,
-                ),
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
+            Text(
+              desc,
+              style: GoogleFonts.montserrat(
+                color: Colors.grey,
+                fontSize: 11.sp,
+                height: 1.4,
               ),
             ),
             SizedBox(height: 16.h),

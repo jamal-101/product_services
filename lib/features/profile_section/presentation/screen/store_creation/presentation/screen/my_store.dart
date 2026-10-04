@@ -5,7 +5,6 @@ import 'package:get/get_instance/src/extension_instance.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:get/get_navigation/src/snackbar/snackbar.dart';
 import '../../../../controller/profile_controller.dart';
-import 'creat_new_store_step1.dart';
 import 'creat_new_store_step5.dart';
 
 class MyStore extends StatelessWidget {
@@ -35,7 +34,7 @@ class MyStore extends StatelessWidget {
             ),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 40.w, vertical: 10.h),
-              child: Text(
+              child: const Text(
                 "You haven't created any stores yet. Get started by setting up your first one.",
                 textAlign: TextAlign.center,
               ),
@@ -61,15 +60,9 @@ class MyStore extends StatelessWidget {
                   );
                   return;
                 }
-                // First time: subscription select → setup → payment → home.
-                // Already paid (no store yet): skip to setup → create store.
-                bool isPurchased =
-                    profileData?.storeSubscription?.isPurchased ?? false;
-                if (isPurchased) {
-                  Get.to(() => CreateNewStoreStep1());
-                } else {
-                  Get.to(() => const CreateNewStoreStep5(payMode: false));
-                }
+                
+                // শুরুতে প্ল্যান সিলেকশন স্ক্রিনে পাঠানো হচ্ছে (payMode: false)
+                Get.to(() => const CreateNewStoreStep5(payMode: false));
               },
               child: const Text(
                 "Create Store",

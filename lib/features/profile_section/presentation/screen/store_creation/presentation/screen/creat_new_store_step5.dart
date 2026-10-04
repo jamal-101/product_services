@@ -5,8 +5,6 @@ import 'package:product_service/features/profile_section/presentation/screen/sto
 
 import 'creat_new_store_step1.dart';
 
-/// [payMode] false = first-time plan selection → continue to setup (steps 1–4).
-/// [payMode] true = after setup → pay, verify, create store → home.
 class CreateNewStoreStep5 extends StatelessWidget {
   final bool payMode;
 
@@ -38,28 +36,11 @@ class CreateNewStoreStep5 extends StatelessWidget {
             ),
           ),
         ),
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            const Text(
-              "Create New Store",
-              style: TextStyle(
-                color: Colors.black,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            Text(
-              payMode ? "Step 5 of 5" : "Step 1 of 5",
-              style: TextStyle(color: Colors.grey, fontSize: 14.sp),
-            ),
-          ],
-        ),
-        bottom: PreferredSize(
-          preferredSize: Size.fromHeight(4.h),
-          child: LinearProgressIndicator(
-            value: payMode ? 1.0 : 0.2,
-            backgroundColor: Colors.grey.shade200,
-            color: const Color(0xFF2A9B4A),
+        title: const Text(
+          "Create New Store",
+          style: TextStyle(
+            color: Colors.black,
+            fontWeight: FontWeight.w600,
           ),
         ),
       ),
@@ -83,21 +64,27 @@ class CreateNewStoreStep5 extends StatelessWidget {
             children: [
               Text(
                 "Store Publication Plan",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18.sp,
-                ),
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.sp),
               ),
               Text(
                 payMode
                     ? "Confirm your plan and pay securely. Your store will be created after payment."
-                    : "Choose a plan first, then set up your store. Payment comes after setup.",
+                    : "Choose a plan to continue with your store setup.",
                 style: TextStyle(color: Colors.grey, fontSize: 13.sp),
               ),
               SizedBox(height: 20.h),
               ...controller.subscriptionList.asMap().entries.map((entry) {
                 final index = entry.key;
                 final plan = entry.value;
+
+                String fullDescription = "Host your storefront seamlessly.";
+                if (plan.features != null && plan.features!.isNotEmpty) {
+                  fullDescription = plan.features!.join('\n• ');
+                  if (plan.features!.length > 1) {
+                    fullDescription = '• $fullDescription';
+                  }
+                }
+
                 return Padding(
                   padding: EdgeInsets.only(bottom: 12.h),
                   child: _buildPlanCard(
@@ -105,9 +92,7 @@ class CreateNewStoreStep5 extends StatelessWidget {
                     plan.sId ?? "",
                     plan.name ?? "",
                     "\$${plan.price ?? 0}",
-                    plan.features != null && plan.features!.isNotEmpty
-                        ? plan.features!.first
-                        : "Host your storefront seamlessly.",
+                    fullDescription,
                     index == 0,
                   ),
                 );
@@ -177,8 +162,7 @@ class CreateNewStoreStep5 extends StatelessWidget {
             children: [
               if (isRecommended)
                 Container(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 8.w, vertical: 2.h),
+                  padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 2.h),
                   decoration: BoxDecoration(
                     color: const Color(0xFF2A9B4A),
                     borderRadius: BorderRadius.circular(20.r),
@@ -195,10 +179,7 @@ class CreateNewStoreStep5 extends StatelessWidget {
               if (isRecommended) SizedBox(height: 8.h),
               Text(
                 title,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 14.sp,
-                ),
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14.sp),
               ),
               SizedBox(height: 4.h),
               Text(
@@ -209,15 +190,14 @@ class CreateNewStoreStep5 extends StatelessWidget {
                   fontSize: 14.sp,
                 ),
               ),
-              SizedBox(height: 4.h),
+              SizedBox(height: 6.h),
               Text(
                 desc,
                 style: TextStyle(
                   fontSize: 11.sp,
                   color: Colors.grey.shade600,
+                  height: 1.4,
                 ),
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
               ),
             ],
           ),

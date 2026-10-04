@@ -936,62 +936,6 @@ class PostAddController extends GetxController {
     return fromMap(map);
   }
 
-  // Future<void> submitAdvertisement() async {
-  //   try {
-  //     isSubmitting.value = true;
-  //     final int positionValue = _selectedPosition();
-  //
-  //     Map<String, dynamic> bodyData = {
-  //       "campaignName": campaignNameController.text.trim(),
-  //       "cityAdConfigId": selectedCityId.value,
-  //       "advertisementType": "featured",
-  //       "slot": selectedSlot.value,
-  //       "position": positionValue,
-  //       "duration": selectedDuration.value,
-  //       "startDate": startDate.value,
-  //     };
-  //
-  //     final compressedImage = await _compressFeaturedImage(featuredImage.value);
-  //     Map<String, File?> files = {
-  //       "featuredImage": compressedImage,
-  //     };
-  //
-  //     var response = await ApiService.multipartRequest(
-  //       ApiEndPoint.createAdvertisement,
-  //       bodyData: bodyData,
-  //       files: files,
-  //       method: "POST",
-  //       header: _sellerAuthHeader(),
-  //     );
-  //
-  //     if (response.isSuccess) {
-  //       Get.offAll(() => const CampaignSuccessView());
-  //     } else {
-  //       final isTooLarge = response.statusCode == 413 ||
-  //           response.message.toLowerCase().contains('too large') ||
-  //           response.message.contains('413');
-  //       Get.snackbar(
-  //         "Error",
-  //         isTooLarge
-  //             ? "Image is still too large for the server. Please pick a smaller photo."
-  //             : response.message,
-  //         backgroundColor: Colors.red,
-  //         colorText: Colors.white,
-  //         snackPosition: SnackPosition.BOTTOM,
-  //       );
-  //     }
-  //   } catch (e) {
-  //     Get.snackbar(
-  //       "Error",
-  //       e.toString(),
-  //       backgroundColor: Colors.red,
-  //       colorText: Colors.white,
-  //       snackPosition: SnackPosition.BOTTOM,
-  //     );
-  //   } finally {
-  //     isSubmitting.value = false;
-  //   }
-  // }
 
   Future<void> submitAdvertisement() async {
     try {

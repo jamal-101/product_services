@@ -7,6 +7,7 @@ import 'package:product_service/config/route/app_route.dart';
 import '../../../../../../../services/api/api_service.dart';
 import '../../../../../../../services/storage/storage_service.dart';
 import '../../../../../../../utils/constants/api_enpoint.dart';
+import '../../../../../../auth_flow/presentation/controller/auth_controller.dart';
 
 class StoreCreationController extends GetxController {
   var currentStep = 1.obs;
@@ -29,14 +30,12 @@ class StoreCreationController extends GetxController {
 
   Rx<File?> logoFile = Rx<File?>(null);
   Rx<File?> coverImageFile = Rx<File?>(null);
-  Rx<File?> tradeLicenseFile = Rx<File?>(null);
 
   final phoneController = TextEditingController();
   final whatsappController = TextEditingController();
   final emailController = TextEditingController();
   var isWhatsAppSameAsPhone = false.obs;
 
-  final tradeLicenseNoController = TextEditingController();
   final tinNumberController = TextEditingController();
 
   var isLoading = false.obs;
@@ -96,16 +95,10 @@ class StoreCreationController extends GetxController {
   }
 
   void fetchCitiesOnDemand() async {
-    print("🔄 User clicked City dropdown. Hitting Cities API...");
     try {
       final response = await ApiService.get(
-        ApiEndPoint.cityAdConfigurationsAdmin,
+        ApiEndPoint.activeCities,
       );
-
-      print("========== CITIES ON-DEMAND RESPONSE ==========");
-      print("Status Code: ${response.statusCode}");
-      print("Full Response Body: ${response.data}");
-      print("===============================================");
 
       if (response.isSuccess) {
         cities.value = response.data['data'] ?? [];
@@ -121,7 +114,6 @@ class StoreCreationController extends GetxController {
     if (pickedFile != null) {
       if (type == 'logo') logoFile.value = File(pickedFile.path);
       if (type == 'cover') coverImageFile.value = File(pickedFile.path);
-      if (type == 'trade_license') tradeLicenseFile.value = File(pickedFile.path);
     }
   }
 
@@ -147,7 +139,7 @@ class StoreCreationController extends GetxController {
         "phone": phoneController.text.trim(),
         "whatsapp": whatsappController.text.trim(),
         "email": emailController.text.trim(),
-        "businessLicenseNumber": tradeLicenseNoController.text.trim(),
+        "businessLicenseNumber": tinNumberController.text.trim(),
         "tinNumber": tinNumberController.text.trim(),
         "workingDays": ["monday", "tuesday", "wednesday", "thursday", "friday"],
         "openingTime": "09:00",
@@ -161,16 +153,12 @@ class StoreCreationController extends GetxController {
         coverImageFile.value,
         'cover',
       );
-      final compressedLicense = await _compressImage(
-        tradeLicenseFile.value,
-        'license',
-      );
 
       Map<String, File?> files = {
         "logo": compressedLogo,
         "coverImage": compressedCover,
-        "tradeLicense": compressedLicense,
       };
+      
       final response = await ApiService.multipartRequest(
         ApiEndPoint.stores,
         bodyData: {"data": storePayload},
@@ -182,7 +170,13 @@ class StoreCreationController extends GetxController {
       );
 
       if (response.isSuccess) {
+        // ১. সেলার মোডে সুইচ করা
+        await LocalStorage.setUserRole('seller');
         await LocalStorage.setStoreType(selectedStoreType.value);
+        if (Get.isRegistered<AuthController>()) {
+          Get.find<AuthController>().selectedRole.value = 'seller';
+        }
+
         Get.snackbar(
           "Success",
           "Store created successfully!",
@@ -213,14 +207,8 @@ class StoreCreationController extends GetxController {
 
   Future<File?> _compressImage(File? file, String label) async {
     if (file == null || !await file.exists()) return file;
-
     final originalBytes = await file.length();
-    debugPrint(
-      '📷 store $label original: ${(originalBytes / 1024).toStringAsFixed(1)} KB',
-    );
-
     if (originalBytes <= 500 * 1024) return file;
-
     try {
       final tempDir = Directory.systemTemp;
       final targetPath =
@@ -235,27 +223,9 @@ class StoreCreationController extends GetxController {
         format: CompressFormat.jpeg,
       );
 
-      if (result != null && await result.length() > 800 * 1024) {
-        final strongerPath =
-            '${tempDir.path}/store_${label}_sm_${DateTime.now().millisecondsSinceEpoch}.jpg';
-        result = await FlutterImageCompress.compressAndGetFile(
-          file.absolute.path,
-          strongerPath,
-          quality: 55,
-          minWidth: 1024,
-          minHeight: 1024,
-          format: CompressFormat.jpeg,
-        );
-      }
-
       if (result == null) return file;
-      final out = File(result.path);
-      debugPrint(
-        '📷 store $label compressed: ${(await out.length() / 1024).toStringAsFixed(1)} KB',
-      );
-      return out;
+      return File(result.path);
     } catch (e) {
-      debugPrint('📷 store $label compress failed: $e');
       return file;
     }
   }

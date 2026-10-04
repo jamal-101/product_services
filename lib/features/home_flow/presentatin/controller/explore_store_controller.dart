@@ -32,7 +32,6 @@ class ExploreStoreController extends GetxController {
   void onInit() {
     super.onInit();
 
-    // searchQuery পরিবর্তন হলে ৩০০ মিলি-সেকেন্ড পর অটোমেটিক fetchStores() কল হবে
     debounce(
       searchQuery,
           (_) => fetchStores(),
@@ -175,10 +174,7 @@ class ExploreStoreController extends GetxController {
     fetchStores();
   }
 
-  // void updateSearchQuery(String query) {
-  //   searchQuery.value = query;
-  //   fetchStores();
-  // }
+
 
   void updateSearchQuery(String query) {
     searchQuery.value = query.trim();

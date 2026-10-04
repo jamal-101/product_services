@@ -1,7 +1,6 @@
-
-
 import 'package:flutter/cupertino.dart';
-import 'package:get/get.dart';
+import 'package:get/get_rx/src/rx_types/rx_types.dart';
+import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import '../../../services/api/api_service.dart';
 import '../../../utils/constants/api_enpoint.dart';
 import '../../../utils/constants/api_response_model.dart';
@@ -12,7 +11,7 @@ class SaveController extends GetxController {
   var selectedTab = 0.obs;
   var isLoading = false.obs;
   var favoriteStoreList = <store_m.FavoriteData>[].obs;
-  var favoriteProductList = <product_m.FavoriteData>[].obs;
+  var favoriteProductList = <product_m.FavoriteData>[].obs; // Jodi products alada tab-e lage rakhben
 
   @override
   void onInit() {
@@ -27,18 +26,15 @@ class SaveController extends GetxController {
     }
   }
 
+
   void loadInitialData() {
-    if (selectedTab.value == 0) {
-      fetchFavoritesStore();
-    } else {
-      fetchFavoriteProduct();
-    }
+    fetchFavoritesStore();
   }
 
   Future<void> fetchFavoritesStore() async {
     try {
       isLoading.value = true;
-      String targetType = 'product_store';
+      String targetType = (selectedTab.value == 0) ? 'product_store' : 'service_store';
       String url = "${ApiEndPoint.favorites}?targetType=$targetType";
 
       ApiResponseModel response = await ApiService.get(url);
@@ -58,13 +54,10 @@ class SaveController extends GetxController {
     }
   }
 
-  // ২. প্রোডাক্ট বা সার্ভিস ডেটা ফেচ করার মেথড (আপনার দেওয়া প্রোডাক্ট মডেল অনুযায়ী)
   Future<void> fetchFavoriteProduct() async {
     try {
       isLoading.value = true;
-      // ট্যাব ১ মানে সার্ভিস বা প্রোডাক্ট হতে পারে (আপনার লজিক অনুযায়ী ঠিক করে নিন)
-      String targetType = selectedTab.value == 1 ? 'service' : 'product';
-      String url = "${ApiEndPoint.favorites}?targetType=$targetType";
+      String url = "${ApiEndPoint.favorites}?targetType=product";
 
       ApiResponseModel response = await ApiService.get(url);
 
@@ -73,10 +66,8 @@ class SaveController extends GetxController {
         favoriteProductList.value = model.data ?? [];
       } else {
         favoriteProductList.clear();
-        debugPrint("Failed to load products: ${response.statusCode}");
       }
     } catch (e) {
-      debugPrint("Error fetching products: $e");
       favoriteProductList.clear();
     } finally {
       isLoading.value = false;

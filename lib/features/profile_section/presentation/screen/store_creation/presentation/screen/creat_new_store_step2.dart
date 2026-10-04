@@ -18,7 +18,9 @@ class CreateNewStoreStep2 extends StatelessWidget {
         Get.find<StoreCreationController>();
 
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
+        backgroundColor: Colors.white,
         surfaceTintColor: AppColor.appBackgroundColor,
         elevation: 0,
         leading: Padding(
@@ -34,28 +36,11 @@ class CreateNewStoreStep2 extends StatelessWidget {
             ),
           ),
         ),
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            const Text(
-              "Create New Store",
-              style: TextStyle(
-                color: Colors.black,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            Text(
-              "Step 2 of 4",
-              style: TextStyle(color: Colors.grey, fontSize: 14.sp),
-            ),
-          ],
-        ),
-        bottom: PreferredSize(
-          preferredSize: Size.fromHeight(4.h),
-          child: LinearProgressIndicator(
-            value: 0.5,
-            backgroundColor: Colors.grey.shade200,
-            color: const Color(0xFF2A9B4A),
+        title: const Text(
+          "Create New Store",
+          style: TextStyle(
+            color: Colors.black,
+            fontWeight: FontWeight.w600,
           ),
         ),
       ),
@@ -261,8 +246,6 @@ class CreateNewStoreStep2 extends StatelessWidget {
                               fontSize: 12.sp,
                               color: Colors.grey.shade600,
                             ),
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
                           ),
                         ],
                       ],
@@ -369,8 +352,6 @@ class CreateNewStoreStep2 extends StatelessWidget {
                 title: Text(cat['name'] ?? ''),
                 subtitle: Text(
                   cat['description'] ?? '',
-                  maxLines: 4,
-                  overflow: TextOverflow.ellipsis,
                 ),
                 onTap: () {
                   controller.selectedCategoryName.value = cat['name'];
@@ -403,15 +384,15 @@ class CreateNewStoreStep2 extends StatelessWidget {
             itemCount: controller.cities.length,
             itemBuilder: (context, index) {
               final city = controller.cities[index];
-             return
-               ListTile(
-                 title: Text("${city['city']}, ${city['country']}"),
-                 onTap: () {
-                   controller.selectedCityName.value = "${city['city']}, ${city['country']}";
-                   controller.selectedCityId.value = city['_id'];
-                   Get.back();
-                 },
-               );
+              return ListTile(
+                title: Text("${city['city']}, ${city['country']}"),
+                onTap: () {
+                  controller.selectedCityName.value =
+                      "${city['city']}, ${city['country']}";
+                  controller.selectedCityId.value = city['_id'];
+                  Get.back();
+                },
+              );
             },
           ),
         ),

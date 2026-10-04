@@ -47,4 +47,9 @@ class ApiEndPoint {
   static const deleteAccount = "$baseUrl/users/profile";
   static const String resendOtp = "$baseUrl/auth/resend-otp";
   static const String notificationsMessages = "$baseUrl/notifications/messages";
+
+  // Subscription & Payment Endpoints
+  static const subscriptionPackages = "$baseUrl/subscription-packages";
+  static const createStripeCheckout = "$baseUrl/stripe/create-checkout-session";
+  static const createDatafastCheckout = "$baseUrl/datafast/create-checkout-session";
 }
