@@ -357,26 +357,6 @@ class AuthController extends GetxController {
             await LocalStorage.setSellerToken(token);
           }
         }
-        // bool hasSellerAccount =
-        //     responseData['data']?['hasSellerAccount'] ?? false;
-        // LocalStorage.hasSellerAccount = hasSellerAccount;
-        // await LocalStorage.setBool(
-        //   LocalStorageKeys.hasSellerAccount,
-        //   hasSellerAccount,
-        // );
-        //
-        // Get.snackbar(
-        //   "Success",
-        //   response.message,
-        //   backgroundColor: Colors.green,
-        //   colorText: Colors.white,
-        // );
-        // if (hasSellerAccount) {
-        //   Get.offAllNamed(AppRoutes.selectRoleScreen);
-        // } else {
-        //   Get.offAllNamed(AppRoutes.homeScreen);
-        // }
-
         bool hasSellerAccount = responseData['data']?['hasSellerAccount'] ?? false;
         LocalStorage.hasSellerAccount = hasSellerAccount;
         await LocalStorage.setBool(LocalStorageKeys.hasSellerAccount, hasSellerAccount);
@@ -387,13 +367,9 @@ class AuthController extends GetxController {
           backgroundColor: Colors.green,
           colorText: Colors.white,
         );
-
-        // ✅ পরিবর্তনকৃত কন্ডিশন:
         if (!hasSellerAccount) {
-          // false হলে Select Role Screen-এ পাঠাবে
           Get.offAllNamed(AppRoutes.selectRoleScreen);
         } else {
-          // true হলে Home Screen-এ পাঠাবে
           Get.offAllNamed(AppRoutes.homeScreen);
         }
 

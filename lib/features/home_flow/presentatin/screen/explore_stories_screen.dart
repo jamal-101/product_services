@@ -277,8 +277,8 @@ class ExploreStoriesScreen extends StatelessWidget {
           child: Text(
             title,
             style: GoogleFonts.plusJakartaSans(
-              fontSize: 14.sp,
-              fontWeight: FontWeight.bold,
+              fontSize: 12.sp,
+              fontWeight: FontWeight.w500,
               color: isSelected ? Colors.white : Colors.black54,
             ),
           ),
