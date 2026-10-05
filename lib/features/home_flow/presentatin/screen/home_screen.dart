@@ -6,8 +6,10 @@ import 'package:product_service/features/home_flow/presentatin/controller/home_c
 import 'package:product_service/utils/constants/api_enpoint.dart';
 import 'package:product_service/utils/constants/app_color.dart';
 import 'package:product_service/utils/constants/app_images.dart';
-import '../../../../component/bottom_navBar/nav_bar..dart';
+import '../../../../component/bottom_navBar/App_scaffold.dart';
+import '../../../../component/bottom_navBar/nav_controller.dart';
 import '../../../../services/api/api_service.dart';
+import '../../../../utils/constants/app_string.dart';
 import '../../../message_flow/presentation/controller/message_controller.dart';
 import '../../../notification/presentaiton/controller/notification_controller.dart';
 import '../../../post_add/controller/post_add_controller.dart';
@@ -23,11 +25,12 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
     final HomeController controller = Get.put(HomeController());
+    Get.put(BottomNavigationController());
 
-    return Scaffold(
-      key: scaffoldKey,
-      drawer: AppDrawer(),
-      bottomNavigationBar: BottomNavBar(selectedIndex: 0),
+    return AppScaffold(
+      selectedIndex: 0,
+      scaffoldKey: scaffoldKey,
+      drawer: const AppDrawer(),
       appBar: AppBar(
         backgroundColor: AppColor.appBackgroundColor,
         surfaceTintColor: AppColor.appBackgroundColor,
@@ -66,8 +69,7 @@ class HomeScreen extends StatelessWidget {
             child: Center(
               child: Obx(() {
                 final notificationCtrl = Get.find<NotificationController>();
-                int notificationCount =
-                    notificationCtrl.notificationList.length;
+                int notificationCount = notificationCtrl.notificationList.length;
 
                 return Stack(
                   clipBehavior: Clip.none,
@@ -132,28 +134,16 @@ class HomeScreen extends StatelessWidget {
                   shopName: "Support",
                 );
               } else {
-                Get.snackbar(
-                  "Error",
-                  "Super Admin ID not found",
-                  backgroundColor: Colors.red,
-                  colorText: Colors.white,
-                );
+                Get.snackbar("Error", "Super Admin ID not found",
+                    backgroundColor: Colors.red, colorText: Colors.white);
               }
             } else {
-              Get.snackbar(
-                "Error",
-                response.message,
-                backgroundColor: Colors.red,
-                colorText: Colors.white,
-              );
+              Get.snackbar("Error", response.message,
+                  backgroundColor: Colors.red, colorText: Colors.white);
             }
           } catch (e) {
-            Get.snackbar(
-              "Error",
-              e.toString(),
-              backgroundColor: Colors.red,
-              colorText: Colors.white,
-            );
+            Get.snackbar("Error", e.toString(),
+                backgroundColor: Colors.red, colorText: Colors.white);
           }
         },
         backgroundColor: Colors.transparent,
@@ -169,7 +159,7 @@ class HomeScreen extends StatelessWidget {
               decoration: BoxDecoration(
                 color: const Color(0xFF27AE60),
                 shape: BoxShape.circle,
-                border: Border.all(width: 3.w, color: Color(0xFFFFFFFF)),
+                border: Border.all(width: 3.w, color: const Color(0xFFFFFFFF)),
                 boxShadow: [
                   BoxShadow(
                     color: Colors.black.withValues(alpha: 0.1),
@@ -203,7 +193,6 @@ class HomeScreen extends StatelessWidget {
           ],
         ),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10),
@@ -214,7 +203,7 @@ class HomeScreen extends StatelessWidget {
               height: 140.h,
               child: Obx(() {
                 if (controller.bannerList.isEmpty) {
-                  return const Center(child: Text("No banners found"));
+                  return Center(child: Text(AppString.noBannersFound.tr));
                 }
 
                 return Stack(
@@ -233,17 +222,17 @@ class HomeScreen extends StatelessWidget {
                             color: Colors.grey[900],
                             image:
                                 banner.image != null && banner.image!.isNotEmpty
-                                ? DecorationImage(
-                                    image: NetworkImage(
-                                      "${ApiEndPoint.imageUrl}${banner.image}",
-                                    ),
-                                    fit: BoxFit.cover,
-                                    colorFilter: ColorFilter.mode(
-                                      Colors.black.withValues(alpha: 0.3),
-                                      BlendMode.darken,
-                                    ),
-                                  )
-                                : null,
+                                    ? DecorationImage(
+                                        image: NetworkImage(
+                                          "${ApiEndPoint.imageUrl}${banner.image}",
+                                        ),
+                                        fit: BoxFit.cover,
+                                        colorFilter: ColorFilter.mode(
+                                          Colors.black.withValues(alpha: 0.3),
+                                          BlendMode.darken,
+                                        ),
+                                      )
+                                    : null,
                           ),
                           padding: EdgeInsets.all(16.w),
                           child: Row(
@@ -255,20 +244,20 @@ class HomeScreen extends StatelessWidget {
                                   children: [
                                     Text(
                                       banner.name ?? "",
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         color: Colors.white,
-                                        fontSize: 18.sp,
+                                        fontSize: 18,
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
-                                    SizedBox(height: 6.h),
+                                    const SizedBox(height: 6),
                                     Text(
                                       banner.description ?? "",
                                       maxLines: 2,
                                       overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         color: Colors.white70,
-                                        fontSize: 11.sp,
+                                        fontSize: 11,
                                       ),
                                     ),
                                   ],
@@ -289,18 +278,18 @@ class HomeScreen extends StatelessWidget {
                           controller.bannerList.length,
                           (index) => Obx(
                             () => Container(
-                              margin: EdgeInsets.symmetric(horizontal: 3.w),
+                              margin: const EdgeInsets.symmetric(horizontal: 3),
                               width:
                                   controller.currentBannerIndex.value == index
-                                  ? 12.w
-                                  : 6.w,
-                              height: 6.h,
+                                      ? 12
+                                      : 6,
+                              height: 6,
                               decoration: BoxDecoration(
-                                color:
-                                    controller.currentBannerIndex.value == index
+                                color: controller.currentBannerIndex.value ==
+                                        index
                                     ? Colors.white
                                     : Colors.white54,
-                                borderRadius: BorderRadius.circular(3.r),
+                                borderRadius: BorderRadius.circular(3),
                               ),
                             ),
                           ),
@@ -311,30 +300,30 @@ class HomeScreen extends StatelessWidget {
                 );
               }),
             ),
-            SizedBox(height: 16.h),
+            const SizedBox(height: 16),
             _buildAdvertiseCard(),
-            SizedBox(height: 10.h),
+            const SizedBox(height: 10),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "Featured Stores",
+                 AppString.featuredStores.tr,
                   style: GoogleFonts.plusJakartaSans(
                     fontWeight: FontWeight.w700,
-                    color: Color(0xFF1A1D24),
+                    color: const Color(0xFF1A1D24),
                     fontSize: 18.sp,
                   ),
                 ),
                 _buildCitySelectionBox(controller),
               ],
             ),
-            SizedBox(height: 10.h),
+            const SizedBox(height: 10),
             Obx(() {
               if (controller.isFeaturedLoading.value) {
-                return Center(
+                return const Center(
                   child: Padding(
-                    padding: EdgeInsets.symmetric(vertical: 20.h),
-                    child: const CircularProgressIndicator(
+                    padding: EdgeInsets.symmetric(vertical: 20),
+                    child: CircularProgressIndicator(
                       color: Color(0xFF27AE60),
                     ),
                   ),
@@ -343,9 +332,9 @@ class HomeScreen extends StatelessWidget {
               if (controller.featuredList.isEmpty) {
                 return Center(
                   child: Padding(
-                    padding: EdgeInsets.symmetric(vertical: 20.h),
+                    padding: const EdgeInsets.symmetric(vertical: 20),
                     child: Text(
-                      "No Featured Stores Found",
+                      AppString.noFeaturedStores.tr,
                       style: GoogleFonts.plusJakartaSans(
                         fontSize: 13.sp,
                         color: Colors.grey,
@@ -385,10 +374,10 @@ class HomeScreen extends StatelessWidget {
                       }
                     },
                     child: Container(
-                      margin: EdgeInsets.only(bottom: 12.h),
+                      margin: const EdgeInsets.only(bottom: 12),
                       decoration: BoxDecoration(
                         color: Colors.white,
-                        borderRadius: BorderRadius.circular(16.r),
+                        borderRadius: BorderRadius.circular(16),
                         border: Border.all(color: Colors.grey.shade200),
                         boxShadow: [
                           BoxShadow(
@@ -403,8 +392,8 @@ class HomeScreen extends StatelessWidget {
                         children: [
                           if (imageUrl.isNotEmpty)
                             ClipRRect(
-                              borderRadius: BorderRadius.vertical(
-                                top: Radius.circular(16.r),
+                              borderRadius: const BorderRadius.vertical(
+                                top: Radius.circular(16),
                               ),
                               child: Image.network(
                                 imageUrl,
@@ -423,7 +412,7 @@ class HomeScreen extends StatelessWidget {
                               ),
                             ),
                           Padding(
-                            padding: EdgeInsets.all(12.w),
+                            padding: const EdgeInsets.all(12),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -435,7 +424,7 @@ class HomeScreen extends StatelessWidget {
                                     color: Colors.black87,
                                   ),
                                 ),
-                                SizedBox(height: 4.h),
+                                const SizedBox(height: 4),
                                 Text(
                                   "Store: ${item.storeId?.displayName?.isNotEmpty == true ? item.storeId!.displayName : "N/A"} (${item.city ?? ""})",
                                   style: GoogleFonts.plusJakartaSans(
@@ -443,7 +432,7 @@ class HomeScreen extends StatelessWidget {
                                     color: Colors.grey[600],
                                   ),
                                 ),
-                                SizedBox(height: 6.h),
+                                const SizedBox(height: 6),
                                 Text(
                                   "Price: \$${item.price ?? 0}",
                                   style: GoogleFonts.plusJakartaSans(
@@ -473,10 +462,10 @@ class HomeScreen extends StatelessWidget {
       alignment: Alignment.centerRight,
       child: Obx(() {
         if (controller.isCityLoading.value) {
-          return SizedBox(
-            height: 20.h,
-            width: 20.w,
-            child: const CircularProgressIndicator(
+          return const SizedBox(
+            height: 20,
+            width: 20,
+            child: CircularProgressIndicator(
               strokeWidth: 2,
               color: Color(0xFF2E7D32),
             ),
@@ -488,16 +477,16 @@ class HomeScreen extends StatelessWidget {
             controller.onCitySelected(cityData);
           },
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12.r),
+            borderRadius: BorderRadius.circular(12),
           ),
           itemBuilder: (BuildContext context) => <PopupMenuEntry<CityData>>[
             PopupMenuItem<CityData>(
               value: CityData(
-                city: "Choose city",
+                city: AppString.chooseCity.tr,
                 latitude: null,
                 longitude: null,
               ),
-              child: const Text('Choose city'),
+              child: Text(AppString.chooseCity.tr),
             ),
             ...controller.cityList.map((city) {
               return PopupMenuItem<CityData>(
@@ -507,10 +496,10 @@ class HomeScreen extends StatelessWidget {
             }).toList(),
           ],
           child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             decoration: BoxDecoration(
               color: Colors.white,
-              borderRadius: BorderRadius.circular(10.r),
+              borderRadius: BorderRadius.circular(10),
               border: Border.all(color: Colors.grey.shade300, width: 1),
               boxShadow: [
                 BoxShadow(
@@ -523,12 +512,12 @@ class HomeScreen extends StatelessWidget {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(
+                const Icon(
                   Icons.location_on_outlined,
-                  size: 18.sp,
-                  color: const Color(0xFF2E7D32),
+                  size: 18,
+                  color: Color(0xFF2E7D32),
                 ),
-                SizedBox(width: 6.w),
+                const SizedBox(width: 6),
                 Text(
                   controller.selectedCityName.value,
                   style: GoogleFonts.plusJakartaSans(
@@ -537,10 +526,10 @@ class HomeScreen extends StatelessWidget {
                     color: Colors.grey[800],
                   ),
                 ),
-                SizedBox(width: 8.w),
-                Icon(
+                const SizedBox(width: 8),
+                const Icon(
                   Icons.keyboard_arrow_down,
-                  size: 18.sp,
+                  size: 18,
                   color: Colors.grey,
                 ),
               ],
@@ -553,46 +542,46 @@ class HomeScreen extends StatelessWidget {
 
   Widget _buildAdvertiseCard({VoidCallback? onTap}) {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 1.w, vertical: 8.h),
-      padding: EdgeInsets.all(10.w),
+      margin: const EdgeInsets.symmetric(horizontal: 1, vertical: 8),
+      padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
-        gradient: LinearGradient(
+        gradient: const LinearGradient(
           begin: Alignment.centerLeft,
           end: Alignment.centerRight,
           colors: [Color(0xFFE7FCF0), Color(0xFFFFFFFF)],
         ),
-        borderRadius: BorderRadius.circular(16.r),
+        borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.05),
-            offset: Offset(0, 1),
+            offset: const Offset(0, 1),
             blurRadius: 2,
             spreadRadius: 0,
           ),
         ],
-        border: Border.all(color: Color(0xFFF3F4F6), width: 1.11),
+        border: Border.all(color: const Color(0xFFF3F4F6), width: 1.11),
       ),
       child: Row(
         children: [
-          Image.asset(AppImages.add_icon, height: 60.h, width: 60.w),
-          SizedBox(width: 14.w),
+          Image.asset(AppImages.add_icon, height: 60, width: 60),
+          const SizedBox(width: 14),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Post Your Ad Here",
+                  AppString.postYourAdHere.tr,
                   style: GoogleFonts.plusJakartaSans(
-                    fontSize: 16.sp,
+                    fontSize: 16,
                     fontWeight: FontWeight.bold,
                     color: const Color(0xFF2E7D32),
                   ),
                 ),
-                SizedBox(height: 4.h),
+                SizedBox(height: 4),
                 Text(
-                  "Reach more customers today",
+                  AppString.reachMoreCustomers.tr,
                   style: GoogleFonts.plusJakartaSans(
-                    fontSize: 12.sp,
+                    fontSize: 12,
                     color: Colors.grey[600],
                   ),
                 ),
@@ -609,23 +598,23 @@ class HomeScreen extends StatelessWidget {
                   postController.checkAndNavigateToPostAd();
                 },
             style: ElevatedButton.styleFrom(
-              backgroundColor: Color(0xFF228B22),
+              backgroundColor: const Color(0xFF228B22),
               foregroundColor: Colors.white,
               elevation: 0,
-              padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 10.h),
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.r),
+                borderRadius: BorderRadius.circular(10),
               ),
             ),
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(Icons.campaign_outlined, size: 20.sp, color: Colors.white),
-                SizedBox(width: 6.w),
+                const Icon(Icons.campaign_outlined, size: 20, color: Colors.white),
+                const SizedBox(width: 6),
                 Text(
-                  "Advertise Here",
+                  AppString.advertiseHere.tr,
                   style: GoogleFonts.plusJakartaSans(
-                    fontSize: 12.sp,
+                    fontSize: 12,
                     fontWeight: FontWeight.w700,
                     color: Colors.white,
                   ),

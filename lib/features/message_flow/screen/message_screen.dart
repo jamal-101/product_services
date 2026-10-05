@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:product_service/component/bottom_navBar/App_scaffold.dart';
 import 'package:product_service/features/auth_flow/presentation/controller/auth_controller.dart';
 import 'package:product_service/features/message_flow/presentation/controller/message_controller.dart';
 import 'package:product_service/features/message_flow/model/chat_model.dart';
@@ -25,8 +26,9 @@ class MessageScreen extends StatelessWidget {
       bool isSeller = authController.selectedRole.value == 'seller';
       int messageNavIndex = isSeller ? 3 : 3;
 
-      return Scaffold(
-        bottomNavigationBar: BottomNavBar(selectedIndex: messageNavIndex),
+      return AppScaffold(
+        // bottomNavigationBar: BottomNavBar(selectedIndex: messageNavIndex),
+        selectedIndex: messageNavIndex,
         appBar: AppBar(
           backgroundColor: Colors.white,
           centerTitle: false,

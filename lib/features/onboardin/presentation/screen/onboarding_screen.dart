@@ -10,32 +10,34 @@ import '../../../account_section/presentation/controller/language_controller.dar
 import '../controller/onboarding_controller.dart';
 import '../model/onboarding_model.dart';
 
-final List<OnboardingModel> onboardingData = [
-  OnboardingModel(
-    titleFirst: 'find'.tr,
-    titleHighlight: 'trusted'.tr,
-    titleLast: 'localStores'.tr,
-    description: 'findLocalStoresDesc'.tr,
-    image: AppImages.splash1,
-  ),
-  OnboardingModel(
-    titleFirst: 'chat'.tr,
-    titleHighlight: AppString.directly.tr,
-    titleLast: 'withSellers'.tr,
-    description: AppString.description2.tr,
-    image: AppImages.splash2,
-  ),
-  OnboardingModel(
-    titleFirst: AppString.promoteYour.tr,
-    titleHighlight: AppString.business.tr,
-    titleLast: "",
-    description: AppString.description3.tr,
-    image: AppImages.splash3,
-  ),
-];
 
 class OnboardingScreen extends StatelessWidget {
   const OnboardingScreen({super.key});
+
+
+  List<OnboardingModel> get onboardingData => [
+    OnboardingModel(
+      titleFirst: 'find'.tr,
+      titleHighlight: ' trusted '.tr,
+      titleLast: 'localStores'.tr,
+      description: 'findLocalStoresDesc'.tr,
+      image: AppImages.splash1,
+    ),
+    OnboardingModel(
+      titleFirst: 'chat'.tr,
+      titleHighlight: ' ${AppString.directly.tr} ',
+      titleLast: 'withSellers'.tr,
+      description: AppString.description2.tr,
+      image: AppImages.splash2,
+    ),
+    OnboardingModel(
+      titleFirst: AppString.promoteYour.tr,
+      titleHighlight: ' ${AppString.business.tr}',
+      titleLast: "",
+      description: AppString.description3.tr,
+      image: AppImages.splash3,
+    ),
+  ];
 
   @override
   Widget build(BuildContext context) {

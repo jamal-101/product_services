@@ -7,33 +7,39 @@ class AppScaffold extends StatelessWidget {
   final Widget body;
   final int selectedIndex;
   final PreferredSizeWidget? appBar;
+  final Widget? drawer;
+  final Widget? floatingActionButton;
+  final GlobalKey<ScaffoldState>? scaffoldKey;
 
   const AppScaffold({
     super.key,
     required this.body,
     required this.selectedIndex,
     this.appBar,
+    this.drawer,
+    this.floatingActionButton,
+    this.scaffoldKey,
   });
 
   @override
   Widget build(BuildContext context) {
-    final BottomNavigationController navController = Get.find<BottomNavigationController>();
-
-    return Obx(
-          () => PopScope(
-        canPop: navController.currentIndex.value == 0,
-        onPopInvokedWithResult: (didPop, result) {
-          if (didPop) return;
-
-          if (navController.currentIndex.value != 0) {
-            navController.handleBackPress();
-          }
-        },
-        child: Scaffold(
-          appBar: appBar,
-          body: body,
-          bottomNavigationBar: BottomNavBar(selectedIndex: selectedIndex),
-        ),
+    final BottomNavigationController navController =
+        Get.find<BottomNavigationController>();
+    return PopScope(
+      canPop: selectedIndex == 0,
+      onPopInvokedWithResult: (didPop, result) {
+        if (didPop) return;
+        if (selectedIndex != 0) {
+          navController.handleBackPress();
+        }
+      },
+      child: Scaffold(
+        key: scaffoldKey,
+        appBar: appBar,
+        drawer: drawer,
+        floatingActionButton: floatingActionButton,
+        body: body,
+        bottomNavigationBar: BottomNavBar(selectedIndex: selectedIndex),
       ),
     );
   }

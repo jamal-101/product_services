@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:product_service/component/bottom_navBar/App_scaffold.dart';
 import 'package:product_service/utils/constants/app_color.dart';
 import 'package:product_service/utils/constants/app_images.dart';
 import 'package:shimmer/shimmer.dart';
-import '../../../../../component/bottom_navBar/nav_bar..dart';
 import '../../../../../utils/constants/api_enpoint.dart';
 import '../controller/listing_controller.dart';
 import '../model/service_model.dart' as s_model;
@@ -18,7 +18,8 @@ class MyListingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return AppScaffold(
+      selectedIndex: 1,
       appBar: AppBar(
         surfaceTintColor: AppColor.appBackgroundColor,
         automaticallyImplyLeading: false,
@@ -70,7 +71,7 @@ class MyListingScreen extends StatelessWidget {
           ),
         ],
       ),
-      bottomNavigationBar: BottomNavBar(selectedIndex: 1),
+      // bottomNavigationBar: BottomNavBar(selectedIndex: 1),
       body: Obx(() {
 
         if (controller.isLoading.value) {

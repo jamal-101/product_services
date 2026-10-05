@@ -1,15 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_navigation/src/extension_navigation.dart';
-import 'package:get/get_navigation/src/root/get_material_app.dart';
-import 'package:get/get_navigation/src/routes/transitions_type.dart';
-import 'package:product_service/services/storage/appTranslation.dart';
+import 'package:get/get.dart';
+import 'package:product_service/utils/constants/app_string.dart';
 import 'package:product_service/services/storage/storage_key.dart';
 import 'package:product_service/services/storage/storage_service.dart';
 import 'config/route/app_route.dart';
 import 'config/theme/light_theme.dart';
-
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -27,14 +23,17 @@ class MyApp extends StatelessWidget {
         defaultTransition: Transition.fadeIn,
         theme: themeData,
         transitionDuration: const Duration(milliseconds: 300),
-        translations: AppTranslations(),
-        // locale property-ta evabe update korun:
+        translations: AppString(),
+        // locale: Locale(
+        //   LocalStorage.preferences?.getString(LocalStorageKeys.languageCode) ?? 'en',
+        //   LocalStorage.preferences?.getString(LocalStorageKeys.countryCode) ?? 'US',
+        // ),
+        // fallbackLocale: const Locale('en', 'US'),
         locale: Locale(
-          LocalStorage.preferences?.getString(LocalStorageKeys.languageCode) ?? 'en',
-          LocalStorage.preferences?.getString(LocalStorageKeys.countryCode) ?? 'US',
+          LocalStorage.preferences?.getString(LocalStorageKeys.languageCode) ?? 'es',
+          LocalStorage.preferences?.getString(LocalStorageKeys.countryCode) ?? 'ES',
         ),
-
-        fallbackLocale: const Locale('en', 'US'),
+        fallbackLocale: const Locale('es', 'ES'),
         initialRoute: AppRoutes.splashScreen,
         getPages: AppRoutes.routes,
       ),

@@ -35,7 +35,7 @@ class ForgetPasswordScreen extends StatelessWidget {
                         style: TextStyle(fontSize: 28.sp, fontWeight: FontWeight.bold),
                         children: [
                           TextSpan(text: AppString.forgot.tr, style: TextStyle(color: AppColor.textDark)),
-                          TextSpan(text: "${AppString.password}?", style: TextStyle(color: AppColor.accent)),
+                          TextSpan(text: "${AppString.password.tr}?", style: TextStyle(color: AppColor.accent)),
                         ],
                       ),
                     ),
@@ -46,7 +46,7 @@ class ForgetPasswordScreen extends StatelessWidget {
                     ),
                     SizedBox(height: 32.h),
 
-                    Text(AppString.email, style: GoogleFonts.plusJakartaSans(fontSize: 16.sp, fontWeight: FontWeight.w500, color: AppColor.textDark)),
+                    Text(AppString.email.tr, style: GoogleFonts.plusJakartaSans(fontSize: 16.sp, fontWeight: FontWeight.w500, color: AppColor.textDark)),
                     SizedBox(height: 8.h),
                     TextFormField(
                       controller: controller.forgotEmailController,

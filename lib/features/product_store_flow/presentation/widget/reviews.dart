@@ -82,7 +82,8 @@ class _ReviewsWidgetState extends State<ReviewsWidget> {
                           String profileImage =
                               review.userId?.profileImage ?? "";
                           bool hasResponse = review.isReplied ?? false;
-                          String ownerReplyText = review.ownerReply?.comment ?? "";
+                          String ownerReplyText =
+                              review.ownerReply?.comment ?? "";
 
                           return Obx(
                             () => _buildReviewItem(
@@ -96,7 +97,7 @@ class _ReviewsWidgetState extends State<ReviewsWidget> {
                               // replyText: review.reply ?? "",
                               replyText: ownerReplyText,
                               isReplying: activeReplyReviewId.value == reviewId,
-                                isSeller: isSeller
+                              isSeller: isSeller,
                             ),
                           );
                         },
@@ -351,7 +352,6 @@ class _ReviewsWidgetState extends State<ReviewsWidget> {
               ),
             ),
 
-
           // if (!isReplied) ...[
           if (!isReplied && isSeller) ...[
             SizedBox(height: 10.h),
@@ -376,7 +376,6 @@ class _ReviewsWidgetState extends State<ReviewsWidget> {
                 ),
               ),
             ),
-
 
             if (isReplying)
               Container(
@@ -475,23 +474,26 @@ class _ReviewsWidgetState extends State<ReviewsWidget> {
             ),
             SizedBox(height: 8.h),
             Obx(
-              () => Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: List.generate(5, (index) {
-                  int starVal = index + 1;
-                  return IconButton(
-                    onPressed: () {
-                      selectedRating.value = starVal;
-                    },
-                    icon: Icon(
-                      index < selectedRating.value
-                          ? Icons.star
-                          : Icons.star_border,
-                      color: const Color(0xFFEE7A1F),
-                      size: 28.sp,
-                    ),
-                  );
-                }),
+              () => FittedBox(
+                // জায়গা বেশি নিলে অটো স্কেল করে ছোট করে নেবে
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: List.generate(5, (index) {
+                    int starVal = index + 1;
+                    return IconButton(
+                      onPressed: () {
+                        selectedRating.value = starVal;
+                      },
+                      icon: Icon(
+                        index < selectedRating.value
+                            ? Icons.star
+                            : Icons.star_border,
+                        color: const Color(0xFFEE7A1F),
+                        size: 28.sp,
+                      ),
+                    );
+                  }),
+                ),
               ),
             ),
             SizedBox(height: 12.h),

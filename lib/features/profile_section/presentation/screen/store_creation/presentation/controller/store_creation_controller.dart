@@ -53,9 +53,7 @@ class StoreCreationController extends GetxController {
       hasMoreCategory.value = true;
       categories.clear();
     }
-
     if (!hasMoreCategory.value || isLoading.value) return;
-
     try {
       if (categoryPage.value == 1) {
         isLoading.value = true;
@@ -65,11 +63,9 @@ class StoreCreationController extends GetxController {
       final response = await ApiService.get(
         '${ApiEndPoint.categories}?page=${categoryPage.value}&limit=10',
       );
-
       if (response.isSuccess) {
         final List fetchedData = response.data['data'] ?? [];
         final meta = response.data['meta'];
-
         if (fetchedData.isNotEmpty) {
           categories.addAll(fetchedData);
         }
@@ -96,15 +92,12 @@ class StoreCreationController extends GetxController {
 
   void fetchCitiesOnDemand() async {
     try {
-      final response = await ApiService.get(
-        ApiEndPoint.activeCities,
-      );
-
+      final response = await ApiService.get(ApiEndPoint.activeCities);
       if (response.isSuccess) {
         cities.value = response.data['data'] ?? [];
       }
     } catch (e) {
-      print("Error fetching cities on demand: $e");
+      print("Error fetching cities: $e");
     }
   }
 
@@ -139,7 +132,7 @@ class StoreCreationController extends GetxController {
         "phone": phoneController.text.trim(),
         "whatsapp": whatsappController.text.trim(),
         "email": emailController.text.trim(),
-        "businessLicenseNumber": tinNumberController.text.trim(),
+        "businessLicenseNumber": tinNumberController.text.trim(), // 🔹 TIN কে License Number হিসেবে পাঠানো হচ্ছে
         "tinNumber": tinNumberController.text.trim(),
         "workingDays": ["monday", "tuesday", "wednesday", "thursday", "friday"],
         "openingTime": "09:00",
@@ -149,10 +142,7 @@ class StoreCreationController extends GetxController {
       };
 
       final compressedLogo = await _compressImage(logoFile.value, 'logo');
-      final compressedCover = await _compressImage(
-        coverImageFile.value,
-        'cover',
-      );
+      final compressedCover = await _compressImage(coverImageFile.value, 'cover');
 
       Map<String, File?> files = {
         "logo": compressedLogo,
@@ -170,36 +160,19 @@ class StoreCreationController extends GetxController {
       );
 
       if (response.isSuccess) {
-        // ১. সেলার মোডে সুইচ করা
         await LocalStorage.setUserRole('seller');
         await LocalStorage.setStoreType(selectedStoreType.value);
         if (Get.isRegistered<AuthController>()) {
           Get.find<AuthController>().selectedRole.value = 'seller';
         }
-
-        Get.snackbar(
-          "Success",
-          "Store created successfully!",
-          backgroundColor: Colors.green,
-          colorText: Colors.white,
-        );
+        Get.snackbar("Success", "Store created successfully!", backgroundColor: Colors.green, colorText: Colors.white);
         Get.offAllNamed(AppRoutes.sellerHomeScreen);
       } else {
-        Get.snackbar(
-          "Error",
-          response.message,
-          backgroundColor: Colors.red,
-          colorText: Colors.white,
-        );
+        Get.snackbar("Error", response.message, backgroundColor: Colors.red, colorText: Colors.white);
       }
     } catch (e) {
       debugPrint("Store creation error: $e");
-      Get.snackbar(
-        "Error",
-        e.toString(),
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
-      );
+      Get.snackbar("Error", e.toString(), backgroundColor: Colors.red, colorText: Colors.white);
     } finally {
       isLoading.value = false;
     }
@@ -211,18 +184,10 @@ class StoreCreationController extends GetxController {
     if (originalBytes <= 500 * 1024) return file;
     try {
       final tempDir = Directory.systemTemp;
-      final targetPath =
-          '${tempDir.path}/store_${label}_${DateTime.now().millisecondsSinceEpoch}.jpg';
-
+      final targetPath = '${tempDir.path}/store_${label}_${DateTime.now().millisecondsSinceEpoch}.jpg';
       XFile? result = await FlutterImageCompress.compressAndGetFile(
-        file.absolute.path,
-        targetPath,
-        quality: 70,
-        minWidth: 1280,
-        minHeight: 1280,
-        format: CompressFormat.jpeg,
+        file.absolute.path, targetPath, quality: 70, minWidth: 1280, minHeight: 1280, format: CompressFormat.jpeg,
       );
-
       if (result == null) return file;
       return File(result.path);
     } catch (e) {

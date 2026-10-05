@@ -248,8 +248,10 @@ class Products {
     sellerId = json['sellerId'];
     storeId = json['storeId'];
     title = json['title'];
-    activePrice = json['activePrice'];
-    originalPrice = json['originalPrice'];
+    // activePrice = json['activePrice'];
+    // originalPrice = json['originalPrice'];
+    activePrice = (json['activePrice'] as num?)?.toInt();
+    originalPrice = (json['originalPrice'] as num?)?.toInt();
     description = json['description'];
     additionalInformation = json['additionalInformation'];
     images = json['images']?.cast<String>();
@@ -476,8 +478,8 @@ class Services {
     sellerId = json['sellerId'];
     storeId = json['storeId'];
     title = json['title'];
-    activePrice = json['activePrice'];
-    originalPrice = json['originalPrice'];
+    activePrice = (json['activePrice'] as num?)?.toInt();
+    originalPrice = (json['originalPrice'] as num?)?.toInt();
     description = json['description'];
     whatsIncluded = json['whatsIncluded']?.cast<String>();
     images = json['images']?.cast<String>();

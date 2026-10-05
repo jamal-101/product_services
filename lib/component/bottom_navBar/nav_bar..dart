@@ -3,7 +3,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:product_service/config/route/app_route.dart';
-import 'package:product_service/features/seller/my_list_flow/presentation/screen/add_product_screen.dart';
 import 'package:product_service/features/seller/my_list_flow/presentation/screen/my_list_screen.dart';
 import 'package:product_service/features/seller/my_store_flow/presentation/screen/my_store_screen.dart';
 import 'package:product_service/utils/constants/app_images.dart';
@@ -23,9 +22,11 @@ class BottomNavBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    WidgetsBinding.instance.addPostFrameCallback(
-          (_) => controller.changeIndex(selectedIndex),
-    );
+    if (controller.currentIndex.value != selectedIndex) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        controller.changeIndex(selectedIndex);
+      });
+    }
 
     return Obx(
           () => Container(
@@ -41,24 +42,26 @@ class BottomNavBar extends StatelessWidget {
         ),
         child: SafeArea(
           top: false,
-          child: Container(
+          child: SizedBox(
             height: 80.h,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                _buildNavItem(0, AppImages.homeIcon, 'home'.tr,),
+                _buildNavItem(0, AppImages.homeIcon, AppString.home.tr,),
                 _buildNavItem(
                   1,
                   authController.selectedRole.value == 'seller'
                       ? AppImages.myListIcon
                       : AppImages.listIcon,
-                  authController.selectedRole.value == 'seller' ? 'myListing'.tr : AppString.stores.tr,
+                  authController.selectedRole.value == 'seller' 
+                      ? AppString.myListing.tr 
+                      : AppString.stores.tr,
                 ),
                 if (authController.selectedRole.value == 'seller')
-                  _buildMyStoreNavItem(2, AppImages.storeIcon, "My Store"),
+                  _buildMyStoreNavItem(2, AppImages.storeIcon, AppString.myStore.tr),
 
-                _buildNavItem(3, AppImages.messageIcon, 'messages'.tr,),
-                _buildNavItem(4, AppImages.accountIcon, 'account'.tr,),
+                _buildNavItem(3, AppImages.messageIcon, AppString.messages.tr,),
+                _buildNavItem(4, AppImages.accountIcon, AppString.account.tr,),
               ],
             ),
           ),
@@ -69,7 +72,7 @@ class BottomNavBar extends StatelessWidget {
 
   Widget _buildNavItem(int index, String imagePath, String label) {
     bool isSelected = controller.currentIndex.value == index;
-    final Color activeColor = const Color(0xFF2A9B4A);
+    const Color activeColor = Color(0xFF2A9B4A);
 
     return Expanded(
       child: GestureDetector(
@@ -124,7 +127,7 @@ class BottomNavBar extends StatelessWidget {
 
   Widget _buildMyStoreNavItem(int index, String imagePath, String label) {
     bool isSelected = controller.currentIndex.value == index;
-    final Color storeColor = Colors.orange;
+    const Color storeColor = Colors.orange;
 
     return Expanded(
       child: GestureDetector(
@@ -181,7 +184,7 @@ class BottomNavBar extends StatelessWidget {
     switch (index) {
       case 0:
         isSeller
-            ? Get.offAll(() => SellerHomeScreen())
+            ? Get.offAll(() => const SellerHomeScreen())
             : Get.offAllNamed(AppRoutes.homeScreen);
         break;
       case 1:
@@ -190,7 +193,7 @@ class BottomNavBar extends StatelessWidget {
             : Get.offAllNamed(AppRoutes.exploreStoriesScreen);
         break;
       case 2:
-        Get.offAll(() => MyStoreScreen());
+        Get.offAll(() => const MyStoreScreen());
         break;
       case 3:
         Get.offAllNamed(AppRoutes.messageScreen);
@@ -200,5 +203,6 @@ class BottomNavBar extends StatelessWidget {
         break;
     }
   }
-}
 
+
+}

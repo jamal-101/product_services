@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:product_service/component/bottom_navBar/App_scaffold.dart';
 import '../../../../../component/bottom_navBar/nav_bar..dart';
 import '../../../../../utils/constants/api_enpoint.dart';
 import '../../../../../utils/constants/app_images.dart';
@@ -16,7 +17,8 @@ class MyStoreScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final MyStoreController controller = Get.put(MyStoreController());
-    return Scaffold(
+    return AppScaffold(
+      selectedIndex: 2,
       body: Obx(() {
         if (controller.isLoading.value) {
           return const Center(child: CircularProgressIndicator(color: Color(0xFFE67E22)));
@@ -83,7 +85,7 @@ class MyStoreScreen extends StatelessWidget {
           ),
         );
       }),
-      bottomNavigationBar: BottomNavBar(selectedIndex: 2),
+      // bottomNavigationBar: BottomNavBar(selectedIndex: 2),
     );
   }
 

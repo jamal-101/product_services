@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:product_service/component/bottom_navBar/App_scaffold.dart';
 import 'package:product_service/features/account_section/presentation/screen/OperatingHoursScreen.dart';
 import 'package:product_service/features/account_section/presentation/screen/privacy_policy_screen.dart';
 import 'package:product_service/features/account_section/presentation/screen/safety_guidelines.dart';
@@ -10,7 +11,6 @@ import 'package:product_service/features/auth_flow/presentation/controller/auth_
 import 'package:product_service/utils/constants/api_enpoint.dart';
 import 'package:product_service/utils/constants/app_images.dart';
 import 'package:product_service/utils/constants/app_string.dart';
-import '../../../../component/bottom_navBar/nav_bar..dart';
 import '../../../../config/route/app_route.dart';
 import '../../../../services/storage/storage_service.dart';
 import '../../../my_add/presentation/screen/my_add_screen.dart';
@@ -26,8 +26,8 @@ class AccountScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final authController = Get.put(AuthController());
     final profileController = Get.put(ProfileController());
-    return Scaffold(
-      bottomNavigationBar: BottomNavBar(selectedIndex: 4),
+    return AppScaffold(
+      selectedIndex: 4,
       body: Obx(() {
         final userData = profileController.profileModel.value.data;
 
@@ -227,7 +227,7 @@ class AccountScreen extends StatelessWidget {
                           },
                         ),
                         SizedBox(height: 20.h),
-                        _buildSectionTitle("BILLING"),
+                        _buildSectionTitle(AppString.billing.tr),
                         _buildCardMenuItem(
                           Icons.balance,
                           'transactionHistory'.tr,
@@ -258,32 +258,32 @@ class AccountScreen extends StatelessWidget {
                         ),
                         _buildCardMenuItem(
                           Icons.security,
-                          "Safety Guidelines",
-                          "Rules and regulations for your safety",
+                          AppString.safetyGuidelines.tr,
+                          AppString.safetyGuidelinesSub.tr,
                               () {
                             Get.to(() => const SafetyGuidelinesScreen());
                           },
                         ),
                         _buildCardMenuItem(
                           Icons.lock_outline,
-                          "Privacy Policy",
-                          "Your privacy and data security matter",
+                          AppString.privacyPolicy.tr,
+                          AppString.privacyPolicySub.tr,
                               () {
                             Get.to(() => const PrivacyPolicyScreen());
                           },
                         ),
                         _buildCardMenuItem(
                           Icons.article,
-                          "Terms & Conditions",
-                          "Read our terms of service",
+                          AppString.termsConditions.tr,
+                          AppString.termsConditionsSub.tr,
                               () {
                             Get.to(() => const TermsConditaionScreen());
                           },
                         ),
                         _buildCardMenuItem(
                           Icons.delete_forever_outlined,
-                          "Delete Account",
-                          "Permanently delete your account and data",
+                          AppString.deleteAccount.tr,
+                          AppString.deleteAccountDesc.tr,
                               () {
                             final DeleteAccountController deleteController = Get.put(DeleteAccountController());
                             Get.dialog(
@@ -292,7 +292,7 @@ class AccountScreen extends StatelessWidget {
                                   borderRadius: BorderRadius.circular(15.r),
                                 ),
                                 title: Text(
-                                  'Delete Account',
+                                  AppString.deleteAccount.tr,
                                   style: GoogleFonts.montserrat(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 18.sp,
@@ -303,20 +303,18 @@ class AccountScreen extends StatelessWidget {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      'Please enter your password to confirm account deletion.',
+                                      AppString.deleteAccountDesc.tr,
                                       style: GoogleFonts.montserrat(
                                         fontSize: 13.sp,
                                         color: Colors.grey.shade700,
                                       ),
                                     ),
                                     SizedBox(height: 15.h),
-
-                                    // পাসওয়ার্ড ইনপুট ফিল্ড এবং হাইড/শো আইকন যুক্ত করা
                                     Obx(() => TextField(
                                       controller: deleteController.passwordController,
                                       obscureText: deleteController.isPasswordHidden.value,
                                       decoration: InputDecoration(
-                                        labelText: 'Password',
+                                        labelText: AppString.password.tr,
                                         labelStyle: GoogleFonts.montserrat(fontSize: 14.sp),
                                         border: OutlineInputBorder(
                                           borderRadius: BorderRadius.circular(8.r),
@@ -338,7 +336,7 @@ class AccountScreen extends StatelessWidget {
                                   TextButton(
                                     onPressed: () => Get.back(),
                                     child: Text(
-                                      'Cancel',
+                                      AppString.cancel.tr,
                                       style: GoogleFonts.montserrat(
                                         color: Colors.grey,
                                         fontWeight: FontWeight.w600,
@@ -368,7 +366,7 @@ class AccountScreen extends StatelessWidget {
                                       ),
                                     )
                                         : Text(
-                                      'Delete',
+                                       AppString.deleteText.tr,
                                       style: GoogleFonts.montserrat(
                                         color: Colors.white,
                                         fontWeight: FontWeight.bold,

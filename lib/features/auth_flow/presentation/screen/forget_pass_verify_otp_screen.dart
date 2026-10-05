@@ -150,7 +150,7 @@ class ForgetPassVerifyOtpScreen extends StatelessWidget {
                           color: AppColor.textLight,
                         ),
                         children: [
-                          TextSpan(text: AppString.donH.tr),
+                          TextSpan(text: AppString.donHave.tr),
                           TextSpan(
                             text: " ${AppString.resendIn.tr} $formattedTime",
                             style: GoogleFonts.plusJakartaSans(

@@ -5,10 +5,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:product_service/component/bottom_navBar/App_scaffold.dart';
 import 'package:product_service/config/route/app_route.dart';
 import 'package:product_service/utils/constants/app_color.dart';
 import 'package:product_service/utils/constants/app_string.dart';
-import '../../../../component/bottom_navBar/nav_bar..dart';
 import '../../../../utils/constants/api_enpoint.dart';
 import '../../../product_store_flow/presentation/screen/store_details_page.dart';
 import '../controller/explore_store_controller.dart';
@@ -24,17 +24,16 @@ class ExploreStoriesScreen extends StatelessWidget {
       ExploreStoreController(),
     );
 
-    return Scaffold(
-      backgroundColor: const Color(0xFFFBFBFB),
-      bottomNavigationBar: BottomNavBar(selectedIndex: 1),
+    return AppScaffold(
+      selectedIndex: 1,
       appBar: AppBar(
-        backgroundColor: Colors.white,
         elevation: 0,
         surfaceTintColor: AppColor.appBackgroundColor,
         automaticallyImplyLeading: false,
         title: Row(
           children: [
             RichText(
+              overflow: TextOverflow.ellipsis,
               text: TextSpan(
                 style: GoogleFonts.plusJakartaSans(
                   fontSize: 18.sp,
@@ -54,9 +53,11 @@ class ExploreStoriesScreen extends StatelessWidget {
                 ],
               ),
             ),
-            _buildTopBarActions(controllers),
           ],
         ),
+        actions: [
+          _buildTopBarActions(controllers),
+        ],
       ),
       body: SafeArea(
         child: Column(
@@ -135,7 +136,7 @@ class ExploreStoriesScreen extends StatelessWidget {
                             () => _buildFilterChip(
                               Icons.location_on_outlined,
                               controllers.selectedCity.value.isEmpty
-                                  ? "City"
+                                  ? AppString.city.tr
                                   : controllers.selectedCity.value,
                               onTap: () {
                                 showModalBottomSheet(
@@ -173,161 +174,13 @@ class ExploreStoriesScreen extends StatelessWidget {
                             }
                             return _buildFilterChip(
                               Icons.access_time_rounded,
-                              "Open now",
+                              AppString.openNow.tr,
                               isSelected: controllers.isOpenNow.value,
                               onTap: () {
                                 controllers.toggleOpenNow();
                               },
                             );
                           }),
-                          // Obx(() {
-                          //   if (!controllers.isListViewSelected.value) {
-                          //     return const SizedBox.shrink();
-                          //   }
-                          //   return PopupMenuButton<String>(
-                          //     onSelected: (String ratingValue) {
-                          //       controllers.updateRating(ratingValue);
-                          //     },
-                          //     shape: RoundedRectangleBorder(
-                          //       borderRadius: BorderRadius.circular(12.r),
-                          //     ),
-                          //     itemBuilder: (BuildContext context) =>
-                          //         <PopupMenuEntry<String>>[
-                          //           const PopupMenuItem<String>(
-                          //             value: '1',
-                          //             child: Row(
-                          //               children: [
-                          //                 Icon(
-                          //                   Icons.star,
-                          //                   color: Colors.amber,
-                          //                   size: 16,
-                          //                 ),
-                          //                 SizedBox(width: 8),
-                          //                 Text('1 Star'),
-                          //               ],
-                          //             ),
-                          //           ),
-                          //           const PopupMenuItem<String>(
-                          //             value: '2',
-                          //             child: Row(
-                          //               children: [
-                          //                 Icon(
-                          //                   Icons.star,
-                          //                   color: Colors.amber,
-                          //                   size: 16,
-                          //                 ),
-                          //                 SizedBox(width: 8),
-                          //                 Text('2 Stars'),
-                          //               ],
-                          //             ),
-                          //           ),
-                          //           const PopupMenuItem<String>(
-                          //             value: '3',
-                          //             child: Row(
-                          //               children: [
-                          //                 Icon(
-                          //                   Icons.star,
-                          //                   color: Colors.amber,
-                          //                   size: 16,
-                          //                 ),
-                          //                 SizedBox(width: 8),
-                          //                 Text('3 Stars'),
-                          //               ],
-                          //             ),
-                          //           ),
-                          //           const PopupMenuItem<String>(
-                          //             value: '4',
-                          //             child: Row(
-                          //               children: [
-                          //                 Icon(
-                          //                   Icons.star,
-                          //                   color: Colors.amber,
-                          //                   size: 16,
-                          //                 ),
-                          //                 SizedBox(width: 8),
-                          //                 Text('4 Stars'),
-                          //               ],
-                          //             ),
-                          //           ),
-                          //           const PopupMenuItem<String>(
-                          //             value: '5',
-                          //             child: Row(
-                          //               children: [
-                          //                 Icon(
-                          //                   Icons.star,
-                          //                   color: Colors.amber,
-                          //                   size: 16,
-                          //                 ),
-                          //                 SizedBox(width: 8),
-                          //                 Text('5 Stars'),
-                          //               ],
-                          //             ),
-                          //           ),
-                          //         ],
-                          //     child: Container(
-                          //       margin: EdgeInsets.only(right: 8.w),
-                          //       padding: EdgeInsets.symmetric(
-                          //         horizontal: 12.w,
-                          //         vertical: 6.h,
-                          //       ),
-                          //       decoration: BoxDecoration(
-                          //         color:
-                          //             controllers.selectedRatingEnum.value !=
-                          //                 null
-                          //             ? const Color(0xFF2C3E50)
-                          //             : Colors.white,
-                          //         borderRadius: BorderRadius.circular(20.r),
-                          //         border: Border.all(
-                          //           color: const Color(0xFFECECF0),
-                          //         ),
-                          //       ),
-                          //       child: Row(
-                          //         children: [
-                          //           Icon(
-                          //             Icons.star_border,
-                          //             size: 14.w,
-                          //             color:
-                          //                 controllers
-                          //                         .selectedRatingEnum
-                          //                         .value !=
-                          //                     null
-                          //                 ? Colors.white
-                          //                 : Colors.black54,
-                          //           ),
-                          //           SizedBox(width: 4.w),
-                          //           Text(
-                          //             controllers.selectedRatingEnum.value ==
-                          //                     null
-                          //                 ? "Rating"
-                          //                 : "${controllers.selectedRatingEnum.value.toString().split('.').last} Star",
-                          //             style: GoogleFonts.plusJakartaSans(
-                          //               fontSize: 12.sp,
-                          //               color:
-                          //                   controllers
-                          //                           .selectedRatingEnum
-                          //                           .value !=
-                          //                       null
-                          //                   ? Colors.white
-                          //                   : Colors.black54,
-                          //             ),
-                          //           ),
-                          //           SizedBox(width: 4.w),
-                          //           Icon(
-                          //             Icons.arrow_drop_down,
-                          //             size: 16.w,
-                          //             color:
-                          //                 controllers
-                          //                         .selectedRatingEnum
-                          //                         .value !=
-                          //                     null
-                          //                 ? Colors.white
-                          //                 : Colors.black54,
-                          //           ),
-                          //         ],
-                          //       ),
-                          //     ),
-                          //   );
-                          // }),
                         ],
                       ),
                     ),
@@ -361,7 +214,7 @@ class ExploreStoriesScreen extends StatelessWidget {
                             return _buildStoreListItem(
                               storeId: store.sId ?? "",
                               index: index,
-                              title: store.displayName ?? "No Name",
+                              title: store.displayName ?? AppString.noName.tr,
                               subtitle:
                                   "${store.categoryId?.name ?? 'Store'} • ${store.phone ?? ''}",
                               rating: store.averageRating?.toString() ?? "0.0",
@@ -384,7 +237,7 @@ class ExploreStoriesScreen extends StatelessWidget {
                             return _buildStoreListItem(
                               storeId: store.sId ?? "",
                               index: index,
-                              title: store.displayName ?? "No Name",
+                              title: store.displayName ?? AppString.noName.tr,
                               subtitle:
                                   "${store.categoryId?.name ?? 'Service'} • ${store.phone ?? ''}",
                               rating: store.averageRating?.toString() ?? "0.0",
@@ -527,6 +380,7 @@ class ExploreStoriesScreen extends StatelessWidget {
                   SizedBox(height: 4.h),
                   Text(
                     subtitle,
+                    maxLines: 1,
                     style: GoogleFonts.plusJakartaSans(
                       fontSize: 12.sp,
                       color: Colors.grey,
@@ -580,7 +434,7 @@ class ExploreStoriesScreen extends StatelessWidget {
       child: Padding(
         padding: EdgeInsets.symmetric(vertical: 40.h),
         child: Text(
-          "No stores found",
+          AppString.noStoresFound.tr,
           style: GoogleFonts.plusJakartaSans(
             fontSize: 14.sp,
             color: Colors.grey,
@@ -594,40 +448,43 @@ class ExploreStoriesScreen extends StatelessWidget {
     return Obx(
       () => Row(
         children: [
-          SizedBox(width: 160.w),
-          Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8.r),
-              border: Border.all(color: Colors.grey.withValues(alpha: 0.3)),
-            ),
-            child: Row(
-              children: [
-                _buildToggleIconButton(
-                  child: Icon(
-                    Icons.list,
-                    size: 20.sp,
-                    color: controllers.isListViewSelected.value
-                        ? Colors.white
-                        : Colors.grey,
-                  ),
-                  isSelected: controllers.isListViewSelected.value,
-                  onTap: () => controllers.toggleView(true),
-                ),
-                _buildToggleIconButton(
-                  child: Text(
-                    "Map",
-                    style: GoogleFonts.plusJakartaSans(
-                      fontSize: 12.sp,
-                      fontWeight: FontWeight.bold,
-                      color: !controllers.isListViewSelected.value
+          Padding(
+            padding: EdgeInsets.only(right: 16),
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8.r),
+                border: Border.all(color: Colors.grey.withValues(alpha: 0.3)),
+              ),
+              child: Row(
+                children: [
+                  _buildToggleIconButton(
+                    child: Icon(
+                      Icons.list,
+                      size: 20.sp,
+                      color: controllers.isListViewSelected.value
                           ? Colors.white
                           : Colors.grey,
                     ),
+                    isSelected: controllers.isListViewSelected.value,
+                    onTap: () => controllers.toggleView(true),
                   ),
-                  isSelected: !controllers.isListViewSelected.value,
-                  onTap: () => controllers.toggleView(false),
-                ),
-              ],
+                  SizedBox(width: 8.w),
+                  _buildToggleIconButton(
+                    child: Text(
+                      AppString.map.tr,
+                      style: GoogleFonts.plusJakartaSans(
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w500,
+                        color: !controllers.isListViewSelected.value
+                            ? Colors.white
+                            : Color(0xFF1A1D24),
+                      ),
+                    ),
+                    isSelected: !controllers.isListViewSelected.value,
+                    onTap: () => controllers.toggleView(false),
+                  ),
+                ],
+              ),
             ),
           ),
         ],
@@ -888,3 +745,4 @@ Future<Set<Marker>> _loadMarkers(ExploreStoreController controllers) async {
 
   return markers;
 }
+

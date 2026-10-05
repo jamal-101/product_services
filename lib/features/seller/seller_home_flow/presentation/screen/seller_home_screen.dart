@@ -1,12 +1,15 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_instance/src/extension_instance.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:product_service/utils/constants/app_string.dart';
 import '../../../../../component/bottom_navBar/nav_bar..dart';
+import '../../../../../component/bottom_navBar/nav_controller.dart';
 import '../../../../../services/api/api_service.dart';
 import '../../../../../utils/constants/api_enpoint.dart';
 import '../../../../../utils/constants/app_images.dart';
@@ -22,6 +25,7 @@ class SellerHomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final SellerHomeController controller = Get.put(SellerHomeController());
     final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+    Get.put(BottomNavigationController());
     return Scaffold(
       key: scaffoldKey,
       drawer: const AppDrawer(),
@@ -62,7 +66,9 @@ class SellerHomeScreen extends StatelessWidget {
               String superAdminId = responseData['data']['_id'] ?? "";
 
               if (superAdminId.isNotEmpty) {
-                final MessageController messageController = Get.put(MessageController());
+                final MessageController messageController = Get.put(
+                  MessageController(),
+                );
 
                 messageController.createChat(
                   participantId: superAdminId,
@@ -71,13 +77,28 @@ class SellerHomeScreen extends StatelessWidget {
                   shopName: "Support",
                 );
               } else {
-                Get.snackbar("Error", "Super Admin ID not found", backgroundColor: Colors.red, colorText: Colors.white);
+                Get.snackbar(
+                  "Error",
+                  AppString.superAdminIdNotFound.tr,
+                  backgroundColor: Colors.red,
+                  colorText: Colors.white,
+                );
               }
             } else {
-              Get.snackbar("Error", response.message, backgroundColor: Colors.red, colorText: Colors.white);
+              Get.snackbar(
+                "Error",
+                response.message,
+                backgroundColor: Colors.red,
+                colorText: Colors.white,
+              );
             }
           } catch (e) {
-            Get.snackbar("Error", e.toString(), backgroundColor: Colors.red, colorText: Colors.white);
+            Get.snackbar(
+              "Error",
+              e.toString(),
+              backgroundColor: Colors.red,
+              colorText: Colors.white,
+            );
           }
         },
         backgroundColor: Colors.transparent,
@@ -134,25 +155,30 @@ class SellerHomeScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(height: 20),
-            Obx(() => controller.isDashboardLoading.value
-                ? const Center(child: CircularProgressIndicator())
-                : Row(
-              children: [
-                Expanded(
-                  child: _buildStatCard(
-                      "Total Items Listed",
-                      controller.dashboardData.value.data?.totalItems?.toString() ?? "0"
-                  ),
-                ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: _buildStatCard(
-                      "Store Visitors (week)",
-                      controller.dashboardData.value.data?.storeVisitors?.toString() ?? "0"
-                  ),
-                ),
-              ],
-            ),
+            Obx(
+              () => controller.isDashboardLoading.value
+                  ? const Center(child: CircularProgressIndicator())
+                  : Row(
+                      children: [
+                        Expanded(
+                          child: _buildStatCard(
+                            AppString.totalItemsListed.tr,
+                            controller.dashboardData.value.data?.totalItems
+                                    ?.toString() ??
+                                "0",
+                          ),
+                        ),
+                        const SizedBox(width: 16),
+                        Expanded(
+                          child: _buildStatCard(
+                            AppString.storeVisitorsWeek.tr,
+                            controller.dashboardData.value.data?.storeVisitors
+                                    ?.toString() ??
+                                "0",
+                          ),
+                        ),
+                      ],
+                    ),
             ),
             _buildAdvertiseCard(),
             const SizedBox(height: 16),
@@ -212,7 +238,8 @@ class SellerHomeScreen extends StatelessWidget {
           ),
         );
       }
-      final trafficList = controller.dashboardData.value.data?.weeklyTraffic ?? [];
+      final trafficList =
+          controller.dashboardData.value.data?.weeklyTraffic ?? [];
       final spots = trafficList.asMap().entries.map((entry) {
         int index = entry.key;
         var traffic = entry.value;
@@ -233,7 +260,7 @@ class SellerHomeScreen extends StatelessWidget {
               children: [
                 Expanded(
                   child: Text(
-                    "Weekly Traffic Analytics",
+                    AppString.weeklyTrafficAnalytics.tr,
                     style: GoogleFonts.poppins(
                       fontWeight: FontWeight.bold,
                       fontSize: 16,
@@ -252,7 +279,7 @@ class SellerHomeScreen extends StatelessWidget {
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Text(
-                    "This Week",
+                    AppString.thisWeek.tr,
                     style: GoogleFonts.poppins(
                       fontSize: 12,
                       color: const Color(0xFF1E293B),
@@ -263,7 +290,7 @@ class SellerHomeScreen extends StatelessWidget {
               ],
             ),
             Text(
-              "Simulated daily page requests",
+              AppString.simulatedDailyPageRequests.tr,
               style: GoogleFonts.poppins(color: Colors.grey, fontSize: 11),
             ),
             const SizedBox(height: 30),
@@ -285,6 +312,7 @@ class SellerHomeScreen extends StatelessWidget {
                     bottomTitles: AxisTitles(
                       sideTitles: SideTitles(
                         showTitles: true,
+                        interval: 1,
                         getTitlesWidget: (value, meta) {
                           int index = value.toInt();
                           String dayLabel = '';
@@ -362,28 +390,25 @@ class SellerHomeScreen extends StatelessWidget {
       margin: EdgeInsets.symmetric(horizontal: 1.w, vertical: 8.h),
       padding: EdgeInsets.all(10.w),
       decoration: BoxDecoration(
-        gradient:  LinearGradient(
+        gradient: LinearGradient(
           begin: Alignment.centerLeft,
           end: Alignment.centerRight,
-          colors: [
-            Color(0xFFE7FCF0),
-            Color(0xFFFFFFFF),
-          ],
+          colors: [Color(0xFFE7FCF0), Color(0xFFFFFFFF)],
         ),
         borderRadius: BorderRadius.circular(16.r),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.05),
-            offset:  Offset(0, 1),
+            offset: Offset(0, 1),
             blurRadius: 2,
             spreadRadius: 0,
           ),
         ],
-        border: Border.all(color:  Color(0xFFF3F4F6), width: 1.11),
+        border: Border.all(color: Color(0xFFF3F4F6), width: 1.11),
       ),
       child: Row(
         children: [
-          Image.asset(AppImages.add_icon,height: 60.h,width: 60.w,),
+          Image.asset(AppImages.add_icon, height: 60.h, width: 60.w),
           SizedBox(width: 14.w),
           Expanded(
             child: Column(
@@ -409,10 +434,14 @@ class SellerHomeScreen extends StatelessWidget {
             ),
           ),
           ElevatedButton(
-            onPressed: onTap ?? () {
-              final PostAddController postController = Get.put(PostAddController());
-              postController.checkAndNavigateToPostAd();
-            },
+            onPressed:
+                onTap ??
+                () {
+                  final PostAddController postController = Get.put(
+                    PostAddController(),
+                  );
+                  postController.checkAndNavigateToPostAd();
+                },
             style: ElevatedButton.styleFrom(
               backgroundColor: Color(0xFF228B22),
               foregroundColor: Colors.white,
