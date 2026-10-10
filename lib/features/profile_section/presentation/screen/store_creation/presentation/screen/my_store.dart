@@ -60,8 +60,6 @@ class MyStore extends StatelessWidget {
                   );
                   return;
                 }
-                
-                // শুরুতে প্ল্যান সিলেকশন স্ক্রিনে পাঠানো হচ্ছে (payMode: false)
                 Get.to(() => const CreateNewStoreStep5(payMode: false));
               },
               child: const Text(

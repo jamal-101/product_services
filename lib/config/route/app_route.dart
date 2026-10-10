@@ -80,7 +80,7 @@ class AppRoutes {
       name: loginScreen,
       page: () =>  LoginScreen(),
       binding: BindingsBuilder(() {
-        Get.lazyPut<AuthController>(() => AuthController());
+        Get.lazyPut<AuthController>(() => AuthController(), fenix: true);
       }),
     ),
     GetPage(

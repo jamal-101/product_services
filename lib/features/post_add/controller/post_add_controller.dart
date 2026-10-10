@@ -238,6 +238,28 @@ class PostAddController extends GetxController {
   }
 
   /// Select a package from GET /subscription-packages?packageType=post_add
+  // void selectPackage(Map<String, dynamic> pkg) {
+  //   final id = (pkg['_id'] ?? '').toString();
+  //   if (id.isEmpty) return;
+  //
+  //   selectedPackageId.value = id;
+  //   packageName.value = (pkg['name'] ?? '').toString();
+  //   packagePrice.value = _toDouble(pkg['price']) ?? 0;
+  //
+  //   final duration = (pkg['duration'] ?? '').toString().toLowerCase();
+  //   if (duration.contains('7') || duration.contains('week') || duration.contains('seven')) {
+  //     selectedDuration.value = 'seven_days';
+  //   } else {
+  //     selectedDuration.value = 'monthly';
+  //   }
+  //
+  //   selectedDuration.value = _uiDurationFromApi(
+  //     (pkg['duration'] ?? '').toString(),
+  //   );
+  //   _refreshSlotPrice();
+  // }
+
+  /// Select a package from GET /subscription-packages?packageType=post_add
   void selectPackage(Map<String, dynamic> pkg) {
     final id = (pkg['_id'] ?? '').toString();
     if (id.isEmpty) return;
@@ -245,11 +267,20 @@ class PostAddController extends GetxController {
     selectedPackageId.value = id;
     packageName.value = (pkg['name'] ?? '').toString();
     packagePrice.value = _toDouble(pkg['price']) ?? 0;
-    selectedDuration.value = _uiDurationFromApi(
-      (pkg['duration'] ?? '').toString(),
-    );
+
+    final durationStr = (pkg['duration'] ?? '').toString().toLowerCase();
+    final nameStr = packageName.value.toLowerCase();
+
+    // সঠিকভাবে 7 দিন বা 30 দিন ডিউরেশন নির্ধারণ
+    if (durationStr.contains('7') || durationStr.contains('week') || durationStr.contains('seven') || nameStr.contains('7')) {
+      selectedDuration.value = 'seven_days';
+    } else {
+      selectedDuration.value = 'monthly';
+    }
+
     _refreshSlotPrice();
   }
+
 
   String _uiDurationFromApi(String apiDuration) {
     final d = apiDuration.toLowerCase();

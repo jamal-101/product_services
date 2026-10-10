@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:product_service/utils/constants/api_enpoint.dart';
 import 'package:product_service/utils/constants/app_color.dart';
 import 'package:product_service/utils/constants/app_images.dart';
+import '../../../../utils/constants/app_string.dart';
 import '../../../auth_flow/presentation/controller/auth_controller.dart';
 import '../controller/my_add_controller.dart';
 import 'add_details_screen.dart';
@@ -46,7 +47,7 @@ class MyAddScreen extends StatelessWidget {
           ),
         ),
         title: Text(
-          'myAdds'.tr,
+          AppString.myAdds.tr,
           style: GoogleFonts.montserrat(
             color: Colors.black,
             fontWeight: FontWeight.bold,
@@ -64,7 +65,7 @@ class MyAddScreen extends StatelessWidget {
           if (controller.myAds.isEmpty) {
             return Center(
               child: Text(
-                'noAdsFound'.tr,
+                AppString.noAdsFound.tr,
                 style: GoogleFonts.plusJakartaSans(
                   fontSize: 16.sp,
                   color: Colors.grey.shade600,
@@ -170,28 +171,30 @@ class MyAddScreen extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        title,
-                        style: GoogleFonts.plusJakartaSans(
-                          fontSize: 16.sp,
-                          fontWeight: FontWeight.bold,
-                          color: const Color(0xFF111827),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          title,
+                          style: GoogleFonts.plusJakartaSans(
+                            fontSize: 16.sp,
+                            fontWeight: FontWeight.bold,
+                            color: const Color(0xFF111827),
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                         ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      SizedBox(height: 2.h),
-                      Text(
-                        date,
-                        style: GoogleFonts.plusJakartaSans(
-                          fontSize: 12.sp,
-                          color: Colors.grey.shade600,
+                        SizedBox(height: 2.h),
+                        Text(
+                          date,
+                          style: GoogleFonts.plusJakartaSans(
+                            fontSize: 12.sp,
+                            color: Colors.grey.shade600,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                   // Text(
                   //   price,

@@ -69,7 +69,8 @@ class HomeScreen extends StatelessWidget {
             child: Center(
               child: Obx(() {
                 final notificationCtrl = Get.find<NotificationController>();
-                int notificationCount = notificationCtrl.notificationList.length;
+                int notificationCount =
+                    notificationCtrl.notificationList.length;
 
                 return Stack(
                   clipBehavior: Clip.none,
@@ -134,16 +135,28 @@ class HomeScreen extends StatelessWidget {
                   shopName: "Support",
                 );
               } else {
-                Get.snackbar("Error", "Super Admin ID not found",
-                    backgroundColor: Colors.red, colorText: Colors.white);
+                Get.snackbar(
+                  "Error",
+                  "Super Admin ID not found",
+                  backgroundColor: Colors.red,
+                  colorText: Colors.white,
+                );
               }
             } else {
-              Get.snackbar("Error", response.message,
-                  backgroundColor: Colors.red, colorText: Colors.white);
+              Get.snackbar(
+                "Error",
+                response.message,
+                backgroundColor: Colors.red,
+                colorText: Colors.white,
+              );
             }
           } catch (e) {
-            Get.snackbar("Error", e.toString(),
-                backgroundColor: Colors.red, colorText: Colors.white);
+            Get.snackbar(
+              "Error",
+              e.toString(),
+              backgroundColor: Colors.red,
+              colorText: Colors.white,
+            );
           }
         },
         backgroundColor: Colors.transparent,
@@ -222,17 +235,17 @@ class HomeScreen extends StatelessWidget {
                             color: Colors.grey[900],
                             image:
                                 banner.image != null && banner.image!.isNotEmpty
-                                    ? DecorationImage(
-                                        image: NetworkImage(
-                                          "${ApiEndPoint.imageUrl}${banner.image}",
-                                        ),
-                                        fit: BoxFit.cover,
-                                        colorFilter: ColorFilter.mode(
-                                          Colors.black.withValues(alpha: 0.3),
-                                          BlendMode.darken,
-                                        ),
-                                      )
-                                    : null,
+                                ? DecorationImage(
+                                    image: NetworkImage(
+                                      "${ApiEndPoint.imageUrl}${banner.image}",
+                                    ),
+                                    fit: BoxFit.cover,
+                                    colorFilter: ColorFilter.mode(
+                                      Colors.black.withValues(alpha: 0.3),
+                                      BlendMode.darken,
+                                    ),
+                                  )
+                                : null,
                           ),
                           padding: EdgeInsets.all(16.w),
                           child: Row(
@@ -281,12 +294,12 @@ class HomeScreen extends StatelessWidget {
                               margin: const EdgeInsets.symmetric(horizontal: 3),
                               width:
                                   controller.currentBannerIndex.value == index
-                                      ? 12
-                                      : 6,
+                                  ? 12
+                                  : 6,
                               height: 6,
                               decoration: BoxDecoration(
-                                color: controller.currentBannerIndex.value ==
-                                        index
+                                color:
+                                    controller.currentBannerIndex.value == index
                                     ? Colors.white
                                     : Colors.white54,
                                 borderRadius: BorderRadius.circular(3),
@@ -307,7 +320,7 @@ class HomeScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                 AppString.featuredStores.tr,
+                  AppString.featuredStores.tr,
                   style: GoogleFonts.plusJakartaSans(
                     fontWeight: FontWeight.w700,
                     color: const Color(0xFF1A1D24),
@@ -323,9 +336,7 @@ class HomeScreen extends StatelessWidget {
                 return const Center(
                   child: Padding(
                     padding: EdgeInsets.symmetric(vertical: 20),
-                    child: CircularProgressIndicator(
-                      color: Color(0xFF27AE60),
-                    ),
+                    child: CircularProgressIndicator(color: Color(0xFF27AE60)),
                   ),
                 );
               }
@@ -432,15 +443,15 @@ class HomeScreen extends StatelessWidget {
                                     color: Colors.grey[600],
                                   ),
                                 ),
-                                const SizedBox(height: 6),
-                                Text(
-                                  "Price: \$${item.price ?? 0}",
-                                  style: GoogleFonts.plusJakartaSans(
-                                    fontSize: 13.sp,
-                                    fontWeight: FontWeight.w700,
-                                    color: const Color(0xFF27AE60),
-                                  ),
-                                ),
+                                // const SizedBox(height: 6),
+                                // Text(
+                                //   "Price: \$${item.price ?? 0}",
+                                //   style: GoogleFonts.plusJakartaSans(
+                                //     fontSize: 13.sp,
+                                //     fontWeight: FontWeight.w700,
+                                //     color: const Color(0xFF27AE60),
+                                //   ),
+                                // ),
                               ],
                             ),
                           ),
@@ -609,7 +620,11 @@ class HomeScreen extends StatelessWidget {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Icon(Icons.campaign_outlined, size: 20, color: Colors.white),
+                const Icon(
+                  Icons.campaign_outlined,
+                  size: 20,
+                  color: Colors.white,
+                ),
                 const SizedBox(width: 6),
                 Text(
                   AppString.advertiseHere.tr,

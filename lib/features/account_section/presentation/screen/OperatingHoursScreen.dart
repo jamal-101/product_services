@@ -16,7 +16,6 @@ class OperatingHoursScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.black),
@@ -45,12 +44,14 @@ class OperatingHoursScreen extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('operatingSchedule'.tr, style: GoogleFonts.montserrat(fontWeight: FontWeight.bold, fontSize: 14.sp)),
-                          Text('setOpeningHours'.tr, style: GoogleFonts.montserrat(color: Colors.grey, fontSize: 11.sp)),
-                        ],
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('operatingSchedule'.tr, style: GoogleFonts.montserrat(fontWeight: FontWeight.bold, fontSize: 14.sp)),
+                            Text('setOpeningHours'.tr, style: GoogleFonts.montserrat(color: Colors.grey, fontSize: 11.sp)),
+                          ],
+                        ),
                       ),
                       Container(
                         padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 6.h),

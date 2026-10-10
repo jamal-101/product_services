@@ -415,7 +415,7 @@ class SellerHomeScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Post Your Ad Here",
+                  AppString.postYourAdHere.tr,
                   style: GoogleFonts.plusJakartaSans(
                     fontSize: 16.sp,
                     fontWeight: FontWeight.bold,
@@ -424,7 +424,7 @@ class SellerHomeScreen extends StatelessWidget {
                 ),
                 SizedBox(height: 4.h),
                 Text(
-                  "Reach more customers today",
+                  AppString.reachMoreCustomers.tr,
                   style: GoogleFonts.plusJakartaSans(
                     fontSize: 12.sp,
                     color: Colors.grey[600],
@@ -457,7 +457,7 @@ class SellerHomeScreen extends StatelessWidget {
                 Icon(Icons.campaign_outlined, size: 20.sp, color: Colors.white),
                 SizedBox(width: 6.w),
                 Text(
-                  "Advertise Here",
+                  AppString.advertiseHere.tr,
                   style: GoogleFonts.plusJakartaSans(
                     fontSize: 12.sp,
                     fontWeight: FontWeight.w700,

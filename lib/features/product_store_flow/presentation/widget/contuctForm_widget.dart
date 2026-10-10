@@ -9,24 +9,6 @@ class ContactFooterWidget extends StatelessWidget {
   const ContactFooterWidget({super.key});
 
 
-
-  Future<void> _makePhoneCall(String phoneNumber) async {
-    final Uri launchUri = Uri(
-      scheme: 'tel',
-      path: phoneNumber,
-    );
-    if (await canLaunchUrl(launchUri)) {
-      await launchUrl(launchUri);
-    } else {
-      Get.snackbar(
-        "Error",
-        "Could not launch phone dialer",
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
-      );
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final StoreDetailsController storeController = Get.find<StoreDetailsController>();
@@ -49,25 +31,6 @@ class ContactFooterWidget extends StatelessWidget {
       ),
       child: Row(
         children: [
-          // _buildIconButton(Icons.phone, () {}),
-          _buildIconButton(Icons.phone, () {
-            final storeData = storeController.storeDetailsModel.value.data?.store;
-            final String? phoneNumber = storeData?.phone;
-
-            if (phoneNumber != null && phoneNumber.trim().isNotEmpty) {
-              _makePhoneCall(phoneNumber);
-            } else {
-              Get.snackbar(
-                "Unavailable",
-                "Phone number is not available",
-                backgroundColor: Colors.orange,
-                colorText: Colors.white,
-              );
-            }
-          }),
-          SizedBox(width: 8.w),
-          // _buildIconButton(Icons.directions, () {}),
-          SizedBox(width: 8.w),
           Expanded(
             child: ElevatedButton.icon(
               onPressed: () {

@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:product_service/features/post_add/presentation/screen/post_add_step2_screen.dart';
+import 'package:product_service/utils/constants/app_string.dart';
 import '../../controller/post_add_controller.dart';
 
 class PostAdStep1Screen extends StatelessWidget {
@@ -21,7 +22,7 @@ class PostAdStep1Screen extends StatelessWidget {
           onPressed: () => Get.back(),
         ),
         title: Text(
-          "Post New Ad",
+          AppString.postNewAd.tr,
           style: GoogleFonts.plusJakartaSans(
             fontSize: 18.sp,
             fontWeight: FontWeight.bold,
@@ -38,7 +39,7 @@ class PostAdStep1Screen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "Step 1 of 4",
+                  AppString.step1Of4.tr,
                   style: GoogleFonts.plusJakartaSans(
                     fontSize: 14.sp,
                     color: Colors.grey.shade600,
@@ -46,7 +47,7 @@ class PostAdStep1Screen extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  "Campaign",
+                  AppString.campaign.tr,
                   style: GoogleFonts.plusJakartaSans(
                     fontSize: 14.sp,
                     color: const Color(0xFF2E7D32),
@@ -118,7 +119,7 @@ class PostAdStep1Screen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "About your campaign",
+                    AppString.aboutYourCampaign.tr,
                     style: GoogleFonts.plusJakartaSans(
                       fontSize: 16.sp,
                       fontWeight: FontWeight.bold,
@@ -127,7 +128,7 @@ class PostAdStep1Screen extends StatelessWidget {
                   ),
                   SizedBox(height: 4.h),
                   Text(
-                    "Fill in the basics. You'll pick your ad slot in the next step.",
+                    AppString.aboutCampaignDesc.tr,
                     style: GoogleFonts.plusJakartaSans(
                       fontSize: 13.sp,
                       color: Colors.grey.shade500,
@@ -135,7 +136,7 @@ class PostAdStep1Screen extends StatelessWidget {
                   ),
                   SizedBox(height: 20.h),
                   Text(
-                    "Campaign name",
+                    AppString.campaignName.tr,
                     style: GoogleFonts.plusJakartaSans(
                       fontSize: 14.sp,
                       fontWeight: FontWeight.w600,
@@ -146,7 +147,7 @@ class PostAdStep1Screen extends StatelessWidget {
                   TextField(
                     controller: controller.campaignNameController,
                     decoration: InputDecoration(
-                      hintText: "e.g. Summer Sale 2026",
+                      hintText: AppString.campaignNameHint.tr,
                       hintStyle: TextStyle(
                         color: Colors.grey.shade400,
                         fontSize: 14.sp,
@@ -170,7 +171,7 @@ class PostAdStep1Screen extends StatelessWidget {
                   ),
                   SizedBox(height: 20.h),
                   Text(
-                    "City",
+                    AppString.city.tr,
                     style: GoogleFonts.plusJakartaSans(
                       fontSize: 14.sp,
                       fontWeight: FontWeight.w600,
@@ -179,70 +180,70 @@ class PostAdStep1Screen extends StatelessWidget {
                   ),
                   SizedBox(height: 8.h),
                   Obx(
-                    () => controller.isLoadingCities.value
+                        () => controller.isLoadingCities.value
                         ? const Center(
-                            child: CircularProgressIndicator(
-                              color: Color(0xFF2E7D32),
-                            ),
-                          )
+                      child: CircularProgressIndicator(
+                        color: Color(0xFF2E7D32),
+                      ),
+                    )
                         : DropdownButtonFormField<String>(
-                            decoration: InputDecoration(
-                              prefixIcon: const Icon(
-                                Icons.location_on_outlined,
-                                color: Color(0xFF2E7D32),
-                                size: 20,
-                              ),
-                              hintText: "Select city",
-                              hintStyle: TextStyle(
-                                color: Colors.grey.shade400,
-                                fontSize: 14.sp,
-                              ),
-                              contentPadding: EdgeInsets.symmetric(
-                                horizontal: 16.w,
-                                vertical: 14.h,
-                              ),
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(12.r),
-                                borderSide: BorderSide(
-                                  color: Colors.grey.shade300,
-                                ),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(12.r),
-                                borderSide: const BorderSide(
-                                  color: Color(0xFF2E7D32),
-                                  width: 1.5,
-                                ),
-                              ),
-                            ),
-                            items: controller.citiesList
-                                .map<DropdownMenuItem<String>>((city) {
-                                  return DropdownMenuItem<String>(
-                                    value: city['_id'],
-                                    child: Text(
-                                      city['city'],
-                                      style: GoogleFonts.plusJakartaSans(
-                                        fontSize: 14.sp,
-                                        color: Colors.black87,
-                                      ),
-                                    ),
-                                  );
-                                })
-                                .toList(),
-                            onChanged: (value) {
-                              controller.selectedCityId.value = value!;
-                              String cityName = '';
-                              for (final city in controller.citiesList) {
-                                if (city is Map &&
-                                    city['_id']?.toString() == value) {
-                                  cityName = (city['city'] ?? '').toString();
-                                  break;
-                                }
-                              }
-                              controller.selectedCityName.value = cityName;
-                              controller.fetchSlotAvailability();
-                            },
+                      decoration: InputDecoration(
+                        prefixIcon: const Icon(
+                          Icons.location_on_outlined,
+                          color: Color(0xFF2E7D32),
+                          size: 20,
+                        ),
+                        hintText: AppString.selectCity.tr,
+                        hintStyle: TextStyle(
+                          color: Colors.grey.shade400,
+                          fontSize: 14.sp,
+                        ),
+                        contentPadding: EdgeInsets.symmetric(
+                          horizontal: 16.w,
+                          vertical: 14.h,
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12.r),
+                          borderSide: BorderSide(
+                            color: Colors.grey.shade300,
                           ),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12.r),
+                          borderSide: const BorderSide(
+                            color: Color(0xFF2E7D32),
+                            width: 1.5,
+                          ),
+                        ),
+                      ),
+                      items: controller.citiesList
+                          .map<DropdownMenuItem<String>>((city) {
+                        return DropdownMenuItem<String>(
+                          value: city['_id'],
+                          child: Text(
+                            city['city'],
+                            style: GoogleFonts.plusJakartaSans(
+                              fontSize: 14.sp,
+                              color: Colors.black87,
+                            ),
+                          ),
+                        );
+                      })
+                          .toList(),
+                      onChanged: (value) {
+                        controller.selectedCityId.value = value!;
+                        String cityName = '';
+                        for (final city in controller.citiesList) {
+                          if (city is Map &&
+                              city['_id']?.toString() == value) {
+                            cityName = (city['city'] ?? '').toString();
+                            break;
+                          }
+                        }
+                        controller.selectedCityName.value = cityName;
+                        controller.fetchSlotAvailability();
+                      },
+                    ),
                   ),
                 ],
               ),
@@ -261,7 +262,7 @@ class PostAdStep1Screen extends StatelessWidget {
                   SizedBox(width: 10.w),
                   Expanded(
                     child: Text(
-                      "Your ad will only appear to users browsing in the selected city.",
+                      AppString.cityVisibleNotice.tr,
                       style: GoogleFonts.plusJakartaSans(
                         fontSize: 12.sp,
                         color: const Color(0xFF2E7D32),
@@ -281,8 +282,8 @@ class PostAdStep1Screen extends StatelessWidget {
                   if (controller.campaignNameController.text.isEmpty ||
                       controller.selectedCityId.value.isEmpty) {
                     Get.snackbar(
-                      "Warning",
-                      "Please fill all fields",
+                      AppString.error.tr,
+                      AppString.fieldRequired.tr,
                       backgroundColor: Colors.red,
                       colorText: Colors.white,
                     );
@@ -302,7 +303,7 @@ class PostAdStep1Screen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      "Continue",
+                      AppString.next.tr,
                       style: GoogleFonts.plusJakartaSans(
                         fontSize: 16.sp,
                         fontWeight: FontWeight.bold,

@@ -6,6 +6,8 @@ class AppString extends Translations {
   static const String totalItemsListed = 'totalItemsListed';
   static const String storeVisitorsWeek = 'storeVisitorsWeek';
   static const String weeklyTrafficAnalytics = 'weeklyTrafficAnalytics';
+  static const String addService = 'addService';
+  static const String addProduct = 'addProduct';
   static const String thisWeek = 'thisWeek';
   static const String simulatedDailyPageRequests = 'simulatedDailyPageRequests';
   static const String upload = 'upload';
@@ -168,12 +170,14 @@ class AppString extends Translations {
   static const String binding = 'binding';
   static const String transactionHistory = 'transactionHistory';
   static const String transactionHistoryTitle = 'transactionHistoryTitle';
-  static const String paymentsReceiptsStripeInvoices = 'paymentsReceiptsStripeInvoices';
+  static const String paymentsReceiptsStripeInvoices =
+      'paymentsReceiptsStripeInvoices';
   static const String billing = 'billing';
   static const String operatingHours = 'operatingHours';
   static const String operatingHoursTime = 'operatingHoursTime';
   static const String identityVerification = 'identityVerification';
-  static const String identityVerificationSubtitle = 'identityVerificationSubtitle';
+  static const String identityVerificationSubtitle =
+      'identityVerificationSubtitle';
   static const String verificationDetails = 'verificationDetails';
   static const String selectType = 'selectType';
   static const String fontSide = 'fontSide';
@@ -251,12 +255,145 @@ class AppString extends Translations {
   static const String deleteText = 'deleteText';
   static const String userNameFallback = 'userNameFallback';
   static const String emailFallback = 'emailFallback';
+  static const String pushEmail = 'pushEmail';
+  static const String transactionHistorySub = 'transactionHistorySub';
+  static const String editProfile = 'editeProfile';
+
+
+  static const String editService = 'editService';
+  static const String editProduct = 'editProduct';
+  static const String tapToUploadImage = 'tapToUploadImage';
+  static const String chooseMainPhotoFirst = 'chooseMainPhotoFirst';
+  static const String serviceTitle = 'serviceTitle';
+  static const String serviceTitleHint = 'serviceTitleHint';
+  static const String productTitleHint = 'productTitleHint';
+  static const String whatsIncluded = 'whatsIncluded';
+  static const String addPoint = 'addPoint';
+  static const String featureItemHint = 'featureItemHint';
+  static const String tellCustomersAboutItem = 'tellCustomersAboutItem';
+  static const String weightSizeGuideHint = 'weightSizeGuideHint';
+  static const String publishService = 'publishService';
+  static const String updateService = 'updateService';
+
+  static const String postNewAd = 'postNewAd';
+  static const String step1Of4 = 'step1Of4';
+  static const String campaign = 'campaign';
+  static const String aboutYourCampaign = 'aboutYourCampaign';
+  static const String aboutCampaignDesc = 'aboutCampaignDesc';
+  static const String campaignName = 'campaignName';
+  static const String campaignNameHint = 'campaignNameHint';
+  static const String selectCity = 'selectCity';
+  static const String cityVisibleNotice = 'cityVisibleNotice';
+
+  static const String step2Of4 = 'step2Of4';
+  static const String chooseSlot = 'chooseSlot';
+  static const String chooseSlotTitle = 'chooseSlotTitle';
+  static const String slotPriceDesc = 'slotPriceDesc';
+  static const String noSlotsAvailable = 'noSlotsAvailable';
+  static const String available = 'available';
+  static const String booked = 'booked';
+  static const String pleaseSelectASlot = 'pleaseSelectASlot';
+
+  static const String step3Of4 = 'step3Of4';
+  static const String adDetails = 'adDetails';
+  static const String adCreative = 'adCreative';
+  static const String uploadBannerDesc = 'uploadBannerDesc';
+  static const String tapToUpload = 'tapToUpload';
+  static const String bannerDimensionHint = 'bannerDimensionHint';
+  static const String subscriptionPackage = 'subscriptionPackage';
+  static const String choosePackageDesc = 'choosePackageDesc';
+  static const String noPackagesAvailable = 'noPackagesAvailable';
+  static const String retry = 'retry';
+  static const String startDate = 'startDate';
+  static const String selectStartDatePrompt = 'selectStartDatePrompt';
+  static const String reviewOrder = 'reviewOrder';
+  static const String pleaseUploadBanner = 'pleaseUploadBanner';
+  static const String pleaseSelectPackage = 'pleaseSelectPackage';
+  static const String pleaseSelectStartDate = 'pleaseSelectStartDate';
+
+  static const String step4Of4 = 'step4Of4';
+  static const String reviewAndPay = 'reviewAndPay';
+  static const String doubleCheckDesc = 'doubleCheckDesc';
+  static const String adBannerPreview = 'adBannerPreview';
+  static const String package = 'package';
+  static const String slot = 'slot';
+  static const String duration = 'duration';
+  static const String dates = 'dates';
+  static const String total = 'total';
+  static const String submitAndPay = 'submitAndPay';
+  static const String weekly7Days = 'weekly7Days';
+  static const String monthly30Days = 'monthly30Days';
+  static const String positionPrefix = 'positionPrefix';
+
+  static const String campaignSubmitted = 'campaignSubmitted';
+  static const String statusLabel = 'statusLabel';
+  static const String pendingReview = 'pendingReview';
+  static const String campaignSuccessDesc = 'campaignSuccessDesc';
+  static const String viewMyCampaigns = 'viewMyCampaigns';
+
 
 
 
   @override
   Map<String, Map<String, String>> get keys => {
     'en_US': {
+      campaignSubmitted: 'Campaign Submitted!',
+      statusLabel: 'Status: ',
+      pendingReview: 'Pending Review',
+      campaignSuccessDesc: "We'll notify you once your ad is approved and scheduled.",
+      viewMyCampaigns: 'View My Campaigns',
+      step4Of4: 'Step 4 of 4 • Summary & pay',
+      reviewAndPay: 'Review & Pay',
+      doubleCheckDesc: 'Double-check everything before submitting.',
+      adBannerPreview: 'Ad Banner Preview',
+      package: 'Package',
+      slot: 'Slot',
+      duration: 'Duration',
+      dates: 'Dates',
+      total: 'Total',
+      submitAndPay: 'Submit & Pay',
+      weekly7Days: 'Weekly (7 days)',
+      monthly30Days: 'Monthly (30 days)',
+      positionPrefix: 'Position',
+      step2Of4: 'Step 2 of 4 • Placement',
+      chooseSlot: 'Choose Slot',
+      chooseSlotTitle: 'Choose slot',
+      slotPriceDesc: 'Higher positions cost more per week or month.',
+      noSlotsAvailable: 'No slots available for this city',
+      available: 'Available',
+      booked: 'Booked',
+      pleaseSelectASlot: 'Please select a slot',
+      postNewAd: 'Post New Ad',
+      step1Of4: 'Step 1 of 4',
+      campaign: 'Campaign',
+      aboutYourCampaign: 'About your campaign',
+      aboutCampaignDesc: "Fill in the basics. You'll pick your ad slot in the next step.",
+      campaignName: 'Campaign name',
+      campaignNameHint: 'e.g. Summer Sale 2026',
+      city: 'City',
+      selectCity: 'Select city',
+      cityVisibleNotice: 'Your ad will only appear to users browsing in the selected city.',
+      editService: 'Edit Service',
+      editProduct: 'Edit Product',
+      tapToUploadImage: 'Tap to upload image',
+      chooseMainPhotoFirst: 'Choose your main photo first',
+      serviceTitle: 'Service Title',
+      serviceTitleHint: 'e.g., Professional Home Cleaning',
+      productTitleHint: 'e.g., Wireless Headphones',
+      whatsIncluded: "What's Included",
+      addPoint: 'Add Point',
+      featureItemHint: 'Feature item...',
+      tellCustomersAboutItem: 'Tell your customers about the item...',
+      weightSizeGuideHint: 'Weight, size guides, or technical details.',
+      publishService: 'Publish Service',
+      updateService: 'Update Service',
+      postYourAdHere: 'Post Your Ad Here',
+      reachMoreCustomers: 'Reach more customers today',
+      advertiseHere: 'Advertise Here',
+      myListing: 'My Listing',
+      pushEmail: 'Push & Email Notifications',
+      transactionHistory: 'Transaction History',
+      transactionHistorySub: 'Payments, receipts & Stripe invoices',
       billing: 'BILLING',
       safetyGuidelines: 'Safety Guidelines',
       safetyGuidelinesSub: 'Rules and regulations for your safety',
@@ -265,7 +402,8 @@ class AppString extends Translations {
       termsConditions: 'Terms & Conditions',
       termsConditionsSub: 'Read our terms of service',
       deleteAccount: 'Delete Account',
-      deleteAccountDesc: 'Please enter your password to confirm account deletion.',
+      deleteAccountDesc:
+          'Please enter your password to confirm account deletion.',
       password: 'Password',
       cancel: 'Cancel',
       deleteText: 'Delete',
@@ -298,9 +436,12 @@ class AppString extends Translations {
       acceptTermsError: 'Please accept the Terms & Conditions to continue',
       enterDocumentNumber: 'Enter document number',
       myStore: 'My Store',
-      findLocalStoresDesc: 'Discover verified shops, services and businesses across your neighborhood in seconds.',
-      description2: 'Skip the call center. Message any seller in real time with photos, videos and seen status.',
-      description3: 'List your store, get featured, run banner ads — and watch new customers walk in.',
+      findLocalStoresDesc:
+          'Discover verified shops, services and businesses across your neighborhood in seconds.',
+      description2:
+          'Skip the call center. Message any seller in real time with photos, videos and seen status.',
+      description3:
+          'List your store, get featured, run banner ads — and watch new customers walk in.',
       continueWithGoogle: 'Continue with Google',
       language: 'Language',
       selectLanguage: 'Select Your Language',
@@ -409,7 +550,8 @@ class AppString extends Translations {
       localStores: 'Local Stores',
       chat: 'Chat',
       withSellers: 'With Sellers',
-      findLocalStoresDesc: 'Find local stores near you to fulfill your regular needs',
+      findLocalStoresDesc:
+          'Find local stores near you to fulfill your regular needs',
       operatingHours: 'Operating Hours',
       operatingHoursTime: '09:00 AM – 09:00 PM (Mon - Sat)',
       operatingSchedule: 'Operating Schedule',
@@ -423,14 +565,17 @@ class AppString extends Translations {
       requestTimeOut: "Request Time Out",
       noInternetConnection: "No internet connection",
       directly: "directly\n",
-      description2: "Chat directly with local store owners to verify and purchase items easily",
+      description2:
+          "Chat directly with local store owners to verify and purchase items easily",
       promoteYour: "Promote your",
       business: "business",
-      description3: "We promote your local business to local customers to grow your store easily",
+      description3:
+          "We promote your local business to local customers to grow your store easily",
       searchConversation: "Search conversations...",
       typeMessage: "Type a message...",
       forgot: "Forgot ",
-      noWorries: "No worries! Enter your email and we'll send you an OTP code to reset your password.",
+      noWorries:
+          "No worries! Enter your email and we'll send you an OTP code to reset your password.",
       resterPassword: "Reset Password",
       enterNewPassword: "Enter new password",
       confirmNewPasswordHint: "Confirm new password",
@@ -438,7 +583,8 @@ class AppString extends Translations {
       logOutMessage: "Are you sure you want to log out?",
       yesLogout: "Yes, Logout",
       identityVerificationSubtitle: "Upload ID document for verification",
-      verificationDetails: "Verification builds trust with buyers and helps you unlock exclusive selling features. Your data is encrypted and kept private.",
+      verificationDetails:
+          "Verification builds trust with buyers and helps you unlock exclusive selling features. Your data is encrypted and kept private.",
       selectType: "Select ID Type",
       fontSide: "Front Side",
       backSide: "Back Side",
@@ -463,6 +609,28 @@ class AppString extends Translations {
       weeklyTrafficAnalytics: 'Weekly Traffic Analytics',
       thisWeek: 'This Week',
       simulatedDailyPageRequests: 'Simulated daily page requests',
+      addService: 'Add Service',
+      addProduct: 'Add Product',
+      myAdds: 'My Ads',
+      noAdsFound: 'No Ads Found',
+
+
+      step3Of4: 'Step 3 of 4 • Creative & Schedule',
+      adDetails: 'Ad Details',
+      adCreative: 'Ad Creative',
+      uploadBannerDesc: 'Upload the banner that will run.',
+      tapToUpload: 'Tap to Upload',
+      bannerDimensionHint: '1080 × 400, JPG/PNG',
+      subscriptionPackage: 'Subscription package',
+      choosePackageDesc: 'Choose a post_add package to continue.',
+      noPackagesAvailable: 'No packages available',
+      retry: 'Retry',
+      startDate: 'Start date',
+      selectStartDatePrompt: 'Select a start date to see schedule',
+      reviewOrder: 'Review order',
+      pleaseUploadBanner: 'Please upload an ad banner image',
+      pleaseSelectPackage: 'Please select a subscription package',
+      pleaseSelectStartDate: 'Please select a start date',
     },
     'es_ES': {
       error: 'Error',
@@ -473,9 +641,12 @@ class AppString extends Translations {
       thisWeek: 'Esta semana',
       simulatedDailyPageRequests: 'Solicitudes de página diarias simuladas',
       enterDocumentNumber: 'Ingrese el número de documento',
-      findLocalStoresDesc: 'Descubre tiendas, servicios y negocios verificados en tu vecindario en segundos.',
-      description2: 'Evita el centro de llamadas. Envía mensajes a cualquier vendedor en tiempo real con fotos, videos y estado de visto.',
-      description3: 'Publica tu tienda, destaca, publica anuncios publicitarios y observa cómo entran nuevos clientes.',
+      findLocalStoresDesc:
+          'Descubre tiendas, servicios y negocios verificados en tu vecindario en segundos.',
+      description2:
+          'Evita el centro de llamadas. Envía mensajes a cualquier vendedor en tiempo real con fotos, videos y estado de visto.',
+      description3:
+          'Publica tu tienda, destaca, publica anuncios publicitarios y observa cómo entran nuevos clientes.',
       continueWithGoogle: 'Continuar con Google',
       language: 'Idioma',
       selectLanguage: 'Selecciona tu idioma',
@@ -598,22 +769,27 @@ class AppString extends Translations {
       requestTimeOut: "Tiempo de espera agotado",
       noInternetConnection: "Sin conexión a internet",
       directly: "directamente\n",
-      description2: "Chatea directamente con los dueños de tiendas locales para verificar y comprar artículos fácilmente",
+      description2:
+          "Chatea directamente con los dueños de tiendas locales para verificar y comprar artículos fácilmente",
       promoteYour: "Promociona tu",
       business: "negocio",
-      description3: "Promocionamos tu negocio local con clientes locales para hacer crecer tu tienda fácilmente",
+      description3:
+          "Promocionamos tu negocio local con clientes locales para hacer crecer tu tienda fácilmente",
       searchConversation: "Buscar conversaciones...",
       typeMessage: "Escribe un mensaje...",
       forgot: "Olvidé ",
-      noWorries: "¡Sin preocupaciones! Ingresa tu correo y te enviaremos un código OTP para restablecer tu contraseña.",
+      noWorries:
+          "¡Sin preocupaciones! Ingresa tu correo y te enviaremos un código OTP para restablecer tu contraseña.",
       resterPassword: "Restablecer contraseña",
       enterNewPassword: "Ingresa una nueva contraseña",
       confirmNewPasswordHint: "Confirma tu nueva contraseña",
       logOutTitle: "Cerrar sesión",
       logOutMessage: "¿Estás seguro de que quieres cerrar sesión?",
       yesLogout: "Sí, cerrar sesión",
-      identityVerificationSubtitle: "Sube el documento de identidad para verificar",
-      verificationDetails: "La verificación genera confianza con los compradores y te ayuda a desbloquear funciones exclusivas de venta. Tus datos están encriptados y se mantienen privados.",
+      identityVerificationSubtitle:
+          "Sube el documento de identidad para verificar",
+      verificationDetails:
+          "La verificación genera confianza con los compradores y te ayuda a desbloquear funciones exclusivas de venta. Tus datos están encriptados y se mantienen privados.",
       selectType: "Seleccionar tipo de documento",
       fontSide: "Parte frontal",
       backSide: "Parte trasera",
@@ -640,7 +816,8 @@ class AppString extends Translations {
       termsAndConditions: 'Términos y condiciones',
       privacyPolicy: 'Política de privacidad',
       andText: ' y ',
-      acceptTermsError: 'Por favor, acepta los Términos y Condiciones para continuar',
+      acceptTermsError:
+          'Por favor, acepta los Términos y Condiciones para continuar',
       noBannersFound: 'No se encontraron banners',
       chooseCity: 'Elegir ciudad',
       noFeaturedStores: 'No se encontraron tiendas destacadas',
@@ -665,12 +842,90 @@ class AppString extends Translations {
       termsConditions: 'Términos y condiciones',
       termsConditionsSub: 'Lea nuestros términos de servicio',
       deleteAccount: 'Eliminar cuenta',
-      deleteAccountDesc: 'Por favor ingrese su contraseña para confirmar la eliminación de la cuenta.',
+      deleteAccountDesc:
+          'Por favor ingrese su contraseña para confirmar la eliminación de la cuenta.',
       password: 'Contraseña',
       cancel: 'Cancelar',
       deleteText: 'Eliminar',
       userNameFallback: 'Nombre de usuario',
       emailFallback: 'correo@ejemplo.com',
+      pushEmail: 'Notificaciones push y correo',
+      transactionHistory: 'Historial de transacciones',
+      transactionHistorySub: 'Pagos, recibos y facturas de Stripe',
+      myList: 'Mi listado',
+      addService: 'Agregar servicio',
+      addProduct: 'Agregar producto',
+      postYourAdHere: 'Publica tu anuncio aquí',
+      reachMoreCustomers: 'Llega a más clientes hoy',
+      advertiseHere: 'Anúnciate aquí',
+      editService: 'Editar servicio',
+      editProduct: 'Editar producto',
+      tapToUploadImage: 'Toca para subir una imagen',
+      chooseMainPhotoFirst: 'Elige tu foto principal primero',
+      serviceTitle: 'Título del servicio',
+      serviceTitleHint: 'ej., Limpieza profesional del hogar',
+      productTitleHint: 'ej., Auriculares inalámbricos',
+      whatsIncluded: 'Qué está incluido',
+      addPoint: 'Agregar punto',
+      featureItemHint: 'Elemento destacado...',
+      tellCustomersAboutItem: 'Cuéntales a tus clientes sobre el artículo...',
+      weightSizeGuideHint: 'Peso, guía de tallas o detalles técnicos.',
+      publishService: 'Publicar servicio',
+      updateService: 'Actualizar servicio',
+      myAdds: 'Mis Anuncios',
+      noAdsFound: 'No se encontraron anuncios',
+      postNewAd: 'Publicar nuevo anuncio',
+      step1Of4: 'Paso 1 de 4',
+      campaign: 'Campaña',
+      aboutYourCampaign: 'Sobre tu campaña',
+      aboutCampaignDesc: 'Completa lo básico. Elegirás tu espacio publicitario en el siguiente paso.',
+      campaignName: 'Nombre de campaña',
+      campaignNameHint: 'ej. Venta de Verano 2026',
+      city: 'Ciudad',
+      selectCity: 'Seleccionar ciudad',
+      cityVisibleNotice: 'Tu anuncio sólo aparecerá a los usuarios que naveguen en la ciudad seleccionada.',
+      step2Of4: 'Paso 2 de 4 • Ubicación',
+      chooseSlot: 'Elegir espacio',
+      chooseSlotTitle: 'Elegir espacio',
+      slotPriceDesc: 'Las posiciones más altas cuestan más por semana o mes.',
+      noSlotsAvailable: 'No hay espacios disponibles para esta ciudad',
+      available: 'Disponible',
+      booked: 'Reservado',
+      pleaseSelectASlot: 'Por favor selecciona un espacio',
+      step3Of4: 'Paso 3 de 4 • Creativo y Horario',
+      adDetails: 'Detalles del anuncio',
+      adCreative: 'Creativo del anuncio',
+      uploadBannerDesc: 'Sube el banner que se mostrará.',
+      tapToUpload: 'Toca para subir',
+      bannerDimensionHint: '1080 × 400, JPG/PNG',
+      subscriptionPackage: 'Paquete de suscripción',
+      choosePackageDesc: 'Elige un paquete post_add para continuar.',
+      noPackagesAvailable: 'No hay paquetes disponibles',
+      retry: 'Reintentar',
+      startDate: 'Fecha de inicio',
+      selectStartDatePrompt: 'Selecciona una fecha de inicio para ver el horario',
+      reviewOrder: 'Revisar pedido',
+      pleaseUploadBanner: 'Por favor sube una imagen de banner para el anuncio',
+      pleaseSelectPackage: 'Por favor selecciona un paquete de suscripción',
+      pleaseSelectStartDate: 'Por favor selecciona una fecha de inicio',
+      step4Of4: 'Paso 4 de 4 • Resumen y pago',
+      reviewAndPay: 'Revisar y pagar',
+      doubleCheckDesc: 'Comprueba todo antes de enviar.',
+      adBannerPreview: 'Vista previa del banner',
+      package: 'Paquete',
+      slot: 'Espacio',
+      duration: 'Duración',
+      dates: 'Fechas',
+      total: 'Total',
+      submitAndPay: 'Enviar y pagar',
+      weekly7Days: 'Semanal (7 días)',
+      monthly30Days: 'Mensual (30 días)',
+      positionPrefix: 'Posición',
+      campaignSubmitted: '¡Campaña enviada!',
+      statusLabel: 'Estado: ',
+      pendingReview: 'Revisión pendiente',
+      campaignSuccessDesc: 'Te notificaremos una vez que tu anuncio sea aprobado y programado.',
+      viewMyCampaigns: 'Ver mis campañas',
     },
   };
 }

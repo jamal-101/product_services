@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:product_service/features/post_add/controller/post_add_controller.dart';
 import 'package:product_service/features/post_add/presentation/screen/post_add_step3_screen.dart';
+import 'package:product_service/utils/constants/app_string.dart';
+import '../../controller/post_add_controller.dart';
 
 class PostAdStep2Screen extends StatelessWidget {
   const PostAdStep2Screen({super.key});
@@ -21,7 +22,7 @@ class PostAdStep2Screen extends StatelessWidget {
           onPressed: () => Get.back(),
         ),
         title: Text(
-          "Post New Ad",
+          AppString.postNewAd.tr,
           style: GoogleFonts.plusJakartaSans(
             color: Colors.black,
             fontSize: 16.sp,
@@ -39,7 +40,7 @@ class PostAdStep2Screen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "Step 2 of 4 • Placement",
+                  AppString.step2Of4.tr,
                   style: GoogleFonts.plusJakartaSans(
                     color: Colors.grey.shade600,
                     fontSize: 12.sp,
@@ -47,7 +48,7 @@ class PostAdStep2Screen extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  "Choose Slot",
+                  AppString.chooseSlot.tr,
                   style: GoogleFonts.plusJakartaSans(
                     color: Colors.green.shade700,
                     fontSize: 12.sp,
@@ -110,7 +111,7 @@ class PostAdStep2Screen extends StatelessWidget {
                   border: Border.all(color: Colors.grey.shade200),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.03),
+                      color: Colors.black.withValues(alpha: 0.03),
                       blurRadius: 10,
                       offset: const Offset(0, 4),
                     ),
@@ -120,7 +121,7 @@ class PostAdStep2Screen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Choose slot",
+                      AppString.chooseSlotTitle.tr,
                       style: GoogleFonts.plusJakartaSans(
                         fontSize: 16.sp,
                         fontWeight: FontWeight.bold,
@@ -129,7 +130,7 @@ class PostAdStep2Screen extends StatelessWidget {
                     ),
                     SizedBox(height: 4.h),
                     Text(
-                      "Higher positions cost more per week or month.",
+                      AppString.slotPriceDesc.tr,
                       style: GoogleFonts.plusJakartaSans(
                         fontSize: 12.sp,
                         color: Colors.grey.shade500,
@@ -146,7 +147,7 @@ class PostAdStep2Screen extends StatelessWidget {
                         if (slots.isEmpty) {
                           return Center(
                             child: Text(
-                              "No slots available for this city",
+                              AppString.noSlotsAvailable.tr,
                               style: GoogleFonts.plusJakartaSans(
                                 fontSize: 13.sp,
                                 color: Colors.grey.shade600,
@@ -168,8 +169,8 @@ class PostAdStep2Screen extends StatelessWidget {
                             final priceLabel = priceValue != null
                                 ? "\$${priceValue.toStringAsFixed(0)}"
                                 : (packagePrice > 0
-                                    ? "\$${packagePrice.toStringAsFixed(0)}"
-                                    : "");
+                                ? "\$${packagePrice.toStringAsFixed(0)}"
+                                : "");
 
                             return Obx(() {
                               final isSelected =
@@ -205,7 +206,7 @@ class PostAdStep2Screen extends StatelessWidget {
                                               ? Colors.green.shade600
                                               : Colors.grey.shade100,
                                           borderRadius:
-                                              BorderRadius.circular(8.r),
+                                          BorderRadius.circular(8.r),
                                         ),
                                         alignment: Alignment.center,
                                         child: Text(
@@ -223,12 +224,12 @@ class PostAdStep2Screen extends StatelessWidget {
                                       Expanded(
                                         child: Column(
                                           crossAxisAlignment:
-                                              CrossAxisAlignment.start,
+                                          CrossAxisAlignment.start,
                                           children: [
                                             Text(
                                               slot.displayName,
                                               style:
-                                                  GoogleFonts.plusJakartaSans(
+                                              GoogleFonts.plusJakartaSans(
                                                 fontSize: 14.sp,
                                                 fontWeight: FontWeight.bold,
                                                 color: Colors.black87,
@@ -242,30 +243,30 @@ class PostAdStep2Screen extends StatelessWidget {
                                                     Icons.check,
                                                     size: 12.sp,
                                                     color:
-                                                        Colors.green.shade600,
+                                                    Colors.green.shade600,
                                                   ),
                                                   SizedBox(width: 4.w),
                                                   Text(
-                                                    "Available",
+                                                    AppString.available.tr,
                                                     style: GoogleFonts
                                                         .plusJakartaSans(
                                                       fontSize: 11.sp,
                                                       color: Colors
                                                           .green.shade600,
                                                       fontWeight:
-                                                          FontWeight.w500,
+                                                      FontWeight.w500,
                                                     ),
                                                   ),
                                                 ] else ...[
                                                   Text(
-                                                    "Booked",
+                                                    AppString.booked.tr,
                                                     style: GoogleFonts
                                                         .plusJakartaSans(
                                                       fontSize: 11.sp,
                                                       color: Colors
                                                           .grey.shade400,
                                                       fontWeight:
-                                                          FontWeight.w500,
+                                                      FontWeight.w500,
                                                     ),
                                                   ),
                                                 ],
@@ -299,14 +300,14 @@ class PostAdStep2Screen extends StatelessWidget {
                                         alignment: Alignment.center,
                                         child: isSelected
                                             ? Container(
-                                                width: 10.w,
-                                                height: 10.h,
-                                                decoration: BoxDecoration(
-                                                  shape: BoxShape.circle,
-                                                  color:
-                                                      Colors.green.shade600,
-                                                ),
-                                              )
+                                          width: 10.w,
+                                          height: 10.h,
+                                          decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            color:
+                                            Colors.green.shade600,
+                                          ),
+                                        )
                                             : null,
                                       ),
                                     ],
@@ -338,8 +339,8 @@ class PostAdStep2Screen extends StatelessWidget {
                 onPressed: () {
                   if (controller.selectedPosition.value <= 0) {
                     Get.snackbar(
-                      "Warning",
-                      "Please select a slot",
+                      AppString.error.tr,
+                      AppString.pleaseSelectASlot.tr,
                       backgroundColor: Colors.red,
                       colorText: Colors.white,
                     );
@@ -349,7 +350,7 @@ class PostAdStep2Screen extends StatelessWidget {
                   controller.fetchPostAddPackages();
                 },
                 child: Text(
-                  "Continue →",
+                  "${AppString.next.tr} →",
                   style: GoogleFonts.plusJakartaSans(
                     fontSize: 15.sp,
                     fontWeight: FontWeight.bold,

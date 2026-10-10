@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:product_service/features/post_add/controller/post_add_controller.dart';
 import 'package:product_service/features/post_add/presentation/screen/post_add_step4_screen.dart';
-
+import 'package:product_service/utils/constants/app_string.dart';
 
 class PostAdStep3Screen extends StatelessWidget {
   const PostAdStep3Screen({super.key});
@@ -22,7 +22,7 @@ class PostAdStep3Screen extends StatelessWidget {
           onPressed: () => Get.back(),
         ),
         title: Text(
-          "Post New Ad",
+          AppString.postNewAd.tr,
           style: GoogleFonts.plusJakartaSans(
             color: Colors.black,
             fontSize: 16.sp,
@@ -41,7 +41,7 @@ class PostAdStep3Screen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "Step 3 of 4 • Creative & Schedule",
+                  AppString.step3Of4.tr,
                   style: GoogleFonts.plusJakartaSans(
                     color: Colors.grey.shade600,
                     fontSize: 12.sp,
@@ -49,7 +49,7 @@ class PostAdStep3Screen extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  "Ad Details",
+                  AppString.adDetails.tr,
                   style: GoogleFonts.plusJakartaSans(
                     color: Colors.green.shade700,
                     fontSize: 12.sp,
@@ -59,7 +59,7 @@ class PostAdStep3Screen extends StatelessWidget {
               ],
             ),
             SizedBox(height: 10.h),
-            // Step progress indicator bars (৩টি পূর্ণ, ১টি খালি)
+            // Step progress indicator bars
             Row(
               children: [
                 Expanded(child: Container(height: 4.h, decoration: BoxDecoration(color: Colors.green, borderRadius: BorderRadius.circular(2.r)))),
@@ -78,7 +78,7 @@ class PostAdStep3Screen extends StatelessWidget {
                 children: [
                   // Ad Creative Title
                   Text(
-                    "Ad Creative",
+                    AppString.adCreative.tr,
                     style: GoogleFonts.plusJakartaSans(
                       fontSize: 15.sp,
                       fontWeight: FontWeight.bold,
@@ -87,7 +87,7 @@ class PostAdStep3Screen extends StatelessWidget {
                   ),
                   SizedBox(height: 2.h),
                   Text(
-                    "Upload the banner that will run.",
+                    AppString.uploadBannerDesc.tr,
                     style: GoogleFonts.plusJakartaSans(
                       fontSize: 12.sp,
                       color: Colors.grey.shade500,
@@ -124,7 +124,7 @@ class PostAdStep3Screen extends StatelessWidget {
                           ),
                           SizedBox(height: 8.h),
                           Text(
-                            "Tap to Upload",
+                            AppString.tapToUpload.tr,
                             style: GoogleFonts.plusJakartaSans(
                               fontSize: 13.sp,
                               fontWeight: FontWeight.bold,
@@ -133,7 +133,7 @@ class PostAdStep3Screen extends StatelessWidget {
                           ),
                           SizedBox(height: 2.h),
                           Text(
-                            "1080 × 400, JPG/PNG",
+                            AppString.bannerDimensionHint.tr,
                             style: GoogleFonts.plusJakartaSans(
                               fontSize: 11.sp,
                               color: Colors.grey.shade500,
@@ -152,9 +152,9 @@ class PostAdStep3Screen extends StatelessWidget {
                   ),
                   SizedBox(height: 16.h),
 
-                  // Package from API: GET /subscription-packages?packageType=post_add
+                  // Package from API
                   Text(
-                    "Subscription package",
+                    AppString.subscriptionPackage.tr,
                     style: GoogleFonts.plusJakartaSans(
                       fontSize: 15.sp,
                       fontWeight: FontWeight.bold,
@@ -163,7 +163,7 @@ class PostAdStep3Screen extends StatelessWidget {
                   ),
                   SizedBox(height: 2.h),
                   Text(
-                    "Choose a post_add package to continue.",
+                    AppString.choosePackageDesc.tr,
                     style: GoogleFonts.plusJakartaSans(
                       fontSize: 12.sp,
                       color: Colors.grey.shade500,
@@ -192,7 +192,7 @@ class PostAdStep3Screen extends StatelessWidget {
                         child: Column(
                           children: [
                             Text(
-                              "No packages available",
+                              AppString.noPackagesAvailable.tr,
                               style: GoogleFonts.plusJakartaSans(
                                 fontSize: 13.sp,
                                 fontWeight: FontWeight.w600,
@@ -201,7 +201,7 @@ class PostAdStep3Screen extends StatelessWidget {
                             SizedBox(height: 8.h),
                             TextButton(
                               onPressed: controller.fetchPostAddPackages,
-                              child: const Text("Retry"),
+                              child: Text(AppString.retry.tr),
                             ),
                           ],
                         ),
@@ -214,8 +214,7 @@ class PostAdStep3Screen extends StatelessWidget {
                         final id = (pkg['_id'] ?? '').toString();
                         final name = (pkg['name'] ?? 'Package').toString();
                         final price = pkg['price'];
-                        final duration =
-                            (pkg['duration'] ?? '').toString();
+                        final duration = (pkg['duration'] ?? '').toString();
                         final features = pkg['features'];
                         final featureText = features is List && features.isNotEmpty
                             ? features.first.toString()
@@ -248,7 +247,7 @@ class PostAdStep3Screen extends StatelessWidget {
                                     Expanded(
                                       child: Column(
                                         crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                                        CrossAxisAlignment.start,
                                         children: [
                                           Text(
                                             name,
@@ -270,8 +269,7 @@ class PostAdStep3Screen extends StatelessWidget {
                                           ),
                                           SizedBox(height: 4.h),
                                           Text(
-                                            controller
-                                                .packageDurationLabel(duration),
+                                            controller.packageDurationLabel(duration),
                                             style: GoogleFonts.plusJakartaSans(
                                               fontSize: 11.sp,
                                               color: Colors.grey.shade500,
@@ -283,7 +281,7 @@ class PostAdStep3Screen extends StatelessWidget {
                                     ),
                                     Column(
                                       crossAxisAlignment:
-                                          CrossAxisAlignment.end,
+                                      CrossAxisAlignment.end,
                                       children: [
                                         Text(
                                           "\$${price ?? 0}",
@@ -309,14 +307,13 @@ class PostAdStep3Screen extends StatelessWidget {
                                           alignment: Alignment.center,
                                           child: isSelected
                                               ? Container(
-                                                  width: 10.w,
-                                                  height: 10.h,
-                                                  decoration: BoxDecoration(
-                                                    shape: BoxShape.circle,
-                                                    color:
-                                                        Colors.green.shade600,
-                                                  ),
-                                                )
+                                            width: 10.w,
+                                            height: 10.h,
+                                            decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              color: Colors.green.shade600,
+                                            ),
+                                          )
                                               : null,
                                         ),
                                       ],
@@ -352,7 +349,7 @@ class PostAdStep3Screen extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "Start date",
+                          AppString.startDate.tr,
                           style: GoogleFonts.plusJakartaSans(
                             fontSize: 12.sp,
                             fontWeight: FontWeight.w600,
@@ -402,7 +399,7 @@ class PostAdStep3Screen extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Obx(
-                                  () => Text(
+                                      () => Text(
                                     controller.startDate.value.isEmpty
                                         ? "mm/dd/yyyy"
                                         : controller.startDate.value,
@@ -430,14 +427,18 @@ class PostAdStep3Screen extends StatelessWidget {
 
                   Obx(() {
                     final start = controller.startDate.value;
-                    final durationLabel = controller.packageDurationLabel(
-                      controller.selectedDuration.value == 'weekly'
-                          ? 'one_week'
-                          : 'one_month',
+
+                    final selectedPkg = controller.postAddPackages.firstWhere(
+                          (p) => (p['_id'] ?? '').toString() == controller.selectedPackageId.value,
+                      orElse: () => {},
                     );
+                    final rawDuration = (selectedPkg['duration'] ?? '30 days').toString();
+                    final durationLabel = controller.packageDurationLabel(rawDuration);
+
                     final text = start.isEmpty
-                        ? "Select a start date to see schedule"
+                        ? AppString.selectStartDatePrompt.tr
                         : "Starts $start • $durationLabel";
+
                     return Container(
                       padding: EdgeInsets.symmetric(
                         horizontal: 16.w,
@@ -480,7 +481,7 @@ class PostAdStep3Screen extends StatelessWidget {
                   if (controller.featuredImage.value == null) {
                     Get.rawSnackbar(
                       messageText: Text(
-                        "Please upload an ad banner image",
+                        AppString.pleaseUploadBanner.tr,
                         style: GoogleFonts.plusJakartaSans(
                           fontSize: 13.sp,
                           color: Colors.white,
@@ -499,7 +500,7 @@ class PostAdStep3Screen extends StatelessWidget {
                   if (controller.selectedPackageId.value.isEmpty) {
                     Get.rawSnackbar(
                       messageText: Text(
-                        "Please select a subscription package",
+                        AppString.pleaseSelectPackage.tr,
                         style: GoogleFonts.plusJakartaSans(
                           fontSize: 13.sp,
                           color: Colors.white,
@@ -518,7 +519,7 @@ class PostAdStep3Screen extends StatelessWidget {
                   if (controller.startDate.value.isEmpty) {
                     Get.rawSnackbar(
                       messageText: Text(
-                        "Please select a start date",
+                        AppString.pleaseSelectStartDate.tr,
                         style: GoogleFonts.plusJakartaSans(
                           fontSize: 13.sp,
                           color: Colors.white,
@@ -537,7 +538,7 @@ class PostAdStep3Screen extends StatelessWidget {
                   Get.to(() => const PostAdStep4Screen());
                 },
                 child: Text(
-                  "Review order →",
+                  "${AppString.reviewOrder.tr} →",
                   style: GoogleFonts.plusJakartaSans(
                     fontSize: 15.sp,
                     fontWeight: FontWeight.bold,

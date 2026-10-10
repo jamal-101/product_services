@@ -91,31 +91,7 @@ class AccountScreen extends StatelessWidget {
                         vertical: 20.h,
                       ),
                       children: [
-                        // if (authController.selectedRole.value == 'seller') ...[
-                        //   _buildGrowthPlanBanner(),
-                        // ],
                         _buildSectionTitle('accounT'.tr),
-                        // _buildCardMenuItem(
-                        //   Icons.person_outline,
-                        //  'editeProfile'.tr,
-                        //   'nameEx'.tr,
-                        //       () {
-                        //         final profileData = profileController.profileModel.value.data;
-                        //         Get.toNamed(
-                        //           AppRoutes.editProfileScreen,
-                        //           arguments: {
-                        //             'name': userController.userData.value.name ?? '',
-                        //             'email': userController.userData.value.email ?? '',
-                        //             'phone': userController.userData.value.phone ?? '',
-                        //             'postalCode': userController.userData.value.postalCode ?? '',
-                        //             'state': userController.userData.value.state ?? '',
-                        //             'address': userController.userData.value.address ?? '',
-                        //             'profileImage': userController.userData.value.profileImage ?? '',
-                        //           },
-                        //         );
-                        //   },
-                        // ),
-
                         _buildCardMenuItem(
                           Icons.person_outline,
                           'editeProfile'.tr,
@@ -220,8 +196,8 @@ class AccountScreen extends StatelessWidget {
                         _buildSectionTitle('settinG'.tr),
                         _buildCardMenuItem(
                           Icons.notifications_none,
-                          'notifications'.tr,
-                          'pushEmail'.tr,
+                          AppString.notifications.tr,
+                          AppString.pushEmail.tr,
                               () {
                             Get.toNamed(AppRoutes.notificationSettingScreen);
                           },
@@ -230,8 +206,8 @@ class AccountScreen extends StatelessWidget {
                         _buildSectionTitle(AppString.billing.tr),
                         _buildCardMenuItem(
                           Icons.balance,
-                          'transactionHistory'.tr,
-                          'payments,receipts&Stripeinvoices'.tr,
+                          AppString.transactionHistory.tr,
+                          AppString.transactionHistorySub.tr,
                               () {
                             Get.to(TransactionHistoryScreen());
                           },
@@ -353,7 +329,6 @@ class AccountScreen extends StatelessWidget {
                                     onPressed: deleteController.isLoading.value
                                         ? null
                                         : () async {
-                                      // আপনার তৈরি করা ডিলিট এপিআই কল ফাংশন
                                       await deleteController.deleteAccountApiCall();
                                     },
                                     child: deleteController.isLoading.value
@@ -377,7 +352,7 @@ class AccountScreen extends StatelessWidget {
                               ),
                             );
                           },
-                          isLogout: true, // এটি দিলে আইকন এবং ব্যাকগ্রাউন্ড লাল (Red) কালার হয়ে যাবে
+                          isLogout: true,
                         ),
 
                         _buildCardMenuItem(
@@ -550,70 +525,4 @@ class AccountScreen extends StatelessWidget {
       ),
     );
   }
-
-  // Widget _buildGrowthPlanBanner() {
-  //   return Container(
-  //     margin: EdgeInsets.only(bottom: 20.h),
-  //     padding: EdgeInsets.all(16.w),
-  //     decoration: BoxDecoration(
-  //       color: const Color(0xFF2A9B4A),
-  //       borderRadius: BorderRadius.circular(15.r),
-  //     ),
-  //     child: Row(
-  //       children: [
-  //         Container(
-  //           padding: EdgeInsets.all(8.w),
-  //           decoration: BoxDecoration(
-  //             color: Colors.white.withValues(alpha: 0.2),
-  //             shape: BoxShape.circle,
-  //           ),
-  //           child: const Icon(Icons.diamond, color: Colors.white, size: 20),
-  //         ),
-  //         SizedBox(width: 12.w),
-  //         Expanded(
-  //           child: Column(
-  //             crossAxisAlignment: CrossAxisAlignment.start,
-  //             children: [
-  //               Text(
-  //                 'growthPlan'.tr,
-  //                 style: GoogleFonts.montserrat(
-  //                   color: Colors.white,
-  //                   fontWeight: FontWeight.bold,
-  //                   fontSize: 14.sp,
-  //                 ),
-  //               ),
-  //               Text(
-  //                 "Renews on July 18, 2026 (\$49/mo)",
-  //                 style: GoogleFonts.montserrat(
-  //                   color: Colors.white.withValues(alpha: 0.9),
-  //                   fontSize: 11.sp,
-  //                 ),
-  //               ),
-  //             ],
-  //           ),
-  //         ),
-  //         GestureDetector(
-  //           onTap: () {
-  //             Get.toNamed(AppRoutes.subscriptionBillingScreen);
-  //           },
-  //           child: Container(
-  //             padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
-  //             decoration: BoxDecoration(
-  //               color: Colors.white,
-  //               borderRadius: BorderRadius.circular(8.r),
-  //             ),
-  //             child: Text(
-  //               'manage'.tr,
-  //               style: GoogleFonts.montserrat(
-  //                 color: const Color(0xFF2A9B4A),
-  //                 fontWeight: FontWeight.bold,
-  //                 fontSize: 10.sp,
-  //               ),
-  //             ),
-  //           ),
-  //         ),
-  //       ],
-  //     ),
-  //   );
-  // }
 }

@@ -49,13 +49,18 @@ class AppDrawer extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  CircleAvatar(
-                    radius: 30.r,
-                    backgroundImage: (userData?.profileImage != null &&
-                        userData!.profileImage!.isNotEmpty)
-                        ? NetworkImage("${ApiEndPoint.imageUrl}${userData.profileImage}")
-                    as ImageProvider
-                        : const AssetImage("assets/images/buyer.png"),
+                  GestureDetector(
+                    onTap: () {
+                      Get.toNamed(AppRoutes.accountScreen);
+                    },
+                    child: CircleAvatar(
+                      radius: 30.r,
+                      backgroundImage: (userData?.profileImage != null &&
+                          userData!.profileImage!.isNotEmpty)
+                          ? NetworkImage("${ApiEndPoint.imageUrl}${userData.profileImage}")
+                      as ImageProvider
+                          : const AssetImage("assets/images/buyer.png"),
+                    ),
                   ),
                   SizedBox(height: 10.h),
                   Text(
@@ -177,7 +182,23 @@ class AppDrawer extends StatelessWidget {
 
         switch (title) {
           case "Create Store":
-            Get.toNamed(AppRoutes.myStore);
+            final ProfileController profileController = Get.find<ProfileController>();
+            final profileData = profileController.profileModel.value.data;
+            bool isStoreCreated = profileData?.isStoreCreated ?? false;
+
+            if (isStoreCreated) {
+              Get.snackbar(
+                "Notice",
+                "You have already created a store!",
+                snackPosition: SnackPosition.TOP,
+                backgroundColor: Colors.orange,
+                colorText: Colors.white,
+                margin: EdgeInsets.all(10.w),
+                borderRadius: 10.r,
+              );
+            } else {
+              Get.to(() => const MyStore());
+            }
             break;
           case "Save Store":
            Get.to(()=>SaveStoreScreen());
@@ -185,9 +206,6 @@ class AppDrawer extends StatelessWidget {
           case "Saved Products":
             Get.to(() => SavedProductScreen());
             break;
-          // case "Saved Services":
-          //   Get.to(() => const SavedServicesScreen());
-          //   break;
           case "Safety Guidelines":
             Get.to(() => SafetyGuidelines());
             break;

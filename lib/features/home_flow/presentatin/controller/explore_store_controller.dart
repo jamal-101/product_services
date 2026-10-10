@@ -1,3 +1,4 @@
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import '../../../../services/api/api_service.dart';
@@ -31,6 +32,8 @@ class ExploreStoreController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+
+    // checkAndRequestLocationPermission();
 
     debounce(
       searchQuery,
@@ -159,7 +162,18 @@ class ExploreStoreController extends GetxController {
     fetchStores();
   }
 
-  void toggleView(bool isList) {
+  // void toggleView(bool isList) {
+  //   isListViewSelected.value = isList;
+  // }
+
+
+  void toggleView(bool isList) async {
+    if (!isList) {
+      bool hasPermission = await checkAndRequestLocationPermission();
+      if (!hasPermission) {
+        return;
+      }
+    }
     isListViewSelected.value = isList;
   }
 
@@ -299,6 +313,34 @@ class ExploreStoreController extends GetxController {
   void handleBookmarkTap(String storeId, int index) {
     bool isProduct = isProductStoreSelected.value;
     toggleStoreFavorite(storeId, isProduct, index);
+  }
+
+
+  Future<bool> checkAndRequestLocationPermission() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      debugPrint("Location services are disabled.");
+      return false;
+    }
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        debugPrint("Location permissions are denied");
+        return false;
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      debugPrint("Location permissions are permanently denied.");
+      return false;
+    }
+
+    debugPrint("Location permission granted successfully!");
+    return true;
   }
 
 }

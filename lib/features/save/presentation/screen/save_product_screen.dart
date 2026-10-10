@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:product_service/features/save/model/favourite_product_model.dart';
 import 'package:product_service/utils/constants/api_enpoint.dart';
+import '../../../product_store_flow/presentation/screen/productServiceDetailsScreen.dart';
 import '../../controller/save_product_controller.dart';
 
 class SavedProductScreen extends StatelessWidget {
@@ -79,7 +80,6 @@ class SavedProductScreen extends StatelessWidget {
               ),
             ),
             SizedBox(height: 16.h),
-
             Expanded(
               child: Obx(() {
                 if (controllers.isLoading.value) {
@@ -118,14 +118,18 @@ class SavedProductScreen extends StatelessWidget {
                   itemBuilder: (context, index) {
                     final FavoriteData favoriteItem = currentList[index];
                     final target = favoriteItem.targetId;
-
-
                     String rawImage = '';
                     if (target?.images != null && target!.images!.isNotEmpty) {
                       rawImage = target.images!.first;
                     }
-
-                    String imageUrl = rawImage.isNotEmpty ? "${ApiEndPoint.imageUrl}$rawImage" : '';
+                    String imageUrl = '';
+                    if (rawImage.isNotEmpty) {
+                      if (rawImage.startsWith('http://') || rawImage.startsWith('https://')) {
+                        imageUrl = rawImage;
+                      } else {
+                        imageUrl = "${ApiEndPoint.imageUrl}$rawImage";
+                      }
+                    }
 
                     String title = target?.title ?? "No Title";
                     num activePrice = target?.activePrice ?? 0;
@@ -144,12 +148,21 @@ class SavedProductScreen extends StatelessWidget {
                       oldPrice: originalPrice != null ? "\$$originalPrice" : null,
                       discountText: discountText,
                       isNetworkImage: true,
+                      onTapCard: () {
+                        if (target?.sId != null) {
+                          Get.to(() => ProductServiceDetailsScreen(
+                            itemId: target!.sId!,
+                            isProduct: isProductTab,
+                          ));
+                        }
+                      },
                       onTapFavorite: () {
                         String targetType = controllers.selectedTab.value == 0 ? "product" : "service";
                         if (target?.sId != null) {
                           controllers.toggleFavorite(target!.sId!, targetType);
                         }
                       },
+
                     );
                   },
                 );
@@ -219,122 +232,126 @@ class SavedProductScreen extends StatelessWidget {
     String? discountText,
     bool isNetworkImage = false,
     required VoidCallback onTapFavorite,
+    required VoidCallback onTapCard,
   }) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16.r),
-        border: Border.all(color: const Color(0xFFF3F4F6)),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.02),
-            blurRadius: 6,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(
-            child: Stack(
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.vertical(top: Radius.circular(16.r)),
-                    image: DecorationImage(
-                      image: isNetworkImage && imagePath.isNotEmpty
-                          ? NetworkImage(imagePath) as ImageProvider
-                          : const AssetImage('assets/images/placeholder.png'),
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
-                Positioned(
-                  top: 8.h,
-                  right: 8.w,
-                  child: GestureDetector(
-                    onTap: onTapFavorite,
-                    child: Container(
-                      padding: EdgeInsets.all(6.r),
-                      decoration: const BoxDecoration(
-                        color: Colors.white,
-                        shape: BoxShape.circle,
+    return GestureDetector(
+      onTap: onTapCard,
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(16.r),
+          border: Border.all(color: const Color(0xFFF3F4F6)),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.02),
+              blurRadius: 6,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: Stack(
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.vertical(top: Radius.circular(16.r)),
+                      image: DecorationImage(
+                        image: isNetworkImage && imagePath.isNotEmpty
+                            ? NetworkImage(imagePath) as ImageProvider
+                            : const AssetImage('assets/images/placeholder.png'),
+                        fit: BoxFit.cover,
                       ),
-                      child: const Icon(Icons.favorite, color: Colors.orange, size: 14),
                     ),
                   ),
-                ),
-
-                if (discountText != null)
                   Positioned(
                     top: 8.h,
-                    left: 8.w,
-                    child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 3.h),
-                      decoration: BoxDecoration(
-                        color: Colors.orange,
-                        borderRadius: BorderRadius.circular(6.r),
-                      ),
-                      child: Text(
-                        discountText,
-                        style: GoogleFonts.plusJakartaSans(
+                    right: 8.w,
+                    child: GestureDetector(
+                      onTap: onTapFavorite,
+                      child: Container(
+                        padding: EdgeInsets.all(6.r),
+                        decoration: const BoxDecoration(
                           color: Colors.white,
-                          fontSize: 10.sp,
-                          fontWeight: FontWeight.bold,
+                          shape: BoxShape.circle,
                         ),
+                        child: const Icon(Icons.favorite, color: Colors.orange, size: 14),
                       ),
                     ),
                   ),
-              ],
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.all(10.w),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: GoogleFonts.plusJakartaSans(
-                    fontSize: 11.sp,
-                    fontWeight: FontWeight.w600,
-                    color: const Color(0xFF111827),
-                  ),
-                ),
-                SizedBox(height: 6.h),
-                Row(
-                  children: [
-                    Text(
-                      price,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: GoogleFonts.plusJakartaSans(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 12.sp,
-                        color: const Color(0xFF111827),
-                      ),
-                    ),
-                    SizedBox(width: 6.w),
 
-                    if (oldPrice != null) ...[
-                      Text(
-                        oldPrice,
-                        style: GoogleFonts.plusJakartaSans(
-                          color: Colors.grey.shade400,
-                          decoration: TextDecoration.lineThrough,
-                          fontSize: 10.sp,
+                  if (discountText != null)
+                    Positioned(
+                      top: 8.h,
+                      left: 8.w,
+                      child: Container(
+                        padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 3.h),
+                        decoration: BoxDecoration(
+                          color: Colors.orange,
+                          borderRadius: BorderRadius.circular(6.r),
+                        ),
+                        child: Text(
+                          discountText,
+                          style: GoogleFonts.plusJakartaSans(
+                            color: Colors.white,
+                            fontSize: 10.sp,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
-                    ],
-                  ],
-                ),
-              ],
+                    ),
+                ],
+              ),
             ),
-          ),
-        ],
+            Padding(
+              padding: EdgeInsets.all(10.w),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: GoogleFonts.plusJakartaSans(
+                      fontSize: 11.sp,
+                      fontWeight: FontWeight.w600,
+                      color: const Color(0xFF111827),
+                    ),
+                  ),
+                  SizedBox(height: 6.h),
+                  Row(
+                    children: [
+                      Text(
+                        price,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.plusJakartaSans(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 12.sp,
+                          color: const Color(0xFF111827),
+                        ),
+                      ),
+                      SizedBox(width: 6.w),
+
+                      if (oldPrice != null) ...[
+                        Text(
+                          oldPrice,
+                          style: GoogleFonts.plusJakartaSans(
+                            color: Colors.grey.shade400,
+                            decoration: TextDecoration.lineThrough,
+                            fontSize: 10.sp,
+                          ),
+                        ),
+                      ],
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

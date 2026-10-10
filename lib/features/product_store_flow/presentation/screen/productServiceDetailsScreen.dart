@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:product_service/features/product_store_flow/presentation/screen/store_details_page.dart';
 import '../../../../utils/constants/api_enpoint.dart';
 import '../controller/productServiceDetailsController.dart';
+import '../controller/store_details_controller.dart';
+import '../widget/prdcut_service_contactFrom.dart';
 
 class ProductServiceDetailsScreen extends StatelessWidget {
   final String itemId;
@@ -14,10 +17,15 @@ class ProductServiceDetailsScreen extends StatelessWidget {
     required this.isProduct,
   });
 
+
+
   @override
   Widget build(BuildContext context) {
     final ProductServiceDetailsController controller =
     Get.put(ProductServiceDetailsController());
+
+    final StoreDetailsController storeController =
+    Get.put(StoreDetailsController());
 
     controller.fetchDetails(itemId, isProduct);
 
@@ -119,7 +127,7 @@ class ProductServiceDetailsScreen extends StatelessWidget {
                       child: Container(
                         padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
                         decoration: BoxDecoration(
-                          color: Colors.black.withOpacity(0.6),
+                          color: Colors.black.withValues(alpha: 0.6),
                           borderRadius: BorderRadius.circular(20.r),
                         ),
                         child: Obx(() => Text(
@@ -150,7 +158,7 @@ class ProductServiceDetailsScreen extends StatelessWidget {
                             decoration: BoxDecoration(
                               color: controller.currentImageIndex.value == index
                                   ? Colors.white
-                                  : Colors.white.withOpacity(0.5),
+                                  : Colors.white.withValues(alpha: 0.5),
                               borderRadius: BorderRadius.circular(3.r),
                             ),
                           ),
@@ -259,15 +267,18 @@ class ProductServiceDetailsScreen extends StatelessWidget {
                               (item) => Padding(
                             padding: EdgeInsets.symmetric(vertical: 4.h),
                             child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Icon(Icons.check_circle,
                                     color: Colors.green, size: 16.sp),
                                 SizedBox(width: 8.w),
-                                Text(
-                                  item,
-                                  style: TextStyle(
-                                    fontSize: 13.sp,
-                                    color: Colors.grey.shade700,
+                                Expanded(
+                                  child: Text(
+                                    item,
+                                    style: TextStyle(
+                                      fontSize: 13.sp,
+                                      color: Colors.grey.shade700,
+                                    ),
                                   ),
                                 ),
                               ],
@@ -330,7 +341,15 @@ class ProductServiceDetailsScreen extends StatelessWidget {
                         ),
                         ElevatedButton(
                           onPressed: () {
-
+                            if (store != null && store.sId != null) {
+                              Get.to(
+                                    () => const ProductDetailsScreen(),
+                                arguments: {
+                                  'storeId': store.sId,
+                                  'storeType': store.storeType ?? "",
+                                },
+                              );
+                            }
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: const Color(0xFFEE7A1F),
@@ -357,80 +376,7 @@ class ProductServiceDetailsScreen extends StatelessWidget {
           ),
         );
       }),
-      bottomNavigationBar: Container(
-        padding: EdgeInsets.all(4.w),
-        margin: EdgeInsets.all(16.w),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(22.r),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withValues(alpha: 0.2),
-              blurRadius: 10,
-              offset: const Offset(0, 4),
-            ),
-          ],
-        ),
-        child: isProduct
-            ? Padding(
-          padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 2.h),
-          child: ElevatedButton.icon(
-            onPressed: () {
-
-            },
-            icon: const Icon(Icons.chat_bubble_outline, color: Colors.white),
-            label: Text("Message Seller", style: TextStyle(color: Colors.white, fontSize: 14.sp)),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFF2D7738),
-              padding: EdgeInsets.symmetric(vertical: 14.h),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14.r)),
-            ),
-          ),
-        )
-            : Row(
-          children: [
-            Container(
-              padding: EdgeInsets.all(14.w),
-              decoration: BoxDecoration(
-                color: Colors.grey.shade100,
-                shape: BoxShape.circle,
-              ),
-              child: GestureDetector(
-                onTap: () {
-                },
-                child: Icon(Icons.phone, color: Colors.black87, size: 20.sp),
-              ),
-            ),
-            SizedBox(width: 8.w),
-            Container(
-              padding: EdgeInsets.all(14.w),
-              decoration: BoxDecoration(
-                color: Colors.grey.shade100,
-                shape: BoxShape.circle,
-              ),
-              child: GestureDetector(
-                onTap: () {
-                },
-                child: Icon(Icons.swap_horiz, color: Colors.black87, size: 20.sp),
-              ),
-            ),
-            SizedBox(width: 8.w),
-            Expanded(
-              child: ElevatedButton.icon(
-                onPressed: () {
-                },
-                icon: const Icon(Icons.chat_bubble_outline, color: Colors.white),
-                label: Text("Message Seller", style: TextStyle(color: Colors.white, fontSize: 14.sp)),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF2D7738),
-                  padding: EdgeInsets.symmetric(vertical: 14.h),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50.r)),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
+      bottomNavigationBar:ProductServiceContactFrom(),
     );
   }
 }

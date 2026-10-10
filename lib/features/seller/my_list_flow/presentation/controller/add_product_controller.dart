@@ -12,6 +12,7 @@ import 'listing_controller.dart';
 class AddProductController extends GetxController {
   var isLoading = false.obs;
 
+
   final titleController = TextEditingController();
   final activePriceController = TextEditingController();
   final originalPriceController = TextEditingController();
@@ -21,6 +22,7 @@ class AddProductController extends GetxController {
   var whatsIncludedList = <TextEditingController>[].obs;
 
   var selectedImage = Rxn<File>();
+  var existingImageUrl = "".obs;
   final ImagePicker _picker = ImagePicker();
 
   late ProfileController profileController;
@@ -55,6 +57,16 @@ class AddProductController extends GetxController {
       originalPriceController.text = arguments.originalPrice?.toString() ?? '';
       descriptionController.text = arguments.description ?? '';
 
+
+      if (arguments.images != null && arguments.images is List && arguments.images.isNotEmpty) {
+        String rawPath = arguments.images.first;
+        if (rawPath.startsWith('http')) {
+          existingImageUrl.value = rawPath;
+        } else {
+          existingImageUrl.value = "${ApiEndPoint.imageUrl}$rawPath";
+        }
+      }
+
       if (storeType == "product_store") {
         extraInfoController.text = arguments.additionalInformation ?? '';
       } else {
@@ -68,12 +80,7 @@ class AddProductController extends GetxController {
     }
   }
 
-  // Future<void> pickImage() async {
-  //   final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
-  //   if (image != null) {
-  //     selectedImage.value = File(image.path);
-  //   }
-  // }
+
 
 
 
@@ -161,6 +168,7 @@ class AddProductController extends GetxController {
 
       if (image != null) {
         selectedImage.value = File(image.path);
+        existingImageUrl.value = "";
       }
     } catch (e) {
       debugPrint('Error picking image: $e');

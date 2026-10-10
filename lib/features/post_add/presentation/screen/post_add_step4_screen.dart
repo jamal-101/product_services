@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:product_service/features/post_add/controller/post_add_controller.dart';
+import 'package:product_service/utils/constants/app_string.dart';
 
 class PostAdStep4Screen extends StatelessWidget {
   const PostAdStep4Screen({super.key});
@@ -12,7 +13,6 @@ class PostAdStep4Screen extends StatelessWidget {
     final PostAddController controller = Get.find<PostAddController>();
 
     return Scaffold(
-      backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
@@ -21,7 +21,7 @@ class PostAdStep4Screen extends StatelessWidget {
           onPressed: () => Get.back(),
         ),
         title: Text(
-          "Post New Ad",
+          AppString.postNewAd.tr,
           style: GoogleFonts.plusJakartaSans(
             color: Colors.black,
             fontSize: 16.sp,
@@ -40,7 +40,7 @@ class PostAdStep4Screen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "Step 4 of 4 • Summary & pay",
+                  AppString.step4Of4.tr,
                   style: GoogleFonts.plusJakartaSans(
                     color: Colors.grey.shade600,
                     fontSize: 12.sp,
@@ -48,7 +48,7 @@ class PostAdStep4Screen extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  "Review & Pay",
+                  AppString.reviewAndPay.tr,
                   style: GoogleFonts.plusJakartaSans(
                     color: Colors.green.shade700,
                     fontSize: 12.sp,
@@ -58,16 +58,48 @@ class PostAdStep4Screen extends StatelessWidget {
               ],
             ),
             SizedBox(height: 10.h),
-            // Step progress indicator bars (সবগুলো ৪টি বার পূর্ণ সবুজ)
+            // Progress Indicator
             Row(
               children: [
-                Expanded(child: Container(height: 4.h, decoration: BoxDecoration(color: Colors.green, borderRadius: BorderRadius.circular(2.r)))),
+                Expanded(
+                  child: Container(
+                    height: 4.h,
+                    decoration: BoxDecoration(
+                      color: Colors.green,
+                      borderRadius: BorderRadius.circular(2.r),
+                    ),
+                  ),
+                ),
                 SizedBox(width: 6.w),
-                Expanded(child: Container(height: 4.h, decoration: BoxDecoration(color: Colors.green, borderRadius: BorderRadius.circular(2.r)))),
+                Expanded(
+                  child: Container(
+                    height: 4.h,
+                    decoration: BoxDecoration(
+                      color: Colors.green,
+                      borderRadius: BorderRadius.circular(2.r),
+                    ),
+                  ),
+                ),
                 SizedBox(width: 6.w),
-                Expanded(child: Container(height: 4.h, decoration: BoxDecoration(color: Colors.green, borderRadius: BorderRadius.circular(2.r)))),
+                Expanded(
+                  child: Container(
+                    height: 4.h,
+                    decoration: BoxDecoration(
+                      color: Colors.green,
+                      borderRadius: BorderRadius.circular(2.r),
+                    ),
+                  ),
+                ),
                 SizedBox(width: 6.w),
-                Expanded(child: Container(height: 4.h, decoration: BoxDecoration(color: Colors.green, borderRadius: BorderRadius.circular(2.r)))),
+                Expanded(
+                  child: Container(
+                    height: 4.h,
+                    decoration: BoxDecoration(
+                      color: Colors.green,
+                      borderRadius: BorderRadius.circular(2.r),
+                    ),
+                  ),
+                ),
               ],
             ),
             SizedBox(height: 16.h),
@@ -77,7 +109,7 @@ class PostAdStep4Screen extends StatelessWidget {
                 children: [
                   // Title
                   Text(
-                    "Review & Pay",
+                    AppString.reviewAndPay.tr,
                     style: GoogleFonts.plusJakartaSans(
                       fontSize: 16.sp,
                       fontWeight: FontWeight.bold,
@@ -86,7 +118,7 @@ class PostAdStep4Screen extends StatelessWidget {
                   ),
                   SizedBox(height: 2.h),
                   Text(
-                    "Double-check everything before submitting.",
+                    AppString.doubleCheckDesc.tr,
                     style: GoogleFonts.plusJakartaSans(
                       fontSize: 12.sp,
                       color: Colors.grey.shade500,
@@ -111,10 +143,9 @@ class PostAdStep4Screen extends StatelessWidget {
                             fit: BoxFit.cover,
                           );
                         } else {
-                          // ডিফল্ট ব্যানার বা প্লেসহোল্ডার যদি ইমেজ না থাকে
                           return Center(
                             child: Text(
-                              "Ad Banner Preview",
+                              AppString.adBannerPreview.tr,
                               style: GoogleFonts.plusJakartaSans(
                                 color: Colors.white,
                                 fontSize: 14.sp,
@@ -137,7 +168,7 @@ class PostAdStep4Screen extends StatelessWidget {
                       border: Border.all(color: Colors.grey.shade200),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.02),
+                          color: Colors.black.withValues(alpha: 0.02),
                           blurRadius: 8,
                           offset: const Offset(0, 3),
                         ),
@@ -145,36 +176,41 @@ class PostAdStep4Screen extends StatelessWidget {
                     ),
                     child: Column(
                       children: [
-                        _buildInfoRow("Campaign", controller.campaignNameController.text),
+                        _buildInfoRow(
+                          AppString.campaign.tr,
+                          controller.campaignNameController.text,
+                        ),
                         Divider(height: 20.h, color: Colors.grey.shade100),
                         _buildInfoRow(
-                          "Package",
+                          AppString.package.tr,
                           controller.packageName.value.isNotEmpty
                               ? "${controller.packageName.value} (\$${controller.packagePrice.value.toStringAsFixed(0)})"
                               : "N/A",
                         ),
                         Divider(height: 20.h, color: Colors.grey.shade100),
                         _buildInfoRow(
-                          "City",
+                          AppString.city.tr,
                           controller.selectedCityName.value.isNotEmpty
                               ? controller.selectedCityName.value
                               : controller.selectedCityId.value,
                         ),
                         Divider(height: 20.h, color: Colors.grey.shade100),
                         _buildInfoRow(
-                          "Slot",
+                          AppString.slot.tr,
                           controller.selectedSlot.value.isNotEmpty
                               ? controller.selectedSlot.value
-                              : "Position ${controller.selectedPosition.value}",
+                              : "${AppString.positionPrefix.tr} ${controller.selectedPosition.value}",
                         ),
                         Divider(height: 20.h, color: Colors.grey.shade100),
                         _buildInfoRow(
-                          "Duration",
-                          "${controller.selectedDuration.value.capitalizeFirst} • ${controller.selectedDuration.value == 'weekly' ? '7 days' : '30 days'}",
+                          AppString.duration.tr,
+                          (controller.selectedDuration.value == 'seven_days' || controller.selectedDuration.value == 'weekly')
+                              ? AppString.weekly7Days.tr
+                              : AppString.monthly30Days.tr,
                         ),
                         Divider(height: 20.h, color: Colors.grey.shade100),
                         _buildInfoRow(
-                          "Dates",
+                          AppString.dates.tr,
                           controller.startDate.value.isEmpty
                               ? "N/A"
                               : controller.startDate.value,
@@ -193,7 +229,7 @@ class PostAdStep4Screen extends StatelessWidget {
                         vertical: 14.h,
                       ),
                       decoration: BoxDecoration(
-                        color: Colors.green.shade50.withOpacity(0.5),
+                        color: Colors.green.shade50.withValues(alpha: 0.5),
                         borderRadius: BorderRadius.circular(16.r),
                         border: Border.all(color: Colors.green.shade200),
                       ),
@@ -201,7 +237,7 @@ class PostAdStep4Screen extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            "Total",
+                            AppString.total.tr,
                             style: GoogleFonts.plusJakartaSans(
                               fontSize: 15.sp,
                               fontWeight: FontWeight.bold,
@@ -229,9 +265,10 @@ class PostAdStep4Screen extends StatelessWidget {
               width: double.infinity,
               height: 50.h,
               child: Obx(() {
-                final busy = controller.isCreatingCheckout.value ||
-                    controller.isVerifyingPayment.value ||
-                    controller.isSubmitting.value;
+                final busy =
+                    controller.isCreatingCheckout.value ||
+                        controller.isVerifyingPayment.value ||
+                        controller.isSubmitting.value;
                 return ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.green.shade700,
@@ -244,24 +281,24 @@ class PostAdStep4Screen extends StatelessWidget {
                   onPressed: busy
                       ? null
                       : () {
-                          controller.startDatafastPayment();
-                        },
+                    controller.startDatafastPayment();
+                  },
                   child: busy
                       ? SizedBox(
-                          height: 20.h,
-                          width: 20.h,
-                          child: const CircularProgressIndicator(
-                            color: Colors.white,
-                            strokeWidth: 2,
-                          ),
-                        )
+                    height: 20.h,
+                    width: 20.h,
+                    child: const CircularProgressIndicator(
+                      color: Colors.white,
+                      strokeWidth: 2,
+                    ),
+                  )
                       : Text(
-                          "Submit & Pay",
-                          style: GoogleFonts.plusJakartaSans(
-                            fontSize: 15.sp,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
+                    AppString.submitAndPay.tr,
+                    style: GoogleFonts.plusJakartaSans(
+                      fontSize: 15.sp,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 );
               }),
             ),
@@ -272,7 +309,6 @@ class PostAdStep4Screen extends StatelessWidget {
     );
   }
 
-  // Helper Widget for Info Rows inside Card
   Widget _buildInfoRow(String title, String value) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,

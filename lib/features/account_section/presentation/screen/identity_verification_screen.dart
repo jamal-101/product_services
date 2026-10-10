@@ -18,7 +18,6 @@ class IdentityVerificationScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
         elevation: 0,
         centerTitle: false,
         leading: Padding(

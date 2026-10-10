@@ -13,23 +13,29 @@ import 'nav_controller.dart';
 
 class BottomNavBar extends StatelessWidget {
   final int selectedIndex;
-  final BottomNavigationController controller = Get.put(
-    BottomNavigationController(),
-  );
-  final AuthController authController = Get.put(AuthController());
 
   BottomNavBar({super.key, required this.selectedIndex});
 
   @override
   Widget build(BuildContext context) {
+    final BottomNavigationController controller = Get.put(
+      BottomNavigationController(),
+    );
+
+    final AuthController authController = Get.isRegistered<AuthController>()
+        ? Get.find<AuthController>()
+        : Get.put(AuthController(), permanent: true);
+
     if (controller.currentIndex.value != selectedIndex) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         controller.changeIndex(selectedIndex);
       });
     }
 
-    return Obx(
-          () => Container(
+    return Obx(() {
+      final bool isSeller = authController.selectedRole.value == 'seller';
+
+      return Container(
         decoration: BoxDecoration(
           color: Colors.white,
           boxShadow: [
@@ -47,39 +53,71 @@ class BottomNavBar extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                _buildNavItem(0, AppImages.homeIcon, AppString.home.tr,),
                 _buildNavItem(
-                  1,
-                  authController.selectedRole.value == 'seller'
+                  index: 0,
+                  imagePath: AppImages.homeIcon,
+                  label: AppString.home.tr,
+                  controller: controller,
+                  isSeller: isSeller,
+                ),
+
+                _buildNavItem(
+                  index: 1,
+                  imagePath: isSeller
                       ? AppImages.myListIcon
                       : AppImages.listIcon,
-                  authController.selectedRole.value == 'seller' 
-                      ? AppString.myListing.tr 
+                  label: isSeller
+                      ? AppString.myListing.tr
                       : AppString.stores.tr,
+                  controller: controller,
+                  isSeller: isSeller,
                 ),
-                if (authController.selectedRole.value == 'seller')
-                  _buildMyStoreNavItem(2, AppImages.storeIcon, AppString.myStore.tr),
-
-                _buildNavItem(3, AppImages.messageIcon, AppString.messages.tr,),
-                _buildNavItem(4, AppImages.accountIcon, AppString.account.tr,),
+                if (isSeller)
+                  _buildMyStoreNavItem(
+                    index: 2,
+                    imagePath: AppImages.storeIcon,
+                    label: AppString.myStore.tr,
+                    controller: controller,
+                  ),
+                _buildNavItem(
+                  index: 3,
+                  imagePath: AppImages.messageIcon,
+                  label: AppString.messages.tr,
+                  controller: controller,
+                  isSeller: isSeller,
+                ),
+                _buildNavItem(
+                  index: 4,
+                  imagePath: AppImages.accountIcon,
+                  label: AppString.account.tr,
+                  controller: controller,
+                  isSeller: isSeller,
+                ),
               ],
             ),
           ),
         ),
-      ),
-    );
+      );
+    });
   }
 
-  Widget _buildNavItem(int index, String imagePath, String label) {
+  Widget _buildNavItem({
+    required int index,
+    required String imagePath,
+    required String label,
+    required BottomNavigationController controller,
+    required bool isSeller,
+  }) {
     bool isSelected = controller.currentIndex.value == index;
     const Color activeColor = Color(0xFF2A9B4A);
 
     return Expanded(
       child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
         onTap: () {
           if (controller.currentIndex.value == index) return;
           controller.changeIndex(index);
-          _handleNavigation(index, authController.selectedRole.value == 'seller');
+          _handleNavigation(index, isSeller);
         },
         child: Container(
           height: 80.h,
@@ -87,33 +125,35 @@ class BottomNavBar extends StatelessWidget {
             color: Colors.white,
             border: isSelected
                 ? Border(
-              top: BorderSide(color: activeColor, width: 3.h),
-            )
+                    top: BorderSide(color: activeColor, width: 3.h),
+                  )
                 : null,
             gradient: isSelected
                 ? LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              stops: const [0.0, 0.7],
-              colors: [activeColor.withValues(alpha: 0.15), Colors.transparent],
-            )
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    stops: const [0.0, 0.7],
+                    colors: [
+                      activeColor.withValues(alpha: 0.15),
+                      Colors.transparent,
+                    ],
+                  )
                 : null,
           ),
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SizedBox(height: 12.h),
-              ColorFiltered(
-                colorFilter: ColorFilter.mode(
-                  isSelected ? activeColor : const Color(0xFF6B7280),
-                  BlendMode.srcIn,
-                ),
-                child: Image.asset(imagePath, width: 26.sp, height: 26.sp),
+              Image.asset(
+                imagePath,
+                width: 24.sp,
+                height: 24.sp,
+                color: isSelected ? activeColor : const Color(0xFF6B7280),
               ),
               SizedBox(height: 4.h),
               Text(
                 label,
                 style: GoogleFonts.montserrat(
-                  fontSize: 12.sp,
+                  fontSize: 11.sp,
                   color: isSelected ? activeColor : const Color(0xFF1A1D24),
                   fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
                 ),
@@ -125,12 +165,18 @@ class BottomNavBar extends StatelessWidget {
     );
   }
 
-  Widget _buildMyStoreNavItem(int index, String imagePath, String label) {
+  Widget _buildMyStoreNavItem({
+    required int index,
+    required String imagePath,
+    required String label,
+    required BottomNavigationController controller,
+  }) {
     bool isSelected = controller.currentIndex.value == index;
     const Color storeColor = Colors.orange;
 
     return Expanded(
       child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
         onTap: () {
           if (controller.currentIndex.value == index) return;
           controller.changeIndex(index);
@@ -142,27 +188,29 @@ class BottomNavBar extends StatelessWidget {
             color: Colors.white,
             border: isSelected
                 ? Border(
-              top: BorderSide(color: storeColor, width: 3.h),
-            )
+                    top: BorderSide(color: storeColor, width: 3.h),
+                  )
                 : null,
             gradient: isSelected
                 ? LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              stops: const [0.0, 0.7],
-              colors: [storeColor.withValues(alpha: 0.15), Colors.transparent],
-            )
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    stops: const [0.0, 0.7],
+                    colors: [
+                      storeColor.withValues(alpha: 0.15),
+                      Colors.transparent,
+                    ],
+                  )
                 : null,
           ),
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SizedBox(height: 12.h),
-              ColorFiltered(
-                colorFilter: ColorFilter.mode(
-                  isSelected ? storeColor : Colors.orange.shade300,
-                  BlendMode.srcIn,
-                ),
-                child: Image.asset(imagePath, width: 26.sp, height: 26.sp),
+              Image.asset(
+                imagePath,
+                width: 24.sp,
+                height: 24.sp,
+                color: isSelected ? storeColor : Colors.orange.shade400,
               ),
               SizedBox(height: 4.h),
               Text(
@@ -203,6 +251,4 @@ class BottomNavBar extends StatelessWidget {
         break;
     }
   }
-
-
 }

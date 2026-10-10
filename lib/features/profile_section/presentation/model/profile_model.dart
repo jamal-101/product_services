@@ -35,7 +35,7 @@ class Data {
   String? phone;
   String? countryCode;
   bool? verified;
-  int? averageRating;
+  double? averageRating;
   int? totalRatings;
   int? totalReviews;
   bool? isDeleted;
@@ -106,7 +106,7 @@ class Data {
     phone = json['phone'];
     countryCode = json['countryCode'];
     verified = json['verified'];
-    averageRating = json['averageRating'];
+    averageRating = (json['averageRating'] as num?)?.toDouble();
     totalRatings = json['totalRatings'];
     totalReviews = json['totalReviews'];
     isDeleted = json['isDeleted'];
@@ -115,7 +115,7 @@ class Data {
     stripeCustomerId = json['stripeCustomerId'];
     subscriptionStatus = json['subscriptionStatus'];
     stripeSubscriptionId = json['stripeSubscriptionId'];
-    datafastRegistrationToken = json['datafastRegistrationToken']; // <--- [ADD] পার্সিং
+    datafastRegistrationToken = json['datafastRegistrationToken'];
     isVerified = json['isVerified'];
     subscriptionExpiresAt = json['subscriptionExpiresAt'];
     subscriptionPackageId = json['subscriptionPackageId'];

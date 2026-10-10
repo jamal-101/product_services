@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_navigation/src/extension_navigation.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:product_service/features/my_add/presentation/screen/my_add_screen.dart';
+import 'package:product_service/utils/constants/app_string.dart';
 
 class CampaignSuccessView extends StatelessWidget {
   const CampaignSuccessView({super.key});
@@ -35,7 +35,7 @@ class CampaignSuccessView extends StatelessWidget {
               ),
               SizedBox(height: 24.h),
               Text(
-                "Campaign Submitted!",
+                AppString.campaignSubmitted.tr,
                 style: GoogleFonts.plusJakartaSans(
                   fontSize: 22.sp,
                   fontWeight: FontWeight.bold,
@@ -47,7 +47,7 @@ class CampaignSuccessView extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    "Status: ",
+                    AppString.statusLabel.tr,
                     style: GoogleFonts.plusJakartaSans(
                       fontSize: 14.sp,
                       color: Colors.grey.shade600,
@@ -55,7 +55,7 @@ class CampaignSuccessView extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    "Pending Review",
+                    AppString.pendingReview.tr,
                     style: GoogleFonts.plusJakartaSans(
                       fontSize: 14.sp,
                       color: Colors.orange.shade800,
@@ -66,7 +66,7 @@ class CampaignSuccessView extends StatelessWidget {
               ),
               SizedBox(height: 8.h),
               Text(
-                "We'll notify you once your ad is approved and scheduled.",
+                AppString.campaignSuccessDesc.tr,
                 textAlign: TextAlign.center,
                 style: GoogleFonts.plusJakartaSans(
                   fontSize: 13.sp,
@@ -78,7 +78,7 @@ class CampaignSuccessView extends StatelessWidget {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {
-                    Get.to(MyAddScreen());
+                    Get.to(() => const MyAddScreen());
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF228B22),
@@ -90,7 +90,7 @@ class CampaignSuccessView extends StatelessWidget {
                     elevation: 0,
                   ),
                   child: Text(
-                    "View My Campaigns",
+                    AppString.viewMyCampaigns.tr,
                     style: GoogleFonts.plusJakartaSans(
                       fontSize: 16.sp,
                       fontWeight: FontWeight.bold,

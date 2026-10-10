@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:product_service/component/bottom_navBar/App_scaffold.dart';
 import 'package:product_service/utils/constants/app_color.dart';
 import 'package:product_service/utils/constants/app_images.dart';
+import 'package:product_service/utils/constants/app_string.dart';
 import 'package:shimmer/shimmer.dart';
 import '../../../../../utils/constants/api_enpoint.dart';
 import '../controller/listing_controller.dart';
@@ -26,7 +27,7 @@ class MyListingScreen extends StatelessWidget {
         centerTitle: false,
         elevation: 0,
         title: Text(
-          "My Listing",
+          AppString.myListing.tr,
           style: TextStyle(
             color: Colors.black,
             fontSize: 18.sp,
@@ -57,7 +58,9 @@ class MyListingScreen extends StatelessWidget {
                     const Icon(Icons.add, color: Colors.white, size: 18),
                     SizedBox(width: 4.w),
                     Obx(() => Text(
-                      controller.storeType == "service_store" ? "Add Service" : "Add Product",
+                      controller.storeType == "service_store"
+                          ? AppString.addService.tr
+                          : AppString.addProduct.tr,
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 12.sp,

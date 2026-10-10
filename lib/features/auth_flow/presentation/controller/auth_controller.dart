@@ -72,8 +72,6 @@ class AuthController extends GetxController {
     });
   }
 
-
-
   Future<void> pickDocumentImage(bool isFront) async {
     Get.bottomSheet(
       Container(
@@ -96,7 +94,9 @@ class AuthController extends GetxController {
               onTap: () async {
                 Get.back();
                 final ImagePicker picker = ImagePicker();
-                final XFile? image = await picker.pickImage(source: ImageSource.camera);
+                final XFile? image = await picker.pickImage(
+                  source: ImageSource.camera,
+                );
                 if (image != null) {
                   if (isFront) {
                     documentFrontImage.value = File(image.path);
@@ -115,7 +115,9 @@ class AuthController extends GetxController {
               onTap: () async {
                 Get.back();
                 final ImagePicker picker = ImagePicker();
-                final XFile? image = await picker.pickImage(source: ImageSource.gallery);
+                final XFile? image = await picker.pickImage(
+                  source: ImageSource.gallery,
+                );
                 if (image != null) {
                   if (isFront) {
                     documentFrontImage.value = File(image.path);
@@ -208,8 +210,6 @@ class AuthController extends GetxController {
     }
   }
 
-
-
   void toggleRegisterPasswordVisibility() {
     isRegisterPasswordVisible.toggle();
     update();
@@ -219,8 +219,6 @@ class AuthController extends GetxController {
     isRegisterConfirmPasswordVisible.toggle();
     update();
   }
-
-
 
   void startOtpTimer() {
     resendCountdown.value = 180;
@@ -233,7 +231,6 @@ class AuthController extends GetxController {
       }
     });
   }
-
 
   Future<void> verifyOtp() async {
     String otpCode = otpControllers.map((c) => c.text.trim()).join();
@@ -294,10 +291,7 @@ class AuthController extends GetxController {
     };
 
     try {
-      final response = await ApiService.post(
-        ApiEndPoint.resendOtp,
-        body: body,
-      );
+      final response = await ApiService.post(ApiEndPoint.resendOtp, body: body);
 
       if (response.isSuccess) {
         Get.snackbar(
@@ -357,9 +351,13 @@ class AuthController extends GetxController {
             await LocalStorage.setSellerToken(token);
           }
         }
-        bool hasSellerAccount = responseData['data']?['hasSellerAccount'] ?? false;
+        bool hasSellerAccount =
+            responseData['data']?['hasSellerAccount'] ?? false;
         LocalStorage.hasSellerAccount = hasSellerAccount;
-        await LocalStorage.setBool(LocalStorageKeys.hasSellerAccount, hasSellerAccount);
+        await LocalStorage.setBool(
+          LocalStorageKeys.hasSellerAccount,
+          hasSellerAccount,
+        );
 
         Get.snackbar(
           "Success",
@@ -368,11 +366,10 @@ class AuthController extends GetxController {
           colorText: Colors.white,
         );
         if (!hasSellerAccount) {
-          Get.offAllNamed(AppRoutes.selectRoleScreen);
-        } else {
           Get.offAllNamed(AppRoutes.homeScreen);
+        } else {
+          Get.offAllNamed(AppRoutes.selectRoleScreen);
         }
-
       } else {
         Get.snackbar(
           "Failed",
@@ -393,75 +390,23 @@ class AuthController extends GetxController {
     }
   }
 
-  // Future<void> selectRole(String role) async {
-  //   String apiRole = (role == 'buyer') ? 'user' : role;
-  //
-  //   final Map<String, dynamic> body = {"role": apiRole};
-  //   selectedRole.value = role;
-  //
-  //   try {
-  //     final response = await ApiService.post(
-  //       ApiEndPoint.switchRole,
-  //       body: body,
-  //     );
-  //
-  //     if (response.isSuccess) {
-  //       var responseData = response.data;
-  //
-  //       String? token =
-  //           responseData['data']?['accessToken']?.toString() ??
-  //           responseData['data']?['token']?.toString();
-  //       if (token != null && token.isNotEmpty) {
-  //         LocalStorage.token = token;
-  //         await LocalStorage.setString(LocalStorageKeys.token, token);
-  //         if (role == 'seller') {
-  //           await LocalStorage.setSellerToken(token);
-  //         }
-  //       }
-  //
-  //       selectedRole.value = role;
-  //       await LocalStorage.setUserRole(role);
-  //       if (role == 'seller') {
-  //         Get.offAllNamed(AppRoutes.sellerHomeScreen);
-  //       } else {
-  //         Get.offAllNamed(AppRoutes.homeScreen);
-  //       }
-  //     } else {
-  //       Get.snackbar(
-  //         "Failed",
-  //         response.message,
-  //         backgroundColor: Colors.red,
-  //         colorText: Colors.white,
-  //       );
-  //     }
-  //   } catch (e) {
-  //     Get.snackbar(
-  //       "Error",
-  //       e.toString(),
-  //       backgroundColor: Colors.red,
-  //       colorText: Colors.white,
-  //     );
-  //   }
-  // }
-
-
-
   Future<void> selectRole(String role) async {
-    String previousRole = selectedRole.value; // আগের রোল সেইভ রাখা হলো
+    String previousRole = selectedRole.value;
     String apiRole = (role == 'buyer') ? 'user' : role;
 
-    final Map<String, dynamic> body = {
-      "role": apiRole,
-    };
-
+    final Map<String, dynamic> body = {"role": apiRole};
 
     try {
-      final response = await ApiService.post(ApiEndPoint.switchRole, body: body);
+      final response = await ApiService.post(
+        ApiEndPoint.switchRole,
+        body: body,
+      );
 
       if (response.isSuccess) {
         var responseData = response.data;
 
-        String? token = responseData['data']?['accessToken']?.toString() ??
+        String? token =
+            responseData['data']?['accessToken']?.toString() ??
             responseData['data']?['token']?.toString();
         if (token != null && token.isNotEmpty) {
           LocalStorage.token = token;
