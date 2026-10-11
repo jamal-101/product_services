@@ -57,6 +57,7 @@ dependencies:
   flutter_widget_from_html: ^0.17.3
   webview_flutter: ^4.10.0
   geolocator: ^14.0.1
+  translator: ^1.0.4+1
 
 dev_dependencies:
   flutter_test:

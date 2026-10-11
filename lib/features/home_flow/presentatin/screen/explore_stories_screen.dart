@@ -10,6 +10,7 @@ import 'package:product_service/config/route/app_route.dart';
 import 'package:product_service/utils/constants/app_color.dart';
 import 'package:product_service/utils/constants/app_string.dart';
 import '../../../../utils/constants/api_enpoint.dart';
+import '../../../../utils/constants/app_translator.dart';
 import '../../../product_store_flow/presentation/screen/store_details_page.dart';
 import '../controller/explore_store_controller.dart';
 import '../widget/city_dialog.dart';
@@ -55,9 +56,7 @@ class ExploreStoriesScreen extends StatelessWidget {
             ),
           ],
         ),
-        actions: [
-          _buildTopBarActions(controllers),
-        ],
+        actions: [_buildTopBarActions(controllers)],
       ),
       body: SafeArea(
         child: Column(
@@ -278,8 +277,8 @@ class ExploreStoriesScreen extends StatelessWidget {
             title,
             style: GoogleFonts.plusJakartaSans(
               fontSize: 12.sp,
-              fontWeight: FontWeight.w500,
-              color: isSelected ? Colors.white : Colors.black54,
+              fontWeight: FontWeight.w600,
+              color: isSelected ? Colors.white : Colors.black87,
             ),
           ),
         ),
@@ -370,21 +369,40 @@ class ExploreStoriesScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    title,
-                    style: GoogleFonts.plusJakartaSans(
-                      fontSize: 14.sp,
-                      fontWeight: FontWeight.bold,
-                    ),
+                  // Text(
+                  //   title,
+                  //   style: GoogleFonts.plusJakartaSans(
+                  //     fontSize: 14.sp,
+                  //     fontWeight: FontWeight.bold,
+                  //   ),
+                  // ),
+                  FutureBuilder<String>(
+                    future: AppTranslatorService.translateText(title),
+                    builder: (context, snapshot) {
+                      return Text(
+                        snapshot.data ?? title,
+                        style: GoogleFonts.plusJakartaSans(
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      );
+                    },
                   ),
+
                   SizedBox(height: 4.h),
-                  Text(
-                    subtitle,
-                    maxLines: 1,
-                    style: GoogleFonts.plusJakartaSans(
-                      fontSize: 12.sp,
-                      color: Colors.grey,
-                    ),
+                  FutureBuilder(
+                    future: AppTranslatorService.translateText(subtitle),
+                    builder: (context, snapshot) {
+                      return Text(
+                        snapshot.data ?? subtitle,
+                        maxLines: 1,
+                        style: GoogleFonts.plusJakartaSans(
+                          fontSize: 12.sp,
+                          color: Colors.black87,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      );
+                    },
                   ),
                 ],
               ),
@@ -745,4 +763,3 @@ Future<Set<Marker>> _loadMarkers(ExploreStoreController controllers) async {
 
   return markers;
 }
-

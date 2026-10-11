@@ -10,6 +10,7 @@ import '../../../../component/bottom_navBar/App_scaffold.dart';
 import '../../../../component/bottom_navBar/nav_controller.dart';
 import '../../../../services/api/api_service.dart';
 import '../../../../utils/constants/app_string.dart';
+import '../../../../utils/constants/app_translator.dart';
 import '../../../message_flow/presentation/controller/message_controller.dart';
 import '../../../notification/presentaiton/controller/notification_controller.dart';
 import '../../../post_add/controller/post_add_controller.dart';
@@ -255,23 +256,62 @@ class HomeScreen extends StatelessWidget {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    Text(
-                                      banner.name ?? "",
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                                    // Text(
+                                    //   banner.name ?? "",
+                                    //   style: const TextStyle(
+                                    //     color: Colors.white,
+                                    //     fontSize: 18,
+                                    //     fontWeight: FontWeight.bold,
+                                    //   ),
+                                    // ),
+                                    FutureBuilder<String>(
+                                      future:
+                                          AppTranslatorService.translateText(
+                                            banner.name ?? "",
+                                          ),
+                                      builder: (context, snapshot) {
+                                        return Text(
+                                          snapshot.data ?? banner.name ?? "",
+                                          style: GoogleFonts.plusJakartaSans(
+                                            color: Colors.white,
+                                            fontSize: 22.sp,
+                                            fontWeight: FontWeight.w700,
+                                          ),
+                                        );
+                                      },
                                     ),
+
                                     const SizedBox(height: 6),
-                                    Text(
-                                      banner.description ?? "",
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: const TextStyle(
-                                        color: Colors.white70,
-                                        fontSize: 11,
-                                      ),
+
+                                    // Text(
+                                    //   banner.description ?? "",
+                                    //   maxLines: 2,
+                                    //   overflow: TextOverflow.ellipsis,
+                                    //   style: GoogleFonts.plusJakartaSans(
+                                    //     color: Colors.white,
+                                    //     fontSize: 14,
+                                    //     fontWeight: FontWeight.w700,
+                                    //   ),
+                                    // ),
+                                    FutureBuilder<String>(
+                                      future:
+                                          AppTranslatorService.translateText(
+                                            banner.description ?? "",
+                                          ),
+                                      builder: (context, snapshot) {
+                                        return Text(
+                                          snapshot.data ??
+                                              banner.description ??
+                                              "",
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: GoogleFonts.plusJakartaSans(
+                                            color: Colors.white,
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w700,
+                                          ),
+                                        );
+                                      },
                                     ),
                                   ],
                                 ),
@@ -427,20 +467,37 @@ class HomeScreen extends StatelessWidget {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
-                                  item.campaignName ?? "No Campaign Name",
-                                  style: GoogleFonts.plusJakartaSans(
-                                    fontSize: 14.sp,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black87,
-                                  ),
+                                // Text(
+                                //   item.campaignName ?? "No Campaign Name",
+                                //   style: GoogleFonts.plusJakartaSans(
+                                //     fontSize: 14.sp,
+                                //     fontWeight: FontWeight.bold,
+                                //     color: Colors.black87,
+                                //   ),
+                                // ),
+
+
+                                FutureBuilder<String>(
+                                  future: AppTranslatorService.translateText(item.campaignName ?? "No Campaign Name"),
+                                  builder: (context, snapshot) {
+                                    return Text(
+                                      snapshot.data ?? item.campaignName ?? "No Campaign Name",
+                                      style: GoogleFonts.plusJakartaSans(
+                                        fontSize: 14.sp,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black87,
+                                      ),
+                                    );
+                                  },
                                 ),
+
                                 const SizedBox(height: 4),
                                 Text(
-                                  "Store: ${item.storeId?.displayName?.isNotEmpty == true ? item.storeId!.displayName : "N/A"} (${item.city ?? ""})",
+                                  "Store: ${item.storeId?.displayName?.isNotEmpty == true ? item.storeId!.displayName : ""} (${item.city ?? ""})",
                                   style: GoogleFonts.plusJakartaSans(
-                                    fontSize: 12.sp,
-                                    color: Colors.grey[600],
+                                    fontSize: 14.sp,
+                                    color: Colors.black45,
+                                    fontWeight: FontWeight.w600
                                   ),
                                 ),
                                 // const SizedBox(height: 6),
