@@ -39,11 +39,26 @@ class SellerHomeScreen extends StatelessWidget {
             scaffoldKey.currentState?.openDrawer();
           },
         ),
-        title: Image.asset(
-          AppImages.home_center_icon,
-          height: 180.h,
-          width: 180.w,
-          fit: BoxFit.contain,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset(
+              AppImages.rollLOgoImage,
+              height: 60.h,
+              width: 60.w,
+              fit: BoxFit.contain,
+            ),
+            SizedBox(width: 5.w),
+            Padding(
+              padding: const EdgeInsets.only(top: 12.0),
+              child: Image.asset(
+                AppImages.jagan,
+                height: 160.h,
+                width: 160.w,
+                fit: BoxFit.contain,
+              ),
+            ),
+          ],
         ),
         actions: [
           IconButton(
@@ -69,7 +84,6 @@ class SellerHomeScreen extends StatelessWidget {
                 final MessageController messageController = Get.put(
                   MessageController(),
                 );
-
                 messageController.createChat(
                   participantId: superAdminId,
                   communicationType: "support",

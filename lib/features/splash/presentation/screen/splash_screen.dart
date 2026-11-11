@@ -17,17 +17,13 @@ class SplashScreen extends StatelessWidget {
           if (!controller.isVideoReady.value) {
             return const SizedBox.shrink();
           }
-
           return SizedBox.expand(
             child: FittedBox(
               fit: BoxFit.cover,
-              child: Padding(
-                padding: EdgeInsets.only(left: 8.0),
-                child: SizedBox(
-                  width: controller.videoController.value.size.width,
-                  height: controller.videoController.value.size.height,
-                  child: VideoPlayer(controller.videoController),
-                ),
+              child: SizedBox(
+                width: controller.videoController.value.size.width,
+                height: controller.videoController.value.size.height,
+                child: VideoPlayer(controller.videoController),
               ),
             ),
           );
@@ -36,3 +32,4 @@ class SplashScreen extends StatelessWidget {
     );
   }
 }
+

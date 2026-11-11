@@ -110,7 +110,7 @@ class Receiver {
   String? phone;
   String? countryCode;
   bool? verified;
-  int? averageRating;
+  double? averageRating;
   int? totalRatings;
   int? totalReviews;
   String? subscriptionStatus;
@@ -160,7 +160,9 @@ class Receiver {
     phone = json['phone'];
     countryCode = json['countryCode'];
     verified = json['verified'];
-    averageRating = json['averageRating'];
+    averageRating = json['averageRating'] != null
+        ? (json['averageRating'] as num).toDouble()
+        : null;
     totalRatings = json['totalRatings'];
     totalReviews = json['totalReviews'];
     subscriptionStatus = json['subscriptionStatus'];
