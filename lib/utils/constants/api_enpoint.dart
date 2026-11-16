@@ -52,4 +52,5 @@ class ApiEndPoint {
   static const subscriptionPackages = "$baseUrl/subscription-packages";
   static const createStripeCheckout = "$baseUrl/stripe/create-checkout-session";
   static const createDatafastCheckout = "$baseUrl/datafast/create-checkout-session";
+  static const String saveFcmToken = "$baseUrl/fcmTokens/save-token";
 }

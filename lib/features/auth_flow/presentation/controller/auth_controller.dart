@@ -1,5 +1,7 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:device_info_plus/device_info_plus.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -345,6 +347,8 @@ class AuthController extends GetxController {
           await LocalStorage.setString(LocalStorageKeys.token, token);
           await LocalStorage.setString(LocalStorageKeys.userId, userId);
 
+          await saveFcmTokenToBackend();
+
           final activeRole =
               responseData['data']?['user']?['activeRole']?.toString() ?? '';
           if (activeRole == 'seller') {
@@ -636,10 +640,50 @@ class AuthController extends GetxController {
     }
   }
 
+
+
+  Future<void> saveFcmTokenToBackend() async {
+    try {
+      String? fcmToken = await FirebaseMessaging.instance.getToken();
+      if (fcmToken == null || fcmToken.isEmpty) return;
+
+      String deviceId = "";
+      DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+
+      if (Platform.isAndroid) {
+        AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+        deviceId = androidInfo.id;
+      } else if (Platform.isIOS) {
+        IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
+        deviceId = iosInfo.identifierForVendor ?? "unknown_ios_id";
+      }
+
+      final Map<String, dynamic> body = {
+        "fcmToken": fcmToken,
+        "deviceId": deviceId,
+        "deviceType": Platform.isAndroid ? "android" : "ios",
+      };
+
+      final response = await ApiService.post(
+        ApiEndPoint.saveFcmToken,
+        body: body,
+      );
+
+      if (response.isSuccess) {
+        debugPrint("✅ FCM Token saved successfully to backend!");
+      } else {
+        debugPrint("❌ Failed to save FCM token: ${response.message}");
+      }
+    } catch (e) {
+      debugPrint("⚠️ Error saving FCM token: $e");
+    }
+  }
+
   @override
   void onClose() {
     _timer?.cancel();
     _phoneTimer?.cancel();
     super.onClose();
   }
+
 }
