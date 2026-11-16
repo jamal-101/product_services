@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "166141086503",
+    "project_id": "jagana-c1897",
+    "storage_bucket": "jagana-c1897.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:166141086503:android:38b7bd716be72528c03702",
+        "android_client_info": {
+          "package_name": "com.example.product_service"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCmSUJQ94zA0YE2ZVQ77cZdj4rt9OY3X4Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
