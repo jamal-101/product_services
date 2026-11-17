@@ -25,21 +25,30 @@ class AppScaffold extends StatelessWidget {
   Widget build(BuildContext context) {
     final BottomNavigationController navController =
         Get.find<BottomNavigationController>();
-    return PopScope(
-      canPop: selectedIndex == 0,
-      onPopInvokedWithResult: (didPop, result) {
-        if (didPop) return;
-        if (selectedIndex != 0) {
-          navController.handleBackPress();
-        }
-      },
-      child: Scaffold(
-        key: scaffoldKey,
-        appBar: appBar,
-        drawer: drawer,
-        floatingActionButton: floatingActionButton,
-        body: body,
-        bottomNavigationBar: BottomNavBar(selectedIndex: selectedIndex),
+
+    return Obx(
+      () => PopScope(
+        // আপনি যেমনটি চেয়েছেন: হোম ট্যাবে (Index 0) থাকলে canPop true হবে, ফলে অ্যাপ ক্লোজ হবে।
+        // অন্য ট্যাবে থাকলে canPop false হবে, যাতে আমরা ব্যাক প্রেস ইন্টারসেপ্ট করতে পারি।
+        canPop: navController.currentIndex.value == 0,
+        onPopInvokedWithResult: (didPop, result) {
+          // যদি ইতিমধ্যে পপ হয়ে যায় (যেমন canPop true ছিল), তবে আর কিছু করার নেই।
+          if (didPop) return;
+
+          // যদি ইউজার হোম ট্যাব (Index 0) ছাড়া অন্য কোনো ট্যাবে থাকে, 
+          // তবে ব্যাক প্রেস করলে navController.handleBackPress() রান হবে যা ইউজারকে হোমে ফিরিয়ে আনবে।
+          if (navController.currentIndex.value != 0) {
+            navController.handleBackPress();
+          }
+        },
+        child: Scaffold(
+          key: scaffoldKey,
+          appBar: appBar,
+          drawer: drawer,
+          floatingActionButton: floatingActionButton,
+          body: body,
+          bottomNavigationBar: BottomNavBar(selectedIndex: selectedIndex),
+        ),
       ),
     );
   }

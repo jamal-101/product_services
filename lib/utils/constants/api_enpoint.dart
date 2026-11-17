@@ -53,4 +53,5 @@ class ApiEndPoint {
   static const createStripeCheckout = "$baseUrl/stripe/create-checkout-session";
   static const createDatafastCheckout = "$baseUrl/datafast/create-checkout-session";
   static const String saveFcmToken = "$baseUrl/fcmTokens/save-token";
+  static const String googleLogin = "$baseUrl/auth/google-login";
 }

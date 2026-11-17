@@ -272,38 +272,52 @@ class LoginScreen extends StatelessWidget {
                 ),
                 SizedBox(height: 24.h),
 
-                SizedBox(
-                  width: double.infinity,
-                  height: 50.h,
-                  child: OutlinedButton(
-                    style: OutlinedButton.styleFrom(
-                      backgroundColor: const Color(0xFFFFFFFF),
-                      side: const BorderSide(color: Color(0xFFECECF0)),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12.r),
-                      ),
-                    ),
-                    onPressed: () {},
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Image.asset(
-                          AppImages.googleIcon,
-                          height: 30.h,
-                          width: 30.w,
-                        ),
-                        SizedBox(width: 8.w),
-                        Text(
-                          AppString.continueWithGoogle.tr,
-                          style: GoogleFonts.plusJakartaSans(
-                            fontSize: 14.sp,
-                            color: const Color(0xFF1A1D24),
-                            fontWeight: FontWeight.w600,
+                GetBuilder<AuthController>(
+                  builder: (controller) {
+                    return SizedBox(
+                      width: double.infinity,
+                      height: 50.h,
+                      child: Obx(
+                            () => OutlinedButton(
+                          style: OutlinedButton.styleFrom(
+                            backgroundColor: const Color(0xFFFFFFFF),
+                            side: const BorderSide(color: Color(0xFFECECF0)),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12.r),
+                            ),
+                          ),
+                          onPressed: controller.isGoogleLoading.value
+                              ? null
+                              : () => controller.signInWithGoogle(),
+                          child: controller.isGoogleLoading.value
+                              ? SizedBox(
+                            height: 20.h,
+                            width: 20.w,
+                            child: const CircularProgressIndicator(strokeWidth: 2),
+                          )
+                              : Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Image.asset(
+                                AppImages.googleIcon,
+                                height: 30.h,
+                                width: 30.w,
+                              ),
+                              SizedBox(width: 8.w),
+                              Text(
+                                AppString.continueWithGoogle.tr,
+                                style: GoogleFonts.plusJakartaSans(
+                                  fontSize: 14.sp,
+                                  color: const Color(0xFF1A1D24),
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                      ],
-                    ),
-                  ),
+                      ),
+                    );
+                  },
                 ),
                 SizedBox(height: 40.h),
                 Center(

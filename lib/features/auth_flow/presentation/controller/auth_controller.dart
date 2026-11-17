@@ -1,11 +1,14 @@
 import 'dart:async';
+import 'dart:async';
 import 'dart:io';
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:firebase_auth/firebase_auth.dart' as fb;
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../../../config/route/app_route.dart';
 import '../../../../services/api/api_service.dart';
@@ -39,6 +42,7 @@ class AuthController extends GetxController {
   final documentNumberController = TextEditingController();
   Rxn<File> documentFrontImage = Rxn<File>();
   Rxn<File> documentBackImage = Rxn<File>();
+  var isGoogleLoading = false.obs;
 
   var selectedDocumentType = "".obs;
   List<String> documentTypes = ['NID', 'Passport'];
@@ -676,6 +680,112 @@ class AuthController extends GetxController {
       }
     } catch (e) {
       debugPrint("⚠️ Error saving FCM token: $e");
+    }
+  }
+
+
+  Future<void> signInWithGoogle() async {
+    isGoogleLoading.value = true;
+    try {
+      // ১. গুগল সাইন-ইন পপআপ ওপেন করা
+      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+      if (googleUser == null) {
+        isGoogleLoading.value = false;
+        return; // ইউজার ক্যানসেল করলে
+      }
+
+      final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+
+      // ২. ফায়ারবেসে গুগলের ক্রেডেনশিয়াল দিয়ে সাইন-ইন করা
+      final fb.AuthCredential credential = fb.GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+
+      fb.UserCredential userCredential =
+      await fb.FirebaseAuth.instance.signInWithCredential(credential);
+
+      // ফায়ারবেস আইডি টোকেন নেওয়া যা ব্যাকএন্ডে পাঠাতে হবে
+      String? firebaseIdToken = await userCredential.user?.getIdToken();
+      if (firebaseIdToken == null) return;
+
+      // ৩. ফায়ারবেস থেকে FCM Token নেওয়া (পুশ নোটিফিকেশনের জন্য)
+      String? fcmToken = await FirebaseMessaging.instance.getToken();
+
+      // ৪. ব্যাকএন্ডের রিকোয়েস্ট বডি
+      final Map<String, dynamic> body = {
+        "token": firebaseIdToken,
+        if (fcmToken != null && fcmToken.isNotEmpty) "fcmToken": fcmToken,
+      };
+
+      // ৫. ব্যাকএন্ডে POST রিকোয়েস্ট পাঠানো
+      final response = await ApiService.post(
+        ApiEndPoint.googleLogin,
+        body: body,
+      );
+
+      if (response.isSuccess) {
+        var responseData = response.data;
+        String? token =
+            responseData['data']?['token'] ??
+                responseData['data']?['accessToken'];
+        String? userId = responseData['data']?['user']?['_id'];
+
+        if (token != null) {
+          LocalStorage.token = token;
+          await LocalStorage.setString(LocalStorageKeys.token, token);
+        }
+        if (userId != null) {
+          LocalStorage.userId = userId;
+          await LocalStorage.setString(LocalStorageKeys.userId, userId);
+        }
+
+        await saveFcmTokenToBackend();
+
+        final activeRole =
+            responseData['data']?['user']?['activeRole']?.toString() ?? '';
+        if (activeRole == 'seller' && token != null) {
+          await LocalStorage.setSellerToken(token);
+        }
+
+        bool hasSellerAccount =
+            responseData['data']?['hasSellerAccount'] ?? false;
+        LocalStorage.hasSellerAccount = hasSellerAccount;
+        await LocalStorage.setBool(
+          LocalStorageKeys.hasSellerAccount,
+          hasSellerAccount,
+        );
+
+        Get.snackbar(
+          "Success",
+          response.message ?? "Google Login Successful",
+          backgroundColor: Colors.green,
+          colorText: Colors.white,
+        );
+
+        if (!hasSellerAccount) {
+          Get.offAllNamed(AppRoutes.homeScreen);
+        } else {
+          Get.offAllNamed(AppRoutes.selectRoleScreen);
+        }
+      } else {
+        Get.snackbar(
+          "Failed",
+          response.message,
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+        );
+      }
+    } catch (e) {
+      debugPrint("Google Sign-In Error: $e");
+      Get.snackbar(
+        "Error",
+        e.toString(),
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+    } finally {
+      isGoogleLoading.value = false;
     }
   }
 
