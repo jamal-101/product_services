@@ -85,7 +85,6 @@ class MyStoreScreen extends StatelessWidget {
           ),
         );
       }),
-      // bottomNavigationBar: BottomNavBar(selectedIndex: 2),
     );
   }
 
@@ -107,6 +106,7 @@ class MyStoreScreen extends StatelessWidget {
     String logoImageUrl = (logoImgPath != null && logoImgPath.isNotEmpty)
         ? (logoImgPath.startsWith('http') ? logoImgPath : '${ApiEndPoint.imageUrl}$logoImgPath')
         : "";
+
     return Stack(
       children: [
         Positioned(

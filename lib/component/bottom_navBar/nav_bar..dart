@@ -67,7 +67,7 @@ class BottomNavBar extends StatelessWidget {
                       ? AppImages.myListIcon
                       : AppImages.listIcon,
                   label: isSeller
-                      ? AppString.myListing.tr
+                      ? AppString.myProducts.tr
                       : AppString.stores.tr,
                   controller: controller,
                   isSeller: isSeller,

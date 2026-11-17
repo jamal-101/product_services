@@ -330,6 +330,7 @@ class AppString extends Translations {
   static const String pendingReview = 'pendingReview';
   static const String campaignSuccessDesc = 'campaignSuccessDesc';
   static const String viewMyCampaigns = 'viewMyCampaigns';
+  static const String myProducts = 'myProducts';
 
 
 
@@ -337,6 +338,7 @@ class AppString extends Translations {
   @override
   Map<String, Map<String, String>> get keys => {
     'en_US': {
+      myProducts: 'My Products',
       campaignSubmitted: 'Campaign Submitted!',
       statusLabel: 'Status: ',
       pendingReview: 'Pending Review',
@@ -926,6 +928,7 @@ class AppString extends Translations {
       pendingReview: 'Revisión pendiente',
       campaignSuccessDesc: 'Te notificaremos una vez que tu anuncio sea aprobado y programado.',
       viewMyCampaigns: 'Ver mis campañas',
+      myProducts: 'Mis productos',
     },
   };
 }
